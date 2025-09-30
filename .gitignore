@@ -1,0 +1,34 @@
+# Archivos auxiliares de LaTeX
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.synctex.gz
+*.fdb_latexmk
+*.blg
+*.bbl
+
+# Archivos generados por BibTeX/Biber
+*.bcf
+*.run.xml
+
+# Archivos de compilación
+*.pdf
+*.dvi
+*.ps
+
+# Archivos comprimidos temporales
+*.gz
+*.zip
+*.rar
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
