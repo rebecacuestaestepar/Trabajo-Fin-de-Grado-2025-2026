@@ -20,7 +20,6 @@
 *.run.xml
 
 # Archivos de compilación
-*.pdf
 *.dvi
 *.ps
 
