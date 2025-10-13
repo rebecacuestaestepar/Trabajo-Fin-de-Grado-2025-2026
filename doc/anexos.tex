@@ -358,6 +358,18 @@
 \tutor{nombre tutor}
 \date{\today}
 
+% Preámbulo sprints
+\usepackage{hyperref}
+\newenvironment{Sprint}[1]{%
+	\subsubsection*{Sprint #1}%
+	\addcontentsline{toc}{subsubsection}{Sprint #1}%
+}{\par\vspace{.5em}}
+
+\newcommand{\bloque}[1]{%
+	\vspace{1em}	% Espacio antes del título
+	\noindent\textbf{#1}\par\vspace{0.8em}	% Título + espacio después
+}
+
 \begin{document}
 
 \maketitle
