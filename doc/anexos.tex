@@ -343,7 +343,7 @@
     \noindent\LARGE
     Presentado por \@author{}\\ 
     en Universidad de Burgos --- \@date{}\\
-    Tutor: \@tutor{}\\
+    Tutores: \@tutor{}\\
   }%
   \end{center}%
   \null
@@ -353,16 +353,17 @@
 
 
 % Datos de portada
-\title{título del TFG \\Documentación Técnica}
+\title{Herramienta de gestión de calendario EPS \\Documentación Técnica}
 \author{ Rebeca Cuesta Estépar}
-\tutor{nombre tutor}
+\tutor{Álvar Arnaiz González, Ana Serrano Mamolar}
 \date{\today}
 
 % Preámbulo sprints
 \usepackage{hyperref}
-\newenvironment{Sprint}[1]{%
-	\subsubsection*{Sprint #1}%
-	\addcontentsline{toc}{subsubsection}{Sprint #1}%
+\newenvironment{Sprint}[2]{%
+	\subsubsection*{Sprint #1  \normalsize(#2)}%
+	\addcontentsline{toc}{subsubsection}{Sprint #1 (#2)}%
+	\vspace{0.8em}%
 }{\par\vspace{.5em}}
 
 \newcommand{\bloque}[1]{%
