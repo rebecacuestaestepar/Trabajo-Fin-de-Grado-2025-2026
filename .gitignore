@@ -56,3 +56,6 @@ media/
 
 # Variables de entorno
 .env
+
+# Directorio de pruebas
+proyecto_pruebas/
