@@ -31,3 +31,28 @@
 # Archivos de sistema
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# DB local
+*.sqlite3
+
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Django
+staticfiles/
+media/
+*.log
+
+# VS Code
+.vscode/
+
+# Variables de entorno
+.env
