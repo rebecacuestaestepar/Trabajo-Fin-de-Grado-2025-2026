@@ -69,14 +69,129 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 \subsection{Requisitos No Funcionales}
 
 
-\section{Especificación de requisitos}
 \begin{enumerate}
 	\item RNF-01. La aplicación debe ser segura.
 	\item RNF-02. La aplicación debe tener un uso sencillo.
 	\item RNF-03. Escalabilidad.
 	\item RNF-04. Rendimiento.
 	\item RNF-05. Disponibilidad.
-	\item RNF-06. Compatibilidad.
+	\item RNF-06. Interoperabilidad o compatibildad.
 	\item RNF-07. Mantenimiento.
 \end{enumerate}
+\section{Especificación de requisitos}
+
+\section{Especificación de casos de uso}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-1}    & \textbf{Inicio de sesión}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-01 \\
+		\textbf{Descripción}          & El usuario al iniciar sesión con credenciales válidas (correo y contraseña), se le permite acceder a la aplicación, si las credenciales son inválidas se mostrará el mensaje de error y no se le permitirá el acceso. \\
+		\textbf{Precondición}         & El usuario ha de tener una cuenta \\
+		\textbf{Acciones}             & 
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Introducir correo
+			\item Introducir contraseña
+			\item Verificar las credenciales
+			
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Acceso si las credenciales son correctas, o un mensaje de error si no lo son \\
+		\textbf{Excepciones}          & Excepciones \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-1 Inicio de sesión}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-2}    & \textbf{Crear reserva}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-03.1 \\
+		\textbf{Descripción}          & Crear una reserva y añadir los datos correspondientes a la misma \\
+		\textbf{Precondición}         & Que sea un usuario autenticado y que tenga los permisos necesarios \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el apartado de Reservas
+			\item Darle a añadir reserva
+			\item Rellenar datos necesarios sobre la reserva
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Que se añadan y actualicen los datos correspondientes en las diferentes partes de la aplicación \\
+		\textbf{Excepciones}          & Que no se pueda añadir la reserva por violación de restricciones \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-2 Crear reserva}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-3}    & \textbf{Editar reserva}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-03.2 \\
+		\textbf{Descripción}          & Editar una reserva y actualizar los datos correspondientes a la misma \\
+		\textbf{Precondición}         & Que sea un usuario autenticado, que tenga los permisos necesarios para hacerlo, y que la reserva exista previamente \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el apartado de Reservas
+			\item Seleccionar la reserva correspondiente
+			\item Actualizar datos necesarios sobre la reserva
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Que se actualicen los datos correspondientes en las diferentes partes de la aplicación \\
+		\textbf{Excepciones}          & Que no se pueda añadir la reserva por violación de restricciones, que no exista la reserva \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-3 Editar reserva}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-4}    & \textbf{Eliminar reserva}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-03.3 \\
+		\textbf{Descripción}          & Eliminar una reserva y modificar los datos correspondientes a la misma \\
+		\textbf{Precondición}         & Que sea un usuario autenticado, que tenga los privilegios necesarios para poder hacerlo y que exista la reserva \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el apartado de Reservas
+			\item Seleccionar la reserva correspondiente
+			\item Eliminarla
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Que se eliminen y actualicen los datos correspondientes en las diferentes partes de la aplicación \\
+		\textbf{Excepciones}          & Que no se pueda eliminar la reserva por violación de restricciones \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-4 Eliminar reserva}
+\end{table}
 
