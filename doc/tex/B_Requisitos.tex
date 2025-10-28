@@ -195,3 +195,200 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\caption{CU-4 Eliminar reserva}
 \end{table}
 
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-5}    & \textbf{Consultar reservas}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-02 \\
+		\textbf{Descripción}          & Poder consultar todas las reservas que se encuentran activas \\
+		\textbf{Precondición}         & Que sea un usuario autenticado \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el apartado de Reservas
+			\item Ver la lista de reservas con sus datos
+		\end{enumerate}\\
+		\textbf{Postcondición}        &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-5 Consultar reservas}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-6}    & \textbf{Generar informes}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-04 \\
+		\textbf{Descripción}          & El usuario selecciona los informes que quiere generar. Puede generar informes sobre los horarios por grado, la ocupación de aulas y los exámenes de convocatoria por grado. \\
+		\textbf{Precondición}         & Que sea un usuario autenticado, y tenga los permisos requeridos para poder generar los informes. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el apartado de Generar informes
+			\item Seleccionar qué tipo de informe quieres generar o exportar y seleccionar el grado o el aula correspondiente.
+		\end{enumerate}\\
+		\textbf{Postcondición}        &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-6 Generar informes}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-7}    & \textbf{Crear usuario}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-06.1 \\
+		\textbf{Descripción}          & El usuario con permisos que, en este caso será el administrador, podrá crear usuarios.  \\
+		\textbf{Precondición}         & Que sea un usuario administrador \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el apartado de Usuarios del sistema
+			\item Pulsar en crear nuevo usuario
+		\end{enumerate}\\
+		\textbf{Postcondición}  Que el usuario y los datos añadidos persistan en el sistema tras crear el usuario      &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-7 Crear usuario}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-8}    & \textbf{Editar usuario}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-6.2 \\
+		\textbf{Descripción}          & Un usuario con privilegios como el administrador podrá editar los datos de los usuarios  \\
+		\textbf{Precondición}         & Que sea un usuario administrador y que exista el usuario y los datos del usuario que quiere editar\\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el listado de Usuarios
+			\item Seleccionar el usuario correspondiente
+			\item Editar datos
+		\end{enumerate}\\
+		\textbf{Postcondición}  Que los datos actualizados o modificados del usuario persistan en el sistema tras guardarlos   &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-8 Editar usuario}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-9}    & \textbf{Eliminar usuario}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-06.3 \\
+		\textbf{Descripción}          & Un usuario con los permisos necesarios (administrador) podrá eliminar cualquier usuario \\
+		\textbf{Precondición}         & Que sea un usuario administrador, que exista el usuario que quiere eliminar \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el listado de Usuarios
+			\item Seleccionar el usuario
+			\item Eliminarlo
+		\end{enumerate}\\
+		\textbf{Postcondición}    Que el usuario y sus datos correspondientes se eliminen del sistema y no persistan sus datos    &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-9 Eliminar usuario}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-10}    & \textbf{Asignar roles}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-05 \\
+		\textbf{Descripción}          & El usuario administrador podrá asignar un rol a cada usuario \\
+		\textbf{Precondición}         & Que sea un usuario administrador, que exista el usuario y el rol \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el listado de usuarios
+			\item Seleccionar usuario
+			\item Seleccionar rol
+			\item Realizar la asignación
+		\end{enumerate}\\
+		\textbf{Postcondición}  Que el usuario pueda realizar en el sistema lo que los permisos relacionados al rol que se le ha asignado le permitan      &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-10 Asignar roles}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-11}    & \textbf{Calcular exámenes}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-07 \\
+		\textbf{Descripción}          & Realizar el cálculo pertinente para que la rotación de la fecha de exámenes sea la pertinente \\
+		\textbf{Precondición}         & Que sea un usuario autenticado \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item Iniciar sesión
+			\item Entrar en el de Exámenes
+			\item Seleccionar calcular rotación
+		\end{enumerate}\\
+		\textbf{Postcondición}   Que las fechas de los exámenes tras el cálculo de rotación sea la correcta     &  \\
+		\textbf{Excepciones}    Los exámenes no pueden caer ni en sábado ni en domingo      &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-11 Calcular exámenes}
+\end{table}
