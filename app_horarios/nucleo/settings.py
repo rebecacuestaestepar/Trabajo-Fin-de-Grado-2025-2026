@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_horarios',
     'rest_framework',
+    'aulas',
+    'calendario',
+    'docencia',
+    'reservas',
 ]
 
 MIDDLEWARE = [
@@ -77,9 +80,9 @@ WSGI_APPLICATION = 'nucleo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mi_proyecto_db',
+        'NAME': 'horario_db',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'quier0AprobarTFG!',
         'HOST': 'localhost',
         'PORT': '3306',
     }

@@ -1,0 +1,58 @@
+from django.db import models
+
+from app_horarios.app_horarios.models import Dia
+from app_horarios.docencia.models import Asignaturas
+
+# Create your models here.
+
+class Reserva(models.Model):
+    idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=5)  # Field name made lowercase.
+    nombre_aula = models.CharField(db_column='NOMBRE_AULA', max_length=8)  # Field name made lowercase.
+    id_dia = models.ForeignKey(Dia, models.CASCADE, db_column='ID_DIA')  # Field name made lowercase.
+    momento_reserva = models.DateTimeField(db_column='MOMENTO_RESERVA')  # Field name made lowercase.
+    estado = models.CharField(db_column='ESTADO', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    tipo = models.CharField(db_column='TIPO', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    hora_inicio = models.TimeField(db_column='HORA_INICIO')  # Field name made lowercase.
+    hora_fin = models.TimeField(db_column='HORA_FIN')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'reserva'
+
+
+class ReservaPeriodica(models.Model):
+    id_reserva = models.OneToOneField(Reserva, models.CASCADE, db_column='ID_RESERVA', primary_key=True)  # Field name made lowercase.
+    id_asignatura = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_ASIGNATURA', max_length=10)  # Field name made lowercase.
+    dia_semana = models.SmallIntegerField(db_column='DIA_SEMANA')  # Field name made lowercase.
+    fecha_inicio = models.DateField(db_column='FECHA_INICIO')  # Field name made lowercase.
+    fecha_fin = models.DateField(db_column='FECHA_FIN')  # Field name made lowercase.
+    intervalo_semanas = models.SmallIntegerField(db_column='INTERVALO_SEMANAS')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'reserva_periodica'
+
+
+
+class Responsable(models.Model):
+    correo = models.CharField(db_column='CORREO', primary_key=True, max_length=30)  # Field name made lowercase.
+    nombre = models.CharField(db_column='NOMBRE', max_length=20)  # Field name made lowercase.
+    apellidos = models.CharField(db_column='APELLIDOS', max_length=30)  # Field name made lowercase.
+    telefono = models.DecimalField(db_column='TELEFONO', max_digits=9, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    codigo_docente = models.CharField(db_column='CODIGO_DOCENTE', unique=True, max_length=9, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'responsable'
+
+
+class ReservaPuntual(models.Model):
+    id_reserva = models.OneToOneField(Reserva, models.CASCADE, db_column='ID_RESERVA', primary_key=True)  # Field name made lowercase.
+    id_responsable = models.ForeignKey(Responsable, models.CASCADE, db_column='ID_RESPONSABLE', max_length=9)  # Field name made lowercase.
+    motivo = models.CharField(db_column='MOTIVO', max_length=90, blank=True, null=True)  # Field name made lowercase.
+    inicio = models.DateTimeField(db_column='INICIO')  # Field name made lowercase.
+    fin = models.DateTimeField(db_column='FIN')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'reserva_puntual'
