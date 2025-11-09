@@ -97,79 +97,146 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} & RF-01 \\
-		\textbf{Descripción}          & El usuario al iniciar sesión con credenciales válidas (correo y contraseña), se le permite acceder a la aplicación, si las credenciales son inválidas se mostrará el mensaje de error y no se le permitirá el acceso. \\
-		\textbf{Precondición}         & El usuario ha de tener una cuenta \\
+		\textbf{Descripción}          & Un usuario no autenticado, introduce las credenciales (correo y contraseña). Si son credenciales válidas , se le permite acceder a la aplicación redirigiéndole en función de su rol, si las credenciales son inválidas se mostrará el mensaje de error y no se le permitirá el acceso. \\
+		\textbf{Precondición}         & El usuario está registrado y su cuenta se encuentra activa \\
 		\textbf{Acciones}             & 
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
 			\item Introducir correo
 			\item Introducir contraseña
-			\item Verificar las credenciales
+			\item El sistema valida el formato
+			\item El sistema verifica las credenciales
+			\item Se crea la sesión
+			\item Se redirige a la pantalla correspondiente según su rol
 			
 		\end{enumerate}\\
-		\textbf{Postcondición}        & Acceso si las credenciales son correctas, o un mensaje de error si no lo son \\
-		\textbf{Excepciones}          & Excepciones \\
+		\textbf{Postcondición}        & En caso de éxito en el inicio de sesión, el usuario tendrá una sesión activa y el usuario queda en su panel correspondiente. En caso de fallo no se crea la sesión, se incrementa el contador de intentos fallidos y se muestra el mensaje de error. \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\item\textbf{Ex1} Credenciales incorrectas \textrightarrow{} mensaje genérico y sumar el intento fallido.
+			\item\textbf{Ex2} Usuario inactivo o bloqueado \textrightarrow{} informar del fallo
+		\end{itemize} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU-1 Inicio de sesión}
 \end{table}
 
+\vspace*{-2cm}
+\setlength{\textfloatsep}{5pt}
+\setlength{\intextsep}{5pt}
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-2}    & \textbf{Crear reserva}\\
+		\textbf{CU-2}    & \textbf{Gestionar usuarios}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-03.1 \\
-		\textbf{Descripción}          & Crear una reserva y añadir los datos correspondientes a la misma \\
-		\textbf{Precondición}         & Que sea un usuario autenticado y que tenga los permisos necesarios \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El administrador puede crear, modificar y eliminar cuentas de usuario del sistema. Incluye búsqueda y listado de los usuarios. \\
+		\textbf{Precondición}         & El administrador tiene que estar autenticado, tiene que disponer de los permisos para la gestión de usuarios y la base de datos tiene que estar disponible. \\
 		\textbf{Acciones}             &
+		{\small
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el apartado de Reservas
-			\item Darle a añadir reserva
-			\item Rellenar datos necesarios sobre la reserva
-		\end{enumerate}\\
-		\textbf{Postcondición}        & Que se añadan y actualicen los datos correspondientes en las diferentes partes de la aplicación \\
-		\textbf{Excepciones}          & Que no se pueda añadir la reserva por violación de restricciones \\
+			\item El administrador accede a la Gestión de Usuarios
+			\item Visualiza el listado de usuarios (nombre, email, estado), y las opciones (Añadir, editar y eliminar)
+			\item El administrador pulsa \emph{Añadir}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\item El sistema muestra un formulario con todos los campos correspondientes a los datos necesarios
+				\item El adminsitrador completa estos campos
+				\item El sistema valida el formato del email y que este sea único
+				\item El sistema crea la cuenta con un estado y contraseña inicial (esta es aleatoria obligar a restablecer)
+				\item El sistema muestra la confirmación
+			\end{enumerate}
+			\item El administrador selecciona al usuario y pulsa \emph{Editar}
+			\begin{enumerate}[label*=\arabic*., itemsep=2pt, topsep=2pt, leftmargin=1em]
+				\item El sistema muestra los datos actuales
+				\item El administrador modifica los campos 
+				\item El sistema valida los campos modificados
+				\item El sistema guarda los cambios
+			\end{enumerate}
+			\item El administrador pulsa \emph{Eliminar} sobre un usuario
+			\begin{enumerate}[label*=\arabic*., itemsep=2pt, topsep=2pt, leftmargin=1em]
+				\item El sistema solicita confirmación y muestra cambios asociados
+				\item El administrador confirma
+				\item El sistema ejecuta el borrado, y elimina los datos asociados
+			\end{enumerate}
+		\end{enumerate}
+		}
+		\\
+		\textbf{Postcondición}        & En caso de éxito el usuario se crea, edita o elimina según la acción realizada. En caso de fallo no se realizan los cambios y se muestra el error \\
+		\textbf{Excepciones}          & 
+		{\small
+		\begin{itemize}
+			\setlength{\itemsep}{0.1em}
+			\setlength{\parsep}{0pt}
+			\setlength{\topsep}{0pt}
+			\tightlist
+			\item \textbf{Ex1} Email duplicado \textrightarrow{} Impedir la creación o edición y mostrar el error
+			\item \textbf{Ex2} Formato de datos inválidos \textrightarrow{} mostrar los errores de validación
+
+		\end{itemize}
+		} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-2 Crear reserva}
+	\caption{CU-2 Gestionar usuarios}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-3}    & \textbf{Editar reserva}\\
+		\textbf{CU-3}    & \textbf{Asignar roles}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-03.2 \\
-		\textbf{Descripción}          & Editar una reserva y actualizar los datos correspondientes a la misma \\
-		\textbf{Precondición}         & Que sea un usuario autenticado, que tenga los permisos necesarios para hacerlo, y que la reserva exista previamente \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El administrador asigna, cambio o quitar roles a usuarios para determinar los permisos de acceso. \\
+		\textbf{Precondición}         & El administrador tiene que estar autenticado, que el usuario sobre el que se actúa exista, y que los roles estén disponibles. \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el apartado de Reservas
-			\item Seleccionar la reserva correspondiente
-			\item Actualizar datos necesarios sobre la reserva
+			\item El administrador accede a \emph{Gestión de usuarios} y selecciona un usuario.
+			\item El sistema muestra los datos del usuario y sus roles actuales.
+			\item El administrador pulsa \emph{Añadir rol}.
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\item El sistema muestra el listado de roles disponibles (no asignados).
+				\item El administrador selecciona uno o varios roles y confirma.
+				\item El sistema valida compatibilidad de roles.
+				\item El sistema asigna el o los roles y confirma.
+			\end{enumerate}
+			\item El administrador pulsa \emph{Editar roles}.
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+			\item El sistema muestra roles actuales y disponibles.
+			\item El administrador desmarca o marca roles y confirma.
+			\item El sistema valida y actualiza los roles y los confirma.
+			\item El administrador selecciona un rol asignado y pulsa \emph{Quitar  rol}.
+			\end{enumerate}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+			\item El sistema solicita confirmación y muestra las consecuencias
+			\item El administrador confirma.
+			\item El sistema quita el rol, actualiza permisos y confirma.
+			\end{enumerate}
 		\end{enumerate}\\
-		\textbf{Postcondición}        & Que se actualicen los datos correspondientes en las diferentes partes de la aplicación \\
-		\textbf{Excepciones}          & Que no se pueda añadir la reserva por violación de restricciones, que no exista la reserva \\
+		\textbf{Postcondición}        & Se actualizan los roles del usuario, pero si falla no hay cambios y se muestra el mensaje de error \\
+		\textbf{Excepciones}          & 
+		{\small
+			\begin{itemize}
+				\tightlist
+				\item \textbf{Ex1.} Usuario inactivo o inexistente \textrightarrow{} impedir acción.
+				\item \textbf{Ex2.} No se puede dejar al usuario sin ningún rol \textrightarrow{} impedir quitar todos los roles
+			\end{itemize} 
+		}\\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-3 Editar reserva}
+	\caption{CU-3 Asignar roles}
 \end{table}
 
 
@@ -177,28 +244,36 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-4}    & \textbf{Eliminar reserva}\\
+		\textbf{CU-4}    & \textbf{Generar informes}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-03.3 \\
-		\textbf{Descripción}          & Eliminar una reserva y modificar los datos correspondientes a la misma \\
-		\textbf{Precondición}         & Que sea un usuario autenticado, que tenga los privilegios necesarios para poder hacerlo y que exista la reserva \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El usuario genera los informes a partir de la información seleccionada (reservas puntuales, ocupación de aulas, horario de grados, exámenes) para poder exportar los resultados.\\
+		\textbf{Precondición}         & Que sea un usuario autenticado, que tenga los privilegios necesarios para poder hacerlo, que la base de datos esté disponible y que existan datos para generar los informes.\\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el apartado de Reservas
-			\item Seleccionar la reserva correspondiente
-			\item Eliminarla
+			\item El usuario accede al módulo \emph{Generar informes}
+			\item El usuario selecciona el tipo de informe que desea generar
+			\item Elige los filtros que desea
+			\item El sistema consulta los datos en la base de datos
+			\item Se genera una vista previa del informe
+			\item El sistema genera la exportación con el archivo
 		\end{enumerate}\\
-		\textbf{Postcondición}        & Que se eliminen y actualicen los datos correspondientes en las diferentes partes de la aplicación \\
-		\textbf{Excepciones}          & Que no se pueda eliminar la reserva por violación de restricciones \\
+		\textbf{Postcondición}        & El informe se genera, y si el usuario lo selecciona, se exporta el informe. Si ocurre algún fallo se muestra el mensaje de error correspondiente \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Que no existan los datos para los filtros que ha solicitado el usuario \textrightarrow{} Mostrar el mensaje de que no hay resultados
+			\item \textbf{Ex2:} Fallo en la conexión a la base de datos \textrightarrow{} mostrar el error y cancelar la generación
+			\item \textbf{Ex3:} Fallo al generar el archivo de exportación \textrightarrow{} mostrar error
+		\end{itemize} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-4 Eliminar reserva}
+	\caption{CU-4 Generar informes}
 \end{table}
 
 
@@ -206,27 +281,35 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-5}    & \textbf{Consultar reservas}\\
+		\textbf{CU-5}    & \textbf{Consultar reservas puntuales}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} & RF-02 \\
-		\textbf{Descripción}          & Poder consultar todas las reservas que se encuentran activas \\
-		\textbf{Precondición}         & Que sea un usuario autenticado \\
+		\textbf{Descripción}          & El gestor o administrador consulta las reservas que existen, y puede aplicar filtros sobre ellas y visualizar los detalles de cada una \\
+		\textbf{Precondición}         & Que sea un usuario autenticado y que tenga el rol de gestor o de administrador. Que la base de datos esté disponible y que existan reservas registradas \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el apartado de Reservas
-			\item Ver la lista de reservas con sus datos
+			\item El usuario accede al módulo \emph{Consultar reservas puntuales}.
+			\item El sistema muestra las reservas que existen en la base de datos
+			\item El usuario puede aplicar filtros
+			\item El sistema actualiza la lista con los resultados filtrados
+			\item El usuario selecciona una reserva específica para ver más información
+			\item El sistema muestra los detalles de la reserva
 		\end{enumerate}\\
-		\textbf{Postcondición}        &  \\
-		\textbf{Excepciones}          &  \\
-		\textbf{Importancia}          & Alta \\
+		\textbf{Postcondición}        &  Se muestra al usuario la información de las reservas con la posibilidad de realizar filtros. No se permite la modificación de datos.\\
+		\textbf{Excepciones}          &  
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\item \textbf{Ex1:} No existen reservas que cumplan los criterios → mostrar mensaje “no hay resultados”.
+			\item \textbf{Ex2:} Error en la conexión a la base de datos → cancelar operación y notificar fallo.
+			\item \textbf{Ex3:} Filtro inválido o mal formado → restablecer búsqueda y mostrar aviso.
+		\end{itemize}\\
+		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-5 Consultar reservas}
+	\caption{CU-5 Consultar reservas puntuales}
 \end{table}
 
 
@@ -234,24 +317,33 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-6}    & \textbf{Generar informes}\\
+		\textbf{CU-6}    & \textbf{Consultar ocupación de aula}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} & RF-04 \\
-		\textbf{Descripción}          & El usuario selecciona los informes que quiere generar. Puede generar informes sobre los horarios por grado, la ocupación de aulas y los exámenes de convocatoria por grado. \\
-		\textbf{Precondición}         & Que sea un usuario autenticado, y tenga los permisos requeridos para poder generar los informes. \\
+		\textbf{Descripción}          & El administrador o el gestor consulta la ocupación del aula para una fecha específica o semanal (solo aparecen las reservas periódicas). El sistema muestra un horario con las horas que se encuentra ocupada o disponible al aula, en función del horario y de las reservas puntuales si así se requiere.\\
+		\textbf{Precondición}         & Que sea un usuario autenticado con el rol de gestor o de administrador, que los horarios y las reservas se encuentren cargadas en el sistema y que la base de datos esté disponible. \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el apartado de Generar informes
-			\item Seleccionar qué tipo de informe quieres generar o exportar y seleccionar el grado o el aula correspondiente.
+			\item El usuario accede al apartado de \emph{Consultar ocupación de aula}.
+			\item El sistema muestra un menú con filtros de aula, fecha o semanal.
+			\item El usuario pulsa el aula y el periodo y pulsa \emph{Buscar}
+			\item El sistema recoge los datos asociado a la búsqueda realizada por el usuario
+			\item El sistema genera una vista con las horas ocupadas y disponibles.
 		\end{enumerate}\\
-		\textbf{Postcondición}        &  \\
-		\textbf{Excepciones}          &  \\
-		\textbf{Importancia}          & Alta \\
+		\textbf{Postcondición}        &  El sistema muestra la ocupación del aula seleccionada mostrándose claramente las horas disponibles y las ocupadas.\\
+		\textbf{Excepciones}          & 
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\tightlist
+			\item \textbf{Ex1:} Que el aula no exista o no se haya seleccionado correctamente \textrightarrow mostrar mensaje de error.
+			\item \textbf{Ex2:} Que no existan datos para la fecha o periodo seleccionado \textrightarrow mostrar que no hay existen reservas para ese aula y no hay datos que mostrar
+			\item \textbf{Ex3:} Que la fecha introducida sea inválida \textrightarrow Mostrar mensaje de error
+			\item \textbf{Ex4:} Que haya un error al recoger los datos de la consulta \textrightarrow notificar el fallo
+		\end{itemize}\\ 
+		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU-6 Generar informes}
@@ -262,27 +354,35 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-7}    & \textbf{Crear usuario}\\
+		\textbf{CU-7}    & \textbf{Consultar horario de grado}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-06.1 \\
-		\textbf{Descripción}          & El usuario con permisos que, en este caso será el administrador, podrá crear usuarios.  \\
-		\textbf{Precondición}         & Que sea un usuario administrador \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador puede consultar el horario de grado. El sistema muestra las clases planificadas con su aula y hora.  \\
+		\textbf{Precondición}         &  El usuario autenticado tiene permisos , los horarios de los grados deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el apartado de Usuarios del sistema
-			\item Pulsar en crear nuevo usuario
+			\item El usuario accede al módulo \emph{Consultar horarios de grado}
+			\item El sistema muestra los grados por los que filtrar.
+			\item El usuario selecciona el grado del que quiere
+			\item El sistema muestra filtros sobre los que aplicar 
+			\item El usuario selecciona si quiere filtrar o no y pulsa \emph{Buscar}
+			\item El sistema recoge los datos asociado al grado seleccionado y los filtros
 		\end{enumerate}\\
-		\textbf{Postcondición} & Que el usuario y los datos añadidos persistan en el sistema tras crear el usuario        \\
-		\textbf{Excepciones}          &  \\
-		\textbf{Importancia}          & Alta \\
+		\textbf{Postcondición} & Se muestra el horario con los filtros y grado aplicados, con la informaciónn actualizada y recogiendo los datos de la base de datos        \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\tightlist
+			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error.
+			\item \textbf{Ex2:} Que no existan horarios para los filtros seleccionados \textrightarrow mostrar mensaje de que no existen resultados
+		\end{itemize} \\
+		\textbf{Importancia}          & Media \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-7 Crear usuario}
+	\caption{CU-7 Consultar horario de grado}
 \end{table}
 
 
@@ -290,7 +390,36 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-8}    & \textbf{Editar usuario}\\
+		\textbf{CU-8}    & \textbf{Cargar horario*******}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El administrador o gestor carga en el sistema un horario de otro año\\
+		\textbf{Precondición}         & Que sea un usuario con permisos y que la base de datos se encuentre disponible para recoger los datos cargados \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a \emph{Cargar horario}
+			\item El sistema muestra la opción de 
+			\item Seleccionar el usuario
+			\item Eliminarlo
+		\end{enumerate}\\
+		\textbf{Postcondición} &   Que el usuario y sus datos correspondientes se eliminen del sistema y no persistan sus datos      \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-8 Cargar horario}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-9}    & \textbf{Gestión de reservas periódicas}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -311,35 +440,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-8 Editar usuario}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-9}    & \textbf{Eliminar usuario}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-06.3 \\
-		\textbf{Descripción}          & Un usuario con los permisos necesarios (administrador) podrá eliminar cualquier usuario \\
-		\textbf{Precondición}         & Que sea un usuario administrador, que exista el usuario que quiere eliminar \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el listado de Usuarios
-			\item Seleccionar el usuario
-			\item Eliminarlo
-		\end{enumerate}\\
-		\textbf{Postcondición} &   Que el usuario y sus datos correspondientes se eliminen del sistema y no persistan sus datos      \\
-		\textbf{Excepciones}          &  \\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-9 Eliminar usuario}
+	\caption{CU-9 Gestión de reservas periódicas}
 \end{table}
 
 \begin{table}[p]
