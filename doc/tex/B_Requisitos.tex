@@ -424,19 +424,43 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} & RF-6.2 \\
-		\textbf{Descripción}          & Un usuario con privilegios como el administrador podrá editar los datos de los usuarios  \\
-		\textbf{Precondición}         & Que sea un usuario administrador y que exista el usuario y los datos del usuario que quiere editar\\
+		\textbf{Descripción}          & El gestor o administrador crea, edita y cancela las reservas durante el periodo especificado, con la frecuencia especificada.  \\
+		\textbf{Precondición}         & Que sea un usuario autenticado con los permisos de reservas, los aulas y horarios disponibles estén cargados, y la base de datos se encuentre disponible.\\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el listado de Usuarios
-			\item Seleccionar el usuario correspondiente
-			\item Editar datos
+			\item El usuario accede a \emph{Gestión de reservas periódicas}.
+			\item El sistema muestra el listado de reservas existentes con filtros.
+			\item El usuario pulsa \emph{Nueva reserva periódica}.
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema muestra un formulario con el aula, las horas, la fecha de inicio y de fin del periodo que va a durar, la frecuencia y días, la persona que lo solicita y el motivo.
+				\item El usuario completa los datos y confirma
+			\end{enumerate}
+			\item El usuario selecciona una reserva periódica y pulsa \emph{Editar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema permite cambiar los distintos campos de la reserva
+				\item El usuario aplica cambios y confirma 
+			\end{enumerate}
+			\item El sistema valida las restricciones, y actualiza o añade la reserva
+			\item El usuario selecciona una reserva periódica y pulsa \emph{Eliminar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema solicita la confirmación y muestra las consecuencias
+				\item El usuario confirma
+				\item El sistema elimina todos los datos correspondientes a esa reserva
+			\end{enumerate}
+			
+			
 		\end{enumerate}\\
-		\textbf{Postcondición} & Que los datos actualizados o modificados del usuario persistan en el sistema tras guardarlos     \\
-		\textbf{Excepciones}          &  \\
+		\textbf{Postcondición} & La reserva periódica queda creada, actualizada o eliminada según la acción     \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Viola restricciones \textrightarrow{} impide la creación o edición y muestra el error
+		\end{itemize} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
@@ -447,29 +471,25 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-10}    & \textbf{Asignar roles}\\
+		\textbf{CU-10}    & \textbf{Validar restricciones del horario}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-05 \\
-		\textbf{Descripción}          & El usuario administrador podrá asignar un rol a cada usuario \\
-		\textbf{Precondición}         & Que sea un usuario administrador, que exista el usuario y el rol \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          &  \\
+		\textbf{Precondición}         &  \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el listado de usuarios
-			\item Seleccionar usuario
-			\item Seleccionar rol
-			\item Realizar la asignación
+			\item 
 		\end{enumerate}\\
-		\textbf{Postcondición} &  Que el usuario pueda realizar en el sistema lo que los permisos relacionados al rol que se le ha asignado le permitan       \\
+		\textbf{Postcondición} &  \\
 		\textbf{Excepciones}          &  \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-10 Asignar roles}
+	\caption{CU-10 Validar restricciones del horario}
 \end{table}
 
 
@@ -477,25 +497,206 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-11}    & \textbf{Calcular exámenes}\\
+		\textbf{CU-11}    & \textbf{Calcular rotación de exámenes}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-07 \\
-		\textbf{Descripción}          & Realizar el cálculo pertinente para que la rotación de la fecha de exámenes sea la pertinente \\
-		\textbf{Precondición}         & Que sea un usuario autenticado \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          &  El gestor o administrador genera una propuesta de calendario de exámenes tras hacer rotaciones asignando fechas y horas, y aulas a prueba cumpliendo con las restricciones. \\
+		\textbf{Precondición}         &  El usuario autenticado con permisos, que la base de ddatos esté disponible y todos los datos necesarios cargados como las aulas, asignaturas, grados,...\\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Iniciar sesión
-			\item Entrar en el de Exámenes
-			\item Seleccionar calcular rotación
+			\item El usuario accede al apartado de \emph{Planificación de exámenes \textrightarrow Rotación}
+			\item El usuario selecciona el grado sobre el que desea hacer el cálculo de los nuevos exámenes
+			\item El usuario pulsa \emph{Calcular}
+			\item El sistema realiza el cálculo de la rotación de los exámenes y muestra una previsualización
+			\item El usuario confirma la propuesta
 		\end{enumerate}\\
-		\textbf{Postcondición}   Que las fechas de los exámenes tras el cálculo de rotación sea la correcta     &  \\
-		\textbf{Excepciones}    Los exámenes no pueden caer ni en sábado ni en domingo      &  \\
+		\textbf{Postcondición}        & Se genera la rotación de exámenes para el grado seleccionado  \\
+		\textbf{Excepciones}         &  \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-11 Calcular exámenes}
+	\caption{CU-11 Calcular rotación de exámenes}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-12}    & \textbf{Modificar fecha de examen}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador modifica la fecha, hora o aula asignada al examen correspondiente. El sistema verificará que el cambio no viole alguna de las restricciones y que no haya conflictos con otros exámenes o reservas. \\
+		\textbf{Precondición}         &  El usuario autenticado tenga los permisos, que el examen se encuentre ya planificado y que la base de datos y las restricciones estén disponibles \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al módulo \emph{Gestión de exámenes}
+			\item El sistema muestra el listado de los exámenes filtrando por grado u algún filtro más de manera opcional
+			\item El usuario selecciona un examen y pulsa \emph{Editar}
+			\item El sistema muestra los datos actuales del examen
+			\item El usuario modifica los datos que crea necesarios y pulsa confirmar
+			\item El sistema valida las restricciones
+			\item El sistema actualiza los datos del examen correspondiente
+		\end{enumerate}\\
+		\textbf{Postcondición} & El examen queda actualizado con los nuevos datos modificados \\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Que la fecha o la hora introducida estén fuera del periodo especificado \textrightarrow{} mostrar error y solicitar nueva fecha u hora 
+			\item \textbf{Ex2:} Que el aula no esté disponible o no cumpla con el aforo necesario \textrightarrow{} impedir el cambio
+			\item \textbf{Ex3:} Que viole alguna otra restricción \textrightarrow{} Mostrar el error y no permitir el cambio
+		\end{itemize}\\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-12 Modificar fecha de examen}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-13}    & \textbf{Crear reserva puntual}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El administrador o gestor crea una reserva puntual de un aula en una fecha y un horario correcto, validando la disponibilidad. \\
+		\textbf{Precondición}         &  El usuario autenticado tiene que tener los permisos, que exista el aula y esté disponible y la base de datos y las restricciones se encuentren disponibles también.\\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al apartado de \emph{Gestión de reservas puntuales}
+			\item El usuario pulsa en \emph{Crear nueva reserva}
+			\item El sistema muestra un formulario con los campos necesarios
+			\item El usuario rellena los campos con los datos correspondientes y pulsa \emph{Crear reserva}
+			\item El sistema valida que se cumplan todas las restricciones
+			\item Si hay errores, el sistema muestra los mensajes correspondientes
+			\item El usuario modifica los datos erróneos
+			\item El sistema crea la reserva
+		\end{enumerate}\\
+		\textbf{Postcondición} &  \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Viola alguna restricción \textrightarrow{} Impide la creación y muestra el mensaje de error
+			\item \textbf{Ex2:} Campos obligatorios están incompletos \textrightarrow{} se muestra el mensajeS
+		\end{itemize} \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-13 Crear reserva puntual}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-14}    & \textbf{Aprobar/rechazar reserva puntual}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          &  \\
+		\textbf{Precondición}         &  \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item 
+		\end{enumerate}\\
+		\textbf{Postcondición} &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-14 Aprobar rechazar reserva puntual}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-15}    & \textbf{Gestión de reservas puntuales}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          &  \\
+		\textbf{Precondición}         &  \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item 
+		\end{enumerate}\\
+		\textbf{Postcondición} &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-15 Gestión de reservas puntuales}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-16}    & \textbf{Revisar solicitudes de reserva}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          &  \\
+		\textbf{Precondición}         &  \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item 
+		\end{enumerate}\\
+		\textbf{Postcondición} &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-16 Revisar solicitudes de reserva}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-17}    & \textbf{Gestión solicitud de reservas}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          &  \\
+		\textbf{Precondición}         &  \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item 
+		\end{enumerate}\\
+		\textbf{Postcondición} &  \\
+		\textbf{Excepciones}          &  \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-17 Gestión solicitud de reservas}
 \end{table}
