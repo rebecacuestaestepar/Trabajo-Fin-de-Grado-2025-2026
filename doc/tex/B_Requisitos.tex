@@ -109,7 +109,6 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 			\item El sistema verifica las credenciales
 			\item Se crea la sesión
 			\item Se redirige a la pantalla correspondiente según su rol
-			
 		\end{enumerate}\\
 		\textbf{Postcondición}        & En caso de éxito en el inicio de sesión, el usuario tendrá una sesión activa y el usuario queda en su panel correspondiente. En caso de fallo no se crea la sesión, se incrementa el contador de intentos fallidos y se muestra el mensaje de error. \\
 		\textbf{Excepciones}          & 
@@ -390,7 +389,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-8}    & \textbf{Cargar horario*******}\\
+		\textbf{CU-8}    & \textbf{Cargar horario}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -401,13 +400,21 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El usuario accede a \emph{Cargar horario}
-			\item El sistema muestra la opción de 
-			\item Seleccionar el usuario
-			\item Eliminarlo
+			\item El usuario accede al apartado de \emph{Horarios}
+			\item El usuario selecciona el grado correspondiente
+			\item El usuario pulsa en \emph{Cargar horario}
+			\item El sistema muestra la opción de cargar un archivo del sistema (csv o Excel) 
+			\item El usuario selecciona el archivo a cargar
+			\item El sistema convierte los datos del excel a datos SQL que pueda recoger la base de datos
+			\item El sistema muestra el calendario de exámenes cargado
 		\end{enumerate}\\
-		\textbf{Postcondición} &   Que el usuario y sus datos correspondientes se eliminen del sistema y no persistan sus datos      \\
-		\textbf{Excepciones}          &  \\
+		\textbf{Postcondición} &   El calendario se encuentra correctamente cargado en la base de datos, se muestra correctamente en la aplicación y si hay más horarios cargados para el mismo grado de diferentes cursos permite seleccionar el horario en función del curso \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Error al pasar los datos de Excel a SQL \textrightarrow{} mostrar mensaje de error y cancelar la carga de datos
+			\item \textbf{Ex2:} Subir un archivo con extensión no válida \textrightarrow{} mostrar el mensaje y pedir la corrección del archivo
+		\end{itemize} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
@@ -451,9 +458,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 				\item El sistema solicita la confirmación y muestra las consecuencias
 				\item El usuario confirma
 				\item El sistema elimina todos los datos correspondientes a esa reserva
-			\end{enumerate}
-			
-			
+			\end{enumerate}			
 		\end{enumerate}\\
 		\textbf{Postcondición} & La reserva periódica queda creada, actualizada o eliminada según la acción     \\
 		\textbf{Excepciones}          & 
@@ -471,27 +476,37 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-10}    & \textbf{Validar restricciones del horario}\\
+		\textbf{CU-10}    & \textbf{Cargar calendario exámenes}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          &  \\
-		\textbf{Precondición}         &  \\
+		\textbf{Descripción}          & El administrador o gestor carga en el sistema un calendario de exámenes de otro año\\
+		\textbf{Precondición}         & Que sea un usuario con permisos y que la base de datos se encuentre disponible para recoger los datos cargados \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item 
+			\item El usuario accede al apartado de \emph{Exámenes}
+			\item El usuario selecciona el grado correspondiente
+			\item El usuario pulsa en \emph{Cargar calendario}
+			\item El sistema muestra la opción de cargar un archivo del sistema (csv o Excel) 
+			\item El usuario selecciona el archivo a cargar
+			\item El sistema convierte los datos del excel a datos SQL que pueda recoger la base de datos
+			\item El sistema muestra el calendario de exámenes cargado
 		\end{enumerate}\\
-		\textbf{Postcondición} &  \\
-		\textbf{Excepciones}          &  \\
+		\textbf{Postcondición} &  La base de datos queda actualizada correctamente a la hora de cargar los datos, y que los muestre correctamente en la aplicación y que si hay más calendarios de distintos años para el mismo grado permita filtrar o seleccionar el curso académico    \\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Error al pasar los datos de Excel a SQL \textrightarrow{} mostrar mensaje de error y cancelar la carga de datos
+			\item \textbf{Ex2:} Subir un archivo con extensión no válida \textrightarrow{} mostrar el mensaje y pedir la corrección del archivo
+		\end{itemize}\\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-10 Validar restricciones del horario}
+	\caption{CU-10 Cargar calendario exámenes}
 \end{table}
-
 
 \begin{table}[p]
 	\centering
@@ -590,7 +605,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\begin{itemize}
 			\tightlist
 			\item \textbf{Ex1:} Viola alguna restricción \textrightarrow{} Impide la creación y muestra el mensaje de error
-			\item \textbf{Ex2:} Campos obligatorios están incompletos \textrightarrow{} se muestra el mensajeS
+			\item \textbf{Ex2:} Campos obligatorios están incompletos \textrightarrow{} se muestra el mensaje
 		\end{itemize} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
@@ -608,16 +623,39 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          &  \\
-		\textbf{Precondición}         &  \\
+		\textbf{Descripción}          & El administrador o gestor revisa las reservas puntuales solicitadas por los usuarios y decide su aprobación o rechazo según la disponibilidad. \\
+		\textbf{Precondición}         &  El usuario debe de tener permisos para poder aprobar o rechazar las solicitudes, tienen que existir reservas pendientes en el sistema, y la base de datos tiene que estar disponible\\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item 
+			\item El usuario accede al apartado de \emph{Gestión de reservas puntuales}
+			\item El sistema muestra la lista de reservas cuyo estado es Pendiente
+			\item El usuario selecciona la reserva
+			\item El sistema le muestra los detalles (aula, fecha, motivo, responsable, periodo, capacidad)
+			\item El usuario pulsa \emph{Aprobar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema verifica la validación de las restricciones 
+				\item Si es válida, se actualiza el estado de la reserva a Aprobada
+			\end{enumerate}
+			\item El usuario pulsa \emph{Rechazar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema le da la opción al usuario de notificar el motivo del rechazo 
+				\item El usuario introduce el motivo si quiere y confirma
+				\item El sistema cambia el estado de la reserva a Rechazada
+			\end{enumerate}
+			
 		\end{enumerate}\\
-		\textbf{Postcondición} &  \\
-		\textbf{Excepciones}          &  \\
+		\textbf{Postcondición} & Se actualiza el estado de la reserva a Aprobada o Rechazada en función de la acción realizada por el usuario \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} La reserva ya ha sido procesada o modificada \textrightarrow{} impedir la acción y mostrar el aviso
+			\item \textbf{Ex2:} El aula que estaba asignada se encuentre ocupada tras aprobarla \textrightarrow{} bloquear acción y sugerir otras aulas disponibles
+			
+		\end{itemize} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
@@ -634,16 +672,38 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          &  \\
-		\textbf{Precondición}         &  \\
+		\textbf{Descripción}          & El gestor o administrador puede consultar, modificar o eliminar reservas puntuales existentes, validando que no se violen las restricciones \\
+		\textbf{Precondición}         & El usuario debe tener los permisos de gestionar las reservas, que estas se encuentren registradas y la base de datos y las validaciones se encuentren disponibles \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item 
+			\item El usuario accede al apartado de \emph{Gestión de Reservas puntuales}
+			\item El sistema muestra la lista de reservas puntuales existentes permitiendo filtrar por aula, o fechas
+			\item El usuario selecciona una reserva y pulsa \emph{Editar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema muestra los datos actuales de la reserva
+				\item El usuario modifica los campos que crea correspondientes y pulsa \emph{Confirmar}
+				\item El sistema valida las restricciones y que los campos no estén vacíos
+				\item El sistema actualiza los datos de la reserva
+			\end{enumerate}
+			\item El usuario selecciona una reserva y pulsa \emph{Eliminar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema solicita confirmación
+				\item El usuario confirma la eliminación
+				\item El sistema elimina la reserva
+			\end{enumerate}
+			
 		\end{enumerate}\\
-		\textbf{Postcondición} &  \\
-		\textbf{Excepciones}          &  \\
+		\textbf{Postcondición} & La reserva puntual queda modificada o eliminada de manera correcta, actualizando todos los datos correspondientes \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Reserva inexistente o ya eliminada \textrightarrow{} impedir la acción y mostrar el error
+			\item \textbf{Ex2:} Violación de restricciones \textrightarrow{} impedir la acción y mostrar el error solicitando la corrección de los datos correspondientes
+		\end{itemize} \\
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
@@ -660,17 +720,27 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          &  \\
-		\textbf{Precondición}         &  \\
+		\textbf{Descripción}          & El gestor o administrador revisa el estado de las solicitudes de reserva \\
+		\textbf{Precondición}         & El usuario tiene que estar autenticado y ha de tener los permisos, deben de existir solicitudes de reservas y la base de datos y las restricciones han de estar disponibles \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item 
+			\item El usuario accede al apartado \emph{Revisar solicitudes de reservas}
+			\item El sistema muestra la lista de todas las solicitudes de reservas cuyo estado es Pendiente
+			\item El usuario elige como filtrar si lo necesita
+			\item El sistema muestra la lista según los filtros
+			\item El usuario selecciona una solicitud
+			\item El sistema le muestra los detalles
 		\end{enumerate}\\
-		\textbf{Postcondición} &  \\
-		\textbf{Excepciones}          &  \\
-		\textbf{Importancia}          & Alta \\
+		\textbf{Postcondición} & Se actualiza o muestra correctamente el estado de las solicitudes \\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} No existen solicitudes para los filtros aplicados \textrightarrow{} mostrar mensaje "Sin resultados"
+			\item \textbf{Ex2:} Error al recoger los datos \textrightarrow{} mostrar aviso de error y no realizar la acción
+		\end{itemize}\\
+		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU-16 Revisar solicitudes de reserva}
@@ -685,17 +755,38 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          &  \\
-		\textbf{Precondición}         &  \\
+		\textbf{Descripción}          & El profesorado (PDI) puede solicitar reservas puntuales de aulas, y consultar el estado de sus solicitudes para ver si han sido procesadas, y en el caso de que sí, ver si han sido aprobadas o rechazadas \\
+		\textbf{Precondición}         & El usuario debe de estar autenticado, el aula solicitada debe de estar disponible y la base de datos y las restricciones disponibles \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item 
+			\item El PDI accede al apartado \emph{Mis solicitudes de reserva}
+			\item El sistema le muestra las opciones disponibles que son solicitar una nueva reserva o consultar el estado de las solicitudes
+			\item El PDI pulsa en \emph{Nueva solicitud}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema muestra un formulario con los campos: fecha, hora inicio y fin, motivo, capacidad
+				\item El PDI completa los campos y envía la solicitud
+				\item El sistema añade la primera aula que cumpla con las restricciones
+				\item El sistema registra la solicitud con el estado \emph{Pendiente}
+			\end{enumerate}
+			\item El PDI selecciona la opción de \emph{Consultar estado}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema muestra un listado con las solicitudes del usuario
+				\item El usuario puede filtrar por fechas o estado
+				\item El sistema actualiza la lista de acuerdo a los filtros
+			\end{enumerate}
 		\end{enumerate}\\
-		\textbf{Postcondición} &  \\
-		\textbf{Excepciones}          &  \\
-		\textbf{Importancia}          & Alta \\
+		\textbf{Postcondición} & La solicitud de reserva queda creada con estado Pendiente, y el usuario puede consultar el estado de las solicitudes realizadas \\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Ningún aula disponible para los datos introducidos \textrightarrow{} impedir envío y solicitar cambiar datos
+			\item \textbf{Ex2:} Solicitud duplicada \textrightarrow{} informar y evitar creación
+		\end{itemize}\\
+		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
 	\caption{CU-17 Gestión solicitud de reservas}
