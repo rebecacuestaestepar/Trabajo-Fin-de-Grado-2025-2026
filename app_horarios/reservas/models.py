@@ -1,6 +1,6 @@
 from django.db import models
 
-from app_horarios.app_horarios.models import Dia
+from app_horarios.calendario.models import Dia
 from app_horarios.docencia.models import Asignaturas
 
 # Create your models here.
@@ -12,6 +12,7 @@ class Reserva(models.Model):
     momento_reserva = models.DateTimeField(db_column='MOMENTO_RESERVA')  # Field name made lowercase.
     estado = models.CharField(db_column='ESTADO', max_length=1, blank=True, null=True)  # Field name made lowercase.
     tipo = models.CharField(db_column='TIPO', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    capacidad_solicitada = models.IntegerField(db_column='CAPACIDAD_SOLICITADA', max_length=3, null=True, blank=True)  # Field name made lowercase.
     hora_inicio = models.TimeField(db_column='HORA_INICIO')  # Field name made lowercase.
     hora_fin = models.TimeField(db_column='HORA_FIN')  # Field name made lowercase.
 
