@@ -1,5 +1,5 @@
 from django.db import models
-from app_horarios.docencia.models import Grado
+from docencia.models import Grado
 
 # Create your models here.
 

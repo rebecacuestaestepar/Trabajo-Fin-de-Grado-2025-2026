@@ -25,6 +25,11 @@ SECRET_KEY = 'django-insecure-9op17d70_c7qawk_r=&l@_xfk4r4^xnkjx)qky+z%g=c+jgmqt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
 ALLOWED_HOSTS = []
 
 
@@ -42,7 +47,7 @@ INSTALLED_APPS = [
     'calendario',
     'docencia',
     'reservas',
-    'corseheaders',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -58,10 +63,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'nucleo.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:3000",
-]
+
 
 
 TEMPLATES = [

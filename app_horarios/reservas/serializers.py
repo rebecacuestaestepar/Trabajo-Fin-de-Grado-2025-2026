@@ -1,11 +1,14 @@
 from rest_framework import serializers
+from app_horarios.calendario.models import Dia
 from reservas.models import Reserva, ReservaPuntual, Responsable
+from aulas.models import Aula
 
-class ReservaPuntualCreateSerializer(serializers.ModelSerializer):
+class ReservaPuntualCreateSerializer(serializers.Serializer):
 
-    # Campos que te llegarán desde React
-    fecha_inicio = serializers.DateField()
-    fecha_fin = serializers.DateField()
+    # Campos que llegan desde React
+    #fecha_inicio = serializers.DateField()
+    #fecha_fin = serializers.DateField()
+    fecha = serializers.DateField()
     hora_inicio = serializers.TimeField()
     hora_fin = serializers.TimeField()
     motivo = serializers.CharField(max_length=90)
@@ -17,19 +20,22 @@ class ReservaPuntualCreateSerializer(serializers.ModelSerializer):
         # Por ahora, algo simple.
 
         correo = validated_data['correo_responsable']
-        responsable, _ = Responsable.objects.get_or_create(
+        responsable= Responsable.objects.get(
             correo=correo,
-            defaults={
-                'nombre': 'Temporal',
-                'apellidos': 'Temporal',
-            }
+        )
+
+        fecha = validated_data['fecha'].day
+        dia = Dia.objects.get(
+            fecha=fecha,
         )
 
     # Crear entrada en RESERVA (usar modelo Reserva)
         reserva = Reserva.objects.create(
             # IDRESERVA podría ser generado automáticamente en el modelo
-            nombre_aula='AULA_DEFAULT',  # de momento valor fijo o null si te lo permites
-            id_dia=validated_data['fecha'],
+            nombre_aula='AULA1',  
+            #id_dia=validated_data['fecha'],
+            id_dia = dia,
+            # Añadir momento de la reserva
             estado='P',  # P = pendiente, por ejemplo
             tipo='P',    # P = puntual
             capacidad_solicitada=validated_data['capacidad_solicitada'],
@@ -43,13 +49,11 @@ class ReservaPuntualCreateSerializer(serializers.ModelSerializer):
             id_responsable=responsable,
             motivo=validated_data['motivo'],
             inicio=validated_data['fecha'],
-            fin=validated_data['fecha'],
+            #fin=validated_data['fecha'],
         )
 
         return reserva_puntual
     
-    """
-    class Meta:
-        model = ReservaPuntual
-        fields = ['id_reserva', 'id_responsable', 'motivo', 'inicio', 'fin']
-    """
+    
+
+    

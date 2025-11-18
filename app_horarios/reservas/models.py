@@ -1,7 +1,7 @@
 from django.db import models
 
-from app_horarios.calendario.models import Dia
-from app_horarios.docencia.models import Asignaturas
+from calendario.models import Dia
+from docencia.models import Asignaturas
 
 # Create your models here.
 
