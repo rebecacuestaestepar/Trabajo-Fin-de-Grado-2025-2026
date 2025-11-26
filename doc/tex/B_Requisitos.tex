@@ -384,12 +384,77 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\caption{CU-7 Consultar horario de grado}
 \end{table}
 
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-8}    & \textbf{Consultar calendario de exámenes}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador puede consultar el calendario de los exámenes de convocatoria. El sistema muestra las fechas de los exámenes, con la asignatura el aula y la hora.  \\
+		\textbf{Precondición}         &  El usuario autenticado tiene permisos , los exámenes de los grados deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al módulo \emph{Consultar exámenes}
+			\item El sistema muestra los grados por los que filtrar.
+			\item El usuario selecciona el grado del que quiere
+			\item El sistema muestra filtros sobre los que aplicar 
+			\item El usuario selecciona si quiere filtrar o no y pulsa \emph{Buscar}
+			\item El sistema recoge los datos asociado al grado seleccionado y los filtros mostrando los exámenes
+		\end{enumerate}\\
+		\textbf{Postcondición} & Se muestra el calendario de exámenes con los filtros y grado aplicados, con la informaciónn actualizada y recogiendo los datos de la base de datos        \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\tightlist
+			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error.
+			\item \textbf{Ex2:} Que no existan exámenes para los filtros seleccionados \textrightarrow mostrar mensaje de que no existen resultados
+		\end{itemize} \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-8 Consultar calendario de exámenes}
+\end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-8}    & \textbf{Cargar horario}\\
+		\textbf{CU-9}    & \textbf{Consultar calendario académico}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador puede consultar el calendario académico de la politécnica. El sistema mostrará el calendario indicando los días lectivos correspondientes a ambos semestres, los días correspondientes a exámenes de convocatoria, a TFG, los días festivos y los días que se produce un cambio de docencia.  \\
+		\textbf{Precondición}         &  El usuario autenticado tiene permisos, los tipos de día deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al módulo \emph{Consultar calendario}
+			\item El sistema muestra el calendario académico con diferentes colores en función del tipo de día.
+		\end{enumerate}\\
+		\textbf{Postcondición} & Se muestra el calendario académico coloreando cada tipo de día con un color diferente (rojo: festivo, morado: cambio de docencia, amarillo: lectivos primer semestre, verde: exámenes convocatoria, azul: lectivos segundo semestre y naranja: días de TFG y TFM), recogiendo los datos de la base de datos        \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\tightlist
+			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error. 
+		\end{itemize} \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-9 Consultar calendario académico}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-10}    & \textbf{Cargar horario}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -418,7 +483,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-8 Cargar horario}
+	\caption{CU-10 Cargar horario}
 \end{table}
 
 
@@ -426,7 +491,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-9}    & \textbf{Gestión de reservas periódicas}\\
+		\textbf{CU-11}    & \textbf{Gestión de reservas periódicas}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -469,14 +534,14 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-9 Gestión de reservas periódicas}
+	\caption{CU-11 Gestión de reservas periódicas}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-10}    & \textbf{Cargar calendario exámenes}\\
+		\textbf{CU-12}    & \textbf{Cargar calendario exámenes}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -505,14 +570,14 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-10 Cargar calendario exámenes}
+	\caption{CU-12 Cargar calendario exámenes}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-11}    & \textbf{Calcular rotación de exámenes}\\
+		\textbf{CU-13}    & \textbf{Calcular rotación de exámenes}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -534,7 +599,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-11 Calcular rotación de exámenes}
+	\caption{CU-13 Calcular rotación de exámenes}
 \end{table}
 
 
@@ -542,7 +607,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-12}    & \textbf{Modificar fecha de examen}\\
+		\textbf{CU-14}    & \textbf{Modificar fecha de examen}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -572,7 +637,80 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-12 Modificar fecha de examen}
+	\caption{CU-14 Modificar fecha de examen}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-15}    & \textbf{Cargar calendario académico}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El administrador o gestor carga en el sistema un calendario académico de otro año\\
+		\textbf{Precondición}         & Que sea un usuario con permisos y que la base de datos se encuentre disponible para recoger los datos cargados \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al apartado de \emph{Calendario académico}
+			\item El usuario pulsa en \emph{Cargar calendario}
+			\item El sistema muestra una ventana con los siguientes campos: Inicio primer semestre y segundo semestre, e inicio y fin de las convocatorias de exámenes para ambos semestres.
+			\item El sistema hace los cálculos necesarios para colorear los días lectivos de ambos semestres y los de convocatoria de exámenes
+			\item El sistema muestra el calendario académico con los días 
+			\item El sistema muestra el calendario de exámenes cargado
+		\end{enumerate}\\
+		\textbf{Postcondición} &  La base de datos queda actualizada correctamente a la hora de cargar los datos, y que los muestre correctamente en la aplicación y que si hay más calendarios de distintos años grado permita seleccionar el curso académico    \\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Error al cargar los datos \textrightarrow{} mostrar mensaje de error y cancelar la carga de datos
+			\item \textbf{Ex2:} Fallo de cálculos \textrightarrow{} mostrar el mensaje y pedir la corrección
+		\end{itemize}\\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-15 Cargar calendario académico}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-16}    & \textbf{Modificar día}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador modifica el tipo de día en el calendario académico. El sistema cambiará el tipo de día que había anteriormente por el seleccionado, y actualizará la información en la base de datos. \\
+		\textbf{Precondición}         &  El usuario autenticado tenga los permisos, que el calendario se encuentre cargado y que la base de datos esté disponible \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al módulo \emph{Calendario académico}
+			\item El sistema muestra el listado de los calendarios que se encuentran cargados en la base de datos mostrando el curso académico al que corresponde cada uno
+			\item El usuario selecciona un curso académico
+			\item El sistema muestra el calendario del curso correspondiente
+			\item El usuario selecciona un día
+			\item El sistema le mostrará las distintas posibilidades de tipo de día que puede seleccionar
+			\item El usuario pulsa sobre el tipo de día
+			\item El sistema cambia el tipo de día y el color correspondiente
+			\item El sistema actualiza los datos del día 
+		\end{enumerate}\\
+		\textbf{Postcondición} & El calendario queda actualizado con las modificaciones de los días realizados\\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Que se modifique un sábado o domingo y se ponga como día lectivo o cambio de docencia\textrightarrow{} mostrar error y solicitar nuevo tipo
+			\item \textbf{Ex2:} Que viole alguna otra restricción \textrightarrow{} Mostrar el error y no permitir el cambio
+		\end{itemize}\\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-16 Modificar día}
 \end{table}
 
 
@@ -580,7 +718,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-13}    & \textbf{Crear reserva puntual}\\
+		\textbf{CU-17}    & \textbf{Crear reserva puntual}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -610,7 +748,81 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-13 Crear reserva puntual}
+	\caption{CU-17 Crear reserva puntual}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-18}    & \textbf{Revisar solicitudes de reserva}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador revisa el estado de las solicitudes de reserva \\
+		\textbf{Precondición}         & El usuario tiene que estar autenticado y ha de tener los permisos, deben de existir solicitudes de reservas y la base de datos y las restricciones han de estar disponibles \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al apartado \emph{Revisar solicitudes de reservas}
+			\item El sistema muestra la lista de todas las solicitudes de reservas cuyo estado es Pendiente
+			\item El usuario elige como filtrar si lo necesita
+			\item El sistema muestra la lista según los filtros
+			\item El usuario selecciona una solicitud
+			\item El sistema le muestra los detalles
+		\end{enumerate}\\
+		\textbf{Postcondición} & Se actualiza o muestra correctamente el estado de las solicitudes \\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} No existen solicitudes para los filtros aplicados \textrightarrow{} mostrar mensaje "Sin resultados"
+			\item \textbf{Ex2:} Error al recoger los datos \textrightarrow{} mostrar aviso de error y no realizar la acción
+		\end{itemize}\\
+		\textbf{Importancia}          & Media-Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-18 Revisar solicitudes de reserva}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-19}    & \textbf{Modificar campo solicitud}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador decide modificar uno de los campos de la solicitud de reserva, y el sistema avisará al responsable de la reserva del cambio realizado \\
+		\textbf{Precondición}         & El usuario tiene que estar autenticado y ha de tener los permisos, deben de existir solicitudes de reservas y la base de datos y las restricciones han de estar disponibles \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al apartado \emph{Revisar solicitudes de reservas}
+			\item El sistema muestra la lista de todas las solicitudes de reservas cuyo estado es Pendiente
+			\item El usuario elige como filtrar si lo necesita
+			\item El sistema muestra la lista según los filtros
+			\item El usuario selecciona una solicitud
+			\item El sistema le muestra los detalles
+			\item El usuario selecciona el campo que quiere modificar y cambia el dato del mismo
+			\item El sistema notificará al responsable de la solicitud de los cambios realizados en la misma
+		\end{enumerate}\\
+		\textbf{Postcondición} & Se muestra la modificación realizada en la solicitud, y se notifica al responsable de la modificación \\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} No existen solicitudes para los filtros aplicados \textrightarrow{} mostrar mensaje "Sin resultados"
+			\item \textbf{Ex2:} Error al recoger los datos \textrightarrow{} mostrar aviso de error y no realizar la acción
+			\item \textbf{Ex:3} Violación de restricción \textrightarrow{} los cambios realizados violarían alguna restricción en caso de ser aprobados
+			\item \textbf{Ex:4} No llega notificación al responsable \textrightarrow{} se solicitará volver a notificarlo
+		\end{itemize}\\
+		\textbf{Importancia}          & Media-Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-19 Modificar campo solicitud}
 \end{table}
 
 
@@ -618,7 +830,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-14}    & \textbf{Aprobar/rechazar reserva puntual}\\
+		\textbf{CU-20}    & \textbf{Aprobar/rechazar reserva puntual}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -659,7 +871,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-14 Aprobar rechazar reserva puntual}
+	\caption{CU-20 Aprobar rechazar reserva puntual}
 \end{table}
 
 
@@ -667,7 +879,7 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-15}    & \textbf{Gestión de reservas puntuales}\\
+		\textbf{CU-21}    & \textbf{Gestión de reservas puntuales}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -707,50 +919,17 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-15 Gestión de reservas puntuales}
+	\caption{CU-21 Gestión de reservas puntuales}
 \end{table}
+
+
 
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-16}    & \textbf{Revisar solicitudes de reserva}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El gestor o administrador revisa el estado de las solicitudes de reserva \\
-		\textbf{Precondición}         & El usuario tiene que estar autenticado y ha de tener los permisos, deben de existir solicitudes de reservas y la base de datos y las restricciones han de estar disponibles \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al apartado \emph{Revisar solicitudes de reservas}
-			\item El sistema muestra la lista de todas las solicitudes de reservas cuyo estado es Pendiente
-			\item El usuario elige como filtrar si lo necesita
-			\item El sistema muestra la lista según los filtros
-			\item El usuario selecciona una solicitud
-			\item El sistema le muestra los detalles
-		\end{enumerate}\\
-		\textbf{Postcondición} & Se actualiza o muestra correctamente el estado de las solicitudes \\
-		\textbf{Excepciones}          &  
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} No existen solicitudes para los filtros aplicados \textrightarrow{} mostrar mensaje "Sin resultados"
-			\item \textbf{Ex2:} Error al recoger los datos \textrightarrow{} mostrar aviso de error y no realizar la acción
-		\end{itemize}\\
-		\textbf{Importancia}          & Media-Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-16 Revisar solicitudes de reserva}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-17}    & \textbf{Gestión solicitud de reservas}\\
+		\textbf{CU-22}    & \textbf{Gestión solicitud de reservas}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -789,5 +968,5 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-17 Gestión solicitud de reservas}
+	\caption{CU-22 Gestión solicitud de reservas}
 \end{table}
