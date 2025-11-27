@@ -2,14 +2,16 @@ from django.db import models
 
 from calendario.models import Dia
 from docencia.models import Asignaturas
+from django.utils import timezone
+
 
 # Create your models here.
 
 class Reserva(models.Model):
-    idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=5)  # Field name made lowercase.
+    idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=12)  # Field name made lowercase.
     nombre_aula = models.CharField(db_column='NOMBRE_AULA', max_length=8)  # Field name made lowercase.
     id_dia = models.ForeignKey(Dia, models.CASCADE, db_column='ID_DIA')  # Field name made lowercase.
-    momento_reserva = models.DateTimeField(db_column='MOMENTO_RESERVA')  # Field name made lowercase.
+    momento_reserva = models.DateTimeField(db_column='MOMENTO_RESERVA', default=timezone.now)  # Field name made lowercase.
     estado = models.CharField(db_column='ESTADO', max_length=1, blank=True, null=True)  # Field name made lowercase.
     tipo = models.CharField(db_column='TIPO', max_length=1, blank=True, null=True)  # Field name made lowercase.
     capacidad_solicitada = models.IntegerField(db_column='CAPACIDAD_SOLICITADA', max_length=3, null=True, blank=True)  # Field name made lowercase.
@@ -19,6 +21,16 @@ class Reserva(models.Model):
     class Meta:
         managed = False
         db_table = 'reserva'
+
+    @classmethod
+    def next_id(cls):
+        ultimo = cls.objects.aggregate(max_id=models.Max('idreserva'))['max_id']
+        if not ultimo:
+            # primer ID
+            return 'R0001'
+        # suponiendo formato Rdddd
+        numero = int(ultimo[1:]) + 1
+        return f'R{numero:04d}'
 
 
 class ReservaPeriodica(models.Model):
@@ -49,7 +61,7 @@ class Responsable(models.Model):
 
 class ReservaPuntual(models.Model):
     id_reserva = models.OneToOneField(Reserva, models.CASCADE, db_column='ID_RESERVA', primary_key=True)  # Field name made lowercase.
-    id_responsable = models.ForeignKey(Responsable, models.CASCADE, db_column='ID_RESPONSABLE', max_length=9)  # Field name made lowercase.
+    id_responsable = models.ForeignKey(Responsable, models.CASCADE, db_column='ID_RESPONSABLE', max_length=30)  # Field name made lowercase.
     motivo = models.CharField(db_column='MOTIVO', max_length=90, blank=True, null=True)  # Field name made lowercase.
     inicio = models.DateTimeField(db_column='INICIO')  # Field name made lowercase.
     fin = models.DateTimeField(db_column='FIN')  # Field name made lowercase.

@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from app_horarios.calendario.models import Dia
+from calendario.models import Dia
 from reservas.models import Reserva, ReservaPuntual, Responsable
 from aulas.models import Aula
+
 
 class ReservaPuntualCreateSerializer(serializers.Serializer):
 
@@ -20,22 +21,29 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
         # Por ahora, algo simple.
 
         correo = validated_data['correo_responsable']
-        responsable= Responsable.objects.get(
-            correo=correo,
-        )
+        try:
+            responsable = Responsable.objects.get(correo=correo)
+        except Responsable.DoesNotExist:
+            raise serializers.ValidationError({
+                'correo_responsable': 'No existe ningún responsable con ese correo.'
+            })
 
-        fecha = validated_data['fecha'].day
-        dia = Dia.objects.get(
-            fecha=fecha,
-        )
+        fecha = validated_data['fecha']
+        try:
+            dia = Dia.objects.get(dia=fecha)  # o Dia.objects.get(pk=fecha) si es PK
+        except Dia.DoesNotExist:
+            raise serializers.ValidationError({
+                'fecha': 'La fecha seleccionada no existe en el calendario académico.'
+            })
 
     # Crear entrada en RESERVA (usar modelo Reserva)
         reserva = Reserva.objects.create(
-            # IDRESERVA podría ser generado automáticamente en el modelo
+            idreserva=Reserva.next_id(),
             nombre_aula='AULA1',  
             #id_dia=validated_data['fecha'],
             id_dia = dia,
             # Añadir momento de la reserva
+            #momento_reserva=timezone.now(),  # Aquí deberías poner la fecha y hora actual
             estado='P',  # P = pendiente, por ejemplo
             tipo='P',    # P = puntual
             capacidad_solicitada=validated_data['capacidad_solicitada'],
@@ -49,6 +57,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
             id_responsable=responsable,
             motivo=validated_data['motivo'],
             inicio=validated_data['fecha'],
+            fin=validated_data['fecha']
             #fin=validated_data['fecha'],
         )
 
