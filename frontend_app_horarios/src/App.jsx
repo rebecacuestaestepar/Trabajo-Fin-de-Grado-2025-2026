@@ -1,17 +1,21 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import SolicitudReserva from './reservas/SolicitudReserva.jsx'
+import FormularioCargar from './calendario/FormularioCargar.jsx';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div>
-      <h1>Solicitud de reserva puntual</h1>
-      <SolicitudReserva />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SolicitudReserva />} />
+        <Route path="/cargar-calendario" element={<FormularioCargar />} />
+      </Routes>
+    </BrowserRouter>
     /*
     <>
       <div>

@@ -1,5 +1,6 @@
 // src/components/ReservaPuntualForm.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
 
 function SolicitudReserva() {
   const [fecha, setFecha] = useState('');
@@ -11,6 +12,18 @@ function SolicitudReserva() {
 
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState(null);
+
+
+  const [esPeriodica, setEsPeriodica] = useState(false);
+  const [fechaInicioPeriodo, setFechaInicioPeriodo] = useState('');
+  const [fechaFinPeriodo, setFechaFinPeriodo] = useState('');
+  const [diaSemanaPeriodica, setDiaSemanaPeriodica] = useState('');
+
+  useEffect(() => {
+    if (esPeriodica) {
+      setFechaInicioPeriodo(fecha);
+    }
+  }, [fecha, esPeriodica]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +43,10 @@ function SolicitudReserva() {
           motivo: motivo,
           capacidad_solicitada: Number(capacidad),
           correo_responsable: correoResponsable,
+          generar_periodica: esPeriodica,
+          fecha_inicio_periodo: fechaInicioPeriodo,
+          fecha_fin_periodo: fechaFinPeriodo,
+          dia_semana_periodica: diaSemanaPeriodica,
         }),
       });
 
@@ -46,6 +63,10 @@ function SolicitudReserva() {
         setMotivo('');
         setCapacidad('');
         setCorreoResponsable('');
+        setEsPeriodica(false);
+        setFechaInicioPeriodo('');
+        setFechaFinPeriodo('');
+        setDiaSemanaPeriodica('');
       }
     } catch (error) {
       setErrores({ general: 'Error al conectar con el servidor' });
@@ -54,6 +75,7 @@ function SolicitudReserva() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h1>Solicitud de reserva puntual</h1>
       <div>
         <label>Correo responsable:</label>
         <input
@@ -112,7 +134,65 @@ function SolicitudReserva() {
         />
       </div>
 
-      <button type="submit">Enviar solicitud</button>
+      <div style={{ marginTop: '16px' }}>
+        <label>
+          <input
+            type="checkbox"
+            checked={esPeriodica}
+            onChange={(e) => setEsPeriodica(e.target.checked)}
+          />{' '}
+          Generar reserva de forma periódica
+        </label>
+      </div>
+
+      {esPeriodica && (
+        <div
+          style={{
+            marginTop: '10px',
+            padding: '10px',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+          }}
+        >
+          <h4>Configuración de reserva periódica</h4>
+
+          <div>
+            <label>Fecha de inicio:</label>
+            <input
+              type="date"
+              value={fechaInicioPeriodo}
+              onChange={(e) => setFechaInicioPeriodo(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label>Fecha de fin:</label>
+            <input
+              type="date"
+              value={fechaFinPeriodo}
+              onChange={(e) => setFechaFinPeriodo(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label>Día de la semana que generar la reserva:</label>
+            <select
+              value={diaSemanaPeriodica}
+              onChange={(e) => setDiaSemanaPeriodica(e.target.value)}
+            >
+              <option value="">Día de la semana que generar la reserva</option>
+              <option value="1">Lunes</option>
+              <option value="2">Martes</option>
+              <option value="3">Miércoles</option>
+              <option value="4">Jueves</option>
+              <option value="5">Viernes</option>
+            </select>
+          </div>
+        </div>
+      )}
+
+
+      <button type="submit" style={{ marginTop: '16px' }}>Enviar solicitud</button>
 
       {mensaje && <p style={{ color: 'green' }}>{mensaje}</p>}
       {errores && (
