@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { cargarCalendarioFormulario } from "../api/calendario";
 
 function FormularioCargar() {
     const [fechaInicio1Semestre, setFechaInicio1Semestre] = useState('');
@@ -16,42 +17,34 @@ function FormularioCargar() {
         e.preventDefault();
         setMensaje(null);
         setErrores(null);
+
+        payload = {
+            fecha_inicio_1_semestre: fechaInicio1Semestre,
+            fecha_fin_1_semestre: fechaFin1Semestre,
+            fecha_inicio_2_semestre: fechaInicio2Semestre,
+            fecha_fin_2_semestre: fechaFin2Semestre,
+            semanas_docencia: Number(semanasDocencia),
+            //fecha_inicio_1_examenes: fechaInicio1Examenes,
+            //fecha_inicio_2_examenes: fechaInicio2Examenes,
+        };
     
 
         try {
-            const response = await fetch('http://localhost:8000/api/calendario/cargar/formulario/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fecha_inicio_1_semestre: fechaInicio1Semestre,
-                    fecha_fin_1_semestre: fechaFin1Semestre,
-                    fecha_inicio_2_semestre: fechaInicio2Semestre,
-                    fecha_fin_2_semestre: fechaFin2Semestre,
-                    semanas_docencia: Number(semanasDocencia),
-                    //fecha_inicio_1_examenes: fechaInicio1Examenes,
-                    //fecha_inicio_2_examenes: fechaInicio2Examenes,
-                }),
-            });
+            const data = await cargarCalendarioFormulario(payload);
+            
+            setMensaje(data.message || 'Fechas cargadas correctamente');
 
-            if (!response.ok) {
-                const data = await response.json();
-                setErrores(data);
-            } else {
-                const data = await response.json();
-                setMensaje(data.message || 'Fechas cargadas correctamente');
-                // opcional: limpiar formulario
-                setFechaInicio1Semestre('');
-                setFechaFin1Semestre('');
-                setFechaInicio2Semestre('');
-                setFechaFin2Semestre('');
-                //setFechaInicio1Examenes('');
-                //setFechaInicio2Examenes('');
-                setSemanasDocencia('');
-            }
+            // opcional: limpiar formulario
+            setFechaInicio1Semestre('');
+            setFechaFin1Semestre('');
+            setFechaInicio2Semestre('');
+            setFechaFin2Semestre('');
+            //setFechaInicio1Examenes('');
+            //setFechaInicio2Examenes('');
+            setSemanasDocencia('');
+            
         } catch (error) {
-            setErrores({ general: 'Error al enviar el formulario' });
+            setErrores(error.data || { general: 'Error al enviar el formulario' });
         }
         
     }

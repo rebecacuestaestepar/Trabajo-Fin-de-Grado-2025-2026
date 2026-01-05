@@ -1,5 +1,6 @@
 // src/components/ReservaPuntualForm.jsx
 import { useState, useEffect } from 'react';
+import { buscarAulasDisponibles, solicitarReservaPuntual } from '../api/reservas';
 
 
 function SolicitudReserva() {
@@ -61,21 +62,9 @@ function SolicitudReserva() {
         payload.dia_semana_periodica = Number(diaSemanaPeriodica);
       }
     
-      try {
-      const response = await fetch('http://localhost:8000/api/aulas/disponibles/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setErrores(data);
-        setAulasDisponibles([]);
-        setAulaSeleccionada('');
-        return;
-      }
+      
+   try {
+      const data = await buscarAulasDisponibles(payload);
 
       setAulasDisponibles(data.aulas || []);
 
@@ -85,9 +74,10 @@ function SolicitudReserva() {
       } else {
         setAulaSeleccionada('');
       }
-
     } catch (error) {
       setErrores({ general: 'Error al conectar con el servidor' });
+      setAulasDisponibles([]);
+      setAulaSeleccionada('');
     } finally {
       setCargandoAulas(false);
     }
@@ -115,10 +105,10 @@ function SolicitudReserva() {
     camaras,
     enchufes,
     generar_periodica: esPeriodica,
-    nombre_aula: aulaSeleccionada || "", // ✅ aula elegida del desplegable
+    nombre_aula: aulaSeleccionada || "", //  aula elegida del desplegable
   };
 
-  // ✅ Solo añadir campos periódicos si es periódica
+  // Solo añadir campos periódicos si es periódica
   if (esPeriodica) {
     payload.fecha_inicio_periodo = fechaInicioPeriodo;
     payload.fecha_fin_periodo = fechaFinPeriodo;
@@ -126,13 +116,8 @@ function SolicitudReserva() {
   }
 
   try {
-    const response = await fetch('http://localhost:8000/api/reservas/puntuales/solicitar/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
 
-    const data = await response.json();
+    const data = await solicitarReservaPuntual(payload);
 
     if (!response.ok) {
       setErrores(data);
@@ -158,7 +143,7 @@ function SolicitudReserva() {
       setAulaSeleccionada('');
     }
   } catch (error) {
-    setErrores({ general: 'Error al conectar con el servidor' });
+    setErrores(error.data || { general: 'Error al conectar con el servidor' });
   }
 };
 
