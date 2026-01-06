@@ -21,6 +21,10 @@ function App() {
         <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
       </Routes>
     </BrowserRouter>
+  
+  
+
+
     /*
     <>
       <div>

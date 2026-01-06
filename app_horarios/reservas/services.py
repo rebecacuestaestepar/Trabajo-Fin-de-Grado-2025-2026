@@ -69,6 +69,11 @@ def aulas_disponibles_en_fecha_hora(
 
     # Si tienes un estado "cancelada", filtra aquí para ignorarla.
     # Ejemplo: solape = solape.exclude(estado='C')
+    solape = solape.exclude(estado='R')
+
+    #PREGUNTAR PROFESORES
+    solape = solape.exclude(estado='P')
+    solape = solape.exclude(estado='S')
 
     disponibles = candidatos.annotate(
         tiene_solape=Exists(solape)

@@ -1,6 +1,8 @@
 import { apiRequest, apiGet, apiPatch, apiPost } from "./client";
 
-
+// ----------------------------------------------
+// --- PÁGINA DE SOLICITUD DE RESERVA PUNTUAL ---
+// ----------------------------------------------
 export function buscarAulasDisponibles(payload) {
     return apiRequest("/aulas/disponibles/", {
         method : "POST",
@@ -15,6 +17,9 @@ export function solicitarReservaPuntual(payload) {
     });
 }
 
+// ------------------------------------------------
+// --- PÁGINA DE GESTIÓN DE RESERVAS PENDIENTES ---
+// ------------------------------------------------
 // Lista pendientes
 export function getReservasPendientes() {
   return apiGet("/reservas/pendientes/");

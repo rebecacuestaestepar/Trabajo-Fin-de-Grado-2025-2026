@@ -1,0 +1,166 @@
+# reservas/api_serializers.py
+from rest_framework import serializers
+from calendario.models import Dia
+from reservas.models import Reserva, ReservaPuntual
+
+from reservas.services import aulas_disponibles_en_fecha_hora
+
+
+# -----------------------------
+# AULAS DISPONIBLES (GENÉRICO)
+# -----------------------------
+class AulasDisponiblesInputSerializer(serializers.Serializer):
+    fecha = serializers.DateField()
+    hora_inicio = serializers.TimeField()
+    hora_fin = serializers.TimeField()
+    capacidad_solicitada = serializers.IntegerField(min_value=0)
+
+    # Recursos (pueden o no existir en tu modelo Reserva; aquí solo para buscar aulas)
+    num_ordenadores = serializers.IntegerField(required=False, allow_null=True, min_value=0)
+    altavoces = serializers.BooleanField(required=False, default=False)
+    proyector = serializers.BooleanField(required=False, default=False)
+    camaras = serializers.BooleanField(required=False, default=False)
+    enchufes = serializers.BooleanField(required=False, default=False)
+
+    def validate(self, attrs):
+        if attrs["hora_inicio"] >= attrs["hora_fin"]:
+            raise serializers.ValidationError("hora_inicio debe ser menor que hora_fin.")
+        return attrs
+
+    def get_queryset(self):
+        v = self.validated_data
+        return aulas_disponibles_en_fecha_hora(
+            fecha=v["fecha"],
+            hora_inicio=v["hora_inicio"],
+            hora_fin=v["hora_fin"],
+            capacidad=v["capacidad_solicitada"],
+            num_ordenadores=v.get("num_ordenadores"),
+            altavoces=v.get("altavoces", False),
+            proyector=v.get("proyector", False),
+            camaras=v.get("camaras", False),
+            enchufes=v.get("enchufes", False),
+        )
+
+
+# -----------------------------
+# LISTADO PENDIENTES/SOLICITADAS
+# -----------------------------
+class ReservaPendienteListItemSerializer(serializers.Serializer):
+    idreserva = serializers.CharField()
+    motivo = serializers.CharField(allow_blank=True, required=False)
+    correo_responsable = serializers.EmailField(allow_blank=True, required=False)
+
+    fecha = serializers.DateField()
+    hora_inicio = serializers.TimeField()
+    hora_fin = serializers.TimeField()
+
+    capacidad_solicitada = serializers.IntegerField(allow_null=True, required=False)
+    num_ordenadores = serializers.IntegerField(allow_null=True, required=False)
+    altavoces = serializers.BooleanField(required=False)
+    proyector = serializers.BooleanField(required=False)
+    camaras = serializers.BooleanField(required=False)
+    enchufes = serializers.BooleanField(required=False)
+
+    nombre_aula = serializers.CharField(allow_blank=True, required=False)
+    estado = serializers.CharField()
+
+
+# -----------------------------
+# DETALLE + PATCH EDICIÓN
+# -----------------------------
+class ReservaDetalleSerializer(serializers.Serializer):
+    idreserva = serializers.CharField(read_only=True)
+
+    fecha = serializers.DateField()
+    hora_inicio = serializers.TimeField()
+    hora_fin = serializers.TimeField()
+
+    motivo = serializers.CharField(max_length=90, allow_blank=True, required=False)
+    correo_responsable = serializers.EmailField(allow_blank=True, required=False)
+
+    capacidad_solicitada = serializers.IntegerField(min_value=0, required=False)
+    num_ordenadores = serializers.IntegerField(required=False, allow_null=True, min_value=0)
+    altavoces = serializers.BooleanField(required=False, default=False)
+    proyector = serializers.BooleanField(required=False, default=False)
+    camaras = serializers.BooleanField(required=False, default=False)
+    enchufes = serializers.BooleanField(required=False, default=False)
+
+    nombre_aula = serializers.CharField(required=False, allow_blank=True)
+
+    estado = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        hi = attrs.get("hora_inicio")
+        hf = attrs.get("hora_fin")
+        if hi and hf and hi >= hf:
+            raise serializers.ValidationError("hora_inicio debe ser menor que hora_fin.")
+        return attrs
+
+    def to_representation(self, instance: Reserva):
+        """
+        instance = Reserva
+        """
+        puntual = ReservaPuntual.objects.select_related("id_responsable").filter(id_reserva=instance).first()
+
+        correo = ""
+        motivo = ""
+        if puntual and getattr(puntual, "id_responsable", None):
+            correo = getattr(puntual.id_responsable, "correo", "") or ""
+        if puntual:
+            motivo = getattr(puntual, "motivo", "") or ""
+
+        # Campos de recursos: si NO existen en el modelo Reserva, devolvemos None/False
+        def get_attr(obj, name, default):
+            return getattr(obj, name, default)
+
+        return {
+            "idreserva": instance.pk,
+            "fecha": instance.id_dia.dia if instance.id_dia else None,
+            "hora_inicio": instance.hora_inicio,
+            "hora_fin": instance.hora_fin,
+
+            "motivo": motivo,
+            "correo_responsable": correo,
+
+            "capacidad_solicitada": get_attr(instance, "capacidad_solicitada", None),
+            "num_ordenadores": get_attr(instance, "num_ordenadores", None),
+            "altavoces": bool(get_attr(instance, "altavoces", False)),
+            "proyector": bool(get_attr(instance, "proyector", False)),
+            "camaras": bool(get_attr(instance, "camaras", False)),
+            "enchufes": bool(get_attr(instance, "enchufes", False)),
+
+            "nombre_aula": instance.nombre_aula or "",
+            "estado": instance.estado,
+        }
+
+    def update(self, instance: Reserva, validated_data):
+        # Fecha => Dia
+        if "fecha" in validated_data:
+            fecha = validated_data["fecha"]
+            try:
+                dia = Dia.objects.get(dia=fecha)
+            except Dia.DoesNotExist:
+                raise serializers.ValidationError({"fecha": "La fecha no existe en el calendario académico."})
+            instance.id_dia = dia
+
+        # Campos de Reserva
+        for field in ["hora_inicio", "hora_fin", "capacidad_solicitada", "nombre_aula"]:
+            if field in validated_data:
+                setattr(instance, field, validated_data[field])
+
+        # Recursos: solo se guardan si tu modelo Reserva tiene esos campos
+        for field in ["num_ordenadores", "altavoces", "proyector", "camaras", "enchufes"]:
+            if field in validated_data and hasattr(instance, field):
+                setattr(instance, field, validated_data[field])
+
+        instance.save()
+
+        # Motivo (ReservaPuntual)
+        if "motivo" in validated_data:
+            puntual = ReservaPuntual.objects.filter(id_reserva=instance).first()
+            if puntual:
+                puntual.motivo = validated_data["motivo"]
+                puntual.save()
+
+        # correo_responsable no lo permito editar aquí (si quieres, lo añadimos)
+        return instance
