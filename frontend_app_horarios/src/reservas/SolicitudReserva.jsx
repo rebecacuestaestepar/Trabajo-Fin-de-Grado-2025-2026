@@ -113,7 +113,7 @@ export default function SolicitudReserva() {
     setMensaje(null);
     setCargandoAulas(true);
 
-    const numOrdenadoresPayload = numOrdenadores === "" ? null : Number(numOrdenadores);
+    const numOrdenadoresPayload = numOrdenadores === "" ? 0 : Number(numOrdenadores);
 
     const payload = {
       fecha: esPeriodica ? undefined : fecha,
@@ -156,7 +156,7 @@ export default function SolicitudReserva() {
     setMensaje(null);
     setErrores(null);
 
-    const numOrdenadoresPayload = numOrdenadores === "" ? null : Number(numOrdenadores);
+    const numOrdenadoresPayload = numOrdenadores === "" ? 0 : Number(numOrdenadores);
 
     const payload = {
       fecha,

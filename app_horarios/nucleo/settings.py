@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'calendario',
     'docencia',
     'reservas',
+    'nucleo',
     'corsheaders',
 ]
 

@@ -7,7 +7,60 @@ from typing import List
 import pandas as pd
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
+from typing import Dict, Set
 
+def get_db_tables() -> List[str]:
+    """Tablas del proyecto (excluye tablas internas de Django)."""
+    with connection.cursor() as cursor:
+        tables = connection.introspection.table_names(cursor)
+
+    # Ajusta si tienes otras tablas internas
+    ignore_prefixes = ("django_", "auth_", "admin_", "sessions_", "django_content_type")
+    ignore_exact = {"django_migrations"}
+
+    return [t for t in tables if not t.startswith(ignore_prefixes) and t not in ignore_exact]
+
+
+def get_fk_dependencies(tables: List[str]) -> Dict[str, Set[str]]:
+    """
+    Grafo: tabla -> set(tablas de las que depende (referenciadas por FK))
+    """
+    deps: Dict[str, Set[str]] = {t: set() for t in tables}
+    tables_set = set(tables)
+
+    with connection.cursor() as cursor:
+        for t in tables:
+            constraints = connection.introspection.get_constraints(cursor, t)
+            for _cname, cinfo in constraints.items():
+                fk = cinfo.get("foreign_key")
+                if fk:
+                    ref_table, _ref_col = fk
+                    if ref_table in tables_set:
+                        deps[t].add(ref_table)
+    return deps
+
+
+def topo_sort(deps: Dict[str, Set[str]]) -> List[str]:
+    """Orden topológico simple."""
+    remaining = {t: set(d) for t, d in deps.items()}
+    result: List[str] = []
+
+    while remaining:
+        ready = [t for t, d in remaining.items() if not d]
+        if not ready:
+            # Si hay ciclo, devolvemos el resto en orden alfabético para no bloquear
+            result.extend(sorted(remaining.keys()))
+            break
+
+        ready.sort()
+        result.extend(ready)
+
+        for t in ready:
+            remaining.pop(t, None)
+        for t in remaining:
+            remaining[t].difference_update(ready)
+
+    return result
 
 def normalize_bool(x):
     if pd.isna(x):
@@ -28,13 +81,23 @@ def sql_ident(name: str) -> str:
         raise CommandError(f"Nombre no válido: {name}")
     return name
 
+def to_db_value(v):
+    # convierte NaN/NaT a None
+    if v is None:
+        return None
+    if isinstance(v, float) and pd.isna(v):
+        return None
+    if pd.isna(v):
+        return None
+    return v
 
+"""
 def get_db_tables() -> List[str]:
     with connection.cursor() as cursor:
         tables = connection.introspection.table_names(cursor)
     # Filtra tablas internas típicas
     return [t for t in tables if not t.startswith("django_")]
-
+"""
 
 def get_table_columns(table: str) -> List[str]:
     with connection.cursor() as cursor:
@@ -73,10 +136,15 @@ class Command(BaseCommand):
             only_set = set(only)
             db_tables = [t for t in db_tables if t in only_set]
 
+        deps = get_fk_dependencies(db_tables)
+        insert_order = topo_sort(deps)               # padres -> hijas
+        delete_order = list(reversed(insert_order))  # hijas -> padres
+
+
         xl = pd.ExcelFile(xlsx_path)
         sheet_names = set(xl.sheet_names)
 
-        tables_in_excel = [t for t in db_tables if t in sheet_names]
+        tables_in_excel = [t for t in insert_order if t in sheet_names]
         missing = [t for t in db_tables if t not in sheet_names]
         if missing:
             self.stdout.write(self.style.WARNING(
@@ -89,14 +157,19 @@ class Command(BaseCommand):
             self.stdout.write("Borrando datos existentes (MySQL)…")
             with connection.cursor() as cursor:
                 cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
-                for t in db_tables:
-                    cursor.execute(f"DELETE FROM {sql_ident(t)};")
+                for t in delete_order:
+                    if t in sheet_names:  # solo tablas presentes en el Excel
+                        cursor.execute(f"DELETE FROM {sql_ident(t)};")
                 cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
 
             # 2) Inserts desde Excel
             self.stdout.write("Insertando datos desde Excel…")
             for table in tables_in_excel:
+                 # 1) Leer hoja
                 df = xl.parse(table)
+                df = df.replace({pd.NA: None})
+                df = df.where(pd.notnull(df), None)
+
 
                 if df.empty:
                     continue
@@ -120,7 +193,11 @@ class Command(BaseCommand):
                 placeholders = ", ".join(["%s"] * len(excel_cols))
                 sql = f"INSERT INTO {sql_ident(table)} ({cols_sql}) VALUES ({placeholders})"
 
-                rows = [tuple(row[c] for c in excel_cols) for _, row in df.iterrows()]
+                #rows = [tuple(row[c] for c in excel_cols) for _, row in df.iterrows()]
+                rows = [
+                    tuple(to_db_value(row[c]) for c in excel_cols)
+                    for _, row in df.iterrows()
+                ]
 
                 with connection.cursor() as cursor:
                     cursor.executemany(sql, rows)

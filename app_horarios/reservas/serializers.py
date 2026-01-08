@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from django.db import transaction
 from reservas.services import aula_disponible_en_varias_fechas, aulas_disponibles_en_fecha_hora
@@ -56,6 +56,9 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
         enchufes = validated_data.get('enchufes', False)
 
         generar_periodica = validated_data.get('generar_periodica', False)
+
+        if num_ordenadores is None:
+            num_ordenadores = 0
 
         # ===========================
         # CASO 1: NO PERIODICA
@@ -118,12 +121,15 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 hora_fin=hora_fin,
             )
 
+            inicio = datetime.combine(fecha, hora_inicio)
+            fin = datetime.combine(fecha, hora_fin)
+
             reserva_puntual = ReservaPuntual.objects.create(
                 id_reserva=reserva,
                 id_responsable=responsable,
                 motivo=motivo,
-                inicio=fecha,
-                fin=fecha,
+                inicio=inicio,
+                fin=fin,
             )
 
             return reserva_puntual
