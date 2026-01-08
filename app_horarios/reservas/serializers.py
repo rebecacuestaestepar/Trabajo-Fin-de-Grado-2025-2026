@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.db import transaction
 from reservas.services import aula_disponible_en_varias_fechas, aulas_disponibles_en_fecha_hora
 from rest_framework import serializers
-from calendario.models import Dia
+from calendario.models import Dia, Festivo
 from reservas.models import Reserva, ReservaPuntual, Responsable
 from aulas.models import Aula
 
@@ -70,6 +70,13 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 raise serializers.ValidationError({
                     'fecha': 'La fecha seleccionada no existe en el calendario académico.'
                 })
+            festivo = Festivo.objects.filter(id_dia=dia).first() # Obtenemos el festivo si existe
+            if festivo:
+                nombre = festivo.nombre or 'Día Festivo'
+                raise serializers.ValidationError({
+                    'fecha': f'El día seleccionado es festivo ({nombre}) y no se pueden hacer reservas.'
+                })
+            
             
             nombre_aula_elegida = validated_data.get("nombre_aula", "").strip() or None
 
@@ -166,6 +173,12 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 if not Dia.objects.filter(dia=current).exists():
                     raise serializers.ValidationError({
                         "fecha": f"La fecha {current.isoformat()} no existe en el calendario académico."
+                    })
+                festivo = Festivo.objects.filter(id_dia__dia=current).first() # Obtenemos el festivo si existe
+                if festivo:
+                    nombre = festivo.nombre or 'Día Festivo'
+                    raise serializers.ValidationError({
+                        'fecha': f'El día {current.isoformat()} es festivo ({nombre}) y no se pueden hacer reservas.'
                     })
                 fechas_periodo.append(current)
             current += timedelta(days=1)
