@@ -4,3 +4,62 @@ Esta parte de la memoria tiene como objetivo presentar las técnicas metodológi
 No se pretende que este apartado se convierta en un capítulo de un libro dedicado a cada una de las alternativas, sino comentar los aspectos más destacados de cada opción, con un repaso somero a los fundamentos esenciales y referencias bibliográficas para que el lector pueda ampliar su conocimiento sobre el tema.
 
 
+\section{Lenguajes y entornos de programación}
+\subsection{Python}
+
+\subsection{Entorno virtual}
+
+\subsection{VisualStudio}
+
+\section{Base de datos y despliegue}
+\subsection{Sistema gestor de base de datos: MySQL}
+
+\subsection{Servidor y entorno de ejecución: Apache}
+
+\section{Frameworks}
+\subsection{Backend: Django ((Django REST Framework)}
+Una vez seleccionado Python como lenguaje principal del proyecto, decidí utilizar Django como framework de desarrollo para el backend. La elección fue tomada principalmente por la necesidad de una arquitectura modular, mantenible y escalable, ya que el sistema debía organizarse en componentes independientes (por ejemplo, gestión de horarios, gestión de aulas, reservas, calendario, etc.) con responsabilidades bien delimitadas, y por ser un proyecto basado en el desarrollo de una aplicación web.
+
+Django favorece este enfoque mediante su organización basada en aplicaciones, permitiendo dividir el proyecto en módulos reutilizables e independientes, con el fin de dividir la lógica del proyecto, facilitando el crecimiento del mismo y reduciendo el acoplamiento entre distintas funcionalidades.
+
+Además, Django se apoya en el patrón arquitectónico MVT (Modelo-Vista-Plantilla), que guía la separación de responsabilidades:
+\begin{itemize}
+	\item \textbf{Modelo (Model):} define la estructura de datos y la interacción con la base de datos mediante el ORM.
+	\item \textbf{Vista (View):} contiene la lógica de negocio y gestiona las peticiones/respuestas, es decir, procesa las solicitudes que entran por parte de los usuarios y 
+	\item \textbf{Plantilla (Template):} se encarga de la presentación de los datos al usuario; en este proyecto, esta separación sigue siendo útil aunque el frontend se implemente con React, ya que el backend se centra en exponer servicios y lógica.
+\end{itemize}
+
+\subsection{Backend: Django REST Framework}
+
+Dado que vamos a necesitar que el frontend consuma datos del backend, concluimos que iba a ser necesaria la utilización de una API, mediante endpoints. Por ello decidió instalarse Django REST Framework.
+Esta elección se debe a que DRF proporciona componentes
+
+Esta elección se debe a que  DRF proporciona componentes esenciales para este tipo de arquitectura. Entre los más relevantes destacan:
+\begin{itemize}
+	\item \textbf{Serializadores:} permiten transformar instancias de modelos y consultas en formatos intercambiables (por ejemplo JSON) y, además, validar los datos de entrada antes de persistirlos.
+	\item \textbf{Vistas y ViewSets:} facilitan la implementación de endpoints reutilizables y coherentes, reduciendo código repetido y estandarizando operaciones habituales (listar, crear, modificar y eliminar recursos).
+	\item \textbf{Autenticación y permisos:} permiten controlar el acceso a la API, aplicando políticas de seguridad según el tipo de usuario o rol.
+\end{itemize}
+
+\subsection{Frontend: React + Vite}
+
+Para llevar a cabo el desarrollo del frontend, tuve en cuenta dos opciones: React y Angular.
+
+Aunque verdaderamente React se define como una librería para construir interfaces de usuarios, que se basa en componentes, permitiendo reutilizar piezas y separar de manera clara las funcionalidades de la interfaz. Además, nos permite una mayor flexibilidad de cara a la estructura del proyecto, permitiendo seleccionar únicamente las dependencias necesarias. Por otro lado, tenemos Angular un framework que es más cerrado, con decisiones y herramientas integradas, teniendo una mayor carga inicial y la adaptación a la forma de trabajo es menos flexible.
+
+Con lo que finalmente elegí utilizar React
+
+\subsection{CSS: Tailwind}
+
+\section{Librerías}
+
+\section{Otras herramientas y técnicas}
+\subsection{Scrum}
+
+\subsection{Github}
+
+\subsection{Zenhub}
+
+\subsection{TeXstudio}
+
+
