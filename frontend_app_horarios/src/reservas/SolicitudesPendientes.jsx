@@ -100,30 +100,7 @@ export default function SolicitudesPendientes() {
             </p>
           </div>
 
-          {/* Toggle visual para ver las 2 opciones de Capacidad/Ordenadores */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-600">Capacidad/PCs:</span>
-            <button
-              className={`rounded-md px-3 py-2 text-sm font-medium ring-1 ${
-                modoCapacidad === "pills"
-                  ? "bg-slate-900 text-white ring-slate-900"
-                  : "bg-white text-slate-700 ring-slate-200 hover:bg-slate-50"
-              }`}
-              onClick={() => setModoCapacidad("pills")}
-            >
-              Iconos/pills
-            </button>
-            <button
-              className={`rounded-md px-3 py-2 text-sm font-medium ring-1 ${
-                modoCapacidad === "texto"
-                  ? "bg-slate-900 text-white ring-slate-900"
-                  : "bg-white text-slate-700 ring-slate-200 hover:bg-slate-50"
-              }`}
-              onClick={() => setModoCapacidad("texto")}
-            >
-              Texto
-            </button>
-          </div>
+          
         </div>
 
         <div className="mt-6">
@@ -181,27 +158,26 @@ export default function SolicitudesPendientes() {
                           {fechaHora}
                         </span>
 
-                        {modoCapacidad === "texto" ? (
-                          <>
-                            <span className="inline-flex items-center gap-2 rounded-md bg-slate-50 px-3 py-1 ring-1 ring-slate-200">
-                              <span className="font-medium">Capacidad:</span> {capacidad}
-                            </span>
-                            <span className="inline-flex items-center gap-2 rounded-md bg-slate-50 px-3 py-1 ring-1 ring-slate-200">
-                              <span className="font-medium">Ordenadores:</span> {pcs}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-indigo-700 ring-1 ring-indigo-200">
-                              👥 <span className="font-semibold">{capacidad}</span>
-                              <span className="hidden sm:inline">capacidad</span>
-                            </span>
-                            <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-amber-700 ring-1 ring-amber-200">
-                              💻 <span className="font-semibold">{pcs}</span>
-                              <span className="hidden sm:inline">ordenadores</span>
-                            </span>
-                          </>
-                        )}
+                        {/*}
+                        <>
+                          <span className="inline-flex items-center gap-2 rounded-md bg-slate-50 px-3 py-1 ring-1 ring-slate-200">
+                            <span className="font-medium">Capacidad:</span> {capacidad}
+                          </span>
+                          <span className="inline-flex items-center gap-2 rounded-md bg-slate-50 px-3 py-1 ring-1 ring-slate-200">
+                            <span className="font-medium">Ordenadores:</span> {pcs}
+                          </span>
+                        </>*/}
+                        
+                        <>
+                          <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-indigo-700 ring-1 ring-indigo-200">
+                            👥 <span className="font-semibold">{capacidad}</span>
+                            <span className="hidden sm:inline">capacidad</span>
+                          </span>
+                          <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-amber-700 ring-1 ring-amber-200">
+                            💻 <span className="font-semibold">{pcs}</span>
+                            <span className="hidden sm:inline">ordenadores</span>
+                          </span>
+                        </>
                       </div>
 
                       {/* Booleanos con iconos */}
@@ -215,7 +191,7 @@ export default function SolicitudesPendientes() {
                       {/* Aula */}
                       <div className="mt-4">
                         <span className="inline-flex items-center gap-2 rounded-md bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-800 ring-1 ring-emerald-200">
-                          🏫 Aula: {aula}
+                          Aula: {aula}
                         </span>
                       </div>
                     </div>

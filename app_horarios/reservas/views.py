@@ -166,8 +166,10 @@ class ReservaAulasCandidatasAPIView(APIView):
         for a in qs:
             candidatas.append({
                 "idreserva": a.pk,
-                "nombre": getattr(a, "nombre", str(a.pk)),
-                "capacidad": getattr(a, "capacidad", None),
+                "nombre": a.nombre,
+                "capacidad": a.capacidad,
+                #"nombre": getattr(a, "nombre", str(a.pk)),
+                #"capacidad": getattr(a, "capacidad", None),
             })
 
         return Response({"candidatas": candidatas})

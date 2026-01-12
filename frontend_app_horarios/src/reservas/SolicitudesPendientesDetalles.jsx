@@ -121,7 +121,7 @@ export default function SolicitudesPendientesDetalles() {
     <div style={{ padding: 24, maxWidth: 900, margin: "0 auto" }}>
       <button onClick={() => navigate("/reservas/pendientes")}>← Volver</button>
 
-      <h1>Detalle solicitud {form.motivo}</h1>
+      <h1>Editar datos de la solicitud {form.motivo}</h1>
 
       {error && <p style={{ color: "crimson" }}>{error}</p>}
       {saving && <p>Guardando...</p>}
