@@ -131,7 +131,7 @@ export default function SolicitudesPendientes() {
               const fechaHora = formatFechaHora(r.fecha, r.hora_inicio, r.hora_fin);
 
               const capacidad = r.capacidad_solicitada ?? "—";
-              const pcs = r.num_ordenadores ?? "—";
+              const pcs = r.num_ordenadores_solicitados ?? "—";
 
               const aula = r.nombre_aula ?? "—";
 
@@ -182,10 +182,10 @@ export default function SolicitudesPendientes() {
 
                       {/* Booleanos con iconos */}
                       <div className="mt-3 flex flex-wrap gap-2">
-                        {boolIcon(r.altavoces, "Altavoces", "🔊", "🔇")}
-                        {boolIcon(r.proyector, "Proyector", "📽️")}
-                        {boolIcon(r.camaras, "Cámara", "📷")}
-                        {boolIcon(r.enchufes, "Enchufes", "🔌")}
+                        {boolIcon(r.altavoces_solicitados, "Altavoces", "🔊", "🔇")}
+                        {boolIcon(r.proyector_solicitado, "Proyector", "📽️")}
+                        {boolIcon(r.camara_solicitada, "Cámara", "📷")}
+                        {boolIcon(r.enchufes_solicitados, "Enchufes", "🔌")}
                       </div>
 
                       {/* Aula */}
@@ -200,14 +200,14 @@ export default function SolicitudesPendientes() {
                     <div className="flex shrink-0 flex-row flex-wrap gap-2 sm:flex-col sm:items-stretch">
                       <button
                         onClick={() => onAceptar(id)}
-                        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800"
+                        className="rounded-lg !bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800"
                       >
                         Aceptar
                       </button>
 
                       <button
                         onClick={() => onRechazar(id)}
-                        className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 active:bg-red-800"
+                        className="rounded-lg !bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 active:bg-red-800"
                       >
                         Rechazar
                       </button>

@@ -59,45 +59,27 @@ class AulasDisponiblesAPIView(APIView):
 # 2) LISTADO: GET /api/reservas/pendientes/
 # Estado: Pendiente o Solicitado => por defecto "P" y "S"
 # -------------------------------------------------------
+"""
 class ReservasPendientesListAPIView(APIView):
-    PENDIENTES_ESTADOS = ("P", "S")  # ajusta si tus códigos son otros
+    PENDIENTES_ESTADOS = ("P")  # ajusta si tus códigos son otros
 
     def get(self, request):
         estados = request.query_params.getlist("estado")
         estados = tuple(estados) if estados else self.PENDIENTES_ESTADOS
 
-        reservas = (
-            Reserva.objects
-            .filter(estado__in=estados)
-            .select_related("id_dia")
-            .order_by("-momento_reserva")  # si no existe idreserva como field, cambia a "-pk"
-        )
-
-        # Traemos ReservaPuntual + Responsable en 1 consulta
         puntuales = (
             ReservaPuntual.objects
-            .select_related("id_responsable", "id_reserva")
-            .filter(id_reserva__in=reservas)
+            .select_related("id_responsable", "id_reserva", "id_reserva__id_dia")
+            .filter(id_reserva__estado__in=estados)
+            .order_by("-momento_reserva")
         )
-        puntual_by_reserva_id = {p.id_reserva_id: p for p in puntuales}
 
         data = []
-        for r in reservas:
-            p = puntual_by_reserva_id.get(r.pk)
+        for p in puntuales:
+            r = p.id_reserva
 
-            correo = ""
-            motivo = ""
-            if p and getattr(p, "id_responsable", None):
-                correo = getattr(p.id_responsable, "correo", "") or ""
-            if p:
-                motivo = getattr(p, "motivo", "") or ""
-
-            # Recursos: si no existen en tu modelo Reserva, devolvemos None/False
-            num_ordenadores = getattr(r, "num_ordenadores", None)
-            altavoces = bool(getattr(r, "altavoces", False))
-            proyector = bool(getattr(r, "proyector", False))
-            camaras = bool(getattr(r, "camaras", False))
-            enchufes = bool(getattr(r, "enchufes", False))
+            correo = getattr(p.id_responsable, "correo", "") if p.id_responsable else ""
+            motivo = getattr(p, "motivo", "") or ""
 
             data.append({
                 "idreserva": r.pk,
@@ -106,21 +88,42 @@ class ReservasPendientesListAPIView(APIView):
                 "fecha": r.id_dia.dia if r.id_dia else None,
                 "hora_inicio": r.hora_inicio,
                 "hora_fin": r.hora_fin,
-                "capacidad_solicitada": getattr(r, "capacidad_solicitada", None),
-                "num_ordenadores": num_ordenadores,
-                "altavoces": altavoces,
-                "proyector": proyector,
-                "camaras": camaras,
-                "enchufes": enchufes,
+
+                # si estos campos están en Reserva, OK; si no, se verán None/False
+                "capacidad_solicitada": getattr(p, "capacidad_solicitada", None),
+                "num_ordenadores": getattr(p, "num_ordenadores", None),
+                "altavoces": bool(getattr(p, "altavoces", False)),
+                "proyector": bool(getattr(p, "proyector", False)),
+                "camaras": bool(getattr(p, "camaras", False)),
+                "enchufes": bool(getattr(p, "enchufes", False)),
+
                 "nombre_aula": r.nombre_aula or "",
                 "estado": r.estado,
+                # opcional si quieres exponerlo:
+                # "momento_reserva": p.momento_reserva,
             })
 
         #out = ReservaPendienteListItemSerializer(data=data, many=True)
         #out.is_valid(raise_exception=False)
         out = ReservaPendienteListItemSerializer(instance=data, many=True)
         return Response(out.data)
+"""
+class ReservasPendientesListAPIView(APIView):
+    PENDIENTES_ESTADOS = ("P",)  # si también quieres "S", pon ("P","S")
 
+    def get(self, request):
+        estados = request.query_params.getlist("estado")
+        estados = tuple(estados) if estados else self.PENDIENTES_ESTADOS
+
+        puntuales = (
+            ReservaPuntual.objects
+            .select_related("id_responsable", "id_reserva", "id_reserva__id_dia")
+            .filter(id_reserva__estado__in=estados)
+            .order_by("-momento_reserva")
+        )
+
+        ser = ReservaPendienteListItemSerializer(puntuales, many=True)
+        return Response(ser.data)
 
 # -------------------------------------------------------
 # 3) DETALLE + PATCH: /api/reservas/<id>/
@@ -183,8 +186,8 @@ class ReservaAprobarAPIView(APIView):
     def post(self, request, id):
         reserva = get_object_or_404(Reserva, pk=id)
 
-        if reserva.estado not in ("P", "S"):
-            return Response({"detail": "La reserva no está en Pendiente/Solicitada."},
+        if reserva.estado not in ("P"):
+            return Response({"detail": "La reserva no está en Pendiente."},
                             status=status.HTTP_400_BAD_REQUEST)
 
         if not (reserva.nombre_aula and reserva.nombre_aula.strip()):
@@ -203,8 +206,8 @@ class ReservaRechazarAPIView(APIView):
     def post(self, request, id):
         reserva = get_object_or_404(Reserva, pk=id)
 
-        if reserva.estado not in ("P", "S"):
-            return Response({"detail": "La reserva no está en Pendiente/Solicitada."},
+        if reserva.estado not in ("P"):
+            return Response({"detail": "La reserva no está en Pendiente."},
                             status=status.HTTP_400_BAD_REQUEST)
 
         reserva.estado = "R"  # Rechazada

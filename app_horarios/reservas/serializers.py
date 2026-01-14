@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 
 from django.db import transaction
+from docencia.models import Docente
 from reservas.services import aula_disponible_en_varias_fechas, aulas_disponibles_en_fecha_hora
 from rest_framework import serializers
 from calendario.models import Dia, Festivo
@@ -39,7 +40,21 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
         correo = validated_data['correo_responsable']
         try:
-            responsable = Responsable.objects.get(correo=correo)
+            responsable = Responsable.objects.filter(correo=correo).first()
+            if not responsable:
+                docente = Docente.objects.filter(correo=correo).first()
+                if not docente:
+                    responsable = Responsable.objects.create(
+                        correo=correo,
+                    )
+                else:
+                    responsable = Responsable.objects.create(
+                        correo=docente.correo,
+                        nombre=docente.nombre,
+                        apellidos=docente.apellidos,
+                        telefono=docente.telefono,
+                        codigo_docente=docente.codigo_docente,
+                    )
         except Responsable.DoesNotExist:
             raise serializers.ValidationError({
                 'correo_responsable': 'No existe ningún responsable con ese correo.'
@@ -116,7 +131,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 id_dia=dia,
                 estado='P',
                 tipo='P',
-                capacidad_solicitada=capacidad,
                 hora_inicio=hora_inicio,
                 hora_fin=hora_fin,
             )
@@ -127,9 +141,15 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
             reserva_puntual = ReservaPuntual.objects.create(
                 id_reserva=reserva,
                 id_responsable=responsable,
+                capacidad_solicitada=capacidad,
                 motivo=motivo,
                 inicio=inicio,
                 fin=fin,
+                num_ordenadores_solicitados=num_ordenadores,
+                altavoces_solicitados=altavoces,
+                proyector_solicitado=proyector,
+                camara_solicitada=camaras,
+                enchufes_solicitados=enchufes,
             )
 
             return reserva_puntual
@@ -263,7 +283,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 id_dia=dia_obj,
                 estado="P",
                 tipo="P",
-                capacidad_solicitada=capacidad,
                 hora_inicio=hora_inicio,
                 hora_fin=hora_fin,
             )
@@ -271,9 +290,15 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
             reserva_puntual = ReservaPuntual.objects.create(
                 id_reserva=reserva,
                 id_responsable=responsable,
+                capacidad_solicitada=capacidad,
                 motivo=motivo,
                 inicio=f,
                 fin=f,
+                num_ordenadores_solicitados=num_ordenadores,
+                altavoces_solicitados=altavoces,
+                proyector_solicitado=proyector,
+                camara_solicitada=camaras,
+                enchufes_solicitados=enchufes,
             )
 
             ultimo_reserva_puntual = reserva_puntual

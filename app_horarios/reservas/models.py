@@ -11,16 +11,14 @@ class Reserva(models.Model):
     idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=12)  # Field name made lowercase.
     nombre_aula = models.CharField(db_column='NOMBRE_AULA', max_length=20)  # Field name made lowercase.
     id_dia = models.ForeignKey(Dia, models.CASCADE, db_column='ID_DIA')  # Field name made lowercase.
-    momento_reserva = models.DateTimeField(db_column='MOMENTO_RESERVA', default=timezone.now)  # Field name made lowercase.
     estado = models.CharField(db_column='ESTADO', max_length=1, blank=True, null=True)  # Field name made lowercase.
     tipo = models.CharField(db_column='TIPO', max_length=1, blank=True, null=True)  # Field name made lowercase.
-    capacidad_solicitada = models.IntegerField(db_column='CAPACIDAD_SOLICITADA', max_length=3, null=True, blank=True)  # Field name made lowercase.
     hora_inicio = models.TimeField(db_column='HORA_INICIO')  # Field name made lowercase.
     hora_fin = models.TimeField(db_column='HORA_FIN')  # Field name made lowercase.
     
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'reserva'
 
     @classmethod
@@ -63,9 +61,16 @@ class Responsable(models.Model):
 class ReservaPuntual(models.Model):
     id_reserva = models.OneToOneField(Reserva, models.CASCADE, db_column='ID_RESERVA', primary_key=True)  # Field name made lowercase.
     id_responsable = models.ForeignKey(Responsable, models.CASCADE, db_column='ID_RESPONSABLE', max_length=30)  # Field name made lowercase.
+    capacidad_solicitada = models.IntegerField(db_column='CAPACIDAD_SOLICITADA', null=True, blank=True)  # Field name made lowercase.
     motivo = models.CharField(db_column='MOTIVO', max_length=90, blank=True, null=True)  # Field name made lowercase.
     inicio = models.DateTimeField(db_column='INICIO')  # Field name made lowercase.
     fin = models.DateTimeField(db_column='FIN')  # Field name made lowercase.
+    num_ordenadores_solicitados = models.PositiveSmallIntegerField(db_column='NUM_ORDENADORES_SOLICITADOS', default=0)  # Field name made lowercase.
+    altavoces_solicitados = models.BooleanField(db_column='ALTAVOCES_SOLICITADOS', default=False)  # Field name made lowercase.
+    proyector_solicitado = models.BooleanField(db_column='PROYECTOR_SOLICITADO', default=False)  # Field name made lowercase.
+    camara_solicitada = models.BooleanField(db_column='CAMARA_SOLICITADA', default=False)  # Field name made lowercase.
+    enchufes_solicitados = models.BooleanField(db_column='ENCHUFES_SOLICITADOS', default=False)  # Field name made lowercase.
+    momento_reserva = models.DateTimeField(db_column='MOMENTO_RESERVA', default=timezone.now)  # Field name made lowercase.
 
     class Meta:
         managed = False

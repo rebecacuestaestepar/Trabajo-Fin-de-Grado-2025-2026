@@ -45,6 +45,7 @@ class AulasDisponiblesInputSerializer(serializers.Serializer):
 # -----------------------------
 # LISTADO PENDIENTES/SOLICITADAS
 # -----------------------------
+"""
 class ReservaPendienteListItemSerializer(serializers.Serializer):
     idreserva = serializers.CharField()
     motivo = serializers.CharField(allow_blank=True, required=False)
@@ -64,7 +65,59 @@ class ReservaPendienteListItemSerializer(serializers.Serializer):
     nombre_aula = serializers.CharField(allow_blank=True, required=False)
     estado = serializers.CharField()
 
+    class Meta:
+        model = ReservaPuntual
+        fields = [
+            "idreserva",
+            "motivo",
+            "correo_responsable",
+            "fecha",
+            "hora_inicio",
+            "hora_fin",
+            "capacidad_solicitada",
+            "num_ordenadores",
+            "altavoces",
+            "proyector",
+            "camaras",
+            "enchufes",
+            "nombre_aula",
+            "estado",
+        ]
+"""
+class ReservaPendienteListItemSerializer(serializers.ModelSerializer):
+    # campos de Reserva
+    idreserva = serializers.CharField(source="id_reserva.pk", read_only=True)
+    fecha = serializers.DateField(source="id_reserva.id_dia.dia", read_only=True)
+    hora_inicio = serializers.TimeField(source="id_reserva.hora_inicio", read_only=True)
+    hora_fin = serializers.TimeField(source="id_reserva.hora_fin", read_only=True)
+    nombre_aula = serializers.CharField(source="id_reserva.nombre_aula", read_only=True)
+    estado = serializers.CharField(source="id_reserva.estado", read_only=True)
 
+    correo_responsable = serializers.EmailField(
+        source="id_responsable.correo",
+        read_only=True,
+        allow_blank=True,
+        required=False,
+    )
+
+    class Meta:
+        model = ReservaPuntual
+        fields = [
+            "idreserva",
+            "motivo",
+            "correo_responsable",
+            "fecha",
+            "hora_inicio",
+            "hora_fin",
+            "capacidad_solicitada",
+            "num_ordenadores_solicitados",   # <- el front espera esto
+            "altavoces_solicitados",         # <- y esto
+            "proyector_solicitado",
+            "camara_solicitada",
+            "enchufes_solicitados",
+            "nombre_aula",
+            "estado",
+        ]
 # -----------------------------
 # DETALLE + PATCH EDICIÓN
 # -----------------------------
@@ -122,9 +175,9 @@ class ReservaDetalleSerializer(serializers.Serializer):
             "motivo": motivo,
             "correo_responsable": correo,
 
-            "capacidad_solicitada": get_attr(instance, "capacidad_solicitada", None),
-            "num_ordenadores": get_attr(instance, "num_ordenadores", None),
-            "altavoces": bool(get_attr(instance, "altavoces", False)),
+            "capacidad_solicitada": get_attr(puntual, "capacidad_solicitada", None) if puntual else None,
+            "num_ordenadores": get_attr(puntual, "num_ordenadores", None) if puntual else None,
+            "altavoces": bool(get_attr(puntual, "altavoces", False)) if puntual else False,
             "proyector": bool(get_attr(instance, "proyector", False)),
             "camaras": bool(get_attr(instance, "camaras", False)),
             "enchufes": bool(get_attr(instance, "enchufes", False)),

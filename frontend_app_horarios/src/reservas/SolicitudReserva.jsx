@@ -417,7 +417,7 @@ export default function SolicitudReserva() {
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
               <button
                 type="submit"
-                className="inline-flex items-center justify-center rounded-md bg-[#7a1e1e] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#651818] focus:outline-none focus:ring-2 focus:ring-[#7a1e1e]/30"
+                className="inline-flex items-center justify-center rounded-md !bg-[#7a1e1e] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#651818] focus:outline-none focus:ring-2 focus:ring-[#7a1e1e]/30"
               >
                 Enviar solicitud
               </button>
