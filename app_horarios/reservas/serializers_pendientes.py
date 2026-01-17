@@ -217,3 +217,9 @@ class ReservaDetalleSerializer(serializers.Serializer):
 
         # correo_responsable no lo permito editar aquí (si quieres, lo añadimos)
         return instance
+    
+class ReservaBulkIdsSerializer(serializers.Serializer):
+    ids = serializers.ListField(
+        child=serializers.CharField(),
+        allow_empty=False
+    )

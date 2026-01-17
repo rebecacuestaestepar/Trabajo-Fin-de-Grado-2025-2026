@@ -5,9 +5,10 @@ from rest_framework import status
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from .serializers import ReservaPuntualCreateSerializer
-from .serializers_pendientes import ( ReservaPendienteListItemSerializer, ReservaDetalleSerializer, AulasDisponiblesInputSerializer)
+from .serializers_pendientes import ( ReservaPendienteListItemSerializer, ReservaDetalleSerializer, AulasDisponiblesInputSerializer, ReservaBulkIdsSerializer)
 from reservas.models import Reserva, ReservaPuntual, Responsable
 from calendario.models import Dia
+
 
 
 
@@ -115,12 +116,33 @@ class ReservasPendientesListAPIView(APIView):
         estados = request.query_params.getlist("estado")
         estados = tuple(estados) if estados else self.PENDIENTES_ESTADOS
 
+        # Parámetros para el filtrado
+        motivo = request.query_params.get("motivo")
+        responsable = request.query_params.get("responsable")
+        desde = request.query_params.get("desde")  # YYYY-MM-DD
+        hasta = request.query_params.get("hasta")  # YYYY-MM-DD
+
         puntuales = (
             ReservaPuntual.objects
             .select_related("id_responsable", "id_reserva", "id_reserva__id_dia")
             .filter(id_reserva__estado__in=estados)
-            .order_by("-momento_reserva")
         )
+
+        # Filtro motivo
+        if motivo:
+            puntuales = puntuales.filter(motivo__icontains=motivo)
+
+        # Filtro responsable (correo o parte)
+        if responsable:
+            puntuales = puntuales.filter(id_responsable__correo__icontains=responsable)
+
+        # Filtro fechas (sobre Dia.dia)
+        if desde:
+            puntuales = puntuales.filter(id_reserva__id_dia__dia__gte=desde)
+        if hasta:
+            puntuales = puntuales.filter(id_reserva__id_dia__dia__lte=hasta)
+
+        puntuales = puntuales.order_by("-momento_reserva")
 
         ser = ReservaPendienteListItemSerializer(puntuales, many=True)
         return Response(ser.data)
@@ -213,5 +235,64 @@ class ReservaRechazarAPIView(APIView):
         reserva.estado = "R"  # Rechazada
         reserva.save()
 
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class ReservaAprobarMasivoAPIView(APIView):
+    @transaction.atomic
+    def post(self, request):
+        ser = ReservaBulkIdsSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        ids = ser.validated_data["ids"]
+
+        reservas = Reserva.objects.select_for_update().filter(pk__in=ids)
+
+        # Comprobación: existen todas
+        if reservas.count() != len(set(ids)):
+            return Response(
+                {"detail": "Alguna de las reservas no existe."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Validaciones
+        for r in reservas:
+            if r.estado != "P":
+                return Response(
+                    {"detail": f"La reserva {r.pk} no está en Pendiente."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if not (r.nombre_aula and r.nombre_aula.strip()):
+                return Response(
+                    {"detail": f"La reserva {r.pk} no tiene aula asignada."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        reservas.update(estado="A")
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ReservaRechazarMasivoAPIView(APIView):
+    @transaction.atomic
+    def post(self, request):
+        ser = ReservaBulkIdsSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        ids = ser.validated_data["ids"]
+
+        reservas = Reserva.objects.select_for_update().filter(pk__in=ids)
+
+        if reservas.count() != len(set(ids)):
+            return Response(
+                {"detail": "Alguna de las reservas no existe."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        for r in reservas:
+            if r.estado != "P":
+                return Response(
+                    {"detail": f"La reserva {r.pk} no está en Pendiente."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        reservas.update(estado="R")
         return Response(status=status.HTTP_204_NO_CONTENT)
 # Create your views here.

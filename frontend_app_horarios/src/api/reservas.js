@@ -48,3 +48,11 @@ export function aprobarReserva(id) {
 export function rechazarReserva(id) {
   return apiPost(`/reservas/${id}/rechazar/`);
 }
+
+export function aprobarReservasMasivo(ids) {
+  return apiPost(`/reservas/aprobar-masivo/`, { ids });
+}
+
+export function rechazarReservasMasivo(ids) {
+  return apiPost(`/reservas/rechazar-masivo/`, { ids });
+}

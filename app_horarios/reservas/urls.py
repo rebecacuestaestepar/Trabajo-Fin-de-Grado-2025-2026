@@ -7,6 +7,8 @@ from .views import (
     ReservaAulasCandidatasAPIView,
     ReservaAprobarAPIView,
     ReservaRechazarAPIView,
+    ReservaAprobarMasivoAPIView,
+    ReservaRechazarMasivoAPIView,
 )
 
 urlpatterns = [
@@ -16,8 +18,11 @@ urlpatterns = [
     path("reservas/solicitar/", SolicitarReservaPuntualAPIView.as_view()),
 
     path("reservas/pendientes/", ReservasPendientesListAPIView.as_view()),
+    path("reservas/aprobar-masivo/", ReservaAprobarMasivoAPIView.as_view()),
+    path("reservas/rechazar-masivo/", ReservaRechazarMasivoAPIView.as_view()),
     path("reservas/<str:id>/", ReservaPendienteDetailAPIView.as_view()),
     path("reservas/<str:id>/aulas-candidatas/", ReservaAulasCandidatasAPIView.as_view()),
     path("reservas/<str:id>/aprobar/", ReservaAprobarAPIView.as_view()),
     path("reservas/<str:id>/rechazar/", ReservaRechazarAPIView.as_view()),
+    
 ]

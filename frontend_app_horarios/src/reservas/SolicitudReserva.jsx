@@ -400,7 +400,7 @@ export default function SolicitudReserva() {
                     disabled={aulasDisponibles.length === 0}
                   >
                     {aulasDisponibles.length === 0 ? (
-                      <option value="">(Sin aulas cargadas)</option>
+                      <option value="">(No existen aulas disponibles para los criterios seleccionados)</option>
                     ) : (
                       aulasDisponibles.map((a) => (
                         <option key={a.nombre} value={a.nombre}>
