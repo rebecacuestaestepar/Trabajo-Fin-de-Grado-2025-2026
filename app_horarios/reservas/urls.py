@@ -12,7 +12,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('reservas/puntuales/solicitar/', SolicitarReservaPuntualAPIView.as_view()),
+    #path('reservas/puntuales/solicitar/', SolicitarReservaPuntualAPIView.as_view()),
          #name='solicitar-reserva-puntual'),
     path("aulas/disponibles/", AulasDisponiblesAPIView.as_view()),
     path("reservas/solicitar/", SolicitarReservaPuntualAPIView.as_view()),

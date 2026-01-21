@@ -26,12 +26,12 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
     camaras = serializers.BooleanField(required=False, default=False)   
     enchufes = serializers.BooleanField(required=False, default=False)
     generar_periodica = serializers.BooleanField(required=False, default=False)
-    #fecha_inicio_periodo = serializers.DateField(required=False, allow_null=True)
-    #fecha_fin_periodo = serializers.DateField(required=False, allow_null=True)
-    fecha_inicio_periodo = serializers.CharField(required=False, allow_blank=True)
-    fecha_fin_periodo = serializers.CharField(required=False, allow_blank=True)
+    fecha_inicio_periodo = serializers.DateField(required=False, allow_null=True)
+    fecha_fin_periodo = serializers.DateField(required=False, allow_null=True)
     dia_semana_periodica = serializers.IntegerField(required=False, min_value=1, max_value=5)
     nombre_aula = serializers.CharField(required=False, allow_blank=True)
+    aulas_por_fecha = serializers.DictField(child=serializers.CharField(allow_blank=True), required=False)
+    
 
     @transaction.atomic
     def create(self, validated_data):
@@ -74,6 +74,9 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
         if num_ordenadores is None:
             num_ordenadores = 0
+        
+        nombre_aula_elegida = validated_data.get("nombre_aula", "").strip() or None
+        aulas_por_fecha = validated_data.get("aulas_por_fecha")
 
         # ===========================
         # CASO 1: NO PERIODICA
@@ -96,7 +99,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 })
             
             
-            nombre_aula_elegida = validated_data.get("nombre_aula", "").strip() or None
 
             # ejemplo NO periódica
             qs = aulas_disponibles_en_fecha_hora(
@@ -157,8 +159,9 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
         # ==========================
         # CASO 2: PERIÓDICA
         # ==========================
-        fi_raw = validated_data.get("fecha_inicio_periodo", "")
-        ff_raw = validated_data.get("fecha_fin_periodo", "")
+        fi = validated_data.get("fecha_inicio_periodo", None)
+        ff = validated_data.get("fecha_fin_periodo", None)
+
 
         '''try:
             fi = date.fromisoformat(fi_raw) if fi_raw else None
@@ -174,12 +177,12 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 "fecha_fin_periodo": "Formato de fecha de fin inválido (use YYYY-MM-DD)."
             })'''
 
-        if not fi_raw or not ff_raw:
+        if not fi or not ff:
             raise serializers.ValidationError({
                 "periodo": "Debe indicar fecha de inicio y fecha de fin para la reserva periódica."
             })
 
-        if fi_raw > ff_raw:
+        if fi > ff:
             raise serializers.ValidationError({
                 "periodo": "La fecha de inicio no puede ser posterior a la fecha de fin."
             })
@@ -192,8 +195,8 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
         # 1) Generar lista de fechas del patrón
         fechas_periodo = []
-        current = fi_raw
-        while current <= ff_raw:
+        current = fi
+        while current <= ff:
             if current.isoweekday() == dia_semana:
                 # Validar que existe en calendario académico
                 if not Dia.objects.filter(dia=current).exists():
@@ -271,11 +274,27 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                     raise serializers.ValidationError({
                         "aulas": f"No hay aulas disponibles para la fecha {f.isoformat()} con esos requisitos."
                     })
+                 # 1) Si el frontend envía selección por fecha, la respetamos
+                if aulas_por_fecha:
+                    aula_sel = (aulas_por_fecha.get(f.isoformat()) or "").strip()
+                    if not aula_sel:
+                        raise serializers.ValidationError({
+                            "aulas_por_fecha": f"Falta aula seleccionada para la fecha {f.isoformat()}."
+                        })
+                    if not qs_dia.filter(nombre=aula_sel).exists():
+                        raise serializers.ValidationError({
+                            "aulas_por_fecha": f"El aula {aula_sel} no está disponible o no cumple requisitos para {f.isoformat()}."
+                        })
+                    aula_final = aula_sel
 
-                if nombre_aula_elegida and qs_dia.filter(nombre=nombre_aula_elegida).exists():
+                #  2) Si NO hay selección por fecha, usamos tu comportamiento actual
+                elif nombre_aula_elegida and qs_dia.filter(nombre=nombre_aula_elegida).exists():
                     aula_final = nombre_aula_elegida
                 else:
                     aula_final = qs_dia.values_list("nombre", flat=True).first()
+            
+            inicio_dt = datetime.combine(f, hora_inicio)
+            fin_dt = datetime.combine(f, hora_fin)
 
             reserva = Reserva.objects.create(
                 idreserva=Reserva.next_id(),
@@ -292,8 +311,8 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 id_responsable=responsable,
                 capacidad_solicitada=capacidad,
                 motivo=motivo,
-                inicio=f,
-                fin=f,
+                inicio=inicio_dt,
+                fin=fin_dt,
                 num_ordenadores_solicitados=num_ordenadores,
                 altavoces_solicitados=altavoces,
                 proyector_solicitado=proyector,

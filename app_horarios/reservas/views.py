@@ -1,3 +1,4 @@
+from datetime import timedelta, date
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,6 +9,8 @@ from .serializers import ReservaPuntualCreateSerializer
 from .serializers_pendientes import ( ReservaPendienteListItemSerializer, ReservaDetalleSerializer, AulasDisponiblesInputSerializer, ReservaBulkIdsSerializer)
 from reservas.models import Reserva, ReservaPuntual, Responsable
 from calendario.models import Dia
+from reservas.services import aulas_disponibles_en_fecha_hora, aula_disponible_en_varias_fechas
+
 
 
 
@@ -40,20 +43,144 @@ class SolicitarReservaPuntualAPIView(APIView):
 # -------------------------------------------------------
 class AulasDisponiblesAPIView(APIView):
     def post(self, request):
-        ser = AulasDisponiblesInputSerializer(data=request.data)
-        ser.is_valid(raise_exception=True)
+        data = request.data
 
-        qs = ser.get_queryset()
+        generar_periodica = bool(data.get("generar_periodica", False))
 
-        candidatas = []
-        for a in qs:
-            candidatas.append({
-                "idreserva": a.pk,
-                "nombre": getattr(a, "nombre", str(a.pk)),
-                "capacidad": getattr(a, "capacidad", None),
-            })
+        hora_inicio = data.get("hora_inicio")
+        hora_fin = data.get("hora_fin")
+        capacidad = int(data.get("capacidad_solicitada"))
+        num_ordenadores = int(data.get("num_ordenadores", 0) or 0)
+        altavoces = bool(data.get("altavoces", False))
+        proyector = bool(data.get("proyector", False))
+        camaras = bool(data.get("camaras", False))
+        enchufes = bool(data.get("enchufes", False))
 
-        return Response({"candidatas": candidatas})
+        # ---------- NO periódica ----------
+        if not generar_periodica:
+            fecha_raw = data.get("fecha")
+            if not fecha_raw:
+                return Response({"fecha": "Este campo es obligatorio."}, status=400)
+
+            try:
+                fecha = date.fromisoformat(fecha_raw)
+            except ValueError:
+                return Response({"fecha": "Formato inválido (YYYY-MM-DD)."}, status=400)
+
+            qs = aulas_disponibles_en_fecha_hora(
+                fecha=fecha,
+                hora_inicio=hora_inicio,
+                hora_fin=hora_fin,
+                capacidad=capacidad,
+                num_ordenadores=num_ordenadores,
+                altavoces=altavoces,
+                proyector=proyector,
+                camaras=camaras,
+                enchufes=enchufes,
+            )
+
+            aulas = [{
+                "nombre": a.nombre,
+                "capacidad": a.capacidad,
+                "num_ordenadores": getattr(a, "num_ordenadores", 0),
+            } for a in qs]
+
+            return Response({"aulas": aulas}, status=200)
+
+        # ---------- PERIÓDICA ----------
+        fi_raw = data.get("fecha_inicio_periodo")
+        ff_raw = data.get("fecha_fin_periodo")
+        dia_semana_raw = data.get("dia_semana_periodica")
+
+        if not fi_raw or not ff_raw or not dia_semana_raw:
+            return Response(
+                {"periodo": "Faltan fecha_inicio_periodo / fecha_fin_periodo / dia_semana_periodica"},
+                status=400
+            )
+
+        try:
+            fi = date.fromisoformat(fi_raw)
+            ff = date.fromisoformat(ff_raw)
+        except ValueError:
+            return Response({"periodo": "Formato de fechas inválido (YYYY-MM-DD)."}, status=400)
+
+        try:
+            dia_semana = int(dia_semana_raw)
+        except ValueError:
+            return Response({"dia_semana_periodica": "Debe ser un entero 1..5"}, status=400)
+
+        if fi > ff:
+            return Response({"periodo": "La fecha de inicio no puede ser mayor que la de fin."}, status=400)
+
+        fechas_periodo = []
+        current = fi
+        while current <= ff:
+            if current.isoweekday() == dia_semana:
+                if not Dia.objects.filter(dia=current).exists():
+                    return Response(
+                        {"fecha": f"La fecha {current.isoformat()} no existe en el calendario académico."},
+                        status=400
+                    )
+                fechas_periodo.append(current)  # date objects
+            current += timedelta(days=1)
+
+        if not fechas_periodo:
+            return Response(
+                {"periodo": "No hay fechas que coincidan con el día de la semana en el rango."},
+                status=400
+            )
+
+        # 1) Aulas comunes
+        qs_comun = aula_disponible_en_varias_fechas(
+            fechas=fechas_periodo,  # date objects
+            hora_inicio=hora_inicio,
+            hora_fin=hora_fin,
+            capacidad=capacidad,
+            num_ordenadores=num_ordenadores,
+            altavoces=altavoces,
+            proyector=proyector,
+            camaras=camaras,
+            enchufes=enchufes,
+        )
+
+        aulas_comunes = [{
+            "nombre": a.nombre,
+            "capacidad": a.capacidad,
+            "num_ordenadores": getattr(a, "num_ordenadores", 0),
+        } for a in qs_comun]
+
+        if aulas_comunes:
+            return Response({
+                "modo": "comun",
+                "fechas": [d.isoformat() for d in fechas_periodo],
+                "aulas_comunes": aulas_comunes,
+            }, status=200)
+
+        # 2) No hay comunes => aulas por fecha
+        aulas_por_fecha = {}
+        for d in fechas_periodo:
+            qs = aulas_disponibles_en_fecha_hora(
+                fecha=d,
+                hora_inicio=hora_inicio,
+                hora_fin=hora_fin,
+                capacidad=capacidad,
+                num_ordenadores=num_ordenadores,
+                altavoces=altavoces,
+                proyector=proyector,
+                camaras=camaras,
+                enchufes=enchufes,
+            )
+            aulas_por_fecha[d.isoformat()] = [{
+                "nombre": a.nombre,
+                "capacidad": a.capacidad,
+                "num_ordenadores": getattr(a, "num_ordenadores", 0),
+            } for a in qs]
+
+        return Response({
+            "modo": "por_fecha",
+            "fechas": [d.isoformat() for d in fechas_periodo],
+            "aulas_por_fecha": aulas_por_fecha,
+        }, status=200)
 
 
 # -------------------------------------------------------
@@ -197,7 +324,7 @@ class ReservaAulasCandidatasAPIView(APIView):
                 #"capacidad": getattr(a, "capacidad", None),
             })
 
-        return Response({"candidatas": candidatas})
+        return Response({"aulas": candidatas})
 
 
 # -------------------------------------------------------

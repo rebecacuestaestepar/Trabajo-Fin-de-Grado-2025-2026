@@ -62,7 +62,7 @@ def aulas_disponibles_en_fecha_hora(
 
     solape = Reserva.objects.filter(
         nombre_aula=OuterRef("nombre"),  # Aula.NOMBRE -> modelo suele ser "nombre"
-        id_dia=fecha,
+        id_dia__dia=fecha,
         hora_inicio__lt=hora_fin,
         hora_fin__gt=hora_inicio,
     )
@@ -73,7 +73,6 @@ def aulas_disponibles_en_fecha_hora(
 
     #PREGUNTAR PROFESORES
     solape = solape.exclude(estado='P')
-    solape = solape.exclude(estado='S')
 
     disponibles = candidatos.annotate(
         tiene_solape=Exists(solape)
@@ -81,8 +80,8 @@ def aulas_disponibles_en_fecha_hora(
 
     return disponibles
 
-
-def aula_disponible_en_varias_fechas(
+""""""
+def aula_disponible_en_varias_fechas2(
     fechas,
     hora_inicio,
     hora_fin,
@@ -111,10 +110,62 @@ def aula_disponible_en_varias_fechas(
     for f in fechas:
         solape = Reserva.objects.filter(
             nombre_aula=OuterRef("nombre"),
-            id_dia=f,
+            id_dia__dia=f,
             hora_inicio__lt=hora_fin,
             hora_fin__gt=hora_inicio,
         )
         qs = qs.annotate(tiene_solape=Exists(solape)).filter(tiene_solape=False)
 
     return qs
+
+
+def aula_disponible_en_varias_fechas(
+    fechas,
+    hora_inicio,
+    hora_fin,
+    capacidad: int,
+    num_ordenadores: int | None,
+    altavoces: bool,
+    proyector: bool,
+    camaras: bool,
+    enchufes: bool,
+):
+    """
+    Devuelve aulas libres en TODAS las fechas.
+    Implementación robusta: intersección por nombres usando el servicio diario.
+    """
+    # 1) Partimos de candidatas por requisitos
+    candidatas_qs = aulas_candidatas_por_requisitos(
+        capacidad=capacidad,
+        num_ordenadores=num_ordenadores,
+        altavoces=altavoces,
+        proyector=proyector,
+        camaras=camaras,
+        enchufes=enchufes,
+    )
+
+    candidatas_nombres = set(candidatas_qs.values_list("nombre", flat=True))
+
+    # 2) Intersección con disponibles por cada fecha
+    comunes = candidatas_nombres.copy()
+
+    for f in fechas:
+        qs_dia = aulas_disponibles_en_fecha_hora(
+            fecha=f,
+            hora_inicio=hora_inicio,
+            hora_fin=hora_fin,
+            capacidad=capacidad,
+            num_ordenadores=num_ordenadores,
+            altavoces=altavoces,
+            proyector=proyector,
+            camaras=camaras,
+            enchufes=enchufes,
+        )
+        disponibles_nombres = set(qs_dia.values_list("nombre", flat=True))
+        comunes &= disponibles_nombres
+
+        if not comunes:
+            break
+
+    # 3) Devolvemos queryset de Aula ordenado
+    return Aula.objects.filter(nombre__in=comunes).order_by("nombre")
