@@ -3,6 +3,7 @@ import { apiRequest, apiGet, apiPatch, apiPost } from "./client";
 // ----------------------------------------------
 // --- PÁGINA DE SOLICITUD DE RESERVA PUNTUAL ---
 // ----------------------------------------------
+// Endpoint para buscar aulas disponibles
 export function buscarAulasDisponibles(payload) {
     return apiRequest("/aulas/disponibles/", {
         method : "POST",
@@ -10,6 +11,7 @@ export function buscarAulasDisponibles(payload) {
     });
 }
 
+// Endpoint para solicitar una reserva puntual
 export function solicitarReservaPuntual(payload) {
     return apiRequest("/reservas/solicitar/", {
         method : "POST",

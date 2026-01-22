@@ -277,6 +277,7 @@ class ReservasPendientesListAPIView(APIView):
 # -------------------------------------------------------
 # 3) DETALLE + PATCH: /api/reservas/<id>/
 # -------------------------------------------------------
+"""
 class ReservaPendienteDetailAPIView(APIView):
     def get_object(self, id):
         return get_object_or_404(Reserva.objects.select_related("id_dia"), pk=id)
@@ -301,7 +302,59 @@ class ReservaPendienteDetailAPIView(APIView):
         updated = ser.update(reserva, ser.validated_data)
 
         return Response(ReservaDetalleSerializer(instance=updated).data)
+"""
 
+
+class ReservaPendienteDetailAPIView(APIView):
+    def get(self, request, id):
+        reserva = Reserva.objects.filter(pk=id).first()
+        if not reserva:
+            return Response({"detail": "Reserva no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(ReservaDetalleSerializer().to_representation(reserva))
+
+    @transaction.atomic
+    def patch(self, request, id):
+        reserva = Reserva.objects.select_for_update().filter(pk=id).first()
+        if not reserva:
+            return Response({"detail": "Reserva no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Validamos lo que llega (parcial)
+        serializer = ReservaDetalleSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        # 1) Campos que están en Reserva
+        if "hora_inicio" in data: reserva.hora_inicio = data["hora_inicio"]
+        if "hora_fin" in data: reserva.hora_fin = data["hora_fin"]
+        if "nombre_aula" in data: reserva.nombre_aula = data["nombre_aula"]
+        if "fecha" in data:
+            # Si tu Reserva guarda FK a Dia, aquí tienes que convertir fecha -> Dia
+            # EJEMPLO (ajusta a tu modelo):
+            # dia = Dia.objects.get(dia=data["fecha"])
+            # reserva.id_dia = dia
+            pass
+
+        # Si proyector/camaras/enchufes están en Reserva (en tu serializer lo pillas de instance!)
+        if "proyector" in data: reserva.proyector = data["proyector"]
+        if "camaras" in data: reserva.camaras = data["camaras"]
+        if "enchufes" in data: reserva.enchufes = data["enchufes"]
+
+        reserva.save()
+
+        # 2) Campos que están en ReservaPuntual
+        puntual = ReservaPuntual.objects.filter(id_reserva=reserva).first()
+        if puntual:
+            if "motivo" in data: puntual.motivo = data["motivo"]
+            # correo_responsable normalmente está en Responsable. Si lo quieres editable:
+            # puntual.id_responsable.correo = data["correo_responsable"]; puntual.id_responsable.save()
+
+            if "capacidad_solicitada" in data: puntual.capacidad_solicitada = data["capacidad_solicitada"]
+            if "num_ordenadores" in data: puntual.num_ordenadores = data["num_ordenadores"]
+            if "altavoces" in data: puntual.altavoces = data["altavoces"]
+
+            puntual.save()
+
+        return Response({"message": "Reserva actualizada correctamente"}, status=status.HTTP_200_OK)
 
 # -------------------------------------------------------
 # 4) AULAS CANDIDATAS: POST /api/reservas/<id>/aulas-candidatas/
@@ -328,7 +381,7 @@ class ReservaAulasCandidatasAPIView(APIView):
 
 
 # -------------------------------------------------------
-# 5) APROBAR / RECHAZAR
+# 5) APROBAR / RECHAZAR (y de forma masiva)
 # -------------------------------------------------------
 class ReservaAprobarAPIView(APIView):
     @transaction.atomic
