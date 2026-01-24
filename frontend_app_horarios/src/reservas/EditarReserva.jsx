@@ -148,7 +148,7 @@ const emptyForm = {
   num_ordenadores: "",
   altavoces: false,
   proyector: false,
-  camaras: false,
+  camara: false,
   enchufes: false,
   nombre_aula: "",
   estado: "",
@@ -167,7 +167,7 @@ function mapReservaToForm(r) {
     num_ordenadores: r.num_ordenadores == null ? "" : String(r.num_ordenadores),
     altavoces: Boolean(r.altavoces),
     proyector: Boolean(r.proyector),
-    camaras: Boolean(r.camaras),
+    camara: Boolean(r.camara),
     enchufes: Boolean(r.enchufes),
     nombre_aula: r.nombre_aula ?? "",
     estado: r.estado ?? "",
@@ -272,7 +272,7 @@ export default function EditarReserva() {
       num_ordenadores: form.num_ordenadores === "" ? 0 : Number(form.num_ordenadores),
       altavoces: form.altavoces,
       proyector: form.proyector,
-      camaras: form.camaras,
+      camara: form.camara,
       enchufes: form.enchufes,
     };
 
@@ -311,7 +311,7 @@ export default function EditarReserva() {
       num_ordenadores: form.num_ordenadores === "" ? null : Number(form.num_ordenadores),
       altavoces: form.altavoces,
       proyector: form.proyector,
-      camaras: form.camaras,
+      camara: form.camara,
       enchufes: form.enchufes,
       nombre_aula: form.nombre_aula,
     };
@@ -395,7 +395,7 @@ export default function EditarReserva() {
               </button>
 
               <h1 className="text-center text-lg font-semibold tracking-wide text-slate-900">
-                REVISAR / EDITAR RESERVA
+                EDITAR RESERVA
               </h1>
 
               <span />
@@ -493,8 +493,8 @@ export default function EditarReserva() {
                   label="Necesito proyector"
                 />
                 <Check
-                  checked={form.camaras}
-                  onChange={(e) => patch({ camaras: e.target.checked })}
+                  checked={form.camara}
+                  onChange={(e) => patch({ camara: e.target.checked })}
                   label="Necesito cámaras"
                 />
                 <Check

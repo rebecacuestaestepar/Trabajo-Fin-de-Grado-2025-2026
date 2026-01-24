@@ -249,10 +249,13 @@ class ReservasPendientesListAPIView(APIView):
         desde = request.query_params.get("desde")  # YYYY-MM-DD
         hasta = request.query_params.get("hasta")  # YYYY-MM-DD
 
+        hoy = date.today()
+
         puntuales = (
             ReservaPuntual.objects
             .select_related("id_responsable", "id_reserva", "id_reserva__id_dia")
             .filter(id_reserva__estado__in=estados)
+            .filter(id_reserva__id_dia__dia__gte=hoy)
         )
 
         # Filtro motivo
@@ -265,7 +268,7 @@ class ReservasPendientesListAPIView(APIView):
 
         # Filtro fechas (sobre Dia.dia)
         if desde:
-            puntuales = puntuales.filter(id_reserva__id_dia__dia__gte=desde)
+            puntuales = puntuales.filter(id_reserva__id_dia__dia__gte=max(date.fromisoformat(desde), hoy))
         if hasta:
             puntuales = puntuales.filter(id_reserva__id_dia__dia__lte=hasta)
 
@@ -330,29 +333,25 @@ class ReservaPendienteDetailAPIView(APIView):
         if "fecha" in data:
             # Si tu Reserva guarda FK a Dia, aquí tienes que convertir fecha -> Dia
             # EJEMPLO (ajusta a tu modelo):
-            # dia = Dia.objects.get(dia=data["fecha"])
-            # reserva.id_dia = dia
-            pass
-
-        # Si proyector/camaras/enchufes están en Reserva (en tu serializer lo pillas de instance!)
-        if "proyector" in data: reserva.proyector = data["proyector"]
-        if "camaras" in data: reserva.camaras = data["camaras"]
-        if "enchufes" in data: reserva.enchufes = data["enchufes"]
-
+            dia = Dia.objects.get(dia=data["fecha"])
+            reserva.id_dia = dia
+            #pass
         reserva.save()
+        
+        # Campos que están en ReservaPuntual
+        reserva_puntual = ReservaPuntual.objects.filter(id_reserva=reserva).first()
+        if not reserva_puntual:
+            return Response({"detail": "ReservaPuntual asociada no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+        
+        if "motivo" in data: reserva_puntual.motivo = data["motivo"]
+        if "capacidad_solicitada" in data: reserva_puntual.capacidad_solicitada = data["capacidad_solicitada"]
+        if "num_ordenadores" in data: reserva_puntual.num_ordenadores_solicitados = data["num_ordenadores"]
+        if "altavoces" in data: reserva_puntual.altavoces_solicitados = data["altavoces"]
+        if "proyector" in data: reserva_puntual.proyector_solicitado = data["proyector"]
+        if "camara" in data: reserva_puntual.camara_solicitada = data["camara"]
+        if "enchufes" in data: reserva_puntual.enchufes_solicitados = data["enchufes"]  
+        reserva_puntual.save()
 
-        # 2) Campos que están en ReservaPuntual
-        puntual = ReservaPuntual.objects.filter(id_reserva=reserva).first()
-        if puntual:
-            if "motivo" in data: puntual.motivo = data["motivo"]
-            # correo_responsable normalmente está en Responsable. Si lo quieres editable:
-            # puntual.id_responsable.correo = data["correo_responsable"]; puntual.id_responsable.save()
-
-            if "capacidad_solicitada" in data: puntual.capacidad_solicitada = data["capacidad_solicitada"]
-            if "num_ordenadores" in data: puntual.num_ordenadores = data["num_ordenadores"]
-            if "altavoces" in data: puntual.altavoces = data["altavoces"]
-
-            puntual.save()
 
         return Response({"message": "Reserva actualizada correctamente"}, status=status.HTTP_200_OK)
 

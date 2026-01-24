@@ -1,7 +1,7 @@
 # reservas/api_serializers.py
 from rest_framework import serializers
 from calendario.models import Dia
-from reservas.models import Reserva, ReservaPuntual
+from reservas.models import Reserva, ReservaPuntual, Responsable
 
 from reservas.services import aulas_disponibles_en_fecha_hora
 
@@ -19,7 +19,7 @@ class AulasDisponiblesInputSerializer(serializers.Serializer):
     num_ordenadores = serializers.IntegerField(required=False, allow_null=True, min_value=0)
     altavoces = serializers.BooleanField(required=False, default=False)
     proyector = serializers.BooleanField(required=False, default=False)
-    camaras = serializers.BooleanField(required=False, default=False)
+    camara = serializers.BooleanField(required=False, default=False)
     enchufes = serializers.BooleanField(required=False, default=False)
 
     def validate(self, attrs):
@@ -37,7 +37,7 @@ class AulasDisponiblesInputSerializer(serializers.Serializer):
             num_ordenadores=v.get("num_ordenadores"),
             altavoces=v.get("altavoces", False),
             proyector=v.get("proyector", False),
-            camaras=v.get("camaras", False),
+            camara=v.get("camara", False),
             enchufes=v.get("enchufes", False),
         )
 
@@ -59,7 +59,7 @@ class ReservaPendienteListItemSerializer(serializers.Serializer):
     num_ordenadores = serializers.IntegerField(allow_null=True, required=False)
     altavoces = serializers.BooleanField(required=False)
     proyector = serializers.BooleanField(required=False)
-    camaras = serializers.BooleanField(required=False)
+    camara = serializers.BooleanField(required=False)
     enchufes = serializers.BooleanField(required=False)
 
     nombre_aula = serializers.CharField(allow_blank=True, required=False)
@@ -135,7 +135,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
     num_ordenadores = serializers.IntegerField(required=False, allow_null=True, min_value=0)
     altavoces = serializers.BooleanField(required=False, default=False)
     proyector = serializers.BooleanField(required=False, default=False)
-    camaras = serializers.BooleanField(required=False, default=False)
+    camara = serializers.BooleanField(required=False, default=False)
     enchufes = serializers.BooleanField(required=False, default=False)
 
     nombre_aula = serializers.CharField(required=False, allow_blank=True)
@@ -176,12 +176,11 @@ class ReservaDetalleSerializer(serializers.Serializer):
             "correo_responsable": correo,
 
             "capacidad_solicitada": get_attr(puntual, "capacidad_solicitada", None) if puntual else None,
-            "num_ordenadores": get_attr(puntual, "num_ordenadores", None) if puntual else None,
-            "altavoces": bool(get_attr(puntual, "altavoces", False)) if puntual else False,
-            "proyector": bool(get_attr(instance, "proyector", False)),
-            "camaras": bool(get_attr(instance, "camaras", False)),
-            "enchufes": bool(get_attr(instance, "enchufes", False)),
-
+            "num_ordenadores": get_attr(puntual, "num_ordenadores_solicitados", None) if puntual else None,
+            "altavoces": bool(get_attr(puntual, "altavoces_solicitados", False)) if puntual else False,
+            "proyector": bool(get_attr(puntual, "proyector_solicitado", False)) if puntual else False,
+            "camara": bool(get_attr(puntual, "camara_solicitada", False)) if puntual else False,
+            "enchufes": bool(get_attr(puntual, "enchufes_solicitados", False)) if puntual else False,
             "nombre_aula": instance.nombre_aula or "",
             "estado": instance.estado,
         }
@@ -197,23 +196,51 @@ class ReservaDetalleSerializer(serializers.Serializer):
             instance.id_dia = dia
 
         # Campos de Reserva
-        for field in ["hora_inicio", "hora_fin", "capacidad_solicitada", "nombre_aula"]:
+        for field in ["hora_inicio", "hora_fin", "nombre_aula"]:
             if field in validated_data:
-                setattr(instance, field, validated_data[field])
-
-        # Recursos: solo se guardan si tu modelo Reserva tiene esos campos
-        for field in ["num_ordenadores", "altavoces", "proyector", "camaras", "enchufes"]:
-            if field in validated_data and hasattr(instance, field):
                 setattr(instance, field, validated_data[field])
 
         instance.save()
 
-        # Motivo (ReservaPuntual)
+        # Campos Reserva Puntual
+        puntual = ReservaPuntual.objects.filter(id_reserva=instance).first()
+
+        if not puntual:
+            raise serializers.ValidationError({"detail": "No se encontró la reserva puntual asociada."})
+
         if "motivo" in validated_data:
-            puntual = ReservaPuntual.objects.filter(id_reserva=instance).first()
-            if puntual:
-                puntual.motivo = validated_data["motivo"]
-                puntual.save()
+            puntual.motivo = validated_data["motivo"]
+        
+        if "capacidad_solicitada" in validated_data:
+            puntual.capacidad_solicitada = validated_data["capacidad_solicitada"]
+        
+        if "num_ordenadores" in validated_data:
+            puntual.num_ordenadores = validated_data["num_ordenadores"] or 0
+        
+        if "altavoces" in validated_data:
+            puntual.altavoces = validated_data["altavoces"]
+        
+        if "proyector" in validated_data:
+            puntual.proyector = validated_data["proyector"]
+
+        if "camaras" in validated_data:
+            puntual.camaras = validated_data["camaras"]
+        
+        if "enchufes" in validated_data:
+            puntual.enchufes = validated_data["enchufes"]
+        
+        puntual.save()
+
+        # Para permitir editar el correo responsable, sólo permitiría editarlo si existe el responable en la base de datos
+        if "correo_responsable" in validated_data:
+            correo = (validated_data["correo_responsable"] or "").strip()
+            if correo:
+                responsable = Responsable.objects.filter(correo=correo).first()
+                if responsable:
+                    puntual.id_responsable = responsable
+                    puntual.save()
+                else:
+                    raise serializers.ValidationError({"correo_responsable": "No existe un responsable con ese correo."})
 
         # correo_responsable no lo permito editar aquí (si quieres, lo añadimos)
         return instance
