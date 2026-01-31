@@ -7,7 +7,7 @@ def aulas_candidatas_por_requisitos(
     num_ordenadores: int | None,
     altavoces: bool,
     proyector: bool,
-    camaras: bool,
+    camara: bool,
     enchufes: bool,
 ):
     """
@@ -29,7 +29,7 @@ def aulas_candidatas_por_requisitos(
         qs = qs.filter(altavoces=True)
     if proyector:
         qs = qs.filter(proyector=True)
-    if camaras:
+    if camara:
         qs = qs.filter(camara=True)  # OJO: en SQL es CAMARA (singular)
     if enchufes:
         qs = qs.filter(enchufes=True)
@@ -45,7 +45,7 @@ def aulas_disponibles_en_fecha_hora(
     num_ordenadores: int | None,
     altavoces: bool,
     proyector: bool,
-    camaras: bool,
+    camara: bool,
     enchufes: bool,
 ):
     """
@@ -56,7 +56,7 @@ def aulas_disponibles_en_fecha_hora(
         num_ordenadores=num_ordenadores,
         altavoces=altavoces,
         proyector=proyector,
-        camaras=camaras,
+        camara=camara,
         enchufes=enchufes,
     )
 
@@ -89,7 +89,7 @@ def aula_disponible_en_varias_fechas2(
     num_ordenadores: int | None,
     altavoces: bool,
     proyector: bool,
-    camaras: bool,
+    camara: bool,
     enchufes: bool,
 ):
     """
@@ -103,7 +103,7 @@ def aula_disponible_en_varias_fechas2(
         num_ordenadores=num_ordenadores,
         altavoces=altavoces,
         proyector=proyector,
-        camaras=camaras,
+        camara=camara,
         enchufes=enchufes,
     ).order_by("nombre")
 
@@ -127,7 +127,7 @@ def aula_disponible_en_varias_fechas(
     num_ordenadores: int | None,
     altavoces: bool,
     proyector: bool,
-    camaras: bool,
+    camara: bool,
     enchufes: bool,
 ):
     """
@@ -140,7 +140,7 @@ def aula_disponible_en_varias_fechas(
         num_ordenadores=num_ordenadores,
         altavoces=altavoces,
         proyector=proyector,
-        camaras=camaras,
+        camara=camara,
         enchufes=enchufes,
     )
 
@@ -158,7 +158,7 @@ def aula_disponible_en_varias_fechas(
             num_ordenadores=num_ordenadores,
             altavoces=altavoces,
             proyector=proyector,
-            camaras=camaras,
+            camara=camara,
             enchufes=enchufes,
         )
         disponibles_nombres = set(qs_dia.values_list("nombre", flat=True))

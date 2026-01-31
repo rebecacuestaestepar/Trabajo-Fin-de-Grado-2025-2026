@@ -23,7 +23,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
     num_ordenadores = serializers.IntegerField(required=False, min_value=0)
     altavoces = serializers.BooleanField(required=False, default=False)
     proyector = serializers.BooleanField(required=False, default=False)
-    camaras = serializers.BooleanField(required=False, default=False)   
+    camara = serializers.BooleanField(required=False, default=False)   
     enchufes = serializers.BooleanField(required=False, default=False)
     generar_periodica = serializers.BooleanField(required=False, default=False)
     fecha_inicio_periodo = serializers.DateField(required=False, allow_null=True)
@@ -67,7 +67,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
         num_ordenadores = validated_data.get('num_ordenadores', None)
         altavoces = validated_data.get('altavoces', False)
         proyector = validated_data.get('proyector', False)
-        camaras = validated_data.get('camaras', False)
+        camara = validated_data.get('camara', False)
         enchufes = validated_data.get('enchufes', False)
 
         generar_periodica = validated_data.get('generar_periodica', False)
@@ -109,7 +109,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 num_ordenadores=num_ordenadores,
                 altavoces=altavoces,
                 proyector=proyector,
-                camaras=camaras,
+                camara=camara,
                 enchufes=enchufes,
             )
 
@@ -150,7 +150,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 num_ordenadores_solicitados=num_ordenadores,
                 altavoces_solicitados=altavoces,
                 proyector_solicitado=proyector,
-                camara_solicitada=camaras,
+                camara_solicitada=camara,
                 enchufes_solicitados=enchufes,
             )
 
@@ -226,7 +226,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
             num_ordenadores=num_ordenadores,
             altavoces=altavoces,
             proyector=proyector,
-            camaras=camaras,
+            camara=camara,
             enchufes=enchufes,
         )
 
@@ -262,7 +262,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                     num_ordenadores=num_ordenadores,
                     altavoces=altavoces,
                     proyector=proyector,
-                    camaras=camaras,
+                    camara=camara,
                     enchufes=enchufes,
                 )
 
@@ -316,7 +316,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 num_ordenadores_solicitados=num_ordenadores,
                 altavoces_solicitados=altavoces,
                 proyector_solicitado=proyector,
-                camara_solicitada=camaras,
+                camara_solicitada=camara,
                 enchufes_solicitados=enchufes,
             )
 

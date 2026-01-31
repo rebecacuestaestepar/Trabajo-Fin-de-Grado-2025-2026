@@ -3,20 +3,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import SolicitudReserva from './reservas/SolicitudReserva.jsx'
+//import SolicitudReserva from './reservas/SolicitudReserva.jsx'
+import SolicitudReservas from './reservas/formulario-paginas/SolicitudReservas.jsx';
 import FormularioCargar from './calendario/FormularioCargar.jsx';
 import SolicitudesPendientes from './reservas/SolicitudesPendientes.jsx';
-import SolicitudesPendientesDetalles from './reservas/SolicitudesPendientesDetalles.jsx';
+import EditarReservas from './reservas/formulario-paginas/EditarReservas.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  //const [count, setCount] = useState(0)
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/reservas/solicitud" element={<SolicitudReserva />} />
+        <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
         <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
-        <Route path="/reservas/pendientes/:id" element={<SolicitudesPendientesDetalles />} />
+        <Route path="/reservas/pendientes/:id" element={<EditarReservas />} />
         <Route path="/cargar-calendario" element={<FormularioCargar />} />
         <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
       </Routes>
