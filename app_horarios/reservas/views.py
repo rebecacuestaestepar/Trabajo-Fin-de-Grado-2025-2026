@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+
+from reservas.serializers_todas import ReservaResumenSerializer, ReservaTodasSerializer
 from .serializers import ReservaPuntualCreateSerializer
 from .serializers_pendientes import ( ReservaPendienteListItemSerializer, ReservaDetalleSerializer, AulasDisponiblesInputSerializer, ReservaBulkIdsSerializer)
 from reservas.models import Reserva, ReservaPuntual, Responsable
@@ -53,7 +55,7 @@ class AulasDisponiblesAPIView(APIView):
         num_ordenadores = int(data.get("num_ordenadores", 0) or 0)
         altavoces = bool(data.get("altavoces", False))
         proyector = bool(data.get("proyector", False))
-        camaras = bool(data.get("camaras", False))
+        camara = bool(data.get("camara", False))
         enchufes = bool(data.get("enchufes", False))
 
         # ---------- NO periódica ----------
@@ -75,7 +77,7 @@ class AulasDisponiblesAPIView(APIView):
                 num_ordenadores=num_ordenadores,
                 altavoces=altavoces,
                 proyector=proyector,
-                camaras=camaras,
+                camara=camara,
                 enchufes=enchufes,
             )
 
@@ -139,7 +141,7 @@ class AulasDisponiblesAPIView(APIView):
             num_ordenadores=num_ordenadores,
             altavoces=altavoces,
             proyector=proyector,
-            camaras=camaras,
+            camara=camara,
             enchufes=enchufes,
         )
 
@@ -167,7 +169,7 @@ class AulasDisponiblesAPIView(APIView):
                 num_ordenadores=num_ordenadores,
                 altavoces=altavoces,
                 proyector=proyector,
-                camaras=camaras,
+                camara=camara,
                 enchufes=enchufes,
             )
             aulas_por_fecha[d.isoformat()] = [{
@@ -222,7 +224,7 @@ class ReservasPendientesListAPIView(APIView):
                 "num_ordenadores": getattr(p, "num_ordenadores", None),
                 "altavoces": bool(getattr(p, "altavoces", False)),
                 "proyector": bool(getattr(p, "proyector", False)),
-                "camaras": bool(getattr(p, "camaras", False)),
+                "camara": bool(getattr(p, "camara", False)),
                 "enchufes": bool(getattr(p, "enchufes", False)),
 
                 "nombre_aula": r.nombre_aula or "",
@@ -354,6 +356,11 @@ class ReservaPendienteDetailAPIView(APIView):
 
 
         return Response({"message": "Reserva actualizada correctamente"}, status=status.HTTP_200_OK)
+    
+    def delete(self, request, id):
+        reserva = get_object_or_404(Reserva, idreserva=id)  # si es PK distinto, ajusta
+        reserva.delete()
+        return Response({"message": "Reserva eliminada"}, status=status.HTTP_200_OK)
 
 # -------------------------------------------------------
 # 4) AULAS CANDIDATAS: POST /api/reservas/<id>/aulas-candidatas/
@@ -475,3 +482,40 @@ class ReservaRechazarMasivoAPIView(APIView):
         reservas.update(estado="R")
         return Response(status=status.HTTP_204_NO_CONTENT)
 # Create your views here.
+
+class ReservasTodasAPIView(APIView):
+    #permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        qs = (
+            Reserva.objects
+            .select_related("id_dia")  # Dia
+            # reverse OneToOne; como en tus "choices" aparece reservapuntual, este nombre es correcto
+            .select_related("reservapuntual", "reservapuntual__id_responsable")
+            .order_by("-id_dia__dia", "-hora_inicio")
+        )
+        return Response(ReservaTodasSerializer(qs, many=True).data)
+
+    
+
+class ReservasEliminarMasivoAPIView(APIView):
+    #permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        ids = request.data.get("ids", [])
+
+        if not isinstance(ids, list) or not ids:
+            return Response(
+                {"detail": "Debes enviar un array 'ids' con al menos un elemento."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Ajusta el campo según tu modelo
+        qs = Reserva.objects.filter(idreserva__in=ids)
+        deleted_count = qs.count()
+        qs.delete()
+
+        return Response(
+            {"message": "Reservas eliminadas", "deleted": deleted_count},
+            status=status.HTTP_200_OK,
+        )

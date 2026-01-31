@@ -58,3 +58,21 @@ export function aprobarReservasMasivo(ids) {
 export function rechazarReservasMasivo(ids) {
   return apiPost(`/reservas/rechazar-masivo/`, { ids });
 }
+
+// ------------------------------------------------
+// --- PÁGINA DE GESTIÓN DE TODAS LAS RESERVAS  ---
+// ------------------------------------------------
+
+export function getTodasReservas() {
+  return apiGet("/reservas/todas/");
+}
+
+export function eliminarReserva(id) {
+  return apiRequest(`/reservas/${id}/`, {
+    method: "DELETE",
+  });
+}
+
+export function eliminarReservasMasivo(ids) {
+  return apiPost(`/reservas/eliminar-masivo/`, { ids });
+}

@@ -6,7 +6,9 @@ import './App.css'
 //import SolicitudReserva from './reservas/SolicitudReserva.jsx'
 import SolicitudReservas from './reservas/formulario-paginas/SolicitudReservas.jsx';
 import FormularioCargar from './calendario/FormularioCargar.jsx';
-import SolicitudesPendientes from './reservas/SolicitudesPendientes.jsx';
+//import SolicitudesPendientes from './reservas/SolicitudesPendientes.jsx';
+import SolicitudesPendientes from './reservas/listado-paginas/SolicitudesPendientes.jsx';
+import TodasReservas from './reservas/listado-paginas/TodasReservas.jsx';
 import EditarReservas from './reservas/formulario-paginas/EditarReservas.jsx';
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
         <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
         <Route path="/reservas/pendientes/:id" element={<EditarReservas />} />
         <Route path="/cargar-calendario" element={<FormularioCargar />} />
+        <Route path="/reservas/todas" element={<TodasReservas />} />
         <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
       </Routes>
     </BrowserRouter>

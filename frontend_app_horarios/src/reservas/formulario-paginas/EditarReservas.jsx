@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
-import ModalConfirmacion from "../formulario-componentes/ui/ModalConfirmacion";
+import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
 import { CajaExito, CajaError } from "../formulario-componentes/ui/CajaExito";
 
 import CamposBaseReserva from "../formulario-componentes/secciones/CamposBaseReserva";

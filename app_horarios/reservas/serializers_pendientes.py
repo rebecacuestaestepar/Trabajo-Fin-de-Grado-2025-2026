@@ -223,8 +223,8 @@ class ReservaDetalleSerializer(serializers.Serializer):
         if "proyector" in validated_data:
             puntual.proyector = validated_data["proyector"]
 
-        if "camaras" in validated_data:
-            puntual.camaras = validated_data["camaras"]
+        if "camara" in validated_data:
+            puntual.camara = validated_data["camara"]
         
         if "enchufes" in validated_data:
             puntual.enchufes = validated_data["enchufes"]
