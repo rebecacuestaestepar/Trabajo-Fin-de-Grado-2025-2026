@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
@@ -14,9 +14,12 @@ import { useEditarReserva } from "../formulario-hooks/useEditarReserva";
 export default function EditarReservas() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/reservas/pendientes";
 
   const editar = useEditarReserva(id, {
-    onFinish: () => navigate("/reservas/pendientes"),
+    onFinish: () => navigate(from),
   });
 
   if (editar.cargando) return <div className="p-6">Cargando reserva...</div>;
@@ -39,7 +42,7 @@ export default function EditarReservas() {
         izquierda={
           <button
             type="button"
-            onClick={() => navigate("/reservas/pendientes")}
+            onClick={() => navigate(from)}
             className="rounded-md px-3 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50"
           >
             ← Volver

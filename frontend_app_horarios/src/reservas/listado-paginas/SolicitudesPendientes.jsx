@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useListadoReservas } from "../listado-hooks/useListadoReservas";
 
 import BarraListado from "../listado-componentes/secciones/BarraListado";
@@ -15,12 +15,16 @@ import {
 
 export default function SolicitudesPendientes() {
   const navegar = useNavigate();
+  const location = useLocation();
 
   const listado = useListadoReservas({
     cargador: getReservasPendientes,
   });
 
-  const alEditar = (id) => navegar(`/reservas/pendientes/${id}`);
+  const alEditar = (id) =>
+    navegar(`/reservas/pendientes/${id}`, {
+      state: { from: location.pathname + location.search },
+    });
 
   const alAceptar = (id) =>
     listado.ejecutarAccion(async () => {

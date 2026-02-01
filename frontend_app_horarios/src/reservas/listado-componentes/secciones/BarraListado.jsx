@@ -66,7 +66,7 @@ export default function BarraListado({
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 justify-start sm:justify-end">
+        <div className="ml-auto flex flex-wrap items-center gap-2 justify-end">
           {tituloAccionCrear && (
             <button
               type="button"

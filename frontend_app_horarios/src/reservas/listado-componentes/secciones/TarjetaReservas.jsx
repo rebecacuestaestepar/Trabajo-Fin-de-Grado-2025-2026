@@ -165,7 +165,7 @@ export default function TarjetaReserva({
               className="rounded-lg !bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-slate-800"
               title="Eliminar"
             >
-              🗑️ Eliminar
+              Eliminar
             </button>
           )}
 
