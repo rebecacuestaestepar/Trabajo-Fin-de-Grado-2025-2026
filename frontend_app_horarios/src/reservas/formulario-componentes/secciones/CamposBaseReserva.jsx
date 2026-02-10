@@ -1,6 +1,21 @@
 import { Campo } from '../ui/Campo.jsx';
 import { AreaTexto, EntradaTexto } from '../ui/Inputs.jsx';
 
+function normalizarEstado(valor) {
+  const v = String(valor ?? "").trim().toUpperCase();
+  if (!v) return "";
+
+  // Ya viene como char
+  if (v === "P" || v === "A" || v === "R") return v;
+
+  // Variantes texto
+  if (v === "PENDIENTE") return "P";
+  if (v === "ACEPTADA" || v === "APROBADA" || v === "APROBADO") return "A";
+  if (v === "RECHAZADA" || v === "RECHAZADO") return "R";
+
+  // Si llega algo raro, lo dejamos vacío para no romper el select
+  return "";
+}
 export default function CamposBaseReserva({
   formulario,
   alCambiar, // (patch) -> alCambiar({ campo: valor })
@@ -8,6 +23,16 @@ export default function CamposBaseReserva({
   mostrarId = false,
   mostrarEstado = false,
 }) {
+
+  const OPCIONES_ESTADO = [
+    { value: "P", label: "Pendiente" },
+    { value: "A", label: "Aceptada" },
+    { value: "R", label: "Rechazada" },
+  ];
+
+  const estadoSelect = normalizarEstado(formulario.estado);
+
+
   return (
     <div className="space-y-4">
       {mostrarId && (
@@ -93,9 +118,38 @@ export default function CamposBaseReserva({
 
         {mostrarEstado && (
           <Campo etiqueta="Estado">
-            <EntradaTexto value={formulario.estado || ""} disabled readOnly />
+            <select
+              value={estadoSelect}
+              onChange={(e) => alCambiar({ estado: e.target.value })}
+              disabled={!!soloLectura.estado}
+              className={[
+                "w-full rounded-lg bg-white px-3 py-2",
+                "text-sm text-slate-900",
+                "ring-1 ring-inset ring-slate-200",
+                "focus:outline-none focus:ring-2 focus:ring-[#7a1e1e]/30",
+                !!soloLectura.estado ? "opacity-60 cursor-not-allowed" : "",
+              ].join(" ")}
+            >
+              {/* Si no hay valor aún, placeholder */}
+              <option value="" disabled>
+                Selecciona estado…
+              </option>
+
+              {OPCIONES_ESTADO.map((op) => (
+                <option key={op.value} value={op.value}>
+                  {op.label}
+                </option>
+              ))}
+            </select>
           </Campo>
         )}
+
+        {/*
+        {mostrarEstado && (
+          <Campo etiqueta="Estado">
+            <EntradaTexto value={formulario.estado || ""} disabled readOnly />
+          </Campo>
+        )}*/}
       </div>
     </div>
   );

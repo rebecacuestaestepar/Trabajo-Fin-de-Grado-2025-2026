@@ -71,11 +71,11 @@ export default function TarjetaReserva({
               className="mt-1 h-4 w-4 rounded border-slate-300"
               aria-label={`Seleccionar reserva ${motivo}`}
             />
-
+          
             <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                     <p className="text-lg font-semibold text-slate-900">{motivo}</p>
-                    {/* ✅ Badge estado */}
+                    
                         {mostrarEstado && (
                         <span
                             className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${badgeEstado(

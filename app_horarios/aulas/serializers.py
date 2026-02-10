@@ -1,6 +1,8 @@
 # aulas/serializers.py
 from rest_framework import serializers
 
+from aulas.models import Aula
+
 class AulaDisponibleRequestSerializer(serializers.Serializer):
     fecha = serializers.DateField(required=False)
     hora_inicio = serializers.TimeField()
@@ -28,3 +30,8 @@ class AulaMiniSerializer(serializers.Serializer):
     proyector = serializers.BooleanField()
     camara = serializers.BooleanField()
     enchufes = serializers.BooleanField(allow_null=True)
+
+class AulaMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Aula
+        fields = ["nombre"]

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
 import { CajaExito, CajaError } from "../formulario-componentes/ui/CajaExito";
@@ -10,8 +12,19 @@ import SeccionPeriodicidad from "../formulario-componentes/secciones/SeccionPeri
 
 import { useReservaPuntual } from "../formulario-hooks/useReservaPuntual";
 
-export default function SolicitudReservas() {
+export default function CrearReserva() {
+  // Reutilizas el mismo hook si te vale el flujo.
+  // Si luego quieres separar lógica admin/solicitud, lo hacemos en otro paso.
   const reserva = useReservaPuntual();
+
+  // Para “no ponerla por defecto en Pendiente”:
+  // dejamos el estado vacío al entrar (para forzar al usuario a elegir).
+  // Si prefieres un valor por defecto distinto, cámbialo aquí.
+  useEffect(() => {
+    if (reserva.formulario.estado === undefined) {
+      reserva.aplicarCambios({ estado: "" });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -23,11 +36,14 @@ export default function SolicitudReservas() {
         alConfirmar={reserva.modal.onConfirm}
       />
 
-      <TarjetaPagina titulo="SOLICITAR RESERVA PUNTUAL">
+      <TarjetaPagina titulo="CREAR RESERVA">
         <form onSubmit={reserva.enviarFormulario} className="space-y-6">
           <CamposBaseReserva
             formulario={reserva.formulario}
             alCambiar={reserva.aplicarCambios}
+            mostrarEstado
+            // aquí NO bloqueamos estado, queremos que se pueda editar:
+            soloLectura={{}}
           />
 
           <SeccionRecursos
@@ -57,7 +73,8 @@ export default function SolicitudReservas() {
             permitirManualSiVacio={false}
           />
 
-          <AccionesReserva variante="solicitud" deshabilitado={!reserva.puedeEnviar} />
+          {/* Variante distinta si quieres que el botón diga "Crear" */}
+          <AccionesReserva variante="crear" deshabilitado={!reserva.puedeEnviar} />
 
           <CajaExito>{reserva.mensaje}</CajaExito>
           <CajaError errores={reserva.errores} />

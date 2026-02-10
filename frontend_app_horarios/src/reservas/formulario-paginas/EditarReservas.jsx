@@ -80,8 +80,8 @@ export default function EditarReservas() {
 
           <AccionesReserva
             variante="editar"
-            alRechazar={editar.pedirRechazar}
-            alAceptar={editar.pedirAprobar}
+            //alRechazar={editar.pedirRechazar}
+            //alAceptar={editar.pedirAprobar}
             alGuardar={editar.guardar}
             deshabilitarGuardar={!editar.puedeGuardar || !editar.hayCambios}
           />

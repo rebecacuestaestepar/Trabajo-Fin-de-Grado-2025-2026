@@ -3,9 +3,12 @@ from django.utils.timezone import now
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 
+
+from aulas.models import Aula
 from calendario.models import Dia
-from aulas.serializers import AulaDisponibleRequestSerializer, AulaMiniSerializer
+from aulas.serializers import AulaDisponibleRequestSerializer, AulaMenuSerializer, AulaMiniSerializer
 from reservas.services import (
     aulas_disponibles_en_fecha_hora,
     aula_disponible_en_varias_fechas,
@@ -109,3 +112,11 @@ class AulasDisponiblesAPIView(APIView):
             {"aulas": aulas, "count": len(aulas)},
             status=status.HTTP_200_OK
         )
+
+
+class ListaAulasAPIView(ListAPIView):
+    serializer_class = AulaMenuSerializer
+    def get_queryset(self):
+        return Aula.objects.all().order_by("nombre")
+
+

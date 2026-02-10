@@ -25,6 +25,7 @@ export default function AccionesReserva({ variante, ...props }) {
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+      {/*}
       <button
         type="button"
         onClick={alRechazar}
@@ -39,7 +40,7 @@ export default function AccionesReserva({ variante, ...props }) {
         className="inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold text-white !bg-[#7a1e1e] hover:bg-[#651818]"
       >
         Aceptar
-      </button>
+      </button>*/}
 
       <button
         type="button"

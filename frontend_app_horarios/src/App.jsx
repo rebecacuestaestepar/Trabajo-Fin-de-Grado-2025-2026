@@ -1,8 +1,11 @@
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+//import './App.css'
+
+import PlantillaApp from './general/layout/PlantillaApp.jsx';
+
 //import SolicitudReserva from './reservas/SolicitudReserva.jsx'
 import SolicitudReservas from './reservas/formulario-paginas/SolicitudReservas.jsx';
 import FormularioCargar from './calendario/FormularioCargar.jsx';
@@ -10,6 +13,13 @@ import FormularioCargar from './calendario/FormularioCargar.jsx';
 import SolicitudesPendientes from './reservas/listado-paginas/SolicitudesPendientes.jsx';
 import TodasReservas from './reservas/listado-paginas/TodasReservas.jsx';
 import EditarReservas from './reservas/formulario-paginas/EditarReservas.jsx';
+import CrearReserva from './reservas/formulario-paginas/CrearReserva.jsx';
+
+import Horarios from './horarios/Horarios.jsx';
+import OcupacionAulas from './aulas/OcupacionAulas.jsx';
+import Examenes from './examenes/Examenes.jsx';
+
+
 
 function App() {
   //const [count, setCount] = useState(0)
@@ -17,12 +27,21 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
-        <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
-        <Route path="/reservas/pendientes/:id" element={<EditarReservas />} />
-        <Route path="/cargar-calendario" element={<FormularioCargar />} />
-        <Route path="/reservas/todas" element={<TodasReservas />} />
-        <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
+        <Route element={<PlantillaApp />}>
+
+          
+          <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
+          <Route path="/reservas/crear" element={<CrearReserva />} />
+          <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
+          <Route path="/reservas/pendientes/:id" element={<EditarReservas />} />
+          <Route path="/cargar-calendario" element={<FormularioCargar />} />
+          <Route path="/reservas/todas" element={<TodasReservas />} />
+          <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
+
+          <Route path="/horarios" element={<Horarios />} />
+          <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
+          <Route path="/examenes" element={<Examenes />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   
