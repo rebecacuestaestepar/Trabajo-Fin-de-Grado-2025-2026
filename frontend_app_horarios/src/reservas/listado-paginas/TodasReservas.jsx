@@ -19,7 +19,7 @@ export default function TodasReservas() {
     cargador: getTodasReservas,
   });
 
-  const alCrear = () => navegar("/reservas/solicitud");
+  const alCrear = () => navegar("/reservas/crear");
   const alEditar = (id) =>
     navegar(`/reservas/pendientes/${id}`, {
       state: { from: location.pathname + location.search },
