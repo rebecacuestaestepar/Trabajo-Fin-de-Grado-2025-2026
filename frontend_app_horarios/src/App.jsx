@@ -16,7 +16,8 @@ import EditarReservas from './reservas/formulario-paginas/EditarReservas.jsx';
 import CrearReserva from './reservas/formulario-paginas/CrearReserva.jsx';
 
 import Horarios from './horarios/Horarios.jsx';
-import OcupacionAulas from './aulas/OcupacionAulas.jsx';
+import OcupacionAulas from './aulas/pages/OcupacionAulas.jsx';
+import OcupacionAulaCalendario from './aulas/pages/OcupacionAulaCalendario.jsx';
 import Examenes from './examenes/Examenes.jsx';
 
 
@@ -40,6 +41,7 @@ function App() {
 
           <Route path="/horarios" element={<Horarios />} />
           <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
+          <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario aulas={aulas} />} />
           <Route path="/examenes" element={<Examenes />} />
         </Route>
       </Routes>

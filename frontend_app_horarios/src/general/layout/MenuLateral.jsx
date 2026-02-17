@@ -5,6 +5,8 @@ import { useAulas } from "../hooks/useAulas";
 
 export default function MenuLateral({ abierto }) {
   const [seccionAulasAbierta, setSeccionAulasAbierta] = useState(false);
+  const [seccionReservasAbierta, setSeccionReservasAbierta] = useState(false);
+  const [seccionReservasPuntualesAbierta, setSeccionReservasPuntualesAbierta] =useState(false);
   const { aulas, cargando, error } = useAulas();
 
   return (
@@ -17,6 +19,23 @@ export default function MenuLateral({ abierto }) {
       <nav className="pt-2">
         {/* IMPORTANTE: ajusta estas rutas a las tuyas reales */}
         <ItemMenu a="/reservas/pendientes">Reservas puntuales</ItemMenu>
+        <SeccionMenu
+          titulo="Reservas"
+          abierta={seccionReservasAbierta}
+          alAlternar={() => setSeccionReservasAbierta((v) => !v)}
+        >
+          <SeccionMenu
+            titulo="Reservas puntuales"
+            abierta={seccionReservasPuntualesAbierta}
+            alAlternar={() => setSeccionReservasPuntualesAbierta((v) => !v)}
+            >
+            <ItemMenu a="/reservas/pendientes">Solicitudes Pendientes</ItemMenu>
+            <ItemMenu a="/reservas/todas">Visualizar Reservas</ItemMenu>
+            <ItemMenu a="/reservas/crear">Crear reserva</ItemMenu>
+            <ItemMenu a="/reservas/solicitud">Solicitar reserva</ItemMenu>
+          </SeccionMenu>
+          <SeccionMenu titulo="Reservas periódicas"> </SeccionMenu>
+        </SeccionMenu>
         <ItemMenu a="/horarios">Horarios</ItemMenu>
 
         <SeccionMenu
@@ -24,32 +43,9 @@ export default function MenuLateral({ abierto }) {
           abierta={seccionAulasAbierta}
           alAlternar={() => setSeccionAulasAbierta((v) => !v)}
         >
-          <ItemMenu a="/ocupacion-aulas">Ver ocupación</ItemMenu>
+          <ItemMenu a="/ocupacion-aulas">Campus Politécnica</ItemMenu>
 
-          <div className="px-2 pb-2">
-            {cargando && (
-              <div className="px-2 py-2 text-sm opacity-80">
-                Cargando aulas…
-              </div>
-            )}
-
-            {error && (
-              <div className="px-2 py-2 text-sm opacity-90">Error: {error}</div>
-            )}
-
-            {!cargando &&
-              !error &&
-              aulas?.map((aula) => {
-                //const id = aula.id ?? aula.idAula;
-                const nombre = String(aula?.nombre ?? "").trim();
-
-                return (
-                  <ItemMenu key={nombre} a={`/ocupacion-aulas/${nombre}`}>
-                    <span className="normal-case font-medium">{nombre}</span>
-                  </ItemMenu>
-                );
-              })}
-          </div>
+          <ItemMenu a="/ocupacion-aulas">Campus Milanera</ItemMenu>
         </SeccionMenu>
 
         <ItemMenu a="/examenes">Exámenes</ItemMenu>
