@@ -1,46 +1,42 @@
 \capitulo{4}{Técnicas y herramientas}
 
-Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. Si se han estudiado diferentes alternativas de metodologías, herramientas, bibliotecas se puede hacer un resumen de los aspectos más destacados de cada alternativa, incluyendo comparativas entre las distintas opciones y una justificación de las elecciones realizadas. 
-No se pretende que este apartado se convierta en un capítulo de un libro dedicado a cada una de las alternativas, sino comentar los aspectos más destacados de cada opción, con un repaso somero a los fundamentos esenciales y referencias bibliográficas para que el lector pueda ampliar su conocimiento sobre el tema.
-
-
 \section{Lenguajes y entornos de programación}
-\subsection{Python}
+Para la realización de este proyecto, se ha decidido utilizar python como lenguaje de programación, por su gran utilidad en la actualidad, la importancia que está tomando en el mundo de la programación y su gran demanda en el mundo laboral. Con lo que puede ser interesante para profundizar más en su funcionamiento y mejorar y conocer más a fondo este lenguaje de programación, ampliando los conocimientos del mismo que se adquirieron en las asignaturas de Sistemas Inteligentes y Algoritmia.
 
-\subsection{Entorno virtual}
-
-\subsection{VisualStudio}
+Además, como entorno en el que se va a realizar todo el proyecto, tanto la parte del backend como la del frontend, va a ser Visual Studio Code, por ser principalmente un editor de código gratuito, por su alto rendimiento y por tener soporte para múltiples lenguajes de programación, permitiendo así tanto el desarrollo web como el backend, además de que permite una amplia personalización del entorno mediante diferentes extensiones.
 
 \section{Base de datos y despliegue}
 \subsection{Sistema gestor de base de datos: MySQL}
 
-La aplicación requiere de una base de datos para almacenar y consultar toda la información relacionada horarios, reservas, y aulas. Para llevarlo a cabo he elegido MySQL como Sistema Gestor de Base de Datos (SGBD), por su apmlio uso y por tener compatibilidad directa con Django mediante su backend. Y Django documenta soporte oficial para MySQL a partir de versiones modernas.
+La aplicación requiere de una base de datos para almacenar y consultar toda la información relacionada horarios, reservas, y aulas. Para llevarlo a cabo se ha elegido MySQL como Sistema Gestor de Base de Datos (SGBD), por su apmlio uso y por tener compatibilidad directa con Django mediante su backend. Además, Django documenta soporte oficial para MySQL a partir de versiones modernas.
 
 Con lo que he elegido MySQL ya que a nivel de mantenimiento permite un control independiente de la versión del sistema gestor de bases de datos, evitando que me limite la compatibilidad con versiones del framework del backend elegido.
 
 \subsection{Servidor y entorno de ejecución: Apache}
+Se han valorado dos alternativas: Apache y XAMPP.
 
-\subsection{Alternativa evaluada: XAMPP}
+XAMMP es un paquete que tiene todo en uno, es decir, te proporciona en el mismo programa el sistema gestor de base de datos y el servidor web, incluyendo Apache y MariaDB. Sin embargo, XAMPP distribuye versiones concretas de sus componentes, lo que limitaba el desfase/obsolescencia? del proyecto ya que las nuevas versiones de Django requieren versiones del sistema gestor de base de datos más actualizadas para poder tener compatibilidad. Por lo que, haber escogido XAMPP como opción, hubiese tenido que instalar versiones de Django anteriores, lo que aceleraría el proceso de desfase de la aplicación.
 
-Como alternativa se valoró XAMPP, que es un paquete que tiene todo en uno, es decir, te proporciona el mismo programa el sistema gestor de base de datos y el servidor web, incluyendo Apache y MariaDB. Sin embargo, XAMPP distribuye versiones concretas de sus componentes, lo que limitaba el desfase del proyecto ya que las nuevas versiones de Django requieren versiones del sistema gestor de base de datos más actualizadas para poder tener compatibilidad. Por lo que, haber escogido XAMPP como opción, hubiese tenido que instalar versiones de Django anteriores, lo que aceleraría el proceso de desfase de la aplicación.
+Por la razón anterior, y la independencia que da descargar por separado el sistema gestor de base de datos y el servidor web, se ha decidido instalar Apache.
+
+
 
 \section{Frameworks}
-\subsection{Backend: Django ((Django REST Framework)}
-Una vez seleccionado Python como lenguaje principal del proyecto, decidí utilizar Django como framework de desarrollo para el backend. La elección fue tomada principalmente por la necesidad de una arquitectura modular, mantenible y escalable, ya que el sistema debía organizarse en componentes independientes (por ejemplo, gestión de horarios, gestión de aulas, reservas, calendario, etc.) con responsabilidades bien delimitadas, y por ser un proyecto basado en el desarrollo de una aplicación web.
+\subsection{Backend: Django (Django REST Framework)}
+Una vez seleccionado Python como lenguaje principal del proyecto, se decidió utilizar Django como \textit{framework} de desarrollo para el \textit{backend}. La elección fue tomada principalmente por la necesidad de una arquitectura modular, mantenible y escalable, ya que el sistema debía organizarse en componentes independientes (por ejemplo, gestión de horarios, gestión de aulas, reservas, calendario, etc.) con responsabilidades bien delimitadas, y por ser un proyecto basado en el desarrollo de una aplicación web.
 
 Django favorece este enfoque mediante su organización basada en aplicaciones, permitiendo dividir el proyecto en módulos reutilizables e independientes, con el fin de dividir la lógica del proyecto, facilitando el crecimiento del mismo y reduciendo el acoplamiento entre distintas funcionalidades.
 
 Además, Django se apoya en el patrón arquitectónico MVT (Modelo-Vista-Plantilla), que guía la separación de responsabilidades:
 \begin{itemize}
-	\item \textbf{Modelo (Model):} define la estructura de datos y la interacción con la base de datos mediante el ORM.
+	\item \textbf{Modelo (Model):} define la estructura de datos y la interacción con la base de datos mediante el ORM \textit{(Object-Relational Mapping)}.
 	\item \textbf{Vista (View):} contiene la lógica de negocio y gestiona las peticiones/respuestas, es decir, procesa las solicitudes que entran por parte de los usuarios y 
 	\item \textbf{Plantilla (Template):} se encarga de la presentación de los datos al usuario; en este proyecto, esta separación sigue siendo útil aunque el frontend se implemente con React, ya que el backend se centra en exponer servicios y lógica.
 \end{itemize}
 
 \subsection{Backend: Django REST Framework}
 
-Dado que vamos a necesitar que el frontend consuma datos del backend, concluimos que iba a ser necesaria la utilización de una API, mediante endpoints. Por ello decidió instalarse Django REST Framework.
-Esta elección se debe a que DRF proporciona componentes
+Dado que se necesita que el \textit{frontend} consuma datos del \textit{backend}, concluimos que iba a ser necesaria la utilización de una API, mediante \textit{endpoints}. Por ello decidió instalarse Django REST Framework (DRF).
 
 Esta elección se debe a que  DRF proporciona componentes esenciales para este tipo de arquitectura. Entre los más relevantes destacan:
 \begin{itemize}
@@ -51,14 +47,14 @@ Esta elección se debe a que  DRF proporciona componentes esenciales para este t
 
 \subsection{Frontend: React + Vite}
 
-Para llevar a cabo el desarrollo del frontend, tuve en cuenta dos opciones: React y Angular.
+Para llevar a cabo el desarrollo del frontend, se tuvieron en cuenta dos opciones: React y Angular.
 
-Aunque verdaderamente React se define como una librería para construir interfaces de usuarios, que se basa en componentes, permitiendo reutilizar piezas y separar de manera clara las funcionalidades de la interfaz. Además, nos permite una mayor flexibilidad de cara a la estructura del proyecto, permitiendo seleccionar únicamente las dependencias necesarias. Por otro lado, tenemos Angular un framework que es más cerrado, con decisiones y herramientas integradas, teniendo una mayor carga inicial y la adaptación a la forma de trabajo es menos flexible.
+Aunque verdaderamente React se define como una librería para construir interfaces de usuarios, basada en componentes, permitiendo reutilizar piezas y separar de manera clara las funcionalidades de la interfaz. Además, nos permite una mayor flexibilidad de cara a la estructura del proyecto, permitiendo seleccionar únicamente las dependencias necesarias. Por otro lado, tenemos Angular un framework que es más cerrado, con decisiones y herramientas integradas, teniendo una mayor carga inicial y la adaptación a la forma de trabajo es menos flexible.
 
 Con lo que finalmente elegí utilizar React, porque me pareció importante la característica de la flexibilidad. 
 Una vez seleccionado React, investigué un poco más a fondo y encontré dos formas de iniciarlo en el proyecto: Create React App y Vite + React. Tras buscar información relativa a ambas opciones, finalmente elegía la opción que contiene Vite.
 
-Y es que Vite es una alternativa más moderna, y es que de hecho el propio equipo de React no recomienda actualmente su utilización debido a limitaciones, y recomienda utilizar herramientas integradas, como es el caso de la escogida.
+Y es que Vite es una alternativa más moderna, de hecho el propio equipo de React no recomienda actualmente su utilización debido a limitaciones, y recomienda utilizar herramientas integradas, como es el caso de la escogida.
 
 Esta herramienta destaca por el hecho de que proporciona un entorno de desarrollo ligero y rápido al contar con un servidor de desarrollo optimizado y capacidades como la recarga en caliente (HMR - Hot Module Replacement) que es instantáneo sin importar lo grande que sea la app, lo que mejora el flujo de trabajo durante la implementación. Además, Vite utiliza Rollup que es muy rápido en eliminar el código muerto que no usas, resultando en una aplicación final más ligera mejorando las métricas de rendimiento web.
 
@@ -66,8 +62,8 @@ Esta herramienta destaca por el hecho de que proporciona un entorno de desarroll
 
 Para la estética del frontend valoré las dos siguientes alternativas: Tailwind CSS y Bootstrap.
 
-Busqué documentación sobre ambos frameworks. Bootstrap permite crear interfaces de forma más rápida debido a que cuenta con un catálogo de componentes predefinidos (botones, formularios,...), pero debido a esta característica en muchas ocasiones las aplicaciones que hacen uso de este framework utilizando su configuración por defecto tienen una estética muy parecida. Se puede personalizar pero requiere estar sobrescribiendo.
-Por otro lado, tenemos Tailwind CSS es \textit{utility-first}, que se basa en clases atómicas que se combinan para construir diseños a medida. Este enfoque permite una mayor flexibilidad y no depende de estilos prestablecidos, además encaja con el desarrollo por componentes del frontend. Por todos estos motivos, fue por los que elegí este framework para los estilos del proyecto.
+Tras analizar la documentación sobre ambos \textit{frameworks}: Bootstrap permite crear interfaces de forma más rápida debido a que cuenta con un catálogo de componentes predefinidos (botones, formularios,...), pero debido a esta característica en muchas ocasiones las aplicaciones que hacen uso de este framework utilizando su configuración por defecto tienen una estética muy parecida. Se puede personalizar pero requiere estar sobrescribiendo.
+Por otro lado, tenemos que Tailwind CSS es \textit{utility-first}, es decir, se basa en clases atómicas que se combinan para construir diseños a medida. Este enfoque permite una mayor flexibilidad y no depende de estilos prestablecidos, además encaja con el desarrollo por componentes del frontend. Por todos estos motivos, fue por los que elegí este framework para los estilos del proyecto.
 
 \section{Bibliotecas}
 \subsection{Biblioteca de Calendarios: React Big Calendar}
