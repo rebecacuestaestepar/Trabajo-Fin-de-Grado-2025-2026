@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import { apiRequest, apiGet } from "./client";
 
 export function cargarCalendarioFormulario(payload) {
     return apiRequest("/calendario/cargar/formulario/", {
@@ -6,3 +6,4 @@ export function cargarCalendarioFormulario(payload) {
         body: payload,
     });
 }
+

@@ -21,7 +21,7 @@ export default function TodasReservas() {
 
   const alCrear = () => navegar("/reservas/crear");
   const alEditar = (id) =>
-    navegar(`/reservas/pendientes/${id}`, {
+    navegar(`/reservas/puntuales/${id}`, {
       state: { from: location.pathname + location.search },
     });
 

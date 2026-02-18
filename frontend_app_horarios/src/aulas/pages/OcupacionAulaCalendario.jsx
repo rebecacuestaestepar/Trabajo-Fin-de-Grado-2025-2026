@@ -8,11 +8,11 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import ToolbarAulaCalendar from "../components/calendario/ToolbarAulaCalendar";
-import { useEventosAula } from "../hooks/useEventosAula";
+import { useEventosAula } from "../hooks/useEventosAulas";
 
 function colorEventoPorTipo(arg) {
   const tipo = arg.event.extendedProps?.tipo;
-  // Puntuales: verde, Periódicas: azul (cambia a tu gusto)
+  // Puntuales: verde, Periódicas: azul
   if (tipo === "PUNTUAL") return { backgroundColor: "#16a34a", borderColor: "#16a34a" };
   if (tipo === "PERIODICA") return { backgroundColor: "#2563eb", borderColor: "#2563eb" };
   return {};
@@ -24,13 +24,13 @@ export default function OcupacionAulaCalendario({
   const navigate = useNavigate();
   const calRef = useRef(null);
 
-  const [aulaId, setAulaId] = useState(aulas?.[0]?.id ?? "");
+  const [aulaId, setAulaId] = useState(aulas?.[0]?.nombre ?? "");
   const [tipo, setTipo] = useState("AMBAS"); // AMBAS | PUNTUAL | PERIODICA
 
   const { events, loading, error, setRange } = useEventosAula({ aulaId, tipo });
 
   const aulaSeleccionada = useMemo(
-    () => aulas.find((a) => String(a.id) === String(aulaId)),
+    () => aulas.find((a) => String(a.nombre) === String(aulaId)),
     [aulas, aulaId]
   );
 
@@ -68,6 +68,32 @@ export default function OcupacionAulaCalendario({
           {error && <div className="text-xs text-rose-600">{error}</div>}
         </div>
       </div>
+
+      {/* Toolbar custom (con filtro) */}
+        <div className="mt-3">
+          <ToolbarAulaCalendar
+            title={calRef.current?.getApi?.().view?.title ?? ""}
+            onPrev={() => calRef.current?.getApi?.().prev()}
+            onNext={() => calRef.current?.getApi?.().next()}
+            onToday={() => calRef.current?.getApi?.().today()}
+            onView={(v) => calRef.current?.getApi?.().changeView(v)}
+            view={calRef.current?.getApi?.().view?.type ?? "timeGridWeek"}
+            tipo={tipo}
+            setTipo={setTipo}
+          />
+        </div>
+
+        {/* Leyenda */}
+        <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-600">
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#16a34a" }} />
+            Puntuales
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#2563eb" }} />
+            Periódicas
+          </div>
+        </div>
 
       {/* Calendario */}
       <div className="rounded-lg border border-slate-200 bg-white p-3">
@@ -114,31 +140,7 @@ export default function OcupacionAulaCalendario({
           headerToolbar={false} // la reemplazamos con toolbar custom
         />
 
-        {/* Toolbar custom (con filtro) */}
-        <div className="mt-3">
-          <ToolbarAulaCalendar
-            title={calRef.current?.getApi?.().view?.title ?? ""}
-            onPrev={() => calRef.current?.getApi?.().prev()}
-            onNext={() => calRef.current?.getApi?.().next()}
-            onToday={() => calRef.current?.getApi?.().today()}
-            onView={(v) => calRef.current?.getApi?.().changeView(v)}
-            view={calRef.current?.getApi?.().view?.type ?? "timeGridWeek"}
-            tipo={tipo}
-            setTipo={setTipo}
-          />
-        </div>
-
-        {/* Leyenda */}
-        <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-600">
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#16a34a" }} />
-            Puntuales
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#2563eb" }} />
-            Periódicas
-          </div>
-        </div>
+        
       </div>
     </div>
   );

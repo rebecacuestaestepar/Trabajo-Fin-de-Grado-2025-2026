@@ -34,14 +34,14 @@ function App() {
           <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
           <Route path="/reservas/crear" element={<CrearReserva />} />
           <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
-          <Route path="/reservas/pendientes/:id" element={<EditarReservas />} />
+          <Route path="/reservas/puntuales/:id" element={<EditarReservas />} />
           <Route path="/cargar-calendario" element={<FormularioCargar />} />
           <Route path="/reservas/todas" element={<TodasReservas />} />
           <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
 
           <Route path="/horarios" element={<Horarios />} />
           <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
-          <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario aulas={aulas} />} />
+          <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario/>} />
           <Route path="/examenes" element={<Examenes />} />
         </Route>
       </Routes>

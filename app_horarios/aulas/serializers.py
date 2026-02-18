@@ -35,3 +35,14 @@ class AulaMenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aula
         fields = ["nombre"]
+
+
+class OcupacionAulaEventosQuerySerializer(serializers.Serializer):
+    aula = serializers.CharField(required=True, max_length=20)
+    start = serializers.DateTimeField(required=True)
+    end = serializers.DateTimeField(required=True)
+    tipo = serializers.ChoiceField(
+        choices=["AMBAS", "PUNTUAL", "PERIODICA"],
+        required=False,
+        default="AMBAS"
+    )
