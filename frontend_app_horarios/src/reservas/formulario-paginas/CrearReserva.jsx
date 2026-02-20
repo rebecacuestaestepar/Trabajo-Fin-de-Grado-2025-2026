@@ -1,8 +1,10 @@
 import { useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
 import { CajaExito, CajaError } from "../formulario-componentes/ui/CajaExito";
+import BotonVolver from "../formulario-componentes/ui/BotonVolver";
 
 import CamposBaseReserva from "../formulario-componentes/secciones/CamposBaseReserva";
 import SeccionRecursos from "../formulario-componentes/secciones/SeccionChecks";
@@ -16,7 +18,7 @@ export default function CrearReserva() {
   // Reutilizas el mismo hook si te vale el flujo.
   // Si luego quieres separar lógica admin/solicitud, lo hacemos en otro paso.
   const reserva = useReservaPuntual();
-
+  
   // Para “no ponerla por defecto en Pendiente”:
   // dejamos el estado vacío al entrar (para forzar al usuario a elegir).
   // Si prefieres un valor por defecto distinto, cámbialo aquí.
@@ -36,7 +38,11 @@ export default function CrearReserva() {
         alConfirmar={reserva.modal.onConfirm}
       />
 
-      <TarjetaPagina titulo="CREAR RESERVA">
+      <TarjetaPagina titulo="CREAR RESERVA"
+        izquierda={<BotonVolver fallback="/reservas/todas" />}
+        derecha={<span />}
+      >
+        
         <form onSubmit={reserva.enviarFormulario} className="space-y-6">
           <CamposBaseReserva
             formulario={reserva.formulario}

@@ -31,7 +31,6 @@ export default function MenuLateral({ abierto }) {
             >
             <ItemMenu a="/reservas/pendientes">Solicitudes Pendientes</ItemMenu>
             <ItemMenu a="/reservas/todas">Visualizar Reservas</ItemMenu>
-            <ItemMenu a="/reservas/crear">Crear reserva</ItemMenu>
             <ItemMenu a="/reservas/solicitud">Solicitar reserva</ItemMenu>
           </SeccionMenu>
           <SeccionMenu titulo="Reservas periódicas"> </SeccionMenu>

@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
 import { CajaExito, CajaError } from "../formulario-componentes/ui/CajaExito";
+import BotonVolver from "../formulario-componentes/ui/BotonVolver";
 
 import CamposBaseReserva from "../formulario-componentes/secciones/CamposBaseReserva";
 import SeccionChecks from "../formulario-componentes/secciones/SeccionChecks";
@@ -39,16 +40,8 @@ export default function EditarReservas() {
 
       <TarjetaPagina
         titulo="EDITAR RESERVA"
-        izquierda={
-          <button
-            type="button"
-            onClick={() => navigate(from)}
-            className="rounded-md px-3 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50"
-          >
-            ← Volver
-          </button>
-        }
-        derecha={<span />}
+          izquierda={<BotonVolver fallback="/reservas" />}
+          derecha={<span />}
       >
         <div className="space-y-6">
           <CamposBaseReserva
