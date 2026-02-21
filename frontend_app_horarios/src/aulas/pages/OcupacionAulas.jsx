@@ -1,10 +1,11 @@
 // src/aulas/pages/OcupacionAulas.jsx
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAulas } from "../../general/hooks/useAulas";
 
 export default function OcupacionAulas() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { aulas, cargando, error } = useAulas();
 
   // "multiple" | "unica"
@@ -42,7 +43,9 @@ export default function OcupacionAulas() {
     // Para enviar el modo
     //params.set("modo", modoCalculado);
 
-    navigate(`/aulas/ocupacion/ver?${params.toString()}`);
+    navigate(`/aulas/ocupacion/ver?${params.toString()}`, {
+      state: { from: location.pathname + location.search },
+    });
   }
 
   

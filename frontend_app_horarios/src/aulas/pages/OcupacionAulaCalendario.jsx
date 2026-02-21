@@ -1,6 +1,6 @@
 // src/aulas/pages/OcupacionAulaCalendarPage.jsx
 import { useMemo, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -25,6 +25,7 @@ export default function OcupacionAulaCalendario({
   aulas = [], // [{id, nombre}] -> ajústalo a tu modelo real
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const calRef = useRef(null);
 
   // Leemos los parámetros de la URL para saber qué aula(s) mostrar
@@ -48,7 +49,7 @@ export default function OcupacionAulaCalendario({
 
   return (
     <div className="space-y-3">
-      <BotonVolver fallback="/reservas" />
+      <BotonVolver fallback="/ocupacion-aulas" />
     
       {/* Cabecera indicando qué aulas se están mostrando */}
       <div className="rounded-lg border border-slate-200 bg-white p-3">
