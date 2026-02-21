@@ -24,14 +24,14 @@ export default function ToolbarAulaCalendar({
           onClick={onPrev}
           className="rounded-md border border-slate-200 px-3 py-1 text-sm hover:bg-slate-50"
         >
-          ◀
+          &#8678;
         </button>
         <button
           type="button"
           onClick={onNext}
           className="rounded-md border border-slate-200 px-3 py-1 text-sm hover:bg-slate-50"
         >
-          ▶
+          &#8680;
         </button>
 
         <div className="ml-2 text-sm font-semibold text-slate-800">{title}</div>

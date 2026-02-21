@@ -41,7 +41,7 @@ function App() {
 
           <Route path="/horarios" element={<Horarios />} />
           <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
-          <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario/>} />
+          <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
           <Route path="/examenes" element={<Examenes />} />
         </Route>
       </Routes>

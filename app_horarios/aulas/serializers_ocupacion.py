@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 class OcupacionAulaQuerySerializer(serializers.Serializer):
-    aula = serializers.CharField(required=True)  # nombre del aula (ej: "A-01")
+    aula = serializers.CharField(required=True) 
     start = serializers.DateTimeField(required=True)
     end = serializers.DateTimeField(required=True)
     tipo = serializers.ChoiceField(

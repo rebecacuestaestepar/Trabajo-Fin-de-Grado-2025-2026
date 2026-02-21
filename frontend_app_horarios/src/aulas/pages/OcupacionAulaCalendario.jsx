@@ -1,6 +1,6 @@
-// src/pages/OcupacionAulaCalendarPage.jsx
+// src/aulas/pages/OcupacionAulaCalendarPage.jsx
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -8,7 +8,10 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import ToolbarAulaCalendar from "../components/calendario/ToolbarAulaCalendar";
-import { useEventosAula } from "../hooks/useEventosAulas";
+import { useEventosAula } from "../hooks/useEventosAula";
+import BotonVolver from "../../reservas/formulario-componentes/ui/BotonVolver";
+import LeyendaAulas from "../components/calendario/LeyendaAulas";
+import { generarMapaColores } from "../ocupacion-utiles/coloresAulas";
 
 function colorEventoPorTipo(arg) {
   const tipo = arg.event.extendedProps?.tipo;
@@ -24,48 +27,35 @@ export default function OcupacionAulaCalendario({
   const navigate = useNavigate();
   const calRef = useRef(null);
 
-  const [aulaId, setAulaId] = useState(aulas?.[0]?.nombre ?? "");
+  // Leemos los parámetros de la URL para saber qué aula(s) mostrar
+  const [searchParams] = useSearchParams();
+  const aulasSeleccionadas = searchParams.getAll("aula");
+  //const [aulaNombre, setAulaNombre] = useState(aulas?.[0]?.nombre ?? "");
+
+
   const [tipo, setTipo] = useState("AMBAS"); // AMBAS | PUNTUAL | PERIODICA
 
-  const { events, loading, error, setRange } = useEventosAula({ aulaId, tipo });
+  const { events, loading, error, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadas, tipo });
 
-  const aulaSeleccionada = useMemo(
-    () => aulas.find((a) => String(a.nombre) === String(aulaId)),
-    [aulas, aulaId]
-  );
+  const mapaColores = useMemo(() => {
+    return generarMapaColores(aulasSeleccionadas);
+  }, [aulasSeleccionadas.join(",")]);
+
+  /*const aulaSeleccionada = useMemo(
+    () => aulas.find((a) => String(a.nombre) === String(aulaNombre).trim()),
+    [aulas, aulaNombre]
+  );*/
 
   return (
     <div className="space-y-3">
-      {/* Selector de aula (arriba, antes del calendario) */}
+      <BotonVolver fallback="/reservas" />
+    
+      {/* Cabecera indicando qué aulas se están mostrando */}
       <div className="rounded-lg border border-slate-200 bg-white p-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="text-sm font-semibold text-slate-800">
-            Ocupación del aula
+            Ocupación de: {aulasSeleccionadas.join(", ") || "Ninguna aula seleccionada"}
           </div>
-
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-slate-600">Aula:</label>
-            <select
-              value={aulaId}
-              onChange={(e) => setAulaId(e.target.value)}
-              className="rounded-md border border-slate-200 px-2 py-1 text-sm"
-            >
-              {aulas.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.nombre ?? a.codigo ?? `Aula ${a.id}`}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {aulaSeleccionada && (
-            <div className="text-xs text-slate-500">
-              Mostrando: <span className="font-medium">{aulaSeleccionada.nombre ?? aulaSeleccionada.codigo}</span>
-            </div>
-          )}
-
-          {loading && <div className="text-xs text-slate-500">Cargando…</div>}
-          {error && <div className="text-xs text-rose-600">{error}</div>}
         </div>
       </div>
 
@@ -84,7 +74,10 @@ export default function OcupacionAulaCalendario({
         </div>
 
         {/* Leyenda */}
-        <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-600">
+        <div className="mt-3">
+          <LeyendaAulas mapaColores={mapaColores} />
+        </div>
+        {/*<div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-600">
           <div className="flex items-center gap-2">
             <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#16a34a" }} />
             Puntuales
@@ -93,7 +86,7 @@ export default function OcupacionAulaCalendario({
             <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#2563eb" }} />
             Periódicas
           </div>
-        </div>
+        </div>*/}
 
       {/* Calendario */}
       <div className="rounded-lg border border-slate-200 bg-white p-3">
@@ -102,8 +95,8 @@ export default function OcupacionAulaCalendario({
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridWeek"          // por defecto semanal
           firstDay={1}                        // lunes
-          slotMinTime="08:30:00"
-          slotMaxTime="20:30:00"
+          //slotMinTime="08:30:00"
+          //slotMaxTime="20:30:00"
           nowIndicator={true}
           height="75vh"
           expandRows={true}
@@ -111,15 +104,40 @@ export default function OcupacionAulaCalendario({
           eventColor="#334155"
           eventDidMount={(arg) => {
             // aplica colores según tipo
-            const c = colorEventoPorTipo(arg);
+            /*const c = colorEventoPorTipo(arg);
             if (c.backgroundColor) {
               arg.el.style.backgroundColor = c.backgroundColor;
               arg.el.style.borderColor = c.borderColor;
-            }
+            }*/
+            const tipoEv = arg.event.extendedProps?.tipo;
+            const aulaEv = arg.event.extendedProps?.aula;
+
+            // Cogemos los colores directamente del mapa usando el nombre del aula
+            const coloresAula = mapaColores[aulaEv] || { oscuro: "#475569", claro: "#cbd5e1" };
+            
+            const bgColor = tipoEv === "PUNTUAL" ? coloresAula.oscuro : coloresAula.claro;
+
+            arg.el.style.backgroundColor = bgColor;
+            arg.el.style.borderColor = bgColor;
+            arg.el.style.color = tipoEv === "PERIODICA" ? "#1e293b" : "#ffffff";
           }}
           datesSet={(arg) => {
             // FullCalendar te da el rango visible; lo usamos para pedir datos al backend
-            setRange({ start: arg.start, end: arg.end });
+            setRange((prev) => {
+              // Si no había rango previo, lo guardamos
+              if (!prev) return { start: arg.start, end: arg.end };
+              
+              // Comparamos el valor numérico de las fechas (milisegundos)
+              if (
+                prev.start.getTime() === arg.start.getTime() &&
+                prev.end.getTime() === arg.end.getTime()
+              ) {
+                return prev; // No hacemos NADA, evitando el render y el bucle
+              }
+              
+              // Solo actualizamos si las fechas son genuinamente distintas
+              return { start: arg.start, end: arg.end };
+            });
           }}
           eventClick={(info) => {
             const tipoEv = info.event.extendedProps?.tipo;
@@ -127,15 +145,11 @@ export default function OcupacionAulaCalendario({
 
             // Si quieres ir "directamente a las características de la reserva puntual"
             if (tipoEv === "PUNTUAL") {
-              navigate(`/reservas/puntuales/${id}`); // ajusta la ruta a tu app
+              navigate(`/reservas/puntuales/${id}`); 
               return;
             }
 
-            // Si es periódica, puedes:
-            // - ir a detalle de la serie
-            // - o abrir modal
-            // Por ahora lo dejo como ejemplo:
-            // navigate(`/reservas/periodicas/${id}`);
+            // Aquí añadirámos la ruta a la consulta periódica, si se realiza la ventana
           }}
           headerToolbar={false} // la reemplazamos con toolbar custom
         />

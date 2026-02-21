@@ -22,7 +22,7 @@ class OcupacionAulaEventosAPIView(APIView):
         end = data["end"]
         tipo = data["tipo"]
 
-        # Validar aula existente (opcional, pero recomendable)
+        # Validacion aula existente
         if not Aula.objects.filter(nombre=aula_nombre).exists():
             return Response(
                 {"aula": "El aula indicada no existe."},

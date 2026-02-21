@@ -1,4 +1,4 @@
-// src/paginas/OcupacionAulas.jsx
+// src/aulas/pages/OcupacionAulas.jsx
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAulas } from "../../general/hooks/useAulas";
@@ -8,7 +8,7 @@ export default function OcupacionAulas() {
   const { aulas, cargando, error } = useAulas();
 
   // "multiple" | "unica"
-  const [modoSeleccion, setModoSeleccion] = useState("multiple");
+  //const [modoSeleccion, setModoSeleccion] = useState("multiple");
   const [seleccionadas, setSeleccionadas] = useState(() => new Set());
 
   const listaOrdenada = useMemo(() => {
@@ -17,17 +17,14 @@ export default function OcupacionAulas() {
     return arr;
   }, [aulas]);
 
+  const totalSeleccionadas = seleccionadas.size;
+  const modoCalculado = totalSeleccionadas <= 1 && totalSeleccionadas >0 ? "unica" : "multiple";
+
+
   function alternarAula(nombre) {
     setSeleccionadas((prev) => {
       const nuevo = new Set(prev);
-
-      if (modoSeleccion === "unica") {
-        // si es única, dejamos solo esa (o ninguna si se desmarca)
-        if (nuevo.has(nombre)) return new Set();
-        return new Set([nombre]);
-      }
-
-      // múltiple
+      
       if (nuevo.has(nombre)) nuevo.delete(nombre);
       else nuevo.add(nombre);
 
@@ -39,14 +36,16 @@ export default function OcupacionAulas() {
     const nombres = Array.from(seleccionadas);
     if (nombres.length === 0) return;
 
-    // Pasamos la selección por querystring: ?aulas=A-01& aULAS=...
     const params = new URLSearchParams();
     nombres.forEach((n) => params.append("aula", n));
+
+    // Para enviar el modo
+    //params.set("modo", modoCalculado);
 
     navigate(`/aulas/ocupacion/ver?${params.toString()}`);
   }
 
-  const totalSeleccionadas = seleccionadas.size;
+  
 
   return (
     <div className="max-w-5xl">
@@ -57,7 +56,7 @@ export default function OcupacionAulas() {
 
       <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
+          {/*<div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-slate-800">Modo:</span>
 
             <label className="inline-flex items-center gap-2 text-sm">
@@ -91,20 +90,15 @@ export default function OcupacionAulas() {
               />
               Única
             </label>
-          </div>
+          </div>*/}
 
-          <button
-            type="button"
-            onClick={verOcupacion}
-            disabled={totalSeleccionadas === 0}
-            className={[
-              "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm",
-              "bg-[#7a1e1e] hover:bg-[#651818]",
-              "disabled:cursor-not-allowed disabled:opacity-50",
-            ].join(" ")}
-          >
-            Ver ocupación ({totalSeleccionadas})
-          </button>
+          {/*<div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-slate-800">Modo:</span>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
+              {modoCalculado === "unica" ? "Única" : "Múltiple"}
+            </span>
+          </div>*/}
+
         </div>
 
         <div className="mt-4">
@@ -146,6 +140,19 @@ export default function OcupacionAulas() {
             </ul>
           )}
         </div>
+        <button
+            type="button"
+            onClick={verOcupacion}
+            disabled={totalSeleccionadas === 0}
+            className={[
+              "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm",
+              "bg-[#7a1e1e] hover:bg-[#651818]",
+              "disabled:cursor-not-allowed disabled:opacity-50",
+              "mt-4",
+            ].join(" ")}
+          >
+            Ver ocupación ({totalSeleccionadas})
+          </button>
       </div>
     </div>
   );

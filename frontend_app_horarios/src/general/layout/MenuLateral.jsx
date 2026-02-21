@@ -42,7 +42,7 @@ export default function MenuLateral({ abierto }) {
           abierta={seccionAulasAbierta}
           alAlternar={() => setSeccionAulasAbierta((v) => !v)}
         >
-          <ItemMenu a="/ocupacion-aulas">Campus Politécnica</ItemMenu>
+          <ItemMenu a="/ocupacion-aulas">Campus Río Vena</ItemMenu>
 
           <ItemMenu a="/ocupacion-aulas">Campus Milanera</ItemMenu>
         </SeccionMenu>

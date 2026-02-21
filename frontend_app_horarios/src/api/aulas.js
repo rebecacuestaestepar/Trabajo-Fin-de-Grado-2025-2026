@@ -6,13 +6,15 @@ export async function obtenerAulas() {
   return respuesta.json();
 }
 
-export async function getEventosAula({ aulaId, start, end, tipo = "AMBAS" }) {
+export async function getEventosAula({ aulaNombre, start, end, tipo = "AMBAS" }) {
   const params = new URLSearchParams({
-    aula_id: String(aulaId),
+    aula: String(aulaNombre),
     start: start.toISOString(),
     end: end.toISOString(),
     tipo,
   });
+
+  console.log("GET /aulas/ocupacion", params.toString());
 
   return apiGet(`/aulas/ocupacion?${params.toString()}`);
 }

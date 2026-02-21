@@ -54,6 +54,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
             .select_related("id_reserva")
             .filter(id_reserva__nombre_aula=aula_nombre)
             .filter(inicio__lt=end_dt, fin__gt=start_dt)  # solapa con el rango visible
+            .filter(id_reserva__estado__in=["A"])  # solo mostrar las reservas aceptadas
             .order_by("inicio")
         )
 
@@ -65,10 +66,10 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
                 "start": _aware(rp.inicio).isoformat(),
                 "end": _aware(rp.fin).isoformat(),
                 "tipo": "PUNTUAL",
-                "reserva_id": str(r.idreserva),
-                "estado": r.estado,
+                #"reserva_id": str(r.idreserva),
+                #"estado": r.estado,
                 "aula": r.nombre_aula,
-                "capacidad_solicitada": rp.capacidad_solicitada,
+                #"capacidad_solicitada": rp.capacidad_solicitada,
             })
 
     # -------------------------
@@ -80,6 +81,8 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
             ReservaPeriodica.objects
             .select_related("id_reserva", "id_asignatura")
             .filter(id_reserva__nombre_aula=aula_nombre)
+            #.filter(fecha_inicio__lt=end_dt.date(), fecha_fin__gt=start_dt.date())  # solapa con el rango visible
+            .filter(id_reserva__estado__in=["A"])  # solo mostrar las reservas aceptadas
             .order_by("fecha_inicio", "dia_semana")
         )
 
@@ -123,7 +126,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
                 # ID único por ocurrencia (serie + fecha). Útil para FullCalendar.
                 ocurrencia_id = f"{r.idreserva}-{d.isoformat()}"
 
-                # Título: si quieres poner asignatura
+                # Título: asignatura
                 asignatura = getattr(per.id_asignatura, "nombre", None) or getattr(per.id_asignatura, "id", None)
                 titulo = f"{asignatura}" if asignatura else f"Periódica {r.idreserva}"
 
@@ -134,7 +137,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
                     "end": ev_end.isoformat(),
                     "tipo": "PERIODICA",
                     "serie_id": str(r.idreserva),
-                    "estado": r.estado,
+                    #"estado": r.estado,
                     "aula": r.nombre_aula,
                     "fecha": d.isoformat(),
                 })
