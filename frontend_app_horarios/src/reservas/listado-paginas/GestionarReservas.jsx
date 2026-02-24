@@ -152,7 +152,6 @@ export default function GestionReservas() {
           />
 
           <PanelFiltros
-            /* ... (Se mantienen todos los props de PanelFiltros idénticos) */
             mostrar={listado.mostrarFiltros}
             usarMotivo={listado.usarMotivo}
             setUsarMotivo={listado.setUsarMotivo}
@@ -196,7 +195,6 @@ export default function GestionReservas() {
               reservas={listado.reservasFiltradas}
               idsSeleccionados={listado.idsSeleccionados}
               alAlternarSeleccionUno={listado.alternarSeleccionUno}
-              // Ya no pasamos "mostrarAceptarRechazar" ni "mostrarEliminar" porque la tarjeta lo decide
               mostrarEstado={true} 
               alAceptar={alAceptar}
               alRechazar={alRechazar}

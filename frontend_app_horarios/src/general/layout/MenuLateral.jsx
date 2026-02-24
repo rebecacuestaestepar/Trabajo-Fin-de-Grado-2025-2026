@@ -18,7 +18,7 @@ export default function MenuLateral({ abierto }) {
     >
       <nav className="pt-2">
         {/* IMPORTANTE: ajusta estas rutas a las tuyas reales */}
-        <ItemMenu a="/reservas/pendientes">Reservas puntuales</ItemMenu>
+        {/*<ItemMenu a="/reservas/pendientes">Reservas puntuales</ItemMenu>*/}
         <SeccionMenu
           titulo="Reservas"
           abierta={seccionReservasAbierta}
@@ -29,7 +29,7 @@ export default function MenuLateral({ abierto }) {
             abierta={seccionReservasPuntualesAbierta}
             alAlternar={() => setSeccionReservasPuntualesAbierta((v) => !v)}
             >
-            <ItemMenu a="/reservas/pendientes">Solicitudes Pendientes</ItemMenu>
+            {/*<ItemMenu a="/reservas/pendientes">Solicitudes Pendientes</ItemMenu>*/}
             <ItemMenu a="/reservas/gestion">Gestionar Reservas</ItemMenu>
             <ItemMenu a="/reservas/solicitud">Solicitar reserva</ItemMenu>
           </SeccionMenu>
