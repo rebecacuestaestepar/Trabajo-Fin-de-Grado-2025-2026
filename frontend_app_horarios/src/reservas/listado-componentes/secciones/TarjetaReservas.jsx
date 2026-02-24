@@ -42,7 +42,7 @@ export default function TarjetaReserva({
   mostrarAceptarRechazar = false,
   mostrarEliminar = false,
 
-  mostrarEstado = false,
+  mostrarEstado = true,
 }) {
   const id = reserva.id ?? reserva.idreserva;
 
@@ -54,7 +54,10 @@ export default function TarjetaReserva({
   const pcs = reserva.num_ordenadores_solicitados ?? reserva.num_ordenadores ?? "—";
   const aula = reserva.nombre_aula ?? "—";
 
-  const estadoRaw = reserva.estado ?? reserva.estado_reserva ?? reserva.status;
+  const estadoRaw = reserva.estado;
+
+  const estadoStr = String(estadoRaw ?? "").trim().toUpperCase();
+  const esPendiente = estadoStr === "P" || estadoStr === "PENDIENTE";
 
   return (
     <li
@@ -140,7 +143,7 @@ export default function TarjetaReserva({
         </div>
 
         <div className="flex shrink-0 flex-row flex-wrap gap-2 sm:flex-col sm:items-stretch">
-          {mostrarAceptarRechazar && (
+          {esPendiente ? (
             <>
               <button
                 onClick={() => alAceptar?.(id)}
@@ -156,10 +159,8 @@ export default function TarjetaReserva({
                 Rechazar
               </button>
             </>
-          )}
-
-          {/* ✅ Eliminar siempre encima de Editar cuando esté activo */}
-          {mostrarEliminar && (
+          ) : (
+            /* Si no es pendiente, mostramos el botón de eliminar*/
             <button
               onClick={() => alEliminar?.(id)}
               className="rounded-lg !bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-slate-800"
@@ -168,6 +169,11 @@ export default function TarjetaReserva({
               Eliminar
             </button>
           )}
+
+          {/* ✅ Eliminar siempre encima de Editar cuando esté activo 
+          {mostrarEliminar && (
+            
+          )}*/}
 
           <button
             onClick={() => alEditar?.(id)}

@@ -19,6 +19,7 @@ import Horarios from './horarios/Horarios.jsx';
 import OcupacionAulas from './aulas/pages/OcupacionAulas.jsx';
 import OcupacionAulaCalendario from './aulas/pages/OcupacionAulaCalendario.jsx';
 import Examenes from './examenes/Examenes.jsx';
+import GestionReservas from './reservas/listado-paginas/GestionarReservas.jsx';
 
 
 
@@ -30,7 +31,7 @@ function App() {
       <Routes>
         <Route element={<PlantillaApp />}>
 
-          
+          <Route path="/reservas/gestion" element={<GestionReservas />} />
           <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
           <Route path="/reservas/crear" element={<CrearReserva />} />
           <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />

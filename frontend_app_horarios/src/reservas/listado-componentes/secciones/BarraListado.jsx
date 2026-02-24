@@ -5,6 +5,9 @@ export default function BarraListado({
   mostrarFiltros,
   setMostrarFiltros,
 
+  soloPendientes,
+  setSoloPendientes,
+
   todoVisibleSeleccionado,
   algunoVisibleSeleccionado,
   alAlternarSeleccionarTodoVisible,
@@ -21,6 +24,21 @@ export default function BarraListado({
     <div className="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-3">
+
+          {/* BOTÓN DE RESERVAS PENDIENTES */}
+          <button
+            type="button"
+            onClick={() => setSoloPendientes((v) => !v)}
+            className={`rounded-lg px-3 py-2 text-sm font-semibold ring-1 transition
+              ${
+                soloPendientes
+                  ? "!bg-amber-100 text-amber-900 ring-amber-300 hover:!bg-amber-200"
+                  : "!bg-white text-slate-800 ring-slate-200 hover:!bg-slate-50"
+              }`}
+          >
+            {soloPendientes ? "Ver Todas" : "Reservas Pendientes"}
+          </button>
+
           <button
             type="button"
             onClick={() => setMostrarFiltros((v) => !v)}

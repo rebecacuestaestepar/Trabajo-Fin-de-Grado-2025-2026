@@ -10,6 +10,8 @@ export function useListadoReservas({
   const [accionando, setAccionando] = useState(false);
   const [error, setError] = useState(null);
 
+  const [soloPendientes, setSoloPendientes] = useState(false); 
+
   // filtros UI
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [usarMotivo, setUsarMotivo] = useState(false);
@@ -49,8 +51,14 @@ export function useListadoReservas({
 
     return reservas.filter((item) => {
       const motivo = normalizar(item.motivo ?? "");
-      const correo = normalizar(item.correo_responsable ?? item.correo ?? "");
+      const correo = normalizar(item.correo_responsable /*?? item.correo*/ ?? "");
       const fechaISO = item.fecha;
+
+      const estadoRow = item.estado;
+      const estadoStr = String(estadoRow ?? "").trim().toUpperCase();
+      const esPendiente = estadoStr === "PENDIENTE" || estadoStr === "P";
+
+      if (soloPendientes && !esPendiente) return false;
 
       if (usarMotivo && motivoBuscado && !motivo.includes(motivoBuscado)) return false;
       if (usarResponsable && responsableBuscado && !correo.includes(responsableBuscado)) return false;
@@ -63,6 +71,7 @@ export function useListadoReservas({
     });
   }, [
     reservas,
+    soloPendientes,
     usarMotivo,
     usarResponsable,
     usarRango,
@@ -121,6 +130,7 @@ export function useListadoReservas({
     setFiltroResponsable("");
     setFiltroDesde("");
     setFiltroHasta("");
+    setSoloPendientes(false);
   }
 
   async function ejecutarAccion(funcionAsync) {
@@ -150,6 +160,8 @@ export function useListadoReservas({
     // filtros
     mostrarFiltros,
     setMostrarFiltros,
+    soloPendientes,
+    setSoloPendientes,
     usarMotivo,
     setUsarMotivo,
     usarResponsable,
