@@ -13,14 +13,16 @@ export function useListadoReservas({
   const [soloPendientes, setSoloPendientes] = useState(false); 
 
   // filtros UI
-  const [mostrarFiltros, setMostrarFiltros] = useState(false);
-  const [usarMotivo, setUsarMotivo] = useState(false);
-  const [usarResponsable, setUsarResponsable] = useState(false);
-  const [usarRango, setUsarRango] = useState(false);
+  const [mostrarFiltros, setMostrarFiltros] = useState(true);
+  const [usarMotivo, setUsarMotivo] = useState(true);
+  const [usarResponsable, setUsarResponsable] = useState(true);
+  const [usarRango, setUsarRango] = useState(true);
+
+  const hoy = new Date().toISOString().split("T")[0];
 
   const [filtroMotivo, setFiltroMotivo] = useState("");
   const [filtroResponsable, setFiltroResponsable] = useState("");
-  const [filtroDesde, setFiltroDesde] = useState("");
+  const [filtroDesde, setFiltroDesde] = useState(hoy);
   const [filtroHasta, setFiltroHasta] = useState("");
 
   // selección
