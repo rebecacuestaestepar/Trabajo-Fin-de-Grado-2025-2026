@@ -10,7 +10,7 @@ export default function SeccionMenu({ titulo, abierta, alAlternar, children }) {
         <span className="text-lg leading-none">{abierta ? "−" : "+"}</span>
       </button>
 
-      {abierta && <div className="bg-black/10">{children}</div>}
+      {abierta && <div className="bg-[#361212] indent-8">{children}</div>}
     </div>
   );
 }
