@@ -149,26 +149,28 @@ export default function GestionReservas() {
                   }`,
               },
             ]}
-          />
+          >
+          
 
-          <PanelFiltros
-            mostrar={listado.mostrarFiltros}
-            usarMotivo={listado.usarMotivo}
-            setUsarMotivo={listado.setUsarMotivo}
-            usarResponsable={listado.usarResponsable}
-            setUsarResponsable={listado.setUsarResponsable}
-            usarRango={listado.usarRango}
-            setUsarRango={listado.setUsarRango}
-            filtroMotivo={listado.filtroMotivo}
-            setFiltroMotivo={listado.setFiltroMotivo}
-            filtroResponsable={listado.filtroResponsable}
-            setFiltroResponsable={listado.setFiltroResponsable}
-            filtroDesde={listado.filtroDesde}
-            setFiltroDesde={listado.setFiltroDesde}
-            filtroHasta={listado.filtroHasta}
-            setFiltroHasta={listado.setFiltroHasta}
-            alLimpiar={listado.limpiarFiltros}
-          />
+            <PanelFiltros
+              mostrar={listado.mostrarFiltros}
+              usarMotivo={listado.usarMotivo}
+              setUsarMotivo={listado.setUsarMotivo}
+              usarResponsable={listado.usarResponsable}
+              setUsarResponsable={listado.setUsarResponsable}
+              usarRango={listado.usarRango}
+              setUsarRango={listado.setUsarRango}
+              filtroMotivo={listado.filtroMotivo}
+              setFiltroMotivo={listado.setFiltroMotivo}
+              filtroResponsable={listado.filtroResponsable}
+              setFiltroResponsable={listado.setFiltroResponsable}
+              filtroDesde={listado.filtroDesde}
+              setFiltroDesde={listado.setFiltroDesde}
+              filtroHasta={listado.filtroHasta}
+              setFiltroHasta={listado.setFiltroHasta}
+              alLimpiar={listado.limpiarFiltros}
+            />
+            </BarraListado>
         </div>
 
         <div className="mt-6">

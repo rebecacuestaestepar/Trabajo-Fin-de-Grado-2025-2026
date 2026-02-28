@@ -18,7 +18,9 @@ export default function BarraListado({
   alLimpiarSeleccion,
 
   // acciones masivas (arrays de botones)
-  accionesMasivas = [], // [{ label, onClick, disabled, className }]
+  accionesMasivas = [], 
+
+  children
 }) {
   return (
     <div className="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
@@ -39,7 +41,7 @@ export default function BarraListado({
             {soloPendientes ? "Ver Todas" : "Reservas Pendientes"}
           </button>
 
-          <button
+          {/*<button
             type="button"
             onClick={() => setMostrarFiltros((v) => !v)}
             className={`rounded-lg px-3 py-2 text-sm font-semibold ring-1 transition
@@ -50,7 +52,7 @@ export default function BarraListado({
               }`}
           >
             Filtrado
-          </button>
+          </button>*/}
 
           <label className="inline-flex items-center gap-2 text-sm text-slate-700">
             <input
@@ -115,6 +117,8 @@ export default function BarraListado({
           </div>
         </div>
       </div>
+      {/*Para meter los filtros en la barra de listado*/}
+      {children}
     </div>
   );
 }
