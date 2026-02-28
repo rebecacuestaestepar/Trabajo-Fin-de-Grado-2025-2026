@@ -42,10 +42,12 @@ export default function OcupacionAulaCalendario({
     return generarMapaColores(aulasSeleccionadas);
   }, [aulasSeleccionadas.join(",")]);
 
-  /*const aulaSeleccionada = useMemo(
-    () => aulas.find((a) => String(a.nombre) === String(aulaNombre).trim()),
-    [aulas, aulaNombre]
-  );*/
+  // Función paa manejar ir con el click a la vista de día
+  const handleDateClick = (arg) => {
+    const calendarApi = calRef.current.getApi();
+    // 'timeGridDay' es la vista de día con horas, ideal para aulas
+    calendarApi.changeView('timeGridDay', arg.date);
+  };
 
   return (
     <div className="space-y-3">
@@ -102,7 +104,11 @@ export default function OcupacionAulaCalendario({
           height="75vh"
           expandRows={true}
           events={events}
-          eventColor="#334155"
+          //eventColor="#334155"
+
+          navLinks={true} // Para que los días sean links nativos
+          dateClick={handleDateClick} // Captura el clic en celdas vacías
+
           eventDidMount={(arg) => {
             // aplica colores según tipo
             /*const c = colorEventoPorTipo(arg);
