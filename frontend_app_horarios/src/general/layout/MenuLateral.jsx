@@ -4,10 +4,28 @@ import SeccionMenu from "./SeccionMenu";
 import { useAulas } from "../hooks/useAulas";
 
 export default function MenuLateral({ abierto }) {
-  const [seccionAulasAbierta, setSeccionAulasAbierta] = useState(false);
+  /*const [seccionAulasAbierta, setSeccionAulasAbierta] = useState(false);
   const [seccionReservasAbierta, setSeccionReservasAbierta] = useState(false);
   const [seccionReservasPuntualesAbierta, setSeccionReservasPuntualesAbierta] =useState(false);
-  const { aulas, cargando, error } = useAulas();
+  const { aulas, cargando, error } = useAulas();*/
+
+  const [estados, setEstados] = useState({});
+
+  const toggle = (id, parentId = null) => {
+    setEstados((prev) => {
+      const nuevoEstado = { ...prev };
+
+
+      if (!parentId) {
+        Object.keys(nuevoEstado).forEach(key => {
+          nuevoEstado[key] = false;
+        });
+      }
+
+      nuevoEstado[id] = !prev[id];
+      return nuevoEstado;
+    });
+  };
 
   return (
     <aside
@@ -17,37 +35,41 @@ export default function MenuLateral({ abierto }) {
       ].join(" ")}
     >
       <nav className="pt-2">
-        {/* IMPORTANTE: ajusta estas rutas a las tuyas reales */}
-        {/*<ItemMenu a="/reservas/pendientes">Reservas puntuales</ItemMenu>*/}
         <SeccionMenu
           titulo="Reservas"
-          abierta={seccionReservasAbierta}
-          alAlternar={() => setSeccionReservasAbierta((v) => !v)}
+          /*abierta={seccionReservasAbierta}*/
+          level={0}
+          abierta={!!estados["reservas"]}
+          alAlternar={() => toggle("reservas")}
         >
           <SeccionMenu
             titulo="Reservas puntuales"
-            abierta={seccionReservasPuntualesAbierta}
-            alAlternar={() => setSeccionReservasPuntualesAbierta((v) => !v)}
-            >
-            {/*<ItemMenu a="/reservas/pendientes">Solicitudes Pendientes</ItemMenu>*/}
-            <ItemMenu a="/reservas/gestion">Gestionar Reservas</ItemMenu>
-            <ItemMenu a="/reservas/solicitud">Solicitar reserva</ItemMenu>
+            /*abierta={seccionReservasPuntualesAbierta}*/
+            level={1}
+            abierta={!!estados["puntuales"]}
+            alAlternar={() => toggle("puntuales", "reservas")}
+          >
+            <ItemMenu a="/reservas/gestion" level={2}>Gestionar Reservas</ItemMenu>
+            <ItemMenu a="/reservas/solicitud" level={2}>Solicitar reserva</ItemMenu>
           </SeccionMenu>
-          <SeccionMenu titulo="Reservas periódicas"> </SeccionMenu>
+          <SeccionMenu titulo="Reservas periódicas" level={1}> </SeccionMenu>
         </SeccionMenu>
-        <ItemMenu a="/horarios">Horarios</ItemMenu>
+        <ItemMenu a="/horarios" level={0}>Horarios</ItemMenu>
 
         <SeccionMenu
           titulo="Ocupación de aulas"
-          abierta={seccionAulasAbierta}
-          alAlternar={() => setSeccionAulasAbierta((v) => !v)}
+          level={0}
+          abierta={!!estados["aulas"]}
+          alAlternar={() => toggle("aulas")}
+          /*abierta={seccionAulasAbierta}
+          alAlternar={() => setSeccionAulasAbierta((v) => !v)}*/
         >
-          <ItemMenu a="/ocupacion-aulas">Campus Río Vena</ItemMenu>
+          <ItemMenu a="/ocupacion-aulas" level={1}>Campus Río Vena</ItemMenu>
 
-          <ItemMenu a="/ocupacion-aulas">Campus Milanera</ItemMenu>
+          <ItemMenu a="/ocupacion-aulas" level={1}>Campus Milanera</ItemMenu>
         </SeccionMenu>
 
-        <ItemMenu a="/examenes">Exámenes</ItemMenu>
+        <ItemMenu a="/examenes" level={0}>Exámenes</ItemMenu>
       </nav>
     </aside>
   );
