@@ -34,6 +34,7 @@ export default function CamposBaseReserva({
 
 
   return (
+    
     <div className="space-y-4">
       {mostrarId && (
         <Campo etiqueta="ID Reserva">
