@@ -34,7 +34,7 @@ class AulaMiniSerializer(serializers.Serializer):
 class AulaMenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aula
-        fields = ["nombre"]
+        fields = ["id", "nombre"]
 
 
 class OcupacionAulaEventosQuerySerializer(serializers.Serializer):

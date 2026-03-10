@@ -22,7 +22,7 @@ function colorEventoPorTipo(arg) {
 }
 
 export default function OcupacionAulaCalendario({
-  aulas = [], // [{id, nombre}] -> ajústalo a tu modelo real
+  aulas = [], // [{id, nombre}] 
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,17 +30,18 @@ export default function OcupacionAulaCalendario({
 
   // Leemos los parámetros de la URL para saber qué aula(s) mostrar
   const [searchParams] = useSearchParams();
-  const aulasSeleccionadas = searchParams.getAll("aula");
+  const aulasSeleccionadasNombres = searchParams.getAll("aula");
   //const [aulaNombre, setAulaNombre] = useState(aulas?.[0]?.nombre ?? "");
 
 
   const [tipo, setTipo] = useState("AMBAS"); // AMBAS | PUNTUAL | PERIODICA
 
-  const { events, loading, error, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadas, tipo });
+  const { events, loading, error, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadasNombres, tipo });
 
   const mapaColores = useMemo(() => {
-    return generarMapaColores(aulasSeleccionadas);
-  }, [aulasSeleccionadas.join(",")]);
+    const aulasObjetos = aulas.filter(a => aulasSeleccionadasNombres.includes(a.nombre));
+    return generarMapaColores(aulasObjetos);
+   }, [aulas, aulasSeleccionadasNombres.join(",")]);
 
   // Función paa manejar ir con el click a la vista de día
   const handleDateClick = (arg) => {
@@ -57,7 +58,7 @@ export default function OcupacionAulaCalendario({
       <div className="rounded-lg border border-slate-200 bg-white p-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="text-sm font-semibold text-slate-800">
-            Ocupación de: {aulasSeleccionadas.join(", ") || "Ninguna aula seleccionada"}
+            Ocupación de: {aulasSeleccionadasNombres.join(", ") || "Ninguna aula seleccionada"}
           </div>
         </div>
       </div>

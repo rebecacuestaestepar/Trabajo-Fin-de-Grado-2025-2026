@@ -12,15 +12,15 @@ export default function OcupacionAulas() {
   //const [modoSeleccion, setModoSeleccion] = useState("multiple");
   const [seleccionadas, setSeleccionadas] = useState(() => new Set());
 
+  /* Ordena la lista de aulas recibida  */
   const listaOrdenada = useMemo(() => {
     const arr = Array.isArray(aulas) ? [...aulas] : [];
     arr.sort((a, b) => String(a?.nombre ?? "").localeCompare(String(b?.nombre ?? "")));
+    console.log("Aulas ordenadas:", arr);
     return arr;
   }, [aulas]);
 
   const totalSeleccionadas = seleccionadas.size;
-  const modoCalculado = totalSeleccionadas <= 1 && totalSeleccionadas >0 ? "unica" : "multiple";
-
 
   function alternarAula(nombre) {
     setSeleccionadas((prev) => {
