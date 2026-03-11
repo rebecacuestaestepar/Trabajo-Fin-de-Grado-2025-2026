@@ -42,9 +42,15 @@ export default function OcupacionAulas() {
 
     // Para enviar el modo
     //params.set("modo", modoCalculado);
+    const objetosSeleccionados = aulas.filter((aula) => 
+      seleccionadas.has(aula.nombre)
+    );
 
     navigate(`/aulas/ocupacion/ver?${params.toString()}`, {
-      state: { from: location.pathname + location.search },
+      state: { 
+        from: location.pathname + location.search,
+        aulasSeleccionadas: objetosSeleccionados,
+      },
     });
   }
 

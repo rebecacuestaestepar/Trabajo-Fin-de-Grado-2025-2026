@@ -13,13 +13,13 @@ import BotonVolver from "../../reservas/formulario-componentes/ui/BotonVolver";
 import LeyendaAulas from "../components/calendario/LeyendaAulas";
 import { generarMapaColores } from "../ocupacion-utiles/coloresAulas";
 
-function colorEventoPorTipo(arg) {
-  const tipo = arg.event.extendedProps?.tipo;
-  // Puntuales: verde, Periódicas: azul
-  if (tipo === "PUNTUAL") return { backgroundColor: "#16a34a", borderColor: "#16a34a" };
-  if (tipo === "PERIODICA") return { backgroundColor: "#2563eb", borderColor: "#2563eb" };
-  return {};
-}
+// function colorEventoPorTipo(arg) {
+//   const tipo = arg.event.extendedProps?.tipo;
+//   // Puntuales: verde, Periódicas: azul
+//   if (tipo === "PUNTUAL") return { backgroundColor: "#16a34a", borderColor: "#16a34a" };
+//   if (tipo === "PERIODICA") return { backgroundColor: "#2563eb", borderColor: "#2563eb" };
+//   return {};
+// }
 
 export default function OcupacionAulaCalendario({
   aulas = [], // [{id, nombre}] 
@@ -33,15 +33,21 @@ export default function OcupacionAulaCalendario({
   const aulasSeleccionadasNombres = searchParams.getAll("aula");
   //const [aulaNombre, setAulaNombre] = useState(aulas?.[0]?.nombre ?? "");
 
+  const objetosAulas = location.state?.aulasSeleccionadas || []; // Si venimos de la selección, las tenemos aquí
+
 
   const [tipo, setTipo] = useState("AMBAS"); // AMBAS | PUNTUAL | PERIODICA
 
   const { events, loading, error, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadasNombres, tipo });
 
+  // const mapaColores = useMemo(() => {
+  //   const aulasObjetos = aulas.filter(a => aulasSeleccionadasNombres.includes(a.nombre));
+  //   return generarMapaColores(aulasObjetos);
+  //  }, [aulas, aulasSeleccionadasNombres.join(",")]);
+
   const mapaColores = useMemo(() => {
-    const aulasObjetos = aulas.filter(a => aulasSeleccionadasNombres.includes(a.nombre));
-    return generarMapaColores(aulasObjetos);
-   }, [aulas, aulasSeleccionadasNombres.join(",")]);
+    return generarMapaColores(objetosAulas);
+  }, [objetosAulas]);
 
   // Función paa manejar ir con el click a la vista de día
   const handleDateClick = (arg) => {
