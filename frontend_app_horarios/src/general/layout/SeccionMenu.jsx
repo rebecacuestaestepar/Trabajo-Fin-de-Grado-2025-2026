@@ -1,6 +1,6 @@
 export default function SeccionMenu({ titulo, abierta, alAlternar, children, level = 0 }) {
   // Definimos colores por profundidad (puedes ajustarlos a tu gusto)
-  const bgColors = ["bg-[#7a1e1e]", "bg-[#4a1212]", "bg-[#2d0a0a]"];
+  const bgColors = ["bg-[#7a1e1e]", "bg-[#4a1212]", "bg-[#120000]"];
   /*const currentBg = bgColors[level] || bgColors[bgColors.length - 1];*/
   const currentBg = bgColors[level] || bgColors[bgColors.length - 1];
   
@@ -18,7 +18,8 @@ export default function SeccionMenu({ titulo, abierta, alAlternar, children, lev
         className={`
           w-full text-left pr-4 py-3 text-sm font-bold uppercase 
           flex items-center justify-between transition-all duration-200
-          hover:bg-white/5 text-white
+          text-white hover:brightness-110
+          ${currentBg}
           ${abierta ? "shadow-md" : ""}
         `}
 

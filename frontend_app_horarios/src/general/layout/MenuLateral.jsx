@@ -66,7 +66,7 @@ export default function MenuLateral({ abierto }) {
         >
           <ItemMenu a="/ocupacion-aulas" level={1}>Campus Río Vena</ItemMenu>
 
-          <ItemMenu a="/ocupacion-aulas" level={1}>Campus Milanera</ItemMenu>
+          <ItemMenu a="/" level={1}>Campus Milanera</ItemMenu>
         </SeccionMenu>
 
         <ItemMenu a="/examenes" level={0}>Exámenes</ItemMenu>
