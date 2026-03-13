@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ItemMenu from "./ItemMenu";
 import SeccionMenu from "./SeccionMenu";
-import { useAulas } from "../hooks/useAulas";
 
 export default function MenuLateral({ abierto }) {
   /*const [seccionAulasAbierta, setSeccionAulasAbierta] = useState(false);

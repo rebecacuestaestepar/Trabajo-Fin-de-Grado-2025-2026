@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { normalizar, fechaEnRango } from "../listado-componentes/ui/fecha";
 
 export function useListadoReservas({
-  cargador, // async () => data
-  despuesDeAccion, // async refresh optional
+  cargador, 
+  despuesDeAccion,
 }) {
   const [reservas, setReservas] = useState([]);
   const [cargando, setCargando] = useState(false);

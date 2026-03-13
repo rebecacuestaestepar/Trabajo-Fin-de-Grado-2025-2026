@@ -106,6 +106,16 @@ export default function GestionReservas() {
     return listado.reservasFiltradas.slice(inicio, fin);
   }, [listado.reservasFiltradas, page, rowsPerPage]);
 
+  // Filtrar reservas cada vez que cambian los filtros o la lista completa
+  const [prevCantidadFiltrada, setPrevCantidadFiltrada] = useState(listado.reservasFiltradas.length);
+
+  // 2. Comparamos durante el propio renderizado (sin useEffect)
+  if (listado.reservasFiltradas.length !== prevCantidadFiltrada) {
+    // Si ha cambiado (porque el usuario filtró), actualizamos el registro y reseteamos la página
+    setPrevCantidadFiltrada(listado.reservasFiltradas.length);
+    setPage(0);
+  }
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-5xl px-4 py-10">
