@@ -1,13 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useListadoReservas } from "../listado-hooks/useListadoReservas";
 
 import BarraListado from "../listado-componentes/secciones/BarraListado";
 import PanelFiltros from "../listado-componentes/secciones/PanelFiltros";
 import ListaReservas from "../listado-componentes/secciones/ListaReservas";
+import Paginador from "../listado-componentes/secciones/Paginador";
 
 import {
-  getTodasReservas, // Usamos la que trae TODAS
+  getTodasReservas, // Usamos la que trae todas las reservas
   eliminarReserva,
   eliminarReservasMasivo,
   aprobarReserva,
@@ -84,6 +85,26 @@ export default function GestionReservas() {
       listado.limpiarSeleccion();
     });
   };
+
+  // LÓGICA PARA EL PAGINADOR
+
+  const [page, setPage] = useState(0); // Usamos índice 0
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(Number.parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const reservasPaginadas = useMemo(() => {
+    const inicio = page * rowsPerPage;
+    const fin = inicio + rowsPerPage;
+    return listado.reservasFiltradas.slice(inicio, fin);
+  }, [listado.reservasFiltradas, page, rowsPerPage]);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -194,7 +215,7 @@ export default function GestionReservas() {
 
           {!listado.cargando && !listado.error && listado.reservasFiltradas.length > 0 && (
             <ListaReservas
-              reservas={listado.reservasFiltradas}
+              reservas={reservasPaginadas}
               idsSeleccionados={listado.idsSeleccionados}
               alAlternarSeleccionUno={listado.alternarSeleccionUno}
               mostrarEstado={true} 
@@ -205,6 +226,13 @@ export default function GestionReservas() {
             />
           )}
         </div>
+        <Paginador
+          count={listado.reservasFiltradas.length}
+          page={page}
+          onChangePage={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </div>
     </div>
   );
