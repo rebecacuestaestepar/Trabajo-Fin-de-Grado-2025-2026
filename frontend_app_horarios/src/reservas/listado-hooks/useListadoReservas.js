@@ -14,9 +14,9 @@ export function useListadoReservas({
 
   // filtros UI
   const [mostrarFiltros, setMostrarFiltros] = useState(true);
-  const [usarMotivo, setUsarMotivo] = useState(true);
-  const [usarResponsable, setUsarResponsable] = useState(true);
-  const [usarRango, setUsarRango] = useState(true);
+  // const [usarMotivo, setUsarMotivo] = useState(true);
+  // const [usarResponsable, setUsarResponsable] = useState(true);
+  // const [usarRango, setUsarRango] = useState(true);
 
   const hoy = new Date().toISOString().split("T")[0];
 
@@ -69,10 +69,10 @@ export function useListadoReservas({
 
       if (soloPendientes && !esPendiente) return false;
 
-      if (usarMotivo && motivoBuscado && !motivo.includes(motivoBuscado)) return false;
-      if (usarResponsable && responsableBuscado && !correo.includes(responsableBuscado)) return false;
+      if ( motivoBuscado && !motivo.includes(motivoBuscado)) return false;
+      if ( responsableBuscado && !correo.includes(responsableBuscado)) return false;
 
-      if (usarRango && (filtrosAplicados.desde || filtrosAplicados.hasta)) {
+      if ((filtrosAplicados.desde || filtrosAplicados.hasta)) {
         if (!fechaEnRango(fechaISO, filtrosAplicados.desde, filtrosAplicados.hasta)) return false;
       }
 
@@ -81,9 +81,6 @@ export function useListadoReservas({
   }, [
     reservas,
     soloPendientes,
-    usarMotivo,
-    usarResponsable,
-    usarRango,
     filtrosAplicados
   ]);
 
@@ -138,9 +135,6 @@ export function useListadoReservas({
   }
 
   function limpiarFiltros() {
-    setUsarMotivo(false);
-    setUsarResponsable(false);
-    setUsarRango(false);
     setFiltroMotivo("");
     setFiltroResponsable("");
     setFiltroDesde("");
@@ -184,12 +178,6 @@ export function useListadoReservas({
     setMostrarFiltros,
     soloPendientes,
     setSoloPendientes,
-    usarMotivo,
-    setUsarMotivo,
-    usarResponsable,
-    setUsarResponsable,
-    usarRango,
-    setUsarRango,
     filtroMotivo,
     setFiltroMotivo,
     filtroResponsable,
