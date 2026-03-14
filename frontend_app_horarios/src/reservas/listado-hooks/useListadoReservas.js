@@ -25,6 +25,13 @@ export function useListadoReservas({
   const [filtroDesde, setFiltroDesde] = useState(hoy);
   const [filtroHasta, setFiltroHasta] = useState("");
 
+  const [filtrosAplicados, setFiltrosAplicados] = useState({
+    motivo: "",
+    responsable: "",
+    desde: hoy,
+    hasta: "",
+  });
+
   // selección
   const [idsSeleccionados, setIdsSeleccionados] = useState(() => new Set());
 
@@ -48,8 +55,8 @@ export function useListadoReservas({
   }, []);
 
   const reservasFiltradas = useMemo(() => {
-    const motivoBuscado = normalizar(filtroMotivo);
-    const responsableBuscado = normalizar(filtroResponsable);
+    const motivoBuscado = normalizar(filtrosAplicados.motivo);
+    const responsableBuscado = normalizar(filtrosAplicados.responsable);
 
     return reservas.filter((item) => {
       const motivo = normalizar(item.motivo ?? "");
@@ -58,15 +65,15 @@ export function useListadoReservas({
 
       const estadoRow = item.estado;
       const estadoStr = String(estadoRow ?? "").trim().toUpperCase();
-      const esPendiente = estadoStr === "PENDIENTE" || estadoStr === "P";
+      const esPendiente = estadoStr === /*"PENDIENTE" ||*/ estadoStr === "P";
 
       if (soloPendientes && !esPendiente) return false;
 
       if (usarMotivo && motivoBuscado && !motivo.includes(motivoBuscado)) return false;
       if (usarResponsable && responsableBuscado && !correo.includes(responsableBuscado)) return false;
 
-      if (usarRango && (filtroDesde || filtroHasta)) {
-        if (!fechaEnRango(fechaISO, filtroDesde, filtroHasta)) return false;
+      if (usarRango && (filtrosAplicados.desde || filtrosAplicados.hasta)) {
+        if (!fechaEnRango(fechaISO, filtrosAplicados.desde, filtrosAplicados.hasta)) return false;
       }
 
       return true;
@@ -77,11 +84,17 @@ export function useListadoReservas({
     usarMotivo,
     usarResponsable,
     usarRango,
-    filtroMotivo,
-    filtroResponsable,
-    filtroDesde,
-    filtroHasta,
+    filtrosAplicados
   ]);
+
+  function aplicarFiltros() {
+    setFiltrosAplicados({
+      motivo: filtroMotivo,
+      responsable: filtroResponsable,
+      desde: filtroDesde,
+      hasta: filtroHasta,
+    });
+  }
 
   const idsFiltrados = useMemo(
     () => reservasFiltradas.map((x) => x.id ?? x.idreserva),
@@ -133,6 +146,13 @@ export function useListadoReservas({
     setFiltroDesde("");
     setFiltroHasta("");
     setSoloPendientes(false);
+
+    setFiltrosAplicados({
+      motivo: "",
+      responsable: "",
+      desde: "",
+      hasta: "",
+    });
   }
 
   async function ejecutarAccion(funcionAsync) {
@@ -179,6 +199,7 @@ export function useListadoReservas({
     filtroHasta,
     setFiltroHasta,
     limpiarFiltros,
+    aplicarFiltros,
 
     // selección
     idsSeleccionados,

@@ -200,6 +200,7 @@ export default function GestionReservas() {
               filtroHasta={listado.filtroHasta}
               setFiltroHasta={listado.setFiltroHasta}
               alLimpiar={listado.limpiarFiltros}
+              alAplicar={listado.aplicarFiltros}
             />
             </BarraListado>
         </div>

@@ -20,6 +20,7 @@ export default function PanelFiltros({
   setFiltroHasta,
 
   alLimpiar,
+  alAplicar,
 }) {
   return (
     <div
@@ -78,7 +79,7 @@ export default function PanelFiltros({
               />
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4 mt-4">
             <button
               type="button"
               onClick={alLimpiar}
@@ -89,8 +90,8 @@ export default function PanelFiltros({
 
             <button
               type="button"
-              onClick={alLimpiar}
-              className="rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 hover:bg-slate-50"
+              onClick={alAplicar}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
             >
               Aplicar filtros
             </button>
