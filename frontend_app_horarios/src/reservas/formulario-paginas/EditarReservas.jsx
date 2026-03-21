@@ -56,7 +56,6 @@ export default function EditarReservas() {
             alCambiar={editar.aplicarCambios}
           />
 
-          {/* Aula: en editar siempre es un único selector (simple) */}
           <SeccionSelectorAula
             alBuscarAulas={editar.buscarAulas}
             estaBuscando={editar.buscandoAulas}
@@ -73,8 +72,6 @@ export default function EditarReservas() {
 
           <AccionesReserva
             variante="editar"
-            //alRechazar={editar.pedirRechazar}
-            //alAceptar={editar.pedirAprobar}
             alGuardar={editar.guardar}
             deshabilitarGuardar={!editar.puedeGuardar || !editar.hayCambios}
           />

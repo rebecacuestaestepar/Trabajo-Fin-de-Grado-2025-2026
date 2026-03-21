@@ -1,4 +1,3 @@
-// src/aulas/pages/OcupacionAulaCalendarPage.jsx
 import { useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 
@@ -13,37 +12,26 @@ import BotonVolver from "../../reservas/formulario-componentes/ui/BotonVolver";
 import LeyendaAulas from "../components/calendario/LeyendaAulas";
 import { generarMapaColores } from "../ocupacion-utiles/coloresAulas";
 
-// function colorEventoPorTipo(arg) {
-//   const tipo = arg.event.extendedProps?.tipo;
-//   // Puntuales: verde, Periódicas: azul
-//   if (tipo === "PUNTUAL") return { backgroundColor: "#16a34a", borderColor: "#16a34a" };
-//   if (tipo === "PERIODICA") return { backgroundColor: "#2563eb", borderColor: "#2563eb" };
-//   return {};
-// }
 
-export default function OcupacionAulaCalendario({
-  aulas = [], // [{id, nombre}] 
-}) {
+export default function OcupacionAulaCalendario() {
   const navigate = useNavigate();
   const location = useLocation();
   const calRef = useRef(null);
 
-  // Leemos los parámetros de la URL para saber qué aula(s) mostrar
+  // Leemos los parámetros de la URL para saber qué aulas mostrar
   const [searchParams] = useSearchParams();
   const aulasSeleccionadasNombres = searchParams.getAll("aula");
-  //const [aulaNombre, setAulaNombre] = useState(aulas?.[0]?.nombre ?? "");
 
-  const objetosAulas = location.state?.aulasSeleccionadas || []; // Si venimos de la selección, las tenemos aquí
+  const objetosAulas = location.state?.aulasSeleccionadas || []; 
 
 
-  const [tipo, setTipo] = useState("AMBAS"); // AMBAS | PUNTUAL | PERIODICA
+  const [tipo, setTipo] = useState("AMBAS"); 
 
-  const { events, loading, error, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadasNombres, tipo });
+  const [calendarioTitulo, setCalendarioTitulo] = useState("");
+  const [calendarioView, setCalendarioView] = useState("timeGridWeek");
 
-  // const mapaColores = useMemo(() => {
-  //   const aulasObjetos = aulas.filter(a => aulasSeleccionadasNombres.includes(a.nombre));
-  //   return generarMapaColores(aulasObjetos);
-  //  }, [aulas, aulasSeleccionadasNombres.join(",")]);
+  const { events, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadasNombres, tipo });
+
 
   const mapaColores = useMemo(() => {
     return generarMapaColores(objetosAulas);
@@ -52,7 +40,6 @@ export default function OcupacionAulaCalendario({
   // Función paa manejar ir con el click a la vista de día
   const handleDateClick = (arg) => {
     const calendarApi = calRef.current.getApi();
-    // 'timeGridDay' es la vista de día con horas, ideal para aulas
     calendarApi.changeView('timeGridDay', arg.date);
   };
 
@@ -72,12 +59,12 @@ export default function OcupacionAulaCalendario({
       {/* Toolbar custom (con filtro) */}
         <div className="mt-3">
           <ToolbarAulaCalendar
-            title={calRef.current?.getApi?.().view?.title ?? ""}
+            title={calendarioTitulo}
             onPrev={() => calRef.current?.getApi?.().prev()}
             onNext={() => calRef.current?.getApi?.().next()}
             onToday={() => calRef.current?.getApi?.().today()}
             onView={(v) => calRef.current?.getApi?.().changeView(v)}
-            view={calRef.current?.getApi?.().view?.type ?? "timeGridWeek"}
+            view={calendarioView}
             tipo={tipo}
             setTipo={setTipo}
           />
@@ -87,16 +74,7 @@ export default function OcupacionAulaCalendario({
         <div className="mt-3">
           <LeyendaAulas mapaColores={mapaColores} />
         </div>
-        {/*<div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-600">
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#16a34a" }} />
-            Puntuales
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-sm" style={{ background: "#2563eb" }} />
-            Periódicas
-          </div>
-        </div>*/}
+
 
       {/* Calendario */}
       <div className="rounded-lg border border-slate-200 bg-white p-3">
@@ -105,28 +83,19 @@ export default function OcupacionAulaCalendario({
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridWeek"          // por defecto semanal
           firstDay={1}                        // lunes
-          //slotMinTime="08:30:00"
-          //slotMaxTime="20:30:00"
           nowIndicator={true}
           height="75vh"
           expandRows={true}
           events={events}
-          //eventColor="#334155"
 
           navLinks={true} // Para que los días sean links nativos
           dateClick={handleDateClick} // Captura el clic en celdas vacías
 
           eventDidMount={(arg) => {
             // aplica colores según tipo
-            /*const c = colorEventoPorTipo(arg);
-            if (c.backgroundColor) {
-              arg.el.style.backgroundColor = c.backgroundColor;
-              arg.el.style.borderColor = c.borderColor;
-            }*/
             const tipoEv = arg.event.extendedProps?.tipo;
             const aulaEv = arg.event.extendedProps?.aula;
 
-            // Cogemos los colores directamente del mapa usando el nombre del aula
             const coloresAula = mapaColores[aulaEv] || { oscuro: "#475569", claro: "#cbd5e1" };
             
             const bgColor = tipoEv === "PUNTUAL" ? coloresAula.oscuro : coloresAula.claro;
@@ -136,12 +105,14 @@ export default function OcupacionAulaCalendario({
             arg.el.style.color = tipoEv === "PERIODICA" ? "#1e293b" : "#ffffff";
           }}
           datesSet={(arg) => {
-            // FullCalendar te da el rango visible; lo usamos para pedir datos al backend
+            setCalendarioTitulo(arg.view.title);
+            setCalendarioView(arg.view.type);
+
             setRange((prev) => {
               // Si no había rango previo, lo guardamos
               if (!prev) return { start: arg.start, end: arg.end };
               
-              // Comparamos el valor numérico de las fechas (milisegundos)
+              // Comparamos el valor numérico de las fechas 
               if (
                 prev.start.getTime() === arg.start.getTime() &&
                 prev.end.getTime() === arg.end.getTime()
@@ -157,15 +128,13 @@ export default function OcupacionAulaCalendario({
             const tipoEv = info.event.extendedProps?.tipo;
             const id = info.event.id;
 
-            // Si quieres ir "directamente a las características de la reserva puntual"
             if (tipoEv === "PUNTUAL") {
               navigate(`/reservas/puntuales/${id}`); 
               return;
             }
 
-            // Aquí añadirámos la ruta a la consulta periódica, si se realiza la ventana
           }}
-          headerToolbar={false} // la reemplazamos con toolbar custom
+          headerToolbar={false} 
         />
 
         

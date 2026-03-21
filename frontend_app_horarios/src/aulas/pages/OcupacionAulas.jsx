@@ -1,4 +1,3 @@
-// src/aulas/pages/OcupacionAulas.jsx
 import { useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAulas } from "../../general/hooks/useAulas";
@@ -8,8 +7,7 @@ export default function OcupacionAulas() {
   const location = useLocation();
   const { aulas, cargando, error } = useAulas();
 
-  // "multiple" | "unica"
-  //const [modoSeleccion, setModoSeleccion] = useState("multiple");
+
   const [seleccionadas, setSeleccionadas] = useState(() => new Set());
 
   /* Ordena la lista de aulas recibida  */
@@ -40,8 +38,6 @@ export default function OcupacionAulas() {
     const params = new URLSearchParams();
     nombres.forEach((n) => params.append("aula", n));
 
-    // Para enviar el modo
-    //params.set("modo", modoCalculado);
     const objetosSeleccionados = aulas.filter((aula) => 
       seleccionadas.has(aula.nombre)
     );
@@ -65,48 +61,6 @@ export default function OcupacionAulas() {
 
       <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          {/*<div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-slate-800">Modo:</span>
-
-            <label className="inline-flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                name="modo"
-                value="multiple"
-                checked={modoSeleccion === "multiple"}
-                onChange={() => {
-                  setModoSeleccion("multiple");
-                  // no tocamos selección actual
-                }}
-              />
-              Múltiple
-            </label>
-
-            <label className="inline-flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                name="modo"
-                value="unica"
-                checked={modoSeleccion === "unica"}
-                onChange={() => {
-                  setModoSeleccion("unica");
-                  // si al cambiar hay más de 1 seleccionada, nos quedamos con la primera
-                  setSeleccionadas((prev) => {
-                    const arr = Array.from(prev);
-                    return arr.length ? new Set([arr[0]]) : new Set();
-                  });
-                }}
-              />
-              Única
-            </label>
-          </div>*/}
-
-          {/*<div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-slate-800">Modo:</span>
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700">
-              {modoCalculado === "unica" ? "Única" : "Múltiple"}
-            </span>
-          </div>*/}
 
         </div>
 
@@ -138,7 +92,6 @@ export default function OcupacionAulas() {
                       </span>
                     </label>
 
-                    {/* Info extra si quieres mostrar edificio/capacidad */}
                     <div className="text-xs text-slate-500">
                       {aula?.edificio ? `Edif. ${aula.edificio}` : ""}
                       {aula?.capacidad != null ? ` · Cap ${aula.capacidad}` : ""}

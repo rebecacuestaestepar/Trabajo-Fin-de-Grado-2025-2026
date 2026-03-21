@@ -4,13 +4,14 @@ import { calcularFechasPeriodicas } from "../formulario-utiles/fechasPeriodicas"
 
 export function useReservaPuntual() {
   const [formulario, setFormulario] = useState({
-    // Estas claves se envían al backend: mejor NO traducirlas.
     fecha: "",
     hora_inicio: "",
     hora_fin: "",
     motivo: "",
     capacidad_solicitada: "",
     correo_responsable: "",
+    nombre_responsable: "",
+    apellidos_responsable: "",
     num_ordenadores: "",
     altavoces: false,
     proyector: false,
@@ -23,14 +24,13 @@ export function useReservaPuntual() {
     dia_semana_periodica: "",
   });
 
-  // Patch del formulario (mezcla parcial)
   const aplicarCambios = (parcial) =>
     setFormulario((prev) => ({ ...prev, ...parcial }));
 
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState(null);
 
-  const [modoSeleccionAula, setModoSeleccionAula] = useState("simple"); // simple|comun|por_fecha
+  const [modoSeleccionAula, setModoSeleccionAula] = useState("simple"); 
   const [aulasDisponibles, setAulasDisponibles] = useState([]);
   const [aulaSeleccionada, setAulaSeleccionada] = useState("");
 
@@ -43,15 +43,14 @@ export function useReservaPuntual() {
   const [confirmacionAbierta, setConfirmacionAbierta] = useState(false);
   const [cantidadConfirmacion, setCantidadConfirmacion] = useState(0);
 
-  // Copiar fecha a inicio de período cuando se activa periodicidad
+  const [modalResponsableAbierta, setModalResponsableAbierta] = useState(false);
+
   useEffect(() => {
     if (formulario.generar_periodica) {
       aplicarCambios({ fecha_inicio_periodo: formulario.fecha });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formulario.fecha, formulario.generar_periodica]);
 
-  // Reset de selección de aulas al activar/desactivar periodicidad
   useEffect(() => {
     setAulasDisponibles([]);
     setAulaSeleccionada("");
@@ -148,7 +147,7 @@ export function useReservaPuntual() {
         setSeleccionPorFecha(siguienteSeleccion);
       }
     } catch (e) {
-      setErrores({ general: "Error al conectar con el servidor" });
+      setErrores( e?.codigo || { general: "Error al conectar con el servidor" });
       setAulasDisponibles([]);
       setAulaSeleccionada("");
       setFechasPeriodicas([]);
@@ -204,6 +203,7 @@ export function useReservaPuntual() {
 
   const enviarSolicitud = async () => {
     setConfirmacionAbierta(false);
+    setModalResponsableAbierta(false);
 
     const payload = {
       fecha: formulario.fecha,
@@ -212,6 +212,8 @@ export function useReservaPuntual() {
       motivo: formulario.motivo,
       capacidad_solicitada: Number(formulario.capacidad_solicitada),
       correo_responsable: formulario.correo_responsable,
+      nombre_responsable: formulario.nombre_responsable,
+      apellidos_responsable: formulario.apellidos_responsable,
       num_ordenadores:
         formulario.num_ordenadores === "" ? 0 : Number(formulario.num_ordenadores),
       altavoces: formulario.altavoces,
@@ -236,7 +238,6 @@ export function useReservaPuntual() {
       const data = await solicitarReservaPuntual(payload);
       setMensaje(data.message || "Reserva(s) creada(s) correctamente");
 
-      // Reset básico
       setFormulario((prev) => ({
         ...prev,
         fecha: "",
@@ -245,6 +246,8 @@ export function useReservaPuntual() {
         motivo: "",
         capacidad_solicitada: "",
         correo_responsable: "",
+        nombre_responsable: "",
+        apellidos_responsable: "",
         num_ordenadores: "",
         altavoces: false,
         proyector: false,
@@ -263,7 +266,16 @@ export function useReservaPuntual() {
       setSeleccionPorFecha({});
       setModoSeleccionAula("simple");
     } catch (e) {
-      setErrores(e?.data || { general: "Error al conectar con el servidor" });
+      const codigoError = e?.data?.codigo || e?.codigo;
+
+      if (codigoError === "RESPONSABLE_NO_REGISTRADO") {
+        setModalResponsableAbierta(true);
+        return;
+      } else {
+        setErrores(e?.data || { general: "Error al conectar con el servidor" });
+      }
+
+      
     }
   };
 
@@ -315,6 +327,9 @@ export function useReservaPuntual() {
       confirmCount: cantidadConfirmacion,
       descripcionConfirm: descripcionConfirmacion,
       onConfirm: enviarSolicitud,
+
+      openResponsable: modalResponsableAbierta,
+      setOpenResponsable: setModalResponsableAbierta,
     },
   };
 }

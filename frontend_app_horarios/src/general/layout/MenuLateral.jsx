@@ -3,10 +3,7 @@ import ItemMenu from "./ItemMenu";
 import SeccionMenu from "./SeccionMenu";
 
 export default function MenuLateral({ abierto }) {
-  /*const [seccionAulasAbierta, setSeccionAulasAbierta] = useState(false);
-  const [seccionReservasAbierta, setSeccionReservasAbierta] = useState(false);
-  const [seccionReservasPuntualesAbierta, setSeccionReservasPuntualesAbierta] =useState(false);
-  const { aulas, cargando, error } = useAulas();*/
+
 
   const [estados, setEstados] = useState({});
 
@@ -36,14 +33,12 @@ export default function MenuLateral({ abierto }) {
       <nav className="pt-2">
         <SeccionMenu
           titulo="Reservas"
-          /*abierta={seccionReservasAbierta}*/
           level={0}
           abierta={!!estados["reservas"]}
           alAlternar={() => toggle("reservas")}
         >
           <SeccionMenu
             titulo="Reservas puntuales"
-            /*abierta={seccionReservasPuntualesAbierta}*/
             level={1}
             abierta={!!estados["puntuales"]}
             alAlternar={() => toggle("puntuales", "reservas")}
@@ -60,8 +55,6 @@ export default function MenuLateral({ abierto }) {
           level={0}
           abierta={!!estados["aulas"]}
           alAlternar={() => toggle("aulas")}
-          /*abierta={seccionAulasAbierta}
-          alAlternar={() => setSeccionAulasAbierta((v) => !v)}*/
         >
           <ItemMenu a="/ocupacion-aulas" level={1}>Campus Río Vena</ItemMenu>
 

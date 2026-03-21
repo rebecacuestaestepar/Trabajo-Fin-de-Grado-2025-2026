@@ -5,21 +5,18 @@ function normalizarEstado(valor) {
   const v = String(valor ?? "").trim().toUpperCase();
   if (!v) return "";
 
-  // Ya viene como char
   if (v === "P" || v === "A" || v === "R") return v;
 
-  // Variantes texto
   if (v === "PENDIENTE") return "P";
   if (v === "ACEPTADA" || v === "APROBADA" || v === "APROBADO") return "A";
   if (v === "RECHAZADA" || v === "RECHAZADO") return "R";
 
-  // Si llega algo raro, lo dejamos vacío para no romper el select
   return "";
 }
 export default function CamposBaseReserva({
   formulario,
-  alCambiar, // (patch) -> alCambiar({ campo: valor })
-  soloLectura = {}, // { idreserva: true, estado: true, ... }
+  alCambiar, 
+  soloLectura = {}, 
   mostrarId = false,
   mostrarEstado = false,
 }) {
@@ -128,10 +125,10 @@ export default function CamposBaseReserva({
                 "text-sm text-slate-900",
                 "ring-1 ring-inset ring-slate-200",
                 "focus:outline-none focus:ring-2 focus:ring-[#7a1e1e]/30",
-                !!soloLectura.estado ? "opacity-60 cursor-not-allowed" : "",
+                soloLectura.estado ? "opacity-60 cursor-not-allowed" : "",
               ].join(" ")}
             >
-              {/* Si no hay valor aún, placeholder */}
+              {/* Si no hay valor aún, lo dejamos vacío */}
               <option value="" disabled>
                 Selecciona estado…
               </option>
@@ -145,12 +142,6 @@ export default function CamposBaseReserva({
           </Campo>
         )}
 
-        {/*
-        {mostrarEstado && (
-          <Campo etiqueta="Estado">
-            <EntradaTexto value={formulario.estado || ""} disabled readOnly />
-          </Campo>
-        )}*/}
       </div>
     </div>
   );

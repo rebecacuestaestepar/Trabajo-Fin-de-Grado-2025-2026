@@ -9,10 +9,8 @@ import {
 
 import igualdadSuperficial from "../formulario-utiles/igualdadSuperficial";
 
-/* ========================= helpers ========================= */
 function normalizarHora(h) {
   if (!h) return "";
-  // "HH:MM:SS" -> "HH:MM"
   return String(h).slice(0, 5);
 }
 
@@ -36,7 +34,6 @@ const formularioVacio = {
 function mapReservaAFormulario(r) {
   if (!r) return { ...formularioVacio };
 
-  // soporta camara o camaras dependiendo de cómo venga del backend
   const cam = r.camara ?? r.camaras ?? false;
 
   return {
@@ -58,7 +55,6 @@ function mapReservaAFormulario(r) {
   };
 }
 
-/* ========================= hook ========================= */
 export function useEditarReserva(id, { onFinish } = {}) {
   const [cargando, setCargando] = useState(true);
   const [errorCarga, setErrorCarga] = useState(null);
@@ -72,14 +68,13 @@ export function useEditarReserva(id, { onFinish } = {}) {
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState(null);
 
-  // Modal confirmar aprobar/rechazar
   const [confirmacionAbierta, setConfirmacionAbierta] = useState(false);
-  const [tipoConfirmacion, setTipoConfirmacion] = useState(null); // "aprobar" | "rechazar"
+  const [tipoConfirmacion, setTipoConfirmacion] = useState(null); 
 
   const aplicarCambios = (parcial) =>
     setFormulario((prev) => ({ ...prev, ...parcial }));
 
-  // 1) Cargar detalle
+  
   useEffect(() => {
     let montado = true;
 
@@ -111,7 +106,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
     };
   }, [id]);
 
-  // 2) Validaciones
+
   const puedeBuscarAulas = useMemo(() => {
     return (
       !!formulario.fecha &&
@@ -134,7 +129,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
     return !igualdadSuperficial(formulario, formularioInicial);
   }, [formulario, formularioInicial]);
 
-  // 3) Buscar aulas candidatas
+
   const buscarAulas = async () => {
     setErrores(null);
     setMensaje(null);
@@ -160,7 +155,6 @@ export function useEditarReserva(id, { onFinish } = {}) {
 
       setAulasDisponibles(arr);
 
-      // si el aula actual no está en la lista, autoselecciona la primera
       if (arr.length > 0 && !arr.some((a) => a.nombre === formulario.nombre_aula)) {
         aplicarCambios({ nombre_aula: arr[0].nombre });
       }
@@ -175,7 +169,6 @@ export function useEditarReserva(id, { onFinish } = {}) {
     }
   };
 
-  // 4) Guardar cambios (PATCH)
   const guardar = async () => {
     setErrores(null);
     setMensaje(null);
@@ -203,7 +196,6 @@ export function useEditarReserva(id, { onFinish } = {}) {
       const res = await patchReserva(formulario.idreserva, parcial);
       setMensaje(res?.message || "Cambios guardados correctamente");
 
-      // actualiza baseline para que hayCambios vuelva a false
       setFormularioInicial((prev) => ({ ...prev, ...formulario }));
     } catch (e) {
       console.error(e);
@@ -211,7 +203,6 @@ export function useEditarReserva(id, { onFinish } = {}) {
     }
   };
 
-  // 5) Aprobar / Rechazar
   const pedirAprobar = () => {
     setTipoConfirmacion("aprobar");
     setConfirmacionAbierta(true);
@@ -236,7 +227,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
         setMensaje(res?.message || "Reserva rechazada");
       }
 
-      if (onFinish) onFinish(); // normalmente navegas a /reservas/pendientes
+      if (onFinish) onFinish(); 
     } catch (e) {
       console.error(e);
       setErrores(e?.data || { general: "Error al cambiar el estado" });
@@ -245,7 +236,6 @@ export function useEditarReserva(id, { onFinish } = {}) {
     }
   };
 
-  // textos modal
   const tituloConfirmacion =
     tipoConfirmacion === "aprobar" ? "¿Aceptar solicitud?" : "¿Rechazar solicitud?";
 
@@ -255,34 +245,27 @@ export function useEditarReserva(id, { onFinish } = {}) {
       : "Vas a rechazar esta solicitud. El estado cambiará a Rechazada.";
 
   return {
-    // carga
     cargando,
     errorCarga,
 
-    // form
     formulario,
     aplicarCambios,
 
-    // aulas
     aulasDisponibles,
     buscandoAulas,
     puedeBuscarAulas,
     buscarAulas,
 
-    // guardar
     puedeGuardar,
     hayCambios,
     guardar,
 
-    // estado / mensajes
     mensaje,
     errores,
 
-    // acciones aprobar/rechazar
     pedirAprobar,
     pedirRechazar,
 
-    // modal
     modal: {
       abierto: confirmacionAbierta,
       setAbierto: setConfirmacionAbierta,

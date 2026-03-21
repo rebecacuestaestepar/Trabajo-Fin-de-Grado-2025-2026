@@ -1,4 +1,3 @@
-// src/components/calendario/ToolbarAulaCalendar.jsx
 export default function ToolbarAulaCalendar({
   title,
   onPrev,

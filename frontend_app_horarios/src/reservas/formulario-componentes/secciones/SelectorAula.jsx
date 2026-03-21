@@ -1,23 +1,22 @@
 import { Campo } from "../ui/Campo";
-import { Selector, EntradaTexto } from "../ui/Inputs";
+import { Selector } from "../ui/Inputs";
 
 export default function SeccionSelectorAula({
   titulo = "Aula candidata",
   alBuscarAulas,
   estaBuscando,
   puedeBuscar,
-  // modos
-  modo, // "simple" | "comun" | "por_fecha"
+
+  modo, 
   aulasDisponibles = [],
   aulaSeleccionada = "",
   alSeleccionarAula,
-  // por-fecha
+  
   fechas = [],
   aulasPorFecha = {},
   seleccionPorFecha = {},
   alSeleccionarPorFecha,
-  // fallback (editar): si no hay aulas, deja escribir manual
-  /*permitirManualSiVacio = false,*/
+
 }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-4">

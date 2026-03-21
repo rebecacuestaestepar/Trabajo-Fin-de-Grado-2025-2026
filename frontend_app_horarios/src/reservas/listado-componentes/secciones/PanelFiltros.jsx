@@ -1,15 +1,6 @@
 export default function PanelFiltros({
   mostrar,
 
-  // toggles
-  //usarMotivo,
-  //setUsarMotivo,
-  //usarResponsable,
-  //setUsarResponsable,
-  //usarRango,
-  //setUsarRango,
-
-  // valores
   filtroMotivo,
   setFiltroMotivo,
   filtroResponsable,

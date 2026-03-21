@@ -12,11 +12,8 @@ export function useListadoReservas({
 
   const [soloPendientes, setSoloPendientes] = useState(false); 
 
-  // filtros UI
   const [mostrarFiltros, setMostrarFiltros] = useState(true);
-  // const [usarMotivo, setUsarMotivo] = useState(true);
-  // const [usarResponsable, setUsarResponsable] = useState(true);
-  // const [usarRango, setUsarRango] = useState(true);
+
 
   const hoy = new Date().toISOString().split("T")[0];
 
@@ -32,7 +29,6 @@ export function useListadoReservas({
     hasta: "",
   });
 
-  // selección
   const [idsSeleccionados, setIdsSeleccionados] = useState(() => new Set());
 
   async function cargar() {
@@ -51,7 +47,6 @@ export function useListadoReservas({
 
   useEffect(() => {
     cargar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const reservasFiltradas = useMemo(() => {
@@ -65,7 +60,7 @@ export function useListadoReservas({
 
       const estadoRow = item.estado;
       const estadoStr = String(estadoRow ?? "").trim().toUpperCase();
-      const esPendiente = estadoStr === /*"PENDIENTE" ||*/ estadoStr === "P";
+      const esPendiente = estadoStr === estadoStr === "P";
 
       if (soloPendientes && !esPendiente) return false;
 
@@ -165,7 +160,6 @@ export function useListadoReservas({
   }
 
   return {
-    // datos
     reservas,
     reservasFiltradas,
     cargando,
@@ -173,7 +167,6 @@ export function useListadoReservas({
     error,
     cargar,
 
-    // filtros
     mostrarFiltros,
     setMostrarFiltros,
     soloPendientes,
@@ -189,7 +182,6 @@ export function useListadoReservas({
     limpiarFiltros,
     aplicarFiltros,
 
-    // selección
     idsSeleccionados,
     cantidadSeleccionadas,
     todoVisibleSeleccionado,
@@ -198,7 +190,6 @@ export function useListadoReservas({
     alternarSeleccionTodoVisible,
     limpiarSeleccion,
 
-    // helper acción
     ejecutarAccion,
   };
 }

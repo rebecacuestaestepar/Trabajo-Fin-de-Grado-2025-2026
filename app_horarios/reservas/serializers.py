@@ -10,16 +10,14 @@ from aulas.models import Aula
 
 
 class ReservaPuntualCreateSerializer(serializers.Serializer):
-
-    # Campos que llegan desde React
-    #fecha_inicio = serializers.DateField()
-    #fecha_fin = serializers.DateField()
     fecha = serializers.DateField()
     hora_inicio = serializers.TimeField()
     hora_fin = serializers.TimeField()
     motivo = serializers.CharField(max_length=90)
     capacidad_solicitada = serializers.IntegerField(min_value=0)
     correo_responsable = serializers.EmailField()
+    nombre_responsable = serializers.CharField(required=False, allow_blank=True)
+    apellidos_responsable = serializers.CharField(required=False, allow_blank=True)
     num_ordenadores = serializers.IntegerField(required=False, min_value=0)
     altavoces = serializers.BooleanField(required=False, default=False)
     proyector = serializers.BooleanField(required=False, default=False)
@@ -35,18 +33,26 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        # Aquí harás la lógica de creación en BD.
-        # Por ahora, algo simple.
 
         correo = validated_data['correo_responsable']
+        nombre_responsable = validated_data.get('nombre_responsable', "").strip()
+        apellidos_responsable = validated_data.get('apellidos_responsable', "").strip()
         try:
             responsable = Responsable.objects.filter(correo=correo).first()
             if not responsable:
                 docente = Docente.objects.filter(correo=correo).first()
                 if not docente:
-                    responsable = Responsable.objects.create(
-                        correo=correo,
-                    )
+                    if not nombre_responsable or not apellidos_responsable:
+                        raise serializers.ValidationError({
+                            "codigo": "RESPONSABLE_NO_REGISTRADO",
+                            "general": " El responsable no está reigstrado. Se requieren nombre y apellidos para proceder con su registro."
+                        })
+                    else: 
+                        responsable = Responsable.objects.create(
+                            correo=correo,
+                            nombre=nombre_responsable,
+                            apellidos=apellidos_responsable
+                        )
                 else:
                     responsable = Responsable.objects.create(
                         correo=docente.correo,

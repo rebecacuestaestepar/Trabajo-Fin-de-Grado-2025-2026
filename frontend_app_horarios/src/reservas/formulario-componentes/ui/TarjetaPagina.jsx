@@ -1,4 +1,3 @@
-// Contenedor principal de página
 export default function TarjetaPagina({ titulo, izquierda, derecha, children }) {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-50 px-4 py-10">

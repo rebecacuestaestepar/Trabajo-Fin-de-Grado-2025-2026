@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
+import { ModalDatosResponsable } from "../formulario-componentes/ui/ModalDatosResponsable";
+
 import { CajaExito, CajaError } from "../formulario-componentes/ui/CajaExito";
 import BotonVolver from "../formulario-componentes/ui/BotonVolver";
 
@@ -15,18 +16,13 @@ import SeccionPeriodicidad from "../formulario-componentes/secciones/SeccionPeri
 import { useReservaPuntual } from "../formulario-hooks/useReservaPuntual";
 
 export default function CrearReserva() {
-  // Reutilizas el mismo hook si te vale el flujo.
-  // Si luego quieres separar lógica admin/solicitud, lo hacemos en otro paso.
   const reserva = useReservaPuntual();
   
-  // Para “no ponerla por defecto en Pendiente”:
-  // dejamos el estado vacío al entrar (para forzar al usuario a elegir).
-  // Si prefieres un valor por defecto distinto, cámbialo aquí.
   useEffect(() => {
     if (reserva.formulario.estado === undefined) {
       reserva.aplicarCambios({ estado: "" });
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -35,6 +31,15 @@ export default function CrearReserva() {
         titulo={`¿Seguro que quieres generar ${reserva.modal.confirmCount} reserva(s)?`}
         descripcion={reserva.modal.descripcionConfirm}
         alCancelar={() => reserva.modal.setOpenConfirm(false)}
+        alConfirmar={reserva.modal.onConfirm}
+      />
+
+      <ModalDatosResponsable
+        abierto={reserva.modal.openResponsable}
+        correo={reserva.formulario.correo_responsable}
+        formulario={reserva.formulario}
+        alCambiar={reserva.aplicarCambios}
+        alCancelar={() => reserva.modal.setOpenResponsable(false)}
         alConfirmar={reserva.modal.onConfirm}
       />
 
@@ -48,7 +53,6 @@ export default function CrearReserva() {
             formulario={reserva.formulario}
             alCambiar={reserva.aplicarCambios}
             mostrarEstado
-            // aquí NO bloqueamos estado, queremos que se pueda editar:
             soloLectura={{}}
           />
 
@@ -79,7 +83,6 @@ export default function CrearReserva() {
             permitirManualSiVacio={false}
           />
 
-          {/* Variante distinta si quieres que el botón diga "Crear" */}
           <AccionesReserva variante="crear" deshabilitado={!reserva.puedeEnviar} />
 
           <CajaExito>{reserva.mensaje}</CajaExito>

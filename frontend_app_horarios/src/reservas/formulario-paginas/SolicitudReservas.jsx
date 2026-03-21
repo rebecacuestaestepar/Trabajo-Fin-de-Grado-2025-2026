@@ -1,6 +1,7 @@
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
 import { CajaExito, CajaError } from "../formulario-componentes/ui/CajaExito";
+import { ModalDatosResponsable } from "../formulario-componentes/ui/ModalDatosResponsable";
 
 import CamposBaseReserva from "../formulario-componentes/secciones/CamposBaseReserva";
 import SeccionRecursos from "../formulario-componentes/secciones/SeccionChecks";
@@ -21,6 +22,15 @@ export default function SolicitudReservas() {
         descripcion={reserva.modal.descripcionConfirm}
         alCancelar={() => reserva.modal.setOpenConfirm(false)}
         alConfirmar={reserva.modal.onConfirm}
+      />
+
+      <ModalDatosResponsable
+          abierto={reserva.modal.openResponsable}
+          correo={reserva.formulario.correo_responsable}
+          formulario={reserva.formulario}
+          alCambiar={reserva.aplicarCambios}
+          alCancelar={() => reserva.modal.setOpenResponsable(false)}
+          alConfirmar={reserva.modal.onConfirm}
       />
 
       <TarjetaPagina titulo="SOLICITAR RESERVA PUNTUAL">

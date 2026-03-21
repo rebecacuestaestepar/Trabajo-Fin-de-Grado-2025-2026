@@ -1,5 +1,3 @@
-// src/aulas/components/calendario/LeyendaAulas.jsx
-
 export default function LeyendaAulas({ mapaColores = {} }) {
   const aulasSeleccionadas = Object.keys(mapaColores);
   

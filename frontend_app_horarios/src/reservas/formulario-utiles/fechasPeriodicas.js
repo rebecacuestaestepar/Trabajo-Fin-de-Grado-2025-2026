@@ -1,5 +1,4 @@
 function aFecha(iso) {
-  // iso esperado: "YYYY-MM-DD"
   const [anio, mes, dia] = iso.split("-").map(Number);
   return new Date(anio, mes - 1, dia);
 }
@@ -11,13 +10,7 @@ function aISOFecha(fecha) {
   return `${anio}-${mes}-${dia}`;
 }
 
-/**
- * Calcula las fechas periódicas entre dos fechas (incluidas) para un día de la semana concreto.
- * @param {string} fechaInicio - "YYYY-MM-DD"
- * @param {string} fechaFin - "YYYY-MM-DD"
- * @param {number|string} diaSemanaPeriodica - 0..6 (domingo..sábado, como JS Date.getDay())
- * @returns {string[]} lista de fechas ISO "YYYY-MM-DD"
- */
+
 export function calcularFechasPeriodicas(fechaInicio, fechaFin, diaSemanaPeriodica) {
   if (!fechaInicio || !fechaFin || diaSemanaPeriodica === null || diaSemanaPeriodica === undefined) {
     return [];

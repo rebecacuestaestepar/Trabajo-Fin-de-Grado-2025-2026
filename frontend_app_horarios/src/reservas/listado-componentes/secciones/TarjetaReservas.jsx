@@ -1,11 +1,10 @@
 import IconoBool from "../ui/IconoBool";
-import { formatearFechaHora } from "../ui/fecha"; // antes: formatFechaHora
+import { formatearFechaHora } from "../ui/fecha"; 
 
 function badgeEstado(estadoRaw) {
   const estado = String(estadoRaw ?? "").trim().toUpperCase();
 
-  // Ajusta estos valores a los que te devuelve tu backend:
-  // por ejemplo: "P" pendiente, "A" aprobada, "R" rechazada, etc.
+
   if (estado === "P" || estado === "PENDIENTE") {
     return "bg-amber-50 text-amber-800 ring-1 ring-amber-200";
   }
@@ -23,7 +22,6 @@ function textoEstado(estadoRaw) {
   if (estado === "P") return "Pendiente";
   if (estado === "A") return "Aprobada";
   if (estado === "R") return "Rechazada";
-  // si ya viene como texto, lo devolvemos “bonito”
   if (!estado) return "—";
   return estadoRaw;
 }
@@ -33,14 +31,10 @@ export default function TarjetaReserva({
   estaSeleccionada,
   alAlternarSeleccion,
 
-  // acciones por reserva
   alAceptar,
   alRechazar,
   alEliminar,
   alEditar,
-
-  mostrarAceptarRechazar = false,
-  mostrarEliminar = false,
 
   mostrarEstado = true,
 }) {
@@ -169,11 +163,6 @@ export default function TarjetaReserva({
               Eliminar
             </button>
           )}
-
-          {/* ✅ Eliminar siempre encima de Editar cuando esté activo 
-          {mostrarEliminar && (
-            
-          )}*/}
 
           <button
             onClick={() => alEditar?.(id)}

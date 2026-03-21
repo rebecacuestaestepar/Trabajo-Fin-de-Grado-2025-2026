@@ -19,28 +19,11 @@ export default function AccionesReserva({ variante, ...props }) {
       </div>
     );
   }
-
-  // variante === "editar"
-  const { alRechazar, alAceptar, alGuardar, deshabilitarGuardar } = props;
+  const { alGuardar, deshabilitarGuardar } = props;
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-      {/*}
-      <button
-        type="button"
-        onClick={alRechazar}
-        className="inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold ring-1 ring-rose-300 text-rose-700 hover:bg-rose-50"
-      >
-        Rechazar
-      </button>
 
-      <button
-        type="button"
-        onClick={alAceptar}
-        className="inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold text-white !bg-[#7a1e1e] hover:bg-[#651818]"
-      >
-        Aceptar
-      </button>*/}
 
       <button
         type="button"

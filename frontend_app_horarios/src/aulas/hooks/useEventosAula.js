@@ -1,5 +1,4 @@
-// src//aulas/hooks/useEventosAula.js
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getEventosAula } from "../../api/aulas";
 
 function normalizarEvento(e) {
@@ -8,45 +7,22 @@ function normalizarEvento(e) {
     title: e.title ?? e.titulo ?? "(sin título)",
     start: e.start,
     end: e.end,
-    // guardamos todo en extendedProps para usarlo al click/colores
     extendedProps: {
       ...e,
-      tipo: e.tipo, // "PUNTUAL" | "PERIODICA"
-      aula: e.aula, // nombre del aula
+      tipo: e.tipo, 
+      aula: e.aula, 
     },
   };
 }
 
 export function useEventosAula({ aulasNombres = [], tipo }) {
-  const [range, setRange] = useState(null); // {start, end}
+  const [range, setRange] = useState(null); 
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  /*const cargar = useCallback(async () => {
-    //const aula = String(aulaNombre ?? "").trim();
-    // Si no hay aulas seleccionadas o no hay rango en el calendario, salimos
-    if (!aulaNombre  || !range?.start || !range?.end) return;
 
-    setLoading(true);
-    setError("");
-    try {
-      const data = await getEventosAula({
-        aulaNombre,
-        start: range.start,
-        end: range.end,
-        tipo,
-      });
-      setEvents(Array.isArray(data) ? data.map(normalizarEvento) : []);
-    } catch (e) {
-      setEvents([]);
-      setError(e?.message || "Error cargando eventos");
-    } finally {
-      setLoading(false);
-    }
-  }, [aulaNombre, range, tipo]);*/
-
-  const aulasKey = aulasNombres.sort().join(","); // ordenamos para evitar recargas innecesarias por el orden de las aulas
+  const aulasKey = aulasNombres.sort().join(","); 
 
   const rangeKey = range?.start && range?.end 
     ? `${range.start.toISOString()}_${range.end.toISOString()}` 

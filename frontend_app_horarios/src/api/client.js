@@ -1,45 +1,7 @@
-// src/api/client.js
-/*const API_BASE = "http://localhost:8000/api";
-
-export async function apiRequest(path, { method = "GET", body } = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers: { "Content-Type": "application/json" },
-    body: body !== undefined ? JSON.stringify(body) : null,
-  });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `${method} ${path} failed`);
-  }
-
-  if (res.status === 204) return null;
-  return res.json();
-}
-
-export function apiGet(path) {
-  return apiRequest(path, { method: "GET" });
-}
-
-export function apiPost(path, body) {
-  return apiRequest(path, { method: "POST", body });
-}
-
-export function apiPatch(path, body) {
-  return apiRequest(path, { method: "PATCH", body });
-}
-*/
-// src/api/client.js (ejemplo)
-// src/api/client.js
-// src/api/client.js
 const API_ORIGIN = import.meta.env.VITE_API_ORIGIN || "http://localhost:8000";
 
 // Construye la URL completa para la petición
 function buildUrl(path) {
-  // Acepta:
-  //  - "/api/..."   (ya viene con /api)
-  //  - "/reservas/..." (le añadimos /api)
-  //  - "http://..." (URL completa)
   // Si la path es una URL completa, la devolvemos tal cual
   if (path.startsWith("http")) return path;
   // Si no, construimos la URL completa, primero nos aseguramos de que empieza por /
@@ -81,7 +43,6 @@ export async function apiFetch(
 
   const opts = {
     method,
-    // 👇 IMPORTANTE: por defecto NO mandamos cookies (evita el error CORS)
     credentials: credentials ?? "omit",
     headers: {
       Accept: "application/json",
@@ -117,7 +78,6 @@ export async function apiFetch(
   return data;
 }
 
-/** ✅ Compatibilidad con imports antiguos **/
 export function apiRequest(path, opts = {}) {
   return apiFetch(path, opts);
 }
@@ -131,7 +91,6 @@ export function apiPatch(path, body, opts = {}) {
   return apiFetch(path, { ...opts, method: "PATCH", body });
 }
 
-/** ✅ API nueva tipo api.get/api.post **/
 export const api = {
   get: (path, opts) => apiFetch(path, { ...opts, method: "GET" }),
   post: (path, body, opts) => apiFetch(path, { ...opts, method: "POST", body }),

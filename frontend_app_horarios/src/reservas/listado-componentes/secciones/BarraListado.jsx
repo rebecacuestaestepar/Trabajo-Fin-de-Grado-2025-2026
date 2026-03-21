@@ -1,9 +1,7 @@
 export default function BarraListado({
-  tituloAccionCrear, // string o null
+  tituloAccionCrear,
   alCrear,
 
-  mostrarFiltros,
-  setMostrarFiltros,
 
   soloPendientes,
   setSoloPendientes,
@@ -17,7 +15,6 @@ export default function BarraListado({
   cantidadSeleccionadas,
   alLimpiarSeleccion,
 
-  // acciones masivas (arrays de botones)
   accionesMasivas = [], 
 
   children
@@ -27,7 +24,6 @@ export default function BarraListado({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-3">
 
-          {/* BOTÓN DE RESERVAS PENDIENTES */}
           <button
             type="button"
             onClick={() => setSoloPendientes((v) => !v)}
@@ -40,19 +36,6 @@ export default function BarraListado({
           >
             {soloPendientes ? "Ver Todas" : "Reservas Pendientes"}
           </button>
-
-          {/*<button
-            type="button"
-            onClick={() => setMostrarFiltros((v) => !v)}
-            className={`rounded-lg px-3 py-2 text-sm font-semibold ring-1 transition
-              ${
-                mostrarFiltros
-                  ? "!bg-slate-900 text-white ring-slate-900"
-                  : "!bg-white text-slate-800 ring-slate-200 hover:!bg-slate-50"
-              }`}
-          >
-            Filtrado
-          </button>*/}
 
           <label className="inline-flex items-center gap-2 text-sm text-slate-700">
             <input
@@ -97,7 +80,6 @@ export default function BarraListado({
             </button>
           )}
 
-          {/* Reservamos hueco para que no “salte” */}
           <div
             className={`flex flex-wrap gap-2 min-h-[40px] items-center
               ${cantidadSeleccionadas > 0 ? "" : "invisible pointer-events-none"}`}
@@ -117,7 +99,6 @@ export default function BarraListado({
           </div>
         </div>
       </div>
-      {/*Para meter los filtros en la barra de listado*/}
       {children}
     </div>
   );

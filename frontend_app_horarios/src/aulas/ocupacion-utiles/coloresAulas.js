@@ -1,4 +1,3 @@
-// src/aulas/utils/coloresAulas.js
 
 /**
  * Recibe un array de aulas y genera un mapa de colores garantizando
@@ -8,12 +7,11 @@ export function generarMapaColores(aulas = []) {
   const mapa = {};
 
 
-  // El Ángulo Áureo (~137.5 grados) asegura que los colores no se pisen en la rueda HSL
+  // El Ángulo Áureo (137.5 grados) asegura que no se generen colore similares
   const goldenAngle = 137.508;
 
-  aulas.forEach((aula, index) => {
-    // Calculamos el matiz (hue)
-    if (!aula || aula.id == null || !aula.nombre) return; // Saltar si el aula no es válido
+  aulas.forEach((aula) => {
+    if (!aula || aula.id == null || !aula.nombre) return; // Saltamos si el aula no es válido
     const hue = Math.round((aula.id * goldenAngle) % 360);
 
     mapa[aula.nombre] = {

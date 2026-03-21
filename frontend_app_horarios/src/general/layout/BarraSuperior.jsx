@@ -17,10 +17,6 @@ export default function BarraSuperior({ alAlternarMenu }) {
       </button>
 
       <div className="flex items-center gap-4">
-        {/* Sustituye esto por tu logo real */}
-        {/*<div className="h-14 w-14 bg-white rounded-sm flex items-center justify-center text-[#7a1e1e] font-bold">
-          UBU
-        </div>*/}
         <img
           src={logoUbu}
           alt="Universidad de Burgos"
@@ -30,7 +26,7 @@ export default function BarraSuperior({ alAlternarMenu }) {
 
 
         <h1 className="text-lg font-semibold tracking-wide">
-          BIENVENIDO@ NOMBRE USUARIO
+          BIENVENID@ NOMBRE USUARIO
         </h1>
       </div>
     </header>

@@ -4,7 +4,7 @@ import { calcularFechasPeriodicas } from "../../formulario-utiles/fechasPeriodic
 
 export default function SeccionPeriodicidad({
   formulario,
-  alCambiar, // alCambiar({ campo: valor })
+  alCambiar, 
   permitir = true,
   titulo = "Generar reserva de forma periódica",
 }) {

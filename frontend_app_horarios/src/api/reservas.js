@@ -76,7 +76,3 @@ export function eliminarReserva(id) {
 export function eliminarReservasMasivo(ids) {
   return apiPost(`/reservas/eliminar-masivo/`, { ids });
 }
-
-//export function crearReserva(payload) {
-//  return apiPost("/reservas/crear/", payload);
-//}

@@ -8,7 +8,7 @@ import ListaReservas from "../listado-componentes/secciones/ListaReservas";
 import Paginador from "../listado-componentes/secciones/Paginador";
 
 import {
-  getTodasReservas, // Usamos la que trae todas las reservas
+  getTodasReservas, 
   eliminarReserva,
   eliminarReservasMasivo,
   aprobarReserva,
@@ -35,7 +35,6 @@ export default function GestionReservas() {
       state: { from: location.pathname + location.search },
     });
 
-  /* === ACCIONES INDIVIDUALES === */
   const alAceptar = (id) => listado.ejecutarAccion(async () => await aprobarReserva(id));
   const alRechazar = (id) => listado.ejecutarAccion(async () => await rechazarReserva(id));
   const alEliminar = (id) => {
@@ -45,7 +44,6 @@ export default function GestionReservas() {
     });
   };
 
-  /* === LÓGICA DE VALIDACIÓN PARA ACCIONES MASIVAS === */
   const todasSeleccionadasSonPendientes = useMemo(() => {
     if (listado.idsSeleccionados.size === 0) return false;
     
@@ -54,14 +52,13 @@ export default function GestionReservas() {
       listado.idsSeleccionados.has(r.id ?? r.idreserva)
     );
 
-    // Verificamos si TODAS tienen estado Pendiente
+    // Verificamos si todas tienen estado Pendiente
     return itemsSeleccionados.every((r) => {
       const estadoStr = String(r.estado ?? r.estado_reserva ?? r.status ?? "").trim().toUpperCase();
       return estadoStr === "P" || estadoStr === "PENDIENTE";
     });
   }, [listado.idsSeleccionados, listado.reservas]);
 
-  /* === ACCIONES MASIVAS === */
   const alAceptarSeleccionadas = () => {
     if (listado.idsSeleccionados.size === 0) return;
     return listado.ejecutarAccion(async () => {
@@ -86,9 +83,8 @@ export default function GestionReservas() {
     });
   };
 
-  // LÓGICA PARA EL PAGINADOR
 
-  const [page, setPage] = useState(0); // Usamos índice 0
+  const [page, setPage] = useState(0); 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangePage = (event, newPage) => {
@@ -106,12 +102,9 @@ export default function GestionReservas() {
     return listado.reservasFiltradas.slice(inicio, fin);
   }, [listado.reservasFiltradas, page, rowsPerPage]);
 
-  // Filtrar reservas cada vez que cambian los filtros o la lista completa
   const [prevCantidadFiltrada, setPrevCantidadFiltrada] = useState(listado.reservasFiltradas.length);
 
-  // 2. Comparamos durante el propio renderizado (sin useEffect)
   if (listado.reservasFiltradas.length !== prevCantidadFiltrada) {
-    // Si ha cambiado (porque el usuario filtró), actualizamos el registro y reseteamos la página
     setPrevCantidadFiltrada(listado.reservasFiltradas.length);
     setPage(0);
   }
@@ -134,8 +127,8 @@ export default function GestionReservas() {
             alCrear={alCrear}
             mostrarFiltros={listado.mostrarFiltros}
             setMostrarFiltros={listado.setMostrarFiltros}
-            soloPendientes={listado.soloPendientes} // Pasamos el nuevo estado
-            setSoloPendientes={listado.setSoloPendientes} // Pasamos la función
+            soloPendientes={listado.soloPendientes} 
+            setSoloPendientes={listado.setSoloPendientes} 
             todoVisibleSeleccionado={listado.todoVisibleSeleccionado}
             algunoVisibleSeleccionado={listado.algunoVisibleSeleccionado}
             alAlternarSeleccionarTodoVisible={listado.alternarSeleccionTodoVisible}
@@ -147,7 +140,6 @@ export default function GestionReservas() {
               {
                 label: "Aceptar",
                 onClick: alAceptarSeleccionadas,
-                // Se deshabilita si está cargando o si NO son todas pendientes
                 disabled: listado.accionando || !todasSeleccionadasSonPendientes,
                 className: `rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm
                   ${
@@ -170,7 +162,6 @@ export default function GestionReservas() {
               {
                 label: "Eliminar",
                 onClick: alEliminarSeleccionadas,
-                // Eliminar siempre está activo mientras haya algo seleccionado y no esté procesando
                 disabled: listado.accionando,
                 className: `rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm
                   ${

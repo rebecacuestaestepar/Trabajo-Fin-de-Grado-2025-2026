@@ -18,10 +18,7 @@ export function normalizar(texto) {
   return String(texto ?? "").trim().toLowerCase();
 }
 
-/**
- * Comprueba si una fecha ISO (YYYY-MM-DD) está dentro del rango [desdeISO, hastaISO].
- * Al ser ISO, comparar strings funciona correctamente.
- */
+
 export function fechaEnRango(fechaISO, desdeISO, hastaISO) {
   if (!fechaISO) return false;
 

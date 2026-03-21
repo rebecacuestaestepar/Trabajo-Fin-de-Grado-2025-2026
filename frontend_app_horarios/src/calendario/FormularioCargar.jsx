@@ -6,8 +6,6 @@ function FormularioCargar() {
     const [fechaFin1Semestre, setFechaFin1Semestre] = useState('');
     const [fechaInicio2Semestre, setFechaInicio2Semestre] = useState('');
     const [fechaFin2Semestre, setFechaFin2Semestre] = useState('');
-    //const [fechaInicio1Examenes, setFechaInicio1Examenes] = useState('');
-    //const [fechaInicio2Examenes, setFechaInicio2Examenes] = useState('');
     const [semanasDocencia, setSemanasDocencia] = useState('');
 
     const [mensaje, setMensaje] = useState(null);
@@ -18,14 +16,12 @@ function FormularioCargar() {
         setMensaje(null);
         setErrores(null);
 
-        payload = {
+        const payload = {
             fecha_inicio_1_semestre: fechaInicio1Semestre,
             fecha_fin_1_semestre: fechaFin1Semestre,
             fecha_inicio_2_semestre: fechaInicio2Semestre,
             fecha_fin_2_semestre: fechaFin2Semestre,
             semanas_docencia: Number(semanasDocencia),
-            //fecha_inicio_1_examenes: fechaInicio1Examenes,
-            //fecha_inicio_2_examenes: fechaInicio2Examenes,
         };
     
 
@@ -34,13 +30,10 @@ function FormularioCargar() {
             
             setMensaje(data.message || 'Fechas cargadas correctamente');
 
-            // opcional: limpiar formulario
             setFechaInicio1Semestre('');
             setFechaFin1Semestre('');
             setFechaInicio2Semestre('');
             setFechaFin2Semestre('');
-            //setFechaInicio1Examenes('');
-            //setFechaInicio2Examenes('');
             setSemanasDocencia('');
             
         } catch (error) {
