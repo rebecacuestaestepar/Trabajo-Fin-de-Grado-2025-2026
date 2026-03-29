@@ -1,5 +1,6 @@
 import { Campo } from '../ui/Campo.jsx';
 import { AreaTexto, EntradaTexto } from '../ui/Inputs.jsx';
+import { SelectHora } from '../ui/SelectHora.jsx';
 
 function normalizarEstado(valor) {
   const v = String(valor ?? "").trim().toUpperCase();
@@ -83,19 +84,28 @@ export default function CamposBaseReserva({
           />
         </Campo>
 
-        <Campo etiqueta="Hora inicio">
+        {/* <Campo etiqueta="Hora inicio">
           <EntradaTexto
             type="time"
+            step={900}
             value={formulario.hora_inicio || ""}
             onChange={(e) => alCambiar({ hora_inicio: e.target.value })}
             required
             disabled={!!soloLectura.hora_inicio}
+          />
+        </Campo> */}
+        <Campo etiqueta="Hora inicio">
+          <SelectHora
+            value={formulario.hora_inicio || ""}
+            onChange={(e) => alCambiar({ hora_inicio: e.target.value })}
+            required
           />
         </Campo>
 
         <Campo etiqueta="Hora fin">
           <EntradaTexto
             type="time"
+            step={900}
             value={formulario.hora_fin || ""}
             onChange={(e) => alCambiar({ hora_fin: e.target.value })}
             required

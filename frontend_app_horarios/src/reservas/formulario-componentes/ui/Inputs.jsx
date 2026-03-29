@@ -4,9 +4,9 @@ export function EntradaTexto(props) {
             {...props}
             className={[
                 "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm ",
-                "shadow-sm outine-none transition ",
+                "shadow-sm outline-none transition ",
                 "focus:border-[#7a1e1e] focus:ring-1 focus:ring-[#7a1e1e]/20 ",
-                "disabled:bg-slate-50 disabled:text-slate-500 disabled:cursos-not-allowed ",
+                "disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed ",
                 props.className ?? "",
             ].join(" ")}
         />
