@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'reservas',
     'nucleo',
     'corsheaders',
+    'usuarios'
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,19 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MOODLE_HOST = 'https://ubuvirtual.ubu.es'
+
+AUTHENTICATION_BACKENDS = [
+    'usuarios.backends.BackendUniversidadMoodle',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+AUTH_USER_MODEL = 'usuarios.Usuario'

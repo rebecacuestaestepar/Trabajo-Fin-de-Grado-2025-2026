@@ -22,6 +22,7 @@ class Asignaturas(models.Model):
     grado_id = models.ForeignKey(Grado, models.CASCADE, db_column='GRADO_ID', max_length=10)  # Field name made lowercase.
     tipo = models.CharField(db_column='TIPO', max_length=1, blank=True, null=True)  # Field name made lowercase.
     horas_practicas = models.DecimalField(db_column='HORAS_PRACTICAS', max_digits=1, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    docentes_imparten = models.ManyToManyField('Docente', through='Imparte', related_name='asignaturas')
 
     class Meta:
         managed = False
@@ -33,6 +34,7 @@ class Docente(models.Model):
     apellidos = models.CharField(db_column='APELLIDOS', max_length=100)  # Field name made lowercase.
     correo = models.CharField(db_column='CORREO', max_length=30)  # Field name made lowercase.
     telefono = models.CharField(db_column='TELEFONO', max_length=9, blank=True, null=True)  # Field name made lowercase.
+    asignatura_impartidas = models.ManyToManyField('Asignaturas', through='Imparte', related_name='docentes')
 
     class Meta:
         managed = False
@@ -50,11 +52,9 @@ class Grupo(models.Model):
 
 
 class Imparte(models.Model):
-    #pk = models.CompositePrimaryKey('CODIGO_DOCENTE', 'ID_ASIGNATURA')
-    codigo_docente = models.ForeignKey(Docente, models.CASCADE, db_column='CODIGO_DOCENTE', max_length=9, primary_key=True)  # Field name made lowercase.
+    codigo_docente = models.ForeignKey(Docente, models.CASCADE, db_column='CODIGO_DOCENTE', max_length=9)  # Field name made lowercase.
     id_asignatura = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_ASIGNATURA', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'imparte'
         unique_together = (('codigo_docente', 'id_asignatura'),)
