@@ -84,16 +84,6 @@ export default function CamposBaseReserva({
           />
         </Campo>
 
-        {/* <Campo etiqueta="Hora inicio">
-          <EntradaTexto
-            type="time"
-            step={900}
-            value={formulario.hora_inicio || ""}
-            onChange={(e) => alCambiar({ hora_inicio: e.target.value })}
-            required
-            disabled={!!soloLectura.hora_inicio}
-          />
-        </Campo> */}
         <Campo etiqueta="Hora inicio">
           <SelectHora
             value={formulario.hora_inicio || ""}
@@ -103,13 +93,10 @@ export default function CamposBaseReserva({
         </Campo>
 
         <Campo etiqueta="Hora fin">
-          <EntradaTexto
-            type="time"
-            step={900}
+          <SelectHora
             value={formulario.hora_fin || ""}
             onChange={(e) => alCambiar({ hora_fin: e.target.value })}
             required
-            disabled={!!soloLectura.hora_fin}
           />
         </Campo>
 
