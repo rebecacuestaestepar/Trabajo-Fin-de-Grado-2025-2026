@@ -71,6 +71,7 @@ class ReservaPuntual(models.Model):
     camara_solicitada = models.BooleanField(db_column='CAMARA_SOLICITADA', default=False)  # Field name made lowercase.
     enchufes_solicitados = models.BooleanField(db_column='ENCHUFES_SOLICITADOS', default=False)  # Field name made lowercase.
     momento_reserva = models.DateTimeField(db_column='MOMENTO_RESERVA', default=timezone.now)  # Field name made lowercase.
+    observaciones = models.CharField(db_column='OBSERVACIONES', max_length=300, blank=True, null=True) 
 
     class Meta:
         managed = False

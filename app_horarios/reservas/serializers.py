@@ -29,6 +29,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
     dia_semana_periodica = serializers.IntegerField(required=False, min_value=1, max_value=5)
     nombre_aula = serializers.CharField(required=False, allow_blank=True)
     aulas_por_fecha = serializers.DictField(child=serializers.CharField(allow_blank=True), required=False)
+    observaciones = serializers.CharField(required=False, allow_blank=True, max_length=300)
     
 
     @transaction.atomic
@@ -75,6 +76,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
         proyector = validated_data.get('proyector', False)
         camara = validated_data.get('camara', False)
         enchufes = validated_data.get('enchufes', False)
+        observaciones = validated_data.get('observaciones', "")
 
         generar_periodica = validated_data.get('generar_periodica', False)
 
@@ -158,6 +160,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 proyector_solicitado=proyector,
                 camara_solicitada=camara,
                 enchufes_solicitados=enchufes,
+                observaciones=observaciones,
             )
 
             return reserva_puntual
@@ -324,6 +327,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 proyector_solicitado=proyector,
                 camara_solicitada=camara,
                 enchufes_solicitados=enchufes,
+                observaciones=observaciones,
             )
 
             ultimo_reserva_puntual = reserva_puntual
