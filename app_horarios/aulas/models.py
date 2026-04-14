@@ -6,8 +6,7 @@ from docencia.models import Grado
 class Aula(models.Model):
     id = models.DecimalField(db_column='ID', primary_key=True, decimal_places=0, max_digits=10)  # Field name made lowercase.
     nombre = models.CharField(db_column='NOMBRE', unique=True, max_length=20)  # Field name made lowercase.
-    # nombre = models.CharField(db_column='NOMBRE', primary_key=True, max_length=20)  # Field name made lowercase.
-
+    nombre_excel = models.CharField(db_column='NOMBRE_EXCEL', max_length=20, blank=True, null=False)  # Field name made lowercase.
     edificio = models.CharField(db_column='EDIFICIO', max_length=6, blank=True, null=True)  # Field name made lowercase.
     planta = models.DecimalField(db_column='PLANTA', max_digits=1, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
     capacidad = models.DecimalField(db_column='CAPACIDAD', max_digits=3, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
