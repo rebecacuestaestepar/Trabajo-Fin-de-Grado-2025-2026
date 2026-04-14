@@ -140,6 +140,15 @@ export default function CamposBaseReserva({
         )}
 
       </div>
+      <Campo etiqueta="Observaciones">
+          <AreaTexto
+            value={formulario.observaciones || ""}
+            onChange={(e) => alCambiar({ observaciones: e.target.value })}
+            rows={3}
+            placeholder=""
+            disabled={!!soloLectura.observaciones}
+          />
+        </Campo>
     </div>
   );
 }
