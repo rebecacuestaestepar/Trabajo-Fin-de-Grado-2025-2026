@@ -1,7 +1,4 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 //import './App.css'
 
 import PlantillaApp from './general/layout/PlantillaApp.jsx';
@@ -20,6 +17,7 @@ import OcupacionAulas from './aulas/pages/OcupacionAulas.jsx';
 import OcupacionAulaCalendario from './aulas/pages/OcupacionAulaCalendario.jsx';
 import Examenes from './examenes/Examenes.jsx';
 import GestionReservas from './reservas/listado-paginas/GestionarReservas.jsx';
+import LoginPage from "./login/LoginPage.jsx";
 
 
 
@@ -29,6 +27,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LoginPage />} />
         <Route element={<PlantillaApp />}>
 
           <Route path="/reservas/gestion" element={<GestionReservas />} />
