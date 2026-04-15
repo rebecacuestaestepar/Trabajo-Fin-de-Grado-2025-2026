@@ -1,7 +1,9 @@
 from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .moodle_api import ClienteMoodle
 from django.conf import settings
+
+User = get_user_model()
 
 class BackendUniversidadMoodle(BaseBackend):
     def authenticate(self, request, username=None, password=None):

@@ -157,3 +157,8 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]

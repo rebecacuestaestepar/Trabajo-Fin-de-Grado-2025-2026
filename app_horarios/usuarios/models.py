@@ -5,9 +5,10 @@ from django.contrib.auth.models import AbstractUser
 class Usuario(AbstractUser):
 
     class Meta:
+        managed = False
         db_table = 'usuarios'
-        verbose_name = 'Usuario'
-        verbose_name_plural = 'Usuarios'
+        #verbose_name = 'Usuario'
+        #verbose_name_plural = 'Usuarios'
     
     def __str__(self):
         return self.username
