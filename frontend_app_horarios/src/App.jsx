@@ -36,7 +36,7 @@ function App() {
           <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
           <Route path="/reservas/puntuales/:id" element={<EditarReservas />} />
           <Route path="/cargar-calendario" element={<FormularioCargar />} />
-          <Route path="/reservas/todas" element={<TodasReservas />} />
+          {/* <Route path="/reservas/todas" element={<TodasReservas />} /> */}
           <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
 
           <Route path="/horarios" element={<Horarios />} />

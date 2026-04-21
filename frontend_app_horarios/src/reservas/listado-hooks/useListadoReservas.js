@@ -60,7 +60,7 @@ export function useListadoReservas({
 
       const estadoRow = item.estado;
       const estadoStr = String(estadoRow ?? "").trim().toUpperCase();
-      const esPendiente = estadoStr === estadoStr === "P";
+      const esPendiente = estadoStr === "P";
 
       if (soloPendientes && !esPendiente) return false;
 

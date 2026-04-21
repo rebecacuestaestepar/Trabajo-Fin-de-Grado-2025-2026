@@ -55,7 +55,7 @@ export default function GestionReservas() {
     // Verificamos si todas tienen estado Pendiente
     return itemsSeleccionados.every((r) => {
       const estadoStr = String(r.estado ?? r.estado_reserva ?? r.status ?? "").trim().toUpperCase();
-      return estadoStr === "P" || estadoStr === "PENDIENTE";
+      return estadoStr === "P";
     });
   }, [listado.idsSeleccionados, listado.reservas]);
 
