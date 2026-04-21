@@ -35,19 +35,26 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 
 \section{Catálogo de requisitos}
 
-En este apartado se detallan todos los requisitos que debe  satisfacer la aplicación desarrollada. Para ello se realiza la distinción entre los requisitos funcionales, que describen los servicios y comportamientos que se esperan que tenga la aplicación, y los requisitos no funcionales, que establecen las condiciones de calidad, rendimiento, seguridad y uso que deben cumplirse.
+En este apartado se detallan todos los requisitos que debe  satisfacer la aplicación desarrollada. Para ello se realiza la distinción entre los requisitos funcionales, que describen los servicios y comportamientos que se esperan que tenga la aplicación, y los requisitos no funcionales, que establecen las condiciones de calidad, rendimiento, seguridad y uso que deben cumplirse. Estos requisitos sirven como base para el diseño, implementación y validación del sistema.
 
 \subsection{Requisitos Funcionales}
 \begin{enumerate}
 	\item RF-01. Autenticación de usuarios.
-	\item RF-02. Consultar reservas.
+	\\La aplicación deberá permitir que los usuarios accedan al sistema mediante un mecanismo de autenticación basado en credenciales. El usuario deberá de introducir su usuario y contraseña de la universidad de Burgos para poder iniciar sesión en la aplicación y acceder a las funcionalidades disponibles. Una vez el usuario ha sido autenticado, el sistema identificará el rol asociado al usuario para determinar y restringir las acciones a las que puede y no puede acceder en función a sus permisos.
+	\item RF-02. Consultar reservas. 
+	\\La aplicación deberá permitir consultar todas las reservas registradas en el sistema, mostrando la información relevante de cada una de ellas. Entre estos datos se incluirán la fecha y hora de inicio y de fin de la reserva, el título que será el motivo de la reserva, el estado en el que se encuentra, el aula al que se encuentra asociada la reserva y los recursos que se han solicitado como la capacidad, el número de ordenadores,... Además el sistema nos permitirá filtrar estas reservas de manera que solo aparezcan las reservas pendientes o si queremos que aparezcan todas, o filtrar mediante rango de fechas, por motivo o por el correo del responsable de la reserva. De forma que permite a los usuarios autorizados a poder consultar las reservas de forma más rápida y directa.
 	\item RF-03. Gestionar reservas.
+	\\La aplicación deberá permitir la gestión de reservas de aulas, distinguiendo entre reservas puntuales y reservas periódicas. Las reservas puntuales podrán ser solicitadas por los usuarios autorizados que tendrán que rellenar un formulario para ello y asignando un aula, el usuario con permisos de edición, validará los campos de la reserva y modificará el aula asignado si lo cree conveniente. Las reservar periódicas, por el contrario, está dirigida a la organización de las clases impartidas por cada grado y tendrán prioridad sobre las reservas puntuales. Esta funcionalidad es el núcleo de la aplicación.
 	\begin{enumerate}
 		\item RF-03.1. Crear reserva.
+		\\El sistema deberá permitir la creación de reservas a través del formulario correspondiente para ello. Donde se recogerán las mismas características que en el formulario de la solicitud, y en este caso, permitirá también elegir el estado de la reserva por el usuario antes de crearla. La aplicación mostrará las aulas disponibles que estén libres para la fecha y hora introducida y con los recursos solicitados. Una vez creada la reserva, se registra y se actualizan de manera automática la ocupación del aula elegido.
 		\item RF-03.2. Editar reserva.
+		\\La aplicación deberá permitir la modificación de reservas ya existentes, si el usuario dispone de los permisos necesarios para ello. Se pueden modificar todos los campos incluido el estado de la reserva, la fecha y hora y el aula asignado a la reserva, entre otros campos. Antes de guardar los cambios, el sistema deberá de comprobar que los cambios realizados en la reserva no provoquen conflictos con otras reservas existentes o con la ocupación del aula. Si la modificación es correcta, se actualizarán los cambios de manera automática en el sistema.
 		\item RF-03.3. Eliminar reserva.
+		\\La aplicación deberá de permitir eliminar reservas existentes en el sistema, siempre que el usuario tenga los permisos adecuados para poder llevar a cabo esta acción. Al eliminar la reserva, el aula quedará  disponible para que pueda ser asignado en la fecha y horas correspondientes por otras futuras reservas. De forma que el sistema deberá garantizar que la eliminación de la reserva se refleja de manera correcta en la consulta de la ocupación. Esta operación deberá realizarse de forma controlada para evitar eliminaciones de manera accidental, incluyendo un mensaje de confirmación previo.
 	\end{enumerate}
 	\item RF-04. Generar informes.
+	
 	\begin{enumerate}
 		\item RF-04.1. Informe de horarios por grado.
 		\item RF-04.2. Informe de ocupación de aulas.
