@@ -34,7 +34,7 @@ export default function BarraListado({
                   : "!bg-white text-slate-800 ring-slate-200 hover:!bg-slate-50"
               }`}
           >
-            {soloPendientes ? "Ver Todas" : "Reservas Pendientes"}
+            {soloPendientes ? "Visualizar Todas" : "Reservas Pendientes"}
           </button>
 
           <label className="inline-flex items-center gap-2 text-sm text-slate-700">
@@ -47,7 +47,7 @@ export default function BarraListado({
               onChange={alAlternarSeleccionarTodoVisible}
               className="h-4 w-4 rounded border-slate-300"
             />
-            Seleccionar todas (vista actual)
+            <span>Seleccionar todas (vista actual)</span>
           </label>
 
           <span className="text-sm text-slate-600">
