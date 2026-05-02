@@ -239,7 +239,7 @@ class ReservasPendientesListAPIView(APIView):
         return Response(out.data)
 """
 class ReservasPendientesListAPIView(APIView):
-    PENDIENTES_ESTADOS = ("P",)  # si también quieres "S", pon ("P","S")
+    PENDIENTES_ESTADOS = ("P")
 
     def get(self, request):
         estados = request.query_params.getlist("estado")
@@ -333,11 +333,8 @@ class ReservaPendienteDetailAPIView(APIView):
         if "hora_fin" in data: reserva.hora_fin = data["hora_fin"]
         if "nombre_aula" in data: reserva.nombre_aula = data["nombre_aula"]
         if "fecha" in data:
-            # Si tu Reserva guarda FK a Dia, aquí tienes que convertir fecha -> Dia
-            # EJEMPLO (ajusta a tu modelo):
             dia = Dia.objects.get(dia=data["fecha"])
             reserva.id_dia = dia
-            #pass
         reserva.save()
         
         # Campos que están en ReservaPuntual
@@ -489,8 +486,7 @@ class ReservasTodasAPIView(APIView):
     def get(self, request):
         qs = (
             Reserva.objects
-            .select_related("id_dia")  # Dia
-            # reverse OneToOne; como en tus "choices" aparece reservapuntual, este nombre es correcto
+            .select_related("id_dia")  
             .select_related("reservapuntual", "reservapuntual__id_responsable")
             .order_by("-id_dia__dia", "-hora_inicio")
         )
@@ -510,7 +506,6 @@ class ReservasEliminarMasivoAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Ajusta el campo según tu modelo
         qs = Reserva.objects.filter(idreserva__in=ids)
         deleted_count = qs.count()
         qs.delete()

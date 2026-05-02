@@ -2,19 +2,17 @@ from rest_framework import serializers
 from reservas.models import Reserva
 
 class ReservaResumenSerializer(serializers.ModelSerializer):
-    # Si tu frontend usa estos nombres con _solicitados, los damos así:
     altavoces_solicitados = serializers.BooleanField(source="altavoces", read_only=True)
     proyector_solicitado = serializers.BooleanField(source="proyector", read_only=True)
     camara_solicitada = serializers.BooleanField(source="camara", read_only=True)
     enchufes_solicitados = serializers.BooleanField(source="enchufes", read_only=True)
 
-    # Si en tu modelo el campo se llama num_ordenadores:
     num_ordenadores_solicitados = serializers.IntegerField(source="num_ordenadores", read_only=True)
 
     class Meta:
         model = Reserva
         fields = [
-            "idreserva",          # o "id" si tu PK es id
+            "idreserva",          
             "motivo",
             "correo_responsable",
             "fecha",
@@ -22,9 +20,8 @@ class ReservaResumenSerializer(serializers.ModelSerializer):
             "hora_fin",
             "capacidad_solicitada",
             "nombre_aula",
-            "estado",             # ✅ MUY IMPORTANTE para “todas”
+            "estado",            
 
-            # flags “solicitados” para tu UI:
             "altavoces_solicitados",
             "proyector_solicitado",
             "camara_solicitada",
@@ -34,10 +31,8 @@ class ReservaResumenSerializer(serializers.ModelSerializer):
 
 
 class ReservaTodasSerializer(serializers.ModelSerializer):
-    # ✅ Fecha real (Dia.dia)
     fecha = serializers.DateField(source="id_dia.dia", read_only=True)
 
-    # ✅ Campos puntuales (si existe ReservaPuntual)
     motivo = serializers.SerializerMethodField()
     correo_responsable = serializers.SerializerMethodField()
     capacidad_solicitada = serializers.SerializerMethodField()
@@ -55,7 +50,7 @@ class ReservaTodasSerializer(serializers.ModelSerializer):
             "nombre_aula",
             "estado",
             "tipo",
-            "fecha",         # ✅ ahora sale como YYYY-MM-DD
+            "fecha",         
             "hora_inicio",
             "hora_fin",
 

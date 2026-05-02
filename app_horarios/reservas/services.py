@@ -30,7 +30,7 @@ def aulas_candidatas_por_requisitos(
     if proyector:
         qs = qs.filter(proyector=True)
     if camara:
-        qs = qs.filter(camara=True)  # OJO: en SQL es CAMARA (singular)
+        qs = qs.filter(camara=True) 
     if enchufes:
         qs = qs.filter(enchufes=True)
 
@@ -61,17 +61,14 @@ def aulas_disponibles_en_fecha_hora(
     )
 
     solape = Reserva.objects.filter(
-        nombre_aula=OuterRef("nombre"),  # Aula.NOMBRE -> modelo suele ser "nombre"
+        nombre_aula=OuterRef("nombre"),
         id_dia__dia=fecha,
         hora_inicio__lt=hora_fin,
         hora_fin__gt=hora_inicio,
     )
 
-    # Si tienes un estado "cancelada", filtra aquí para ignorarla.
-    # Ejemplo: solape = solape.exclude(estado='C')
+    # Ignoramos las reservas pendientes y rechazadas, que no bloquean el aula
     solape = solape.exclude(estado='R')
-
-    #PREGUNTAR PROFESORES
     solape = solape.exclude(estado='P')
 
     disponibles = candidatos.annotate(

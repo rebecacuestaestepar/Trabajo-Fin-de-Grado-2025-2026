@@ -248,7 +248,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                     aula_comun = nombre_aula_elegida
                 else:
                     # Si eligió una pero no sirve para todas, no abortamos:
-                    # pasamos al fallback "por fecha" (según lo que quieres)
+                    # pasamos a elegir por fecha
                     aula_comun = None
             else:
                 aula_comun = qs_comun.values_list("nombre", flat=True).first()
@@ -262,7 +262,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
             if aula_comun:
                 aula_final = aula_comun
             else:
-                # FALLBACK: elegir aula por fecha (como en no periódica)
+                # Elegir aula por fecha
                 qs_dia = aulas_disponibles_en_fecha_hora(
                     fecha=f,
                     hora_inicio=hora_inicio,
@@ -276,14 +276,9 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 )
 
                 if not qs_dia.exists():
-                    # Aquí tienes dos decisiones:
-                    # A) abortar todo (atomic) -> no se crea ninguna
-                    # B) saltar esa fecha -> se crean las otras
-                    # Como estás en @transaction.atomic, lo más coherente es A) abortar:
                     raise serializers.ValidationError({
                         "aulas": f"No hay aulas disponibles para la fecha {f.isoformat()} con esos requisitos."
                     })
-                 # 1) Si el frontend envía selección por fecha, la respetamos
                 if aulas_por_fecha:
                     aula_sel = (aulas_por_fecha.get(f.isoformat()) or "").strip()
                     if not aula_sel:
@@ -296,7 +291,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                         })
                     aula_final = aula_sel
 
-                #  2) Si NO hay selección por fecha, usamos tu comportamiento actual
                 elif nombre_aula_elegida and qs_dia.filter(nombre=nombre_aula_elegida).exists():
                     aula_final = nombre_aula_elegida
                 else:
