@@ -165,6 +165,7 @@ class Command(BaseCommand):
             # 2) Inserts desde Excel
             self.stdout.write("Insertando datos desde Excel…")
             for table in tables_in_excel:
+                self.stdout.write(f"  -> Procesando tabla/hoja: {table}")
                  # 1) Leer hoja
                 df = xl.parse(table)
                 df = df.replace({pd.NA: None})
@@ -194,10 +195,13 @@ class Command(BaseCommand):
                 sql = f"INSERT INTO {sql_ident(table)} ({cols_sql}) VALUES ({placeholders})"
 
                 #rows = [tuple(row[c] for c in excel_cols) for _, row in df.iterrows()]
-                rows = [
-                    tuple(to_db_value(row[c]) for c in excel_cols)
-                    for _, row in df.iterrows()
-                ]
+                #rows = [
+                #    tuple(to_db_value(row[c]) for c in excel_cols)
+                #    for _, row in df.iterrows()
+                #]
+                rows = []
+                for record in df.to_dict('records'):
+                    rows.append(tuple(to_db_value(record[c]) for c in excel_cols))
 
                 with connection.cursor() as cursor:
                     cursor.executemany(sql, rows)
