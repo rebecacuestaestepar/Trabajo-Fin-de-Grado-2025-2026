@@ -480,7 +480,7 @@ def extraer_practica_rotada90(ws, fila_actual, col_actual, mapa_merge, celdas_vi
     cond = False
     if tipo_d2 == "AULA":
         celdas_visitadas.add(celda_aula.coordinate)
-        cond, num_aulas, aulas = extraer_aulas_2(valor_d2)
+        cond, num_aulas, aulas = extraer_aulas(valor_d2)
         
         if celda_aula.coordinate in mapa_merge:
             salto_col = mapa_merge[celda_aula.coordinate]["col_fin"] + 1
@@ -680,5 +680,18 @@ def parsear_horario_excel(fichero):
         ws = wb.worksheets[i]
         clases_hoja = escanear_hoja(ws, diccionario_asignaturas)
         clases.extend(clases_hoja)
+    return clases
+
+
+def parsear_horario_excel_2(fichero):
+    wb = openpyxl.load_workbook(fichero, data_only=True)
+    diccionario_asignaturas = extraer_codigo_asignaturas(wb["ASIGNATURAS"])
+    clases = []
+    
+    for ws in wb.worksheets:
+        if ws.title.startswith(("G", "D_")):            
+            clases_hoja = escanear_hoja(ws, diccionario_asignaturas)
+            clases.extend(clases_hoja)
+            
     return clases
         
