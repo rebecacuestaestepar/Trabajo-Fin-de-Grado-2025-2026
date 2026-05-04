@@ -110,8 +110,8 @@ class ReservaPendienteListItemSerializer(serializers.ModelSerializer):
             "hora_inicio",
             "hora_fin",
             "capacidad_solicitada",
-            "num_ordenadores_solicitados",   # <- el front espera esto
-            "altavoces_solicitados",         # <- y esto
+            "num_ordenadores_solicitados",
+            "altavoces_solicitados",         
             "proyector_solicitado",
             "camara_solicitada",
             "enchufes_solicitados",
@@ -231,7 +231,6 @@ class ReservaDetalleSerializer(serializers.Serializer):
         
         puntual.save()
 
-        # Para permitir editar el correo responsable, sólo permitiría editarlo si existe el responable en la base de datos
         if "correo_responsable" in validated_data:
             correo = (validated_data["correo_responsable"] or "").strip()
             if correo:
@@ -242,7 +241,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
                 else:
                     raise serializers.ValidationError({"correo_responsable": "No existe un responsable con ese correo."})
 
-        # correo_responsable no lo permito editar aquí (si quieres, lo añadimos)
+        # Falta permitir editar el correo de responsable
         return instance
     
 class ReservaBulkIdsSerializer(serializers.Serializer):

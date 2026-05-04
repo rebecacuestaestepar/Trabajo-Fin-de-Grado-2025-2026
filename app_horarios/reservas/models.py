@@ -25,9 +25,7 @@ class Reserva(models.Model):
     def next_id(cls):
         ultimo = cls.objects.aggregate(max_id=models.Max('idreserva'))['max_id']
         if not ultimo:
-            # primer ID
             return 'R0001'
-        # suponiendo formato Rdddd
         numero = int(ultimo[1:]) + 1
         return f'R{numero:04d}'
 

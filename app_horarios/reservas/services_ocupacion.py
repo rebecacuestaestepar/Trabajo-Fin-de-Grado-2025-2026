@@ -48,20 +48,19 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
     # 1) Reservas puntuales
     # -------------------------
     if tipo in ("AMBAS", "PUNTUAL"):
-        # ReservaPuntual tiene inicio/fin (DateTimeField), perfecto para filtrar por rango
         qs_puntual = (
             ReservaPuntual.objects
             .select_related("id_reserva")
             .filter(id_reserva__nombre_aula=aula_nombre)
-            .filter(inicio__lt=end_dt, fin__gt=start_dt)  # solapa con el rango visible
-            .filter(id_reserva__estado__in=["A"])  # solo mostrar las reservas aceptadas
+            .filter(inicio__lt=end_dt, fin__gt=start_dt) 
+            .filter(id_reserva__estado__in=["A"])
             .order_by("inicio")
         )
 
         for rp in qs_puntual:
             r = rp.id_reserva
             eventos.append({
-                "id": str(r.idreserva),  # para navegar al detalle de la puntual
+                "id": str(r.idreserva),
                 "title": rp.motivo or f"Reserva puntual {r.idreserva}",
                 "start": _aware(rp.inicio).isoformat(),
                 "end": _aware(rp.fin).isoformat(),
@@ -76,7 +75,6 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
     # 2) Reservas periódicas (expansión)
     # -------------------------
     if tipo in ("AMBAS", "PERIODICA"):
-        # Periodicidad está en ReservaPeriodica, y el horario (hora_inicio/hora_fin) en Reserva
         qs_periodica = (
             ReservaPeriodica.objects
             .select_related("id_reserva", "id_asignatura")
@@ -104,7 +102,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
             if rango_ini >= rango_fin_excl:
                 continue
 
-            dia_semana = int(per.dia_semana)          # ISO: lunes=1 ... domingo=7
+            dia_semana = int(per.dia_semana)
             intervalo = int(per.intervalo_semanas) or 1
 
             for d in _iter_dias(rango_ini, rango_fin_excl):
@@ -123,7 +121,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
                 if ev_end <= start_dt or ev_start >= end_dt:
                     continue
 
-                # ID único por ocurrencia (serie + fecha). Útil para FullCalendar.
+                # ID único por ocurrencia (serie + fecha)
                 ocurrencia_id = f"{r.idreserva}-{d.isoformat()}"
 
                 # Título: asignatura
