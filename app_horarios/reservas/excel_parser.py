@@ -668,4 +668,17 @@ def escanear_hoja(ws, diccionario_cod):
         fila_actual += 1
     
     return clases_hoja
+
+
+def parsear_horario_excel(fichero):
+    wb = openpyxl.load_workbook(fichero, data_only=True)
+    diccionario_asignaturas = extraer_codigo_asignaturas(wb["ASIGNATURAS"])
+    clases = []
+    for i in range(6):
+        if i == 2 or i == 1:
+            continue
+        ws = wb.worksheets[i]
+        clases_hoja = escanear_hoja(ws, diccionario_asignaturas)
+        clases.extend(clases_hoja)
+    return clases
         
