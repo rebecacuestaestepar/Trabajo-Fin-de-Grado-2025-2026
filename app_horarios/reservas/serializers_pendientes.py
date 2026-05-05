@@ -27,7 +27,7 @@ class AulasDisponiblesInputSerializer(serializers.Serializer):
             raise serializers.ValidationError("hora_inicio debe ser menor que hora_fin.")
         return attrs
 
-    def get_queryset(self):
+    def get_queryset(self, excluir_reserva_id=None):
         v = self.validated_data
         return aulas_disponibles_en_fecha_hora(
             fecha=v["fecha"],
@@ -39,6 +39,7 @@ class AulasDisponiblesInputSerializer(serializers.Serializer):
             proyector=v.get("proyector", False),
             camara=v.get("camara", False),
             enchufes=v.get("enchufes", False),
+            excluir_reserva_id=excluir_reserva_id,
         )
 
 
@@ -182,7 +183,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
             "proyector": bool(get_attr(puntual, "proyector_solicitado", False)) if puntual else False,
             "camara": bool(get_attr(puntual, "camara_solicitada", False)) if puntual else False,
             "enchufes": bool(get_attr(puntual, "enchufes_solicitados", False)) if puntual else False,
-            "id_aula": instance.id_aula or "",
+            "id_aula": instance.id_aula_id if instance.id_aula_id else "",
             "nombre_aula": instance.id_aula.nombre if instance.id_aula else "",
             "estado": instance.estado,
         }
@@ -201,6 +202,9 @@ class ReservaDetalleSerializer(serializers.Serializer):
         for field in ["hora_inicio", "hora_fin", "id_aula"]:
             if field in validated_data:
                 setattr(instance, field, validated_data[field])
+
+        if "id_aula" in validated_data:
+            instance.id_aula_id = validated_data["id_aula"]
 
         instance.save()
 

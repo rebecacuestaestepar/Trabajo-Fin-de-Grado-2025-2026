@@ -50,6 +50,7 @@ function mapReservaAFormulario(r) {
     proyector: Boolean(r.proyector),
     camara: Boolean(cam),
     enchufes: Boolean(r.enchufes),
+    id_aula: r.id_aula ?? "",
     nombre_aula: r.nombre_aula ?? "",
     estado: r.estado ?? "",
   };
@@ -90,6 +91,16 @@ export function useEditarReserva(id, { onFinish } = {}) {
         const mapped = mapReservaAFormulario(data);
         setFormulario(mapped);
         setFormularioInicial(mapped);
+
+        if (mapped.id_aula && mapped.nombre_aula) {
+          setAulasDisponibles([
+            {
+              nombre: mapped.nombre_aula,
+              capacidad: mapped.capacidad_solicitada || "—",
+              num_ordenadores: mapped.num_ordenadores || "—",
+            },
+          ]);
+        }
       })
       .catch((e) => {
         console.error(e);
@@ -156,7 +167,13 @@ export function useEditarReserva(id, { onFinish } = {}) {
       setAulasDisponibles(arr);
 
       if (arr.length > 0 && !arr.some((a) => a.nombre === formulario.nombre_aula)) {
-        aplicarCambios({ nombre_aula: arr[0].nombre });
+        const aulaActualSigueDisponible = arr.some((a) => a.nombre === formulario.nombre_aula);
+        if (!aulaActualSigueDisponible) {
+          aplicarCambios({ 
+            id_aula: arr[0].id, 
+            nombre_aula: arr[0].nombre 
+          });
+        }
       }
 
       if (arr.length === 0) setMensaje("No hay aulas candidatas para esos criterios.");
@@ -189,6 +206,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
       proyector: formulario.proyector,
       camara: formulario.camara,
       enchufes: formulario.enchufes,
+      id_aula: formulario.id_aula,
       nombre_aula: formulario.nombre_aula,
     };
 

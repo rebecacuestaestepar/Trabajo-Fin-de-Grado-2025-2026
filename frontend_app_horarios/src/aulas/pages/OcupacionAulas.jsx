@@ -71,6 +71,7 @@ export default function OcupacionAulas() {
           {!cargando && !error && (
             <ul className="divide-y divide-slate-100 rounded-md border border-slate-200">
               {listaOrdenada.map((aula) => {
+                const id = String(aula?.id ?? "");
                 const nombre = String(aula?.nombre ?? "").trim();
                 if (!nombre) return null;
 
@@ -78,7 +79,8 @@ export default function OcupacionAulas() {
 
                 return (
                   <li
-                    key={nombre}
+                    key={id}
+                    //value={nombre}
                     className="flex items-center justify-between px-3 py-3 hover:bg-slate-50"
                   >
                     <label className="flex items-center gap-3 cursor-pointer select-none">

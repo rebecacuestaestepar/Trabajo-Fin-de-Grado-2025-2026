@@ -50,10 +50,17 @@ export default function SeccionSelectorAula({
             {aulasDisponibles.length > 0 ? (
               <Selector
                 value={aulaSeleccionada}
-                onChange={(e) => alSeleccionarAula(e.target.value)}
+                onChange={(e) => {
+                  const nombreSeleccionado = e.target.value;
+                  const aulaObjeto = aulasDisponibles.find((a) => a.nombre === nombreSeleccionado);
+                  if (aulaObjeto) {
+                    alSeleccionarAula(aulaObjeto.nombre);
+                  }
+                  //alSeleccionarAula(e.target.value)
+                }}
               >
                 {aulasDisponibles.map((a) => (
-                  <option key={a.nombre} value={a.nombre}>
+                  <option key={a.id || a.nombre} value={a.nombre}>
                     {a.nombre} — cap {a.capacidad} — pcs {a.num_ordenadores}
                   </option>
                 ))}

@@ -47,6 +47,7 @@ def aulas_disponibles_en_fecha_hora(
     proyector: bool,
     camara: bool,
     enchufes: bool,
+    excluir_reserva_id=None,
 ):
     """
     Devuelve aulas que cumplen requisitos y NO tienen reservas solapadas ese día.
@@ -70,6 +71,9 @@ def aulas_disponibles_en_fecha_hora(
     # Ignoramos las reservas pendientes y rechazadas, que no bloquean el aula
     solape = solape.exclude(estado='R')
     solape = solape.exclude(estado='P')
+
+    if excluir_reserva_id:
+        solape = solape.exclude(idreserva=excluir_reserva_id)
 
     disponibles = candidatos.annotate(
         tiene_solape=Exists(solape)

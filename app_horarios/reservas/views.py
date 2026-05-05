@@ -340,7 +340,7 @@ class ReservaPendienteDetailAPIView(APIView):
 
         if "hora_inicio" in data: reserva.hora_inicio = data["hora_inicio"]
         if "hora_fin" in data: reserva.hora_fin = data["hora_fin"]
-        if "id_aula" in data: reserva.id_aula = data["id_aula"]
+        if "id_aula" in data: reserva.id_aula_id = data["id_aula"]
         if "fecha" in data:
             dia = Dia.objects.get(dia=data["fecha"])
             reserva.id_dia = dia
@@ -377,11 +377,11 @@ class ReservaAulasCandidatasAPIView(APIView):
         ser = AulasDisponiblesInputSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
 
-        qs = ser.get_queryset()
+        qs = ser.get_queryset(excluir_reserva_id=id)
         candidatas = []
         for a in qs:
             candidatas.append({
-                "idreserva": a.pk,
+                "id": a.pk,
                 "nombre": a.nombre,
                 "capacidad": a.capacidad,
                 #"nombre": getattr(a, "nombre", str(a.pk)),
@@ -408,7 +408,6 @@ class ReservaAprobarAPIView(APIView):
             return Response({"detail": "Debe existir un aula asignada antes de aprobar."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Ajusta códigos si los tuyos son otros
         reserva.estado = "A"  # Aceptada
         reserva.save()
 
@@ -439,7 +438,7 @@ class ReservaAprobarMasivoAPIView(APIView):
 
         reservas = Reserva.objects.select_for_update().filter(pk__in=ids)
 
-        # Comprobación: existen todas
+        # Comprobación si existen todas las reservas
         if reservas.count() != len(set(ids)):
             return Response(
                 {"detail": "Alguna de las reservas no existe."},
@@ -453,7 +452,7 @@ class ReservaAprobarMasivoAPIView(APIView):
                     {"detail": f"La reserva {r.pk} no está en Pendiente."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            if not r.id_aula_aula:
+            if not r.id_aula:
                 return Response(
                     {"detail": f"La reserva {r.pk} no tiene aula asignada."},
                     status=status.HTTP_400_BAD_REQUEST,

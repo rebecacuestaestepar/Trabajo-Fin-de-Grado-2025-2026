@@ -244,7 +244,6 @@ export function useReservaPuntual(opciones = {}) {
       } else {
          data = await solicitarReservaPuntual(payload);
       }
-      //const data = await solicitarReservaPuntual(payload);
       setMensaje(data.message || "Reserva(s) creada(s) correctamente");
 
       setFormulario((prev) => ({

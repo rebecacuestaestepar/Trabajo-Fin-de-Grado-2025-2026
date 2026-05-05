@@ -63,7 +63,13 @@ export default function EditarReservas() {
             modo="simple"
             aulasDisponibles={editar.aulasDisponibles}
             aulaSeleccionada={editar.formulario.nombre_aula}
-            alSeleccionarAula={(nombre) => editar.aplicarCambios({ nombre_aula: nombre })}
+            //alSeleccionarAula={(nombre) => editar.aplicarCambios({ nombre_aula: nombre })}
+            alSeleccionarAula={(aulaElegida) => 
+              editar.aplicarCambios({ 
+                id_aula: editar.aulasDisponibles.find(a => a.nombre === aulaElegida)?.id || null,
+                nombre_aula: aulaElegida
+              })
+            }
             fechas={[]}
             aulasPorFecha={{}}
             seleccionPorFecha={{}}

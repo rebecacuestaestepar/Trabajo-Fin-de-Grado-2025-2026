@@ -31,7 +31,7 @@ def _iter_dias(inicio, fin_exclusivo):
         cur += timedelta(days=1)
 
 
-def obtener_eventos_ocupacion_aula(*, aula_id: str, start_dt: datetime, end_dt: datetime, tipo: str = "AMBAS"):
+def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_dt: datetime, tipo: str = "AMBAS"):
     """
     Devuelve eventos listos para FullCalendar:
 
@@ -50,8 +50,8 @@ def obtener_eventos_ocupacion_aula(*, aula_id: str, start_dt: datetime, end_dt: 
     if tipo in ("AMBAS", "PUNTUAL"):
         qs_puntual = (
             ReservaPuntual.objects
-            .select_related("id_reserva")
-            .filter(id_reserva__id_aula=aula_id)
+            .select_related("id_reserva", "id_reserva__id_aula")
+            .filter(id_reserva__id_aula__nombre=aula_nombre)
             .filter(inicio__lt=end_dt, fin__gt=start_dt) 
             .filter(id_reserva__estado__in=["A"])
             .order_by("inicio")
@@ -67,8 +67,8 @@ def obtener_eventos_ocupacion_aula(*, aula_id: str, start_dt: datetime, end_dt: 
                 "tipo": "PUNTUAL",
                 #"reserva_id": str(r.idreserva),
                 #"estado": r.estado,
-                "aula": r.id_aula,
-                "aula_nombre": getattr(r.id_aula, "nombre", ""),
+                #"aula": r.id_aula,
+                "aula": r.id_aula.nombre if r.id_aula else "",
                 #"capacidad_solicitada": rp.capacidad_solicitada,
             })
 
@@ -78,8 +78,8 @@ def obtener_eventos_ocupacion_aula(*, aula_id: str, start_dt: datetime, end_dt: 
     if tipo in ("AMBAS", "PERIODICA"):
         qs_periodica = (
             ReservaPeriodica.objects
-            .select_related("id_reserva", "id_asignatura")
-            .filter(id_reserva__id_aula=aula_id)
+            .select_related("id_reserva", "id_reserva__id_aula", "id_grupo")
+            .filter(id_reserva__id_aula__nombre=aula_nombre)
             #.filter(fecha_inicio__lt=end_dt.date(), fecha_fin__gt=start_dt.date())  # solapa con el rango visible
             .filter(id_reserva__estado__in=["A"])  # solo mostrar las reservas aceptadas
             .order_by("fecha_inicio", "dia_semana")
@@ -125,9 +125,19 @@ def obtener_eventos_ocupacion_aula(*, aula_id: str, start_dt: datetime, end_dt: 
                 # ID único por ocurrencia (serie + fecha)
                 ocurrencia_id = f"{r.idreserva}-{d.isoformat()}"
 
+                grupo = getattr(per, "id_grupo", None)
+
+                if grupo:
+                    asignatura_obj = getattr(grupo, "id_asignatura", None)
+                    asignatura_nombre = getattr(asignatura_obj, "nombre", None) or getattr(asignatura_obj, "id", None)
+                    nombre_grupo = getattr(grupo, "nombre", "")
+                    titulo = f"{asignatura_nombre} - {nombre_grupo}".strip() if asignatura_nombre else f"Grupo {nombre_grupo}"
+                else:
+                    titulo = f"Periódica {r.idreserva}"
+
                 # Título: asignatura
-                asignatura = getattr(per.id_asignatura, "nombre", None) or getattr(per.id_asignatura, "id", None)
-                titulo = f"{asignatura}" if asignatura else f"Periódica {r.idreserva}"
+                #asignatura = getattr(per.id_asignatura, "nombre", None) or getattr(per.id_asignatura, "id", None)
+                #titulo = f"{asignatura}" if asignatura else f"Periódica {r.idreserva}"
 
                 eventos.append({
                     "id": ocurrencia_id,
@@ -137,7 +147,7 @@ def obtener_eventos_ocupacion_aula(*, aula_id: str, start_dt: datetime, end_dt: 
                     "tipo": "PERIODICA",
                     "serie_id": str(r.idreserva),
                     #"estado": r.estado,
-                    "aula": r.id_aula,
+                    "aula": r.id_aula.nombre if r.id_aula else "",
                     "fecha": d.isoformat(),
                 })
 

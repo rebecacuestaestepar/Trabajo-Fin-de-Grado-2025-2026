@@ -33,7 +33,7 @@ class Reserva(models.Model):
 
 class ReservaPeriodica(models.Model):
     id_reserva = models.OneToOneField(Reserva, models.CASCADE, db_column='ID_RESERVA', primary_key=True)  # Field name made lowercase.
-    id_asignatura = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_ASIGNATURA', max_length=10)  # Field name made lowercase.
+    id_grupo = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_GRUPO', max_length=10)  # Field name made lowercase.
     dia_semana = models.SmallIntegerField(db_column='DIA_SEMANA')  # Field name made lowercase.
     fecha_inicio = models.DateField(db_column='FECHA_INICIO')  # Field name made lowercase.
     fecha_fin = models.DateField(db_column='FECHA_FIN')  # Field name made lowercase.
