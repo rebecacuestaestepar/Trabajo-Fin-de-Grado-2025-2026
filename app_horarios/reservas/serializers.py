@@ -27,13 +27,24 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
     fecha_inicio_periodo = serializers.DateField(required=False, allow_null=True)
     fecha_fin_periodo = serializers.DateField(required=False, allow_null=True)
     dia_semana_periodica = serializers.IntegerField(required=False, min_value=1, max_value=5)
-    nombre_aula = serializers.CharField(required=False, allow_blank=True)
+    id_aula = serializers.IntegerField(required=False, allow_null=True)
     aulas_por_fecha = serializers.DictField(child=serializers.CharField(allow_blank=True), required=False)
     observaciones = serializers.CharField(required=False, allow_blank=True, max_length=300)
+
+    estado = serializers.ChoiceField(choices=[('P', 'Pendiente'), ('A', 'Aceptada'), ('R', 'Rechazada')], default='P', required=False)
     
 
     @transaction.atomic
     def create(self, validated_data):
+
+        estado_elegido = validated_data.get("estado", "P")
+
+        es_solicitud = self.context.get('es_solicitud', False)
+        
+        if es_solicitud:
+            estado_final = 'P'
+        else:
+            estado_final = estado_elegido
 
         correo = validated_data['correo_responsable']
         nombre_responsable = validated_data.get('nombre_responsable', "").strip()
@@ -83,7 +94,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
         if num_ordenadores is None:
             num_ordenadores = 0
         
-        nombre_aula_elegida = validated_data.get("nombre_aula", "").strip() or None
+        id_aula_elegida = validated_data.get("id_aula", None)
         aulas_por_fecha = validated_data.get("aulas_por_fecha")
 
         # ===========================
@@ -126,20 +137,20 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                     "aulas": "No hay aulas disponibles que cumplan las condiciones para esa fecha y hora."
                 })
 
-            if nombre_aula_elegida:
-                if not qs.filter(nombre=nombre_aula_elegida).exists():
+            if id_aula_elegida:
+                if not qs.filter(id=id_aula_elegida).exists():
                     raise serializers.ValidationError({
-                        "nombre_aula": "El aula seleccionada no cumple requisitos o no está disponible."
+                        "id_aula": "El aula seleccionada no cumple requisitos o no está disponible."
                     })
-                aula_final = nombre_aula_elegida
+                aula_final = id_aula_elegida
             else:
-                aula_final = qs.values_list("nombre", flat=True).first()
+                aula_final = qs.values_list("id", flat=True).first()
 
             reserva = Reserva.objects.create(
                 idreserva=Reserva.next_id(),
-                nombre_aula=aula_final,   
+                id_aula_id=aula_final,   
                 id_dia=dia,
-                estado='P',
+                estado=estado_final,
                 tipo='P',
                 hora_inicio=hora_inicio,
                 hora_fin=hora_fin,
@@ -243,15 +254,15 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
         if qs_comun.exists():
             # Si el usuario eligió una, intentamos esa primero
-            if nombre_aula_elegida:
-                if qs_comun.filter(nombre=nombre_aula_elegida).exists():
-                    aula_comun = nombre_aula_elegida
+            if id_aula_elegida:
+                if qs_comun.filter(id=id_aula_elegida).exists():
+                    aula_comun = id_aula_elegida
                 else:
                     # Si eligió una pero no sirve para todas, no abortamos:
                     # pasamos a elegir por fecha
                     aula_comun = None
             else:
-                aula_comun = qs_comun.values_list("nombre", flat=True).first()
+                aula_comun = qs_comun.values_list("id", flat=True).first()
 
         # 3) Crear reservas
         ultimo_reserva_puntual = None
@@ -291,19 +302,19 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                         })
                     aula_final = aula_sel
 
-                elif nombre_aula_elegida and qs_dia.filter(nombre=nombre_aula_elegida).exists():
-                    aula_final = nombre_aula_elegida
+                elif id_aula_elegida and qs_dia.filter(id=id_aula_elegida).exists():
+                    aula_final = id_aula_elegida
                 else:
-                    aula_final = qs_dia.values_list("nombre", flat=True).first()
+                    aula_final = qs_dia.values_list("id", flat=True).first()
             
             inicio_dt = datetime.combine(f, hora_inicio)
             fin_dt = datetime.combine(f, hora_fin)
 
             reserva = Reserva.objects.create(
                 idreserva=Reserva.next_id(),
-                nombre_aula=aula_final,
+                id_aula_id=aula_final,
                 id_dia=dia_obj,
-                estado="P",
+                estado=estado_final,
                 tipo="P",
                 hora_inicio=hora_inicio,
                 hora_fin=hora_fin,

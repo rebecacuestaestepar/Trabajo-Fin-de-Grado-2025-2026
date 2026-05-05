@@ -90,7 +90,8 @@ class ReservaPendienteListItemSerializer(serializers.ModelSerializer):
     fecha = serializers.DateField(source="id_reserva.id_dia.dia", read_only=True)
     hora_inicio = serializers.TimeField(source="id_reserva.hora_inicio", read_only=True)
     hora_fin = serializers.TimeField(source="id_reserva.hora_fin", read_only=True)
-    nombre_aula = serializers.CharField(source="id_reserva.nombre_aula", read_only=True)
+    id_aula = serializers.CharField(source="id_reserva.id_aula", read_only=True)
+    nombre_aula = serializers.CharField(source="id_reserva.id_aula.nombre", read_only=True)
     estado = serializers.CharField(source="id_reserva.estado", read_only=True)
 
     correo_responsable = serializers.EmailField(
@@ -115,6 +116,7 @@ class ReservaPendienteListItemSerializer(serializers.ModelSerializer):
             "proyector_solicitado",
             "camara_solicitada",
             "enchufes_solicitados",
+            "id_aula",
             "nombre_aula",
             "estado",
         ]
@@ -138,7 +140,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
     camara = serializers.BooleanField(required=False, default=False)
     enchufes = serializers.BooleanField(required=False, default=False)
 
-    nombre_aula = serializers.CharField(required=False, allow_blank=True)
+    id_aula = serializers.IntegerField(required=False, allow_null=False)
 
     estado = serializers.CharField(read_only=True)
 
@@ -162,7 +164,6 @@ class ReservaDetalleSerializer(serializers.Serializer):
         if puntual:
             motivo = getattr(puntual, "motivo", "") or ""
 
-        # Campos de recursos: si NO existen en el modelo Reserva, devolvemos None/False
         def get_attr(obj, name, default):
             return getattr(obj, name, default)
 
@@ -181,7 +182,8 @@ class ReservaDetalleSerializer(serializers.Serializer):
             "proyector": bool(get_attr(puntual, "proyector_solicitado", False)) if puntual else False,
             "camara": bool(get_attr(puntual, "camara_solicitada", False)) if puntual else False,
             "enchufes": bool(get_attr(puntual, "enchufes_solicitados", False)) if puntual else False,
-            "nombre_aula": instance.nombre_aula or "",
+            "id_aula": instance.id_aula or "",
+            "nombre_aula": instance.id_aula.nombre if instance.id_aula else "",
             "estado": instance.estado,
         }
 
@@ -196,7 +198,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
             instance.id_dia = dia
 
         # Campos de Reserva
-        for field in ["hora_inicio", "hora_fin", "nombre_aula"]:
+        for field in ["hora_inicio", "hora_fin", "id_aula"]:
             if field in validated_data:
                 setattr(instance, field, validated_data[field])
 

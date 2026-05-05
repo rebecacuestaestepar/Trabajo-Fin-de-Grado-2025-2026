@@ -24,7 +24,18 @@ from reservas.services import aulas_disponibles_en_fecha_hora, aula_disponible_e
 """
 class SolicitarReservaPuntualAPIView(APIView):
     def post(self, request):
-        serializer = ReservaPuntualCreateSerializer(data=request.data)
+        serializer = ReservaPuntualCreateSerializer(data=request.data, context={"es_solicitud": True})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Reserva puntual creada correctamente"},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class CrearReservaPuntualAPIView(APIView):
+    def post(self, request):
+        serializer = ReservaPuntualCreateSerializer(data=request.data, context={"es_solicitud": False})
         if serializer.is_valid():
             reserva_puntual = serializer.save()
             return Response(
@@ -323,21 +334,18 @@ class ReservaPendienteDetailAPIView(APIView):
         if not reserva:
             return Response({"detail": "Reserva no encontrada"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Validamos lo que llega (parcial)
         serializer = ReservaDetalleSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
-        # 1) Campos que están en Reserva
         if "hora_inicio" in data: reserva.hora_inicio = data["hora_inicio"]
         if "hora_fin" in data: reserva.hora_fin = data["hora_fin"]
-        if "nombre_aula" in data: reserva.nombre_aula = data["nombre_aula"]
+        if "id_aula" in data: reserva.id_aula = data["id_aula"]
         if "fecha" in data:
             dia = Dia.objects.get(dia=data["fecha"])
             reserva.id_dia = dia
         reserva.save()
         
-        # Campos que están en ReservaPuntual
         reserva_puntual = ReservaPuntual.objects.filter(id_reserva=reserva).first()
         if not reserva_puntual:
             return Response({"detail": "ReservaPuntual asociada no encontrada"}, status=status.HTTP_404_NOT_FOUND)
@@ -355,7 +363,7 @@ class ReservaPendienteDetailAPIView(APIView):
         return Response({"message": "Reserva actualizada correctamente"}, status=status.HTTP_200_OK)
     
     def delete(self, request, id):
-        reserva = get_object_or_404(Reserva, idreserva=id)  # si es PK distinto, ajusta
+        reserva = get_object_or_404(Reserva, idreserva=id) 
         reserva.delete()
         return Response({"message": "Reserva eliminada"}, status=status.HTTP_200_OK)
 
@@ -395,7 +403,8 @@ class ReservaAprobarAPIView(APIView):
             return Response({"detail": "La reserva no está en Pendiente."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        if not (reserva.nombre_aula and reserva.nombre_aula.strip()):
+        #if not (reserva.id_aula and reserva.id_aula.strip()):
+        if not reserva.id_aula:
             return Response({"detail": "Debe existir un aula asignada antes de aprobar."},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -444,7 +453,7 @@ class ReservaAprobarMasivoAPIView(APIView):
                     {"detail": f"La reserva {r.pk} no está en Pendiente."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            if not (r.nombre_aula and r.nombre_aula.strip()):
+            if not r.id_aula_aula:
                 return Response(
                     {"detail": f"La reserva {r.pk} no tiene aula asignada."},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -486,7 +495,7 @@ class ReservasTodasAPIView(APIView):
     def get(self, request):
         qs = (
             Reserva.objects
-            .select_related("id_dia")  
+            .select_related("id_dia", "id_aula")  
             .select_related("reservapuntual", "reservapuntual__id_responsable")
             .order_by("-id_dia__dia", "-hora_inicio")
         )

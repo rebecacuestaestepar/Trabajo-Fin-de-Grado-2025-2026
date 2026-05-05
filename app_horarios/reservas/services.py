@@ -61,7 +61,7 @@ def aulas_disponibles_en_fecha_hora(
     )
 
     solape = Reserva.objects.filter(
-        nombre_aula=OuterRef("nombre"),
+        id_aula=OuterRef("id"),
         id_dia__dia=fecha,
         hora_inicio__lt=hora_fin,
         hora_fin__gt=hora_inicio,
@@ -106,7 +106,7 @@ def aula_disponible_en_varias_fechas2(
 
     for f in fechas:
         solape = Reserva.objects.filter(
-            nombre_aula=OuterRef("nombre"),
+            id_aula=OuterRef("id"),
             id_dia__dia=f,
             hora_inicio__lt=hora_fin,
             hora_fin__gt=hora_inicio,
@@ -141,10 +141,10 @@ def aula_disponible_en_varias_fechas(
         enchufes=enchufes,
     )
 
-    candidatas_nombres = set(candidatas_qs.values_list("nombre", flat=True))
+    candidatas_ids = set(candidatas_qs.values_list("id", flat=True))
 
     # 2) Intersección con disponibles por cada fecha
-    comunes = candidatas_nombres.copy()
+    comunes = candidatas_ids.copy()
 
     for f in fechas:
         qs_dia = aulas_disponibles_en_fecha_hora(
@@ -158,11 +158,11 @@ def aula_disponible_en_varias_fechas(
             camara=camara,
             enchufes=enchufes,
         )
-        disponibles_nombres = set(qs_dia.values_list("nombre", flat=True))
-        comunes &= disponibles_nombres
+        disponibles_ids = set(qs_dia.values_list("id", flat=True))
+        comunes &= disponibles_ids
 
         if not comunes:
             break
 
     # 3) Devolvemos queryset de Aula ordenado
-    return Aula.objects.filter(nombre__in=comunes).order_by("nombre")
+    return Aula.objects.filter(id__in=comunes).order_by("nombre")

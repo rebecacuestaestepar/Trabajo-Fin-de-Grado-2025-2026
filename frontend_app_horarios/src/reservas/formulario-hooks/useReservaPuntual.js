@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { buscarAulasDisponibles, solicitarReservaPuntual } from "../../api/reservas";
+import { buscarAulasDisponibles, solicitarReservaPuntual, crearReservaPuntual } from "../../api/reservas";
 import { calcularFechasPeriodicas } from "../formulario-utiles/fechasPeriodicas";
 
 export function useReservaPuntual() {
@@ -221,6 +221,7 @@ export function useReservaPuntual() {
       camara: formulario.camara,
       enchufes: formulario.enchufes,
       generar_periodica: formulario.generar_periodica,
+      estado: formulario.estado || "P",
     };
 
     if (!formulario.generar_periodica) {
@@ -235,6 +236,8 @@ export function useReservaPuntual() {
     }
 
     try {
+
+      
       const data = await solicitarReservaPuntual(payload);
       setMensaje(data.message || "Reserva(s) creada(s) correctamente");
 

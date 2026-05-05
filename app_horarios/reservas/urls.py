@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import (
+    CrearReservaPuntualAPIView,
     SolicitarReservaPuntualAPIView,
     AulasDisponiblesAPIView,
     ReservasPendientesListAPIView,
@@ -19,6 +20,7 @@ urlpatterns = [
          #name='solicitar-reserva-puntual'),
     path("aulas/disponibles/", AulasDisponiblesAPIView.as_view()),
     path("reservas/solicitar/", SolicitarReservaPuntualAPIView.as_view()),
+    path("reservas/crear/", CrearReservaPuntualAPIView.as_view()),
 
     path("reservas/pendientes/", ReservasPendientesListAPIView.as_view()),
     path("reservas/aprobar-masivo/", ReservaAprobarMasivoAPIView.as_view()),

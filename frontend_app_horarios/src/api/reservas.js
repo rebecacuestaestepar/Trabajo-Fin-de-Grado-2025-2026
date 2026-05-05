@@ -19,6 +19,13 @@ export function solicitarReservaPuntual(payload) {
     });
 }
 
+export function crearReservaPuntual(payload) {
+    return apiRequest("/reservas/crear/", {
+        method : "POST",
+        body: payload,
+    });
+}
+
 // ------------------------------------------------
 // --- PÁGINA DE GESTIÓN DE RESERVAS PENDIENTES ---
 // ------------------------------------------------

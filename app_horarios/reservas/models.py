@@ -1,5 +1,6 @@
 from django.db import models
 
+from aulas.models import Aula
 from calendario.models import Dia
 from docencia.models import Asignaturas
 from django.utils import timezone
@@ -9,7 +10,7 @@ from django.utils import timezone
 
 class Reserva(models.Model):
     idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=12)  # Field name made lowercase.
-    nombre_aula = models.CharField(db_column='NOMBRE_AULA', max_length=20)  # Field name made lowercase.
+    id_aula = models.ForeignKey(Aula, models.CASCADE, db_column='ID_AULA')  # Field name made lowercase.
     id_dia = models.ForeignKey(Dia, models.CASCADE, db_column='ID_DIA')  # Field name made lowercase.
     estado = models.CharField(db_column='ESTADO', max_length=1, blank=True, null=True)  # Field name made lowercase.
     tipo = models.CharField(db_column='TIPO', max_length=1, blank=True, null=True)  # Field name made lowercase.

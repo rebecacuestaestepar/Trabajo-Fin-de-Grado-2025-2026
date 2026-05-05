@@ -8,6 +8,7 @@ class ReservaResumenSerializer(serializers.ModelSerializer):
     enchufes_solicitados = serializers.BooleanField(source="enchufes", read_only=True)
 
     num_ordenadores_solicitados = serializers.IntegerField(source="num_ordenadores", read_only=True)
+    nombre_aula = serializers.CharField(source="id_aula.nombre", read_only=True)
 
     class Meta:
         model = Reserva
@@ -43,11 +44,13 @@ class ReservaTodasSerializer(serializers.ModelSerializer):
     camara_solicitada = serializers.SerializerMethodField()
     enchufes_solicitados = serializers.SerializerMethodField()
 
+    id_aula = serializers.CharField(source="id_aula_id", read_only=True)
+    nombre_aula = serializers.CharField(source="id_aula.nombre", read_only=True)
+
     class Meta:
         model = Reserva
         fields = [
             "idreserva",
-            "nombre_aula",
             "estado",
             "tipo",
             "fecha",         
@@ -63,6 +66,8 @@ class ReservaTodasSerializer(serializers.ModelSerializer):
             "proyector_solicitado",
             "camara_solicitada",
             "enchufes_solicitados",
+            "id_aula",
+            "nombre_aula",
         ]
 
     def _puntual(self, obj):

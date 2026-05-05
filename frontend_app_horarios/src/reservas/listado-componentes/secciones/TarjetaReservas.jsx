@@ -53,6 +53,8 @@ export default function TarjetaReserva({
   const estadoStr = String(estadoRaw ?? "").trim().toUpperCase();
   const esPendiente = estadoStr === "P" || estadoStr === "PENDIENTE";
 
+  console.log(reserva);
+
   return (
     <li
       className={`group rounded-2xl bg-white p-5 shadow-sm ring-1 transition hover:shadow-md

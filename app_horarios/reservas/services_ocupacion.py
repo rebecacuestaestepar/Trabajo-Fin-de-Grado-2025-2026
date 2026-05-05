@@ -31,7 +31,7 @@ def _iter_dias(inicio, fin_exclusivo):
         cur += timedelta(days=1)
 
 
-def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_dt: datetime, tipo: str = "AMBAS"):
+def obtener_eventos_ocupacion_aula(*, aula_id: str, start_dt: datetime, end_dt: datetime, tipo: str = "AMBAS"):
     """
     Devuelve eventos listos para FullCalendar:
 
@@ -51,7 +51,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
         qs_puntual = (
             ReservaPuntual.objects
             .select_related("id_reserva")
-            .filter(id_reserva__nombre_aula=aula_nombre)
+            .filter(id_reserva__id_aula=aula_id)
             .filter(inicio__lt=end_dt, fin__gt=start_dt) 
             .filter(id_reserva__estado__in=["A"])
             .order_by("inicio")
@@ -67,7 +67,8 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
                 "tipo": "PUNTUAL",
                 #"reserva_id": str(r.idreserva),
                 #"estado": r.estado,
-                "aula": r.nombre_aula,
+                "aula": r.id_aula,
+                "aula_nombre": getattr(r.id_aula, "nombre", ""),
                 #"capacidad_solicitada": rp.capacidad_solicitada,
             })
 
@@ -78,7 +79,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
         qs_periodica = (
             ReservaPeriodica.objects
             .select_related("id_reserva", "id_asignatura")
-            .filter(id_reserva__nombre_aula=aula_nombre)
+            .filter(id_reserva__id_aula=aula_id)
             #.filter(fecha_inicio__lt=end_dt.date(), fecha_fin__gt=start_dt.date())  # solapa con el rango visible
             .filter(id_reserva__estado__in=["A"])  # solo mostrar las reservas aceptadas
             .order_by("fecha_inicio", "dia_semana")
@@ -136,7 +137,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
                     "tipo": "PERIODICA",
                     "serie_id": str(r.idreserva),
                     #"estado": r.estado,
-                    "aula": r.nombre_aula,
+                    "aula": r.id_aula,
                     "fecha": d.isoformat(),
                 })
 
