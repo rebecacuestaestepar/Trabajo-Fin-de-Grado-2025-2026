@@ -16,7 +16,7 @@ import SeccionPeriodicidad from "../formulario-componentes/secciones/SeccionPeri
 import { useReservaPuntual } from "../formulario-hooks/useReservaPuntual";
 
 export default function CrearReserva() {
-  const reserva = useReservaPuntual();
+  const reserva = useReservaPuntual({ esCreacion: true });
   
   useEffect(() => {
     if (reserva.formulario.estado === undefined) {
@@ -83,7 +83,7 @@ export default function CrearReserva() {
             permitirManualSiVacio={false}
           />
 
-          <AccionesReserva variante="crear" deshabilitado={!reserva.puedeEnviar} />
+          <AccionesReserva variante="crear" deshabilitado={!reserva.puedeEnviar} alGuardar={reserva.enviarFormulario} />
 
           <CajaExito>{reserva.mensaje}</CajaExito>
           <CajaError errores={reserva.errores} />

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { buscarAulasDisponibles, solicitarReservaPuntual, crearReservaPuntual } from "../../api/reservas";
 import { calcularFechasPeriodicas } from "../formulario-utiles/fechasPeriodicas";
 
-export function useReservaPuntual() {
+export function useReservaPuntual(opciones = {}) {
   const [formulario, setFormulario] = useState({
     fecha: "",
     hora_inicio: "",
@@ -13,6 +13,7 @@ export function useReservaPuntual() {
     nombre_responsable: "",
     apellidos_responsable: "",
     num_ordenadores: "",
+    estado: opciones.esCreacion ? "A" : "P",
     altavoces: false,
     proyector: false,
     camara: false,
@@ -237,8 +238,13 @@ export function useReservaPuntual() {
 
     try {
 
-      
-      const data = await solicitarReservaPuntual(payload);
+      let data;
+      if (opciones.esCreacion) {
+        data = await crearReservaPuntual(payload);
+      } else {
+         data = await solicitarReservaPuntual(payload);
+      }
+      //const data = await solicitarReservaPuntual(payload);
       setMensaje(data.message || "Reserva(s) creada(s) correctamente");
 
       setFormulario((prev) => ({
