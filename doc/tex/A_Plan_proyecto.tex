@@ -425,12 +425,12 @@ Duración: 3 semanas
 		
 		\item\bloque{Gráfico}
 		El gráfico \textit{burndown chart} se puede ver en la siguiente figura~\ref{fig:burndown-sprint19}
-		\imagen{img/Sprint 19.png}{Gráfico de los commits realizados durante el Sprint 18}{fig:burndown-sprint19}
+		\imagen{img/Sprint 19.png}{Gráfico de los commits realizados durante el Sprint 19}{fig:burndown-sprint19}
 	\end{itemize}
 \end{Sprint}
 
-\begin{Sprint}{20}{22/04/2026-29/04/2026}
-	Duración: 1 semana
+\begin{Sprint}{20}{22/04/2026-06/05/2026}
+	Duración: 2 semana
 	\begin{itemize}	
 		\item\bloque{Objetivos}
 		Durante la reunión de planificación de este sprint se propusieron los siguientes objetivos:
@@ -449,12 +449,38 @@ Duración: 3 semanas
 			\item Investigar para comenzar a hacer tests y cobertura del back.
 		\end{enumerate}
 		\item\bloque{Revisión del Sprint}
+		Durante la revisión de este sprint, se han comentado las dudas que han ido surgiendo a lo largo del srpint. Y se ha visto cómo se han cargado todos los aulas y asignaturas en base de datos, esta también ha sido modificada con lo cambios que vimos en la reunión anterior. Se ha pasado todo el código del analizador a django a falta de modificar alguna cosa que se ha determinado durante la reunión. Ha faltado la corrección de la memoria, ya que en cuanto a documentación lo que se ha avanzado han sido los requisitos funcionales que se han terminado y falta de documentar algún requisito no funcional. Además, se ha comentado el flujo de la carga de un excel de horarios para implementar en el siguiente sprint.
+		
+		
+		\item\bloque{Gráfico}
+		El gráfico \textit{burndown chart} se puede ver en la siguiente figura~\ref{fig:burndown-sprint19}
+		\imagen{img/Sprint 20.png}{Gráfico de los commits realizados durante el Sprint 20}{fig:burndown-sprint20}
+	\end{itemize}
+\end{Sprint}
+
+\begin{Sprint}{21}{06/05/2026-13/05/2026}
+	Duración: 1 semana
+	\begin{itemize}	
+		\item\bloque{Objetivos}
+		Durante la reunión de planificación de este sprint se propusieron los siguientes objetivos:
+		\begin{enumerate}
+			\item Modificar las aulas en base de datos con la nomenclatura determinada en la reunión.
+			\item Hacer flujo de carga del excel de horarios si existe el curso académico al que quiere asociarse.
+			\item Quitar el atributo de capacidad máxima de la tabla grupo.
+			\item En el Excel terminar de unificar las asignaturas, y hacer una hoja con el listado de grados del que quiere extraerse la información.
+			\item Modificar entidad-relación haciendo una ISA de los grupo, ya que solamente añaden id de aulas a los grupos teóricos.
+			\item Hacer que en la carga de datos a la base de datos, si no encuentra un grupo lo cree.
+			\item Dividir cada tipo de estructura de la clase en funciones.
+			\item Hacer vista de calendario con los diferentes colores.
+			\item Corregir memoria, y avanzar apartado de aspectos relevantes y de conceptos teóricos. Y terminar de documentar los requisitos no funcionales.
+			\item Añadir la excepción al parser de los grupos teóricos.
+		\end{enumerate}
+		\item\bloque{Revisión del Sprint}
 		
 		
 		\item\bloque{Gráfico}
 	\end{itemize}
 \end{Sprint}
-
 
 
 \section{Estudio de viabilidad}
