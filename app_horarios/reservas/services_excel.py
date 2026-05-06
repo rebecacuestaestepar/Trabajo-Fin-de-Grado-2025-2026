@@ -30,6 +30,7 @@ def generar_reservas_periodicas(clases, fecha_inicio_sem, fecha_fin_sem):
             dia_num = DIAS_SEMANA.get(clase.dia, 1)
 
             reserva = Reserva.objects.create(
+                idreserva=Reserva.next_id(),
                 id_aula=aula_objeto,
                 id_dia=dia_num,
                 estado='A',
@@ -47,4 +48,3 @@ def generar_reservas_periodicas(clases, fecha_inicio_sem, fecha_fin_sem):
                 intervalo_semanas=1
             )
             num_reservas_creadas += 1
-            

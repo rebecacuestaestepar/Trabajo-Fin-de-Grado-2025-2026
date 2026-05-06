@@ -156,6 +156,8 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 hora_fin=hora_fin,
             )
 
+            reserva.refresh_from_db()
+
             inicio = datetime.combine(fecha, hora_inicio)
             fin = datetime.combine(fecha, hora_fin)
 

@@ -23,12 +23,14 @@ class Reserva(models.Model):
         db_table = 'reserva'
 
     @classmethod
+    
     def next_id(cls):
         ultimo = cls.objects.aggregate(max_id=models.Max('idreserva'))['max_id']
         if not ultimo:
             return 'R0001'
         numero = int(ultimo[1:]) + 1
         return f'R{numero:04d}'
+
 
 
 class ReservaPeriodica(models.Model):

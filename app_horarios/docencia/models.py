@@ -52,9 +52,10 @@ class Grupo(models.Model):
 
 
 class Imparte(models.Model):
-    codigo_docente = models.ForeignKey(Docente, models.CASCADE, db_column='CODIGO_DOCENTE', max_length=9)  # Field name made lowercase.
-    id_asignatura = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_ASIGNATURA', max_length=10)  # Field name made lowercase.
+    codigo_docente = models.ForeignKey(Docente, models.CASCADE, db_column='CODIGO_DOCENTE')  # Field name made lowercase.
+    id_asignatura = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_ASIGNATURA')  # Field name made lowercase.
 
     class Meta:
+        managed = False
         db_table = 'imparte'
         unique_together = (('codigo_docente', 'id_asignatura'),)
