@@ -6,3 +6,9 @@ export function cargarHorarioExcel(payload) {
         body: payload,
     });
 }
+
+export function obtenerCursos() {
+    return apiRequest("/docencia/cursos/", {
+        method: "GET",
+    });
+}

@@ -8,7 +8,7 @@ import SolicitudReservas from './reservas/formulario-paginas/SolicitudReservas.j
 import FormularioCargar from './calendario/FormularioCargar.jsx';
 //import SolicitudesPendientes from './reservas/SolicitudesPendientes.jsx';
 import SolicitudesPendientes from './reservas/listado-paginas/SolicitudesPendientes.jsx';
-import TodasReservas from './reservas/listado-paginas/TodasReservas.jsx';
+//import TodasReservas from './reservas/listado-paginas/TodasReservas.jsx';
 import EditarReservas from './reservas/formulario-paginas/EditarReservas.jsx';
 import CrearReserva from './reservas/formulario-paginas/CrearReserva.jsx';
 
@@ -18,6 +18,7 @@ import OcupacionAulaCalendario from './aulas/pages/OcupacionAulaCalendario.jsx';
 import Examenes from './examenes/Examenes.jsx';
 import GestionReservas from './reservas/listado-paginas/GestionarReservas.jsx';
 import LoginPage from "./login/LoginPage.jsx";
+import ListaCursos from "./horarios/pages/ListaCursos.jsx";
 
 
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
 
           <Route path="/horarios" element={<Horarios />} />
+          <Route path="/horarios/cargar/cursos" element={<ListaCursos />} />
           <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
           <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
           <Route path="/examenes" element={<Examenes />} />
