@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
+from app_horarios.calendario.models import Curso
 from reservas.excel_parser import parsear_horario_excel
 from reservas.services_excel import generar_reservas_periodicas
 
@@ -12,7 +13,7 @@ class CargarHorarioExcelView(APIView):
 
     def post(self, request, *args, **kwargs):
         fichero = request.FILES.get('fichero')
-        curso = request.data.get('curso')
+        curso = request.data.get('id_curso')
 
         if not fichero:
             return Response({'error': 'No se ha proporcionado ningún fichero'}, status=400)
@@ -28,3 +29,8 @@ class CargarHorarioExcelView(APIView):
             return Response({'message': 'Horario cargado y reservas generadas correctamente'}, status=200)
         except Exception as e:
             return Response({'error': str(e)}, status=500)
+
+class ObtenerCursosView(APIView):
+    def get(self, request, *args, **kwargs):
+        cursos = Curso.objects.all().values('idcurso')
+        return Response(cursos, status=200)
