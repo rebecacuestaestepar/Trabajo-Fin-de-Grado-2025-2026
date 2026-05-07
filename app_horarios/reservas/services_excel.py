@@ -25,7 +25,10 @@ def generar_reservas_periodicas(clases, fecha_inicio_sem, fecha_fin_sem):
             grupo_objeto = Grupo.objects.filter(id_asignatura=clase.cod_asig, nombre = clase.grupo).first()
 
             if not grupo_objeto:
-                continue
+                grupo_objeto = Grupo.objects.create(
+                    id_asignatura=clase.cod_asig,
+                    nombre=clase.grupo
+                )
 
             dia_num = DIAS_SEMANA.get(clase.dia, 1)
 

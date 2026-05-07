@@ -41,7 +41,7 @@ class Docente(models.Model):
         db_table = 'docente'
 
 class Grupo(models.Model):
-    grupoid = models.CharField(db_column='GRUPOID', primary_key=True, max_length=10)  # Field name made lowercase.
+    grupoid = models.AutoField(db_column='GRUPOID', primary_key=True)  # Field name made lowercase.
     nombre = models.CharField(db_column='NOMBRE', max_length=3, blank=True, null=True)  # Field name made lowercase.
     id_asignatura = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_ASIGNATURA', max_length=10)  # Field name made lowercase.
     id_aula = models.ForeignKey('aulas.Aula', models.CASCADE, db_column='ID_AULA', blank=True, null=True)  # Field name made lowercase.
