@@ -630,8 +630,11 @@ def extraer_clases(ws, tabla, mapa_merge, asignaturas):
                     color_rgb = celda.fill.start_color.rgb
 
                     print("")
+
+                    if color_tema in [2,7,9] and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 90:
+                        siguiente_col = extraer_clase_rotada90(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
                     
-                    if color_tema in [2,7,9] and tipo == "ABREV_ASIG" and coord in mapa_merge:
+                    elif color_tema in [2,7,9] and tipo == "ABREV_ASIG" and coord in mapa_merge:
                         siguiente_col = extraer_teoricas(ws, tramo["fila_inicio"], tramo["fila_fin"], col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
                             
                     elif (color_tema in [6,8] or color_rgb == "FFF1FA78") and tipo == "GRUPO_PRACTICO":
