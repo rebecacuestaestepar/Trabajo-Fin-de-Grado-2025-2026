@@ -60,10 +60,23 @@ export default function OcupacionAulas() {
       </p>
 
       <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+          <button
+            type="button"
+            onClick={verOcupacion}
+            disabled={totalSeleccionadas === 0}
+            className={[
+              "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm",
+              "bg-[#7a1e1e] hover:bg-[#651818]",
+              "disabled:cursor-not-allowed disabled:opacity-50",
+              "mt-4",
+            ].join(" ")}
+          >
+            Ver ocupación ({totalSeleccionadas})
+          </button>
 
         </div>
-
+        
         <div className="mt-4">
           {cargando && <div className="text-sm text-slate-600">Cargando aulas…</div>}
           {error && <div className="text-sm text-rose-700">Error: {error}</div>}
@@ -104,19 +117,7 @@ export default function OcupacionAulas() {
             </ul>
           )}
         </div>
-        <button
-            type="button"
-            onClick={verOcupacion}
-            disabled={totalSeleccionadas === 0}
-            className={[
-              "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm",
-              "bg-[#7a1e1e] hover:bg-[#651818]",
-              "disabled:cursor-not-allowed disabled:opacity-50",
-              "mt-4",
-            ].join(" ")}
-          >
-            Ver ocupación ({totalSeleccionadas})
-          </button>
+        
       </div>
     </div>
   );
