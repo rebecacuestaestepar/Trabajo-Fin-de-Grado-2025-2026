@@ -718,16 +718,4 @@ def parsear_horario_excel(fichero):
         clases.extend(clases_hoja)
     return clases
 
-
-def parsear_horario_excel_2(fichero):
-    wb = openpyxl.load_workbook(fichero, data_only=True)
-    diccionario_asignaturas = extraer_codigo_asignaturas(wb["ASIGNATURAS"])
-    clases = []
-    
-    for ws in wb.worksheets:
-        if ws.title.startswith(("G", "D_")):            
-            clases_hoja = escanear_hoja(ws, diccionario_asignaturas)
-            clases.extend(clases_hoja)
-            
-    return clases
         

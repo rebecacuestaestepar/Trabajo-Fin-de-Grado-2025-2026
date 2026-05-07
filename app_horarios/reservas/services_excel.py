@@ -2,12 +2,13 @@ from limpiar_nombres_aulas import limpiar_nombre_aula
 from excel_parser import DIAS_SEMANA
 from aulas.models import Aula
 from reservas.models import Reserva, ReservaPeriodica
-from docencia.models import Grupo
+from docencia.models import Grupo, Asignaturas
+from calendario.models import Curso, Semestre
 from django.db import transaction
 
 import uuid
 
-def generar_reservas_periodicas(clases, fecha_inicio_sem, fecha_fin_sem):
+def generar_reservas_periodicas(clases, curso):
 
     with transaction.atomic():
 
@@ -29,6 +30,23 @@ def generar_reservas_periodicas(clases, fecha_inicio_sem, fecha_fin_sem):
                     id_asignatura=clase.cod_asig,
                     nombre=clase.grupo
                 )
+            
+            curso = Curso.objects.filter(id=curso).first()
+
+            fecha_inicio_sem_1 = Semestre.objects.filter(curso=curso, numero=1).first().fecha_inicio
+            fecha_inicio_sem_2 = Semestre.objects.filter(curso=curso, numero=2).first().fecha_inicio
+            fecha_fin_sem_1 = Semestre.objects.filter(curso=curso, numero=1).first().fecha_fin
+            fecha_fin_sem_2 = Semestre.objects.filter(curso=curso, numero=2).first().fecha_fin
+
+            semestre_academico = Asignaturas.objects.filter(id=clase.cod_asig).first().semestre_academico
+
+            result = semestre_academico % 2
+            if result == 1:
+                fecha_inicio_sem = fecha_inicio_sem_1
+                fecha_fin_sem = fecha_fin_sem_1
+            else:
+                fecha_inicio_sem = fecha_inicio_sem_2
+                fecha_fin_sem = fecha_fin_sem_2
 
             dia_num = DIAS_SEMANA.get(clase.dia, 1)
 
