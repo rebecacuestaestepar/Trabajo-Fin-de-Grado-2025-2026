@@ -669,15 +669,27 @@ def escanear_hoja(ws, diccionario_cod):
     
     return clases_hoja
 
+def extraer_hojas_analizar(ws):
+    fila_inicio = 2
+    hojas = []
+    col=1
+
+    while fila_inicio <= ws.max_row:
+        celda = ws.cell(row=fila_inicio, column=col)
+        if celda.value == None:
+            break
+        hojas.append(celda.value)
+        fila_inicio += 1
+    return hojas
+
 
 def parsear_horario_excel(fichero):
     wb = openpyxl.load_workbook(fichero, data_only=True)
     diccionario_asignaturas = extraer_codigo_asignaturas(wb["ASIGNATURAS"])
+    hojas_recorrer = extraer_hojas_analizar(wb.worksheets[-1])
     clases = []
-    for i in range(6):
-        if i == 2 or i == 1:
-            continue
-        ws = wb.worksheets[i]
+    for hoja in hojas_recorrer:
+        ws = wb[hoja]
         clases_hoja = escanear_hoja(ws, diccionario_asignaturas)
         clases.extend(clases_hoja)
     return clases
