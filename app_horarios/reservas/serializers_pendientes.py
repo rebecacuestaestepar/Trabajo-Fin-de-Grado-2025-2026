@@ -143,7 +143,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
 
     id_aula = serializers.IntegerField(required=False, allow_null=False)
 
-    estado = serializers.CharField(read_only=True)
+    estado = serializers.CharField(required=False)
 
     def validate(self, attrs):
         hi = attrs.get("hora_inicio")

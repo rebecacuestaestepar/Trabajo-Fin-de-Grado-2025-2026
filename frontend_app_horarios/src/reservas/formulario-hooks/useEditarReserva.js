@@ -70,7 +70,9 @@ export function useEditarReserva(id, { onFinish } = {}) {
   const [errores, setErrores] = useState(null);
 
   const [confirmacionAbierta, setConfirmacionAbierta] = useState(false);
-  const [tipoConfirmacion, setTipoConfirmacion] = useState(null); 
+  const [tipoConfirmacion, setTipoConfirmacion] = useState(null);
+
+  const [recursosBuscados, setRecursosBuscados] = useState(null);
 
   const aplicarCambios = (parcial) =>
     setFormulario((prev) => ({ ...prev, ...parcial }));
@@ -91,6 +93,18 @@ export function useEditarReserva(id, { onFinish } = {}) {
         const mapped = mapReservaAFormulario(data);
         setFormulario(mapped);
         setFormularioInicial(mapped);
+
+        setRecursosBuscados({
+          fecha: mapped.fecha,
+          hora_inicio: mapped.hora_inicio,
+          hora_fin: mapped.hora_fin,
+          capacidad_solicitada: mapped.capacidad_solicitada,
+          num_ordenadores: mapped.num_ordenadores,
+          altavoces: mapped.altavoces,
+          proyector: mapped.proyector,
+          camara: mapped.camara,
+          enchufes: mapped.enchufes,
+        });
 
         if (mapped.id_aula && mapped.nombre_aula) {
           setAulasDisponibles([
@@ -127,14 +141,30 @@ export function useEditarReserva(id, { onFinish } = {}) {
     );
   }, [formulario.fecha, formulario.hora_inicio, formulario.hora_fin, formulario.capacidad_solicitada]);
 
+  const recursosModificados = useMemo(() => {
+    if (!recursosBuscados) return false;
+    return (
+      formulario.fecha !== recursosBuscados.fecha ||
+      formulario.hora_inicio !== recursosBuscados.hora_inicio ||
+      formulario.hora_fin !== recursosBuscados.hora_fin ||
+      formulario.capacidad_solicitada !== recursosBuscados.capacidad_solicitada ||
+      formulario.num_ordenadores !== recursosBuscados.num_ordenadores ||
+      formulario.altavoces !== recursosBuscados.altavoces ||
+      formulario.proyector !== recursosBuscados.proyector ||
+      formulario.camara !== recursosBuscados.camara ||
+      formulario.enchufes !== recursosBuscados.enchufes
+    );
+  }, [formulario, recursosBuscados]);
+
   const puedeGuardar = useMemo(() => {
     return (
       !!formulario.fecha &&
       !!formulario.hora_inicio &&
       !!formulario.hora_fin &&
-      String(formulario.capacidad_solicitada).trim() !== ""
+      String(formulario.capacidad_solicitada).trim() !== "" &&
+      !recursosModificados
     );
-  }, [formulario.fecha, formulario.hora_inicio, formulario.hora_fin, formulario.capacidad_solicitada]);
+  }, [formulario.fecha, formulario.hora_inicio, formulario.hora_fin, formulario.capacidad_solicitada, recursosModificados]);
 
   const hayCambios = useMemo(() => {
     return !igualdadSuperficial(formulario, formularioInicial);
@@ -165,6 +195,18 @@ export function useEditarReserva(id, { onFinish } = {}) {
       const arr = Array.isArray(lista) ? lista : [];
 
       setAulasDisponibles(arr);
+
+      setRecursosBuscados({
+        fecha: formulario.fecha,
+        hora_inicio: formulario.hora_inicio,
+        hora_fin: formulario.hora_fin,
+        capacidad_solicitada: formulario.capacidad_solicitada,
+        num_ordenadores: formulario.num_ordenadores,
+        altavoces: formulario.altavoces,
+        proyector: formulario.proyector,
+        camara: formulario.camara,
+        enchufes: formulario.enchufes,
+      });
 
       if (arr.length > 0 && !arr.some((a) => a.nombre === formulario.nombre_aula)) {
         const aulaActualSigueDisponible = arr.some((a) => a.nombre === formulario.nombre_aula);
@@ -208,6 +250,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
       enchufes: formulario.enchufes,
       id_aula: formulario.id_aula,
       nombre_aula: formulario.nombre_aula,
+      estado: formulario.estado,
     };
 
     try {
@@ -273,6 +316,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
     buscandoAulas,
     puedeBuscarAulas,
     buscarAulas,
+    recursosModificados,
 
     puedeGuardar,
     hayCambios,

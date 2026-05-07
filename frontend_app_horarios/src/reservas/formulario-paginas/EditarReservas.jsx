@@ -76,6 +76,13 @@ export default function EditarReservas() {
             alSeleccionarPorFecha={() => {}}
           />
 
+          {editar.recursosModificados && (
+            <div className="text-sm text-amber-700 bg-amber-50 p-3 rounded-md border border-amber-200">
+              Han sido modificados recursos del aula o fechas, para poder guardar necesita volver a validar
+              los aulas disponibles y seleccionar nuevamente el aula.
+            </div>
+          )}
+
           <AccionesReserva
             variante="editar"
             alGuardar={editar.guardar}

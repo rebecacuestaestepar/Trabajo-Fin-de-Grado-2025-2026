@@ -344,7 +344,10 @@ class ReservaPendienteDetailAPIView(APIView):
         if "fecha" in data:
             dia = Dia.objects.get(dia=data["fecha"])
             reserva.id_dia = dia
+        if "estado" in data: reserva.estado = data["estado"]
         reserva.save()
+
+        
         
         reserva_puntual = ReservaPuntual.objects.filter(id_reserva=reserva).first()
         if not reserva_puntual:
