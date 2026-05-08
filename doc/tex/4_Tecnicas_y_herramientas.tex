@@ -1,11 +1,20 @@
 \capitulo{4}{Técnicas y herramientas}
 
-\section{Lenguajes y entornos de programación}
-Para la realización de este proyecto, se ha decidido utilizar python como lenguaje de programación, por su gran utilidad en la actualidad, la importancia que está tomando en el mundo de la programación y su gran demanda en el mundo laboral. Con lo que puede ser interesante para profundizar más en su funcionamiento y mejorar y conocer más a fondo este lenguaje de programación, ampliando los conocimientos del mismo que se adquirieron en las asignaturas de Sistemas Inteligentes y Algoritmia.
+En este apartado se van a explicar las decisiones tomadas a lo largo del desarrollo del proyecto, en cuanto las herramientas y técnicas elegidas y utilizadas en este. También se va a exponer en el caso de que se hayan valorado más opciones el porqué de decidirse por la herramienta finalmente elegida frente a la otra opción. 
 
-Además, como entorno en el que se va a realizar todo el proyecto, tanto la parte del backend como la del frontend, va a ser Visual Studio Code, por ser principalmente un editor de código gratuito, por su alto rendimiento y por tener soporte para múltiples lenguajes de programación, permitiendo así tanto el desarrollo web como el backend, además de que permite una amplia personalización del entorno mediante diferentes extensiones.
+\section{Lenguajes y entornos de programación}
+Para la realización de este proyecto, se ha decidido utilizar python como lenguaje de programación, por su gran popularidad en la actualidad, la importancia que está tomando en el mundo de la programación y su gran demanda en el mundo laboral. Con lo que puede ser interesante para profundizar más en su funcionamiento y mejorar y conocer más a fondo este lenguaje de programación, ampliando los conocimientos del mismo que se adquirieron en las asignaturas de Sistemas Inteligentes y Algoritmia.
+
+Además, el entorno de desarrollo en el que se va a realizar todo el proyecto, tanto la parte del backend como la del frontend, va a ser Visual Studio Code, por ser principalmente un editor de código gratuito, por su alto rendimiento y por tener soporte para múltiples lenguajes de programación. Permitiendo así tanto el desarrollo web como el backend, además de que permite una amplia personalización del entorno mediante diferentes extensiones.
 
 \section{Base de datos y despliegue}
+
+\section{Base de datos y despliegue}
+
+En esta sección se exponen las herramientas elegidas para soportar el funcionamiento de la aplicación, tanto a nivel de almacenamiento de datos como de despliegue de la aplicación. Asimismo, se justifican las elecciones realizadas en función de la compatibilidad con el framework empleado y de las necesidades de mantenimiento del sistema.
+
+\subsection{Sistema gestor de base de datos: MySQL} 
+
 \subsection{Sistema gestor de base de datos: MySQL}
 
 La aplicación requiere de una base de datos para almacenar y consultar toda la información relacionada horarios, reservas, y aulas. Para llevarlo a cabo se ha elegido MySQL como Sistema Gestor de Base de Datos (SGBD), por su apmlio uso y por tener compatibilidad directa con Django mediante su backend. Además, Django documenta soporte oficial para MySQL a partir de versiones modernas.
@@ -14,16 +23,19 @@ Con lo que he elegido MySQL ya que a nivel de mantenimiento permite un control i
 
 \subsection{Servidor y entorno de ejecución: Apache}
 Se han valorado dos alternativas: Apache y XAMPP.
-
 XAMMP es un paquete que tiene todo en uno, es decir, te proporciona en el mismo programa el sistema gestor de base de datos y el servidor web, incluyendo Apache y MariaDB. Sin embargo, XAMPP distribuye versiones concretas de sus componentes, lo que limitaba el desfase/obsolescencia? del proyecto ya que las nuevas versiones de Django requieren versiones del sistema gestor de base de datos más actualizadas para poder tener compatibilidad. Por lo que, haber escogido XAMPP como opción, hubiese tenido que instalar versiones de Django anteriores, lo que aceleraría el proceso de desfase de la aplicación.
 
 Por la razón anterior, y la independencia que da descargar por separado el sistema gestor de base de datos y el servidor web, se ha decidido instalar Apache.
 
 
 
+
 \section{Frameworks}
+
+En este apartado se recogen las decisiones tecnológicas relacionadas con los \textit{frameworks} empleados en el proyecto, tanto para el \textit{backend} como para el \textit{frontend}. Su selección no solo responde a criterios técnicos, sino también a la necesidad de contar con una solución mantenible, flexible y alineada con el tipo de aplicación web que se pretende desarrollar.
+
 \subsection{Backend: Django (Django REST Framework)}
-Una vez seleccionado Python como lenguaje principal del proyecto, se decidió utilizar Django como \textit{framework} de desarrollo para el \textit{backend}. La elección fue tomada principalmente por la necesidad de una arquitectura modular, mantenible y escalable, ya que el sistema debía organizarse en componentes independientes (por ejemplo, gestión de horarios, gestión de aulas, reservas, calendario, etc.) con responsabilidades bien delimitadas, y por ser un proyecto basado en el desarrollo de una aplicación web.
+Una vez seleccionado Python como lenguaje principal del proyecto, se decidió utilizar Django como \textit{framework} de desarrollo para el \textit{backend}. La elección fue tomada principalmente por la necesidad de una arquitectura modular, mantenible y escalable, se tuvo en cuenta que el sistema debía organizarse en componentes independientes (por ejemplo, gestión de horarios, gestión de aulas, reservas, calendario, etc.) con responsabilidades bien delimitadas, y por ser un proyecto basado en el desarrollo de una aplicación web.
 
 Django favorece este enfoque mediante su organización basada en aplicaciones, permitiendo dividir el proyecto en módulos reutilizables e independientes, con el fin de dividir la lógica del proyecto, facilitando el crecimiento del mismo y reduciendo el acoplamiento entre distintas funcionalidades.
 
@@ -47,22 +59,22 @@ Esta elección se debe a que  DRF proporciona componentes esenciales para este t
 
 \subsection{Frontend: React + Vite}
 
-Para llevar a cabo el desarrollo del frontend, se tuvieron en cuenta dos opciones: React y Angular.
+Para llevar a cabo el desarrollo del frontend, se tuvieron en cuenta dos opciones: \textit{React} y \textit{Angular}.
 
-Aunque verdaderamente React se define como una librería para construir interfaces de usuarios, basada en componentes, permitiendo reutilizar piezas y separar de manera clara las funcionalidades de la interfaz. Además, nos permite una mayor flexibilidad de cara a la estructura del proyecto, permitiendo seleccionar únicamente las dependencias necesarias. Por otro lado, tenemos Angular un framework que es más cerrado, con decisiones y herramientas integradas, teniendo una mayor carga inicial y la adaptación a la forma de trabajo es menos flexible.
+Aunque verdaderamente \textit{React} se define como una librería para construir interfaces de usuarios, basada en componentes, permitiendo reutilizar piezas y separar de manera clara las funcionalidades de la interfaz. Además, nos permite una mayor flexibilidad de cara a la estructura del proyecto, permitiendo seleccionar únicamente las dependencias necesarias. Por otro lado, tenemos \textit{Angular} un framework que es más cerrado, con decisiones y herramientas integradas, teniendo una mayor carga inicial y la adaptación a la forma de trabajo es menos flexible.
 
-Con lo que finalmente elegí utilizar React, porque me pareció importante la característica de la flexibilidad. 
-Una vez seleccionado React, investigué un poco más a fondo y encontré dos formas de iniciarlo en el proyecto: Create React App y Vite + React. Tras buscar información relativa a ambas opciones, finalmente elegía la opción que contiene Vite.
+Con lo que finalmente elegí utilizar \textit{React}, porque me pareció importante la característica de la flexibilidad. 
+Una vez seleccionado \textit{React}, investigué en profundidad y encontré dos formas de iniciarlo en el proyecto: \textit{Create React App} y \textit{Vite + React}. Tras buscar información relativa a ambas opciones, finalmente elegía la opción que contiene Vite.
 
 Y es que Vite es una alternativa más moderna, de hecho el propio equipo de React no recomienda actualmente su utilización debido a limitaciones, y recomienda utilizar herramientas integradas, como es el caso de la escogida.
 
-Esta herramienta destaca por el hecho de que proporciona un entorno de desarrollo ligero y rápido al contar con un servidor de desarrollo optimizado y capacidades como la recarga en caliente (HMR - Hot Module Replacement) que es instantáneo sin importar lo grande que sea la app, lo que mejora el flujo de trabajo durante la implementación. Además, Vite utiliza Rollup que es muy rápido en eliminar el código muerto que no usas, resultando en una aplicación final más ligera mejorando las métricas de rendimiento web.
+Esta herramienta destaca por el hecho de que proporciona un entorno de desarrollo ligero y rápido al contar con un servidor de desarrollo optimizado y capacidades como la recarga en caliente (HMR - Hot Module Replacement) que es instantáneo sin importar lo grande que sea la app, lo que mejora el flujo de trabajo durante la implementación. Además, \textit{Vite} utiliza Rollup que es muy rápido en eliminar el código muerto que no usas, resultando en una aplicación final más ligera mejorando las métricas de rendimiento web.
 
 \subsection{CSS: Tailwind}
 
-Para la estética del frontend valoré las dos siguientes alternativas: Tailwind CSS y Bootstrap.
+Para la estética del frontend valoré dos alternativas: \textit{Tailwind CSS} y \textit{Bootstrap}.
 
-Tras analizar la documentación sobre ambos \textit{frameworks}: Bootstrap permite crear interfaces de forma más rápida debido a que cuenta con un catálogo de componentes predefinidos (botones, formularios,...), pero debido a esta característica en muchas ocasiones las aplicaciones que hacen uso de este framework utilizando su configuración por defecto tienen una estética muy parecida. Se puede personalizar pero requiere estar sobrescribiendo.
+Tras analizar la documentación sobre ambos \textit{frameworks}: \textit{Bootstrap} permite crear interfaces de forma más rápida debido a que cuenta con un catálogo de componentes predefinidos (botones, formularios,...), pero debido a esta característica en muchas ocasiones las aplicaciones que hacen uso de este framework utilizando su configuración por defecto tienen una estética muy parecida. Se puede personalizar pero requiere estar sobrescribiendo.
 Por otro lado, tenemos que Tailwind CSS es \textit{utility-first}, es decir, se basa en clases atómicas que se combinan para construir diseños a medida. Este enfoque permite una mayor flexibilidad y no depende de estilos prestablecidos, además encaja con el desarrollo por componentes del frontend. Por todos estos motivos, fue por los que elegí este framework para los estilos del proyecto.
 
 \section{Bibliotecas}
