@@ -5,3 +5,56 @@ Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalle
 Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
 Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
 Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+
+En esta sección de la memoria se busca resumir y resaltar aspectos teóricos y prácticos sobre la implementación y decisiones relevantes del proyecto.
+
+\subsection{Analizador léxico}
+Durante el desarrollo del proyecto, se decidió realizar un analizador léxico para la carga de los horarios de los grados en el sistema, los cuales se encuentran ahora mismo en una hoja de cálculo. Esta decisión fue tomada debido a que para poder modificar la franja horario en la que se imparte una clase tiene que estar cargada en base de datos, y habría que cargar de manera manual las reservas en el sistema. Lo que no es viable ya que con la extracción de los datos del excel, el número de clases o reservas extraídas supera las 1000 reservas periódicas.
+
+Para comenzar se analizó en profundidad que presentaban las clases teóricas y prácticas de la hoja de cálculo que se utiliza actualmente para la gestión de los horarios. Tras el análisis se figuró que las clases teóricas podían ser encontradas con tres estructuras diferentes, y las clases prácticas con otras tres estructuras, con una estructura de ellas común entre los dos tipos de clases. También se observó que las clases teóricas tenían un color y las prácticas otro a nivel general incluyendo las clases en inglés del grado de Organización Industrial. También se analizaron los datos que era importante extraer para poder realizar las cargas en base de datos de las reservas periódicas, entre los que se encuentran, la asignatura, su código (identificador de la asignatura en base de datos), el grupo, el aula, el día de la semana y la franja horaria en la que se imparte la clase. 
+
+Durante el desarrollo de este parser, se detectó que la hoja de cálculo inicial presentaba una estructura poco homogénea. Aunque a nivel general, sí que seguía una estructura, se encontraron datos introducidos sin mecanismos de validación consistentes, y en ocasiones sin un criterio uniforme. Por consecuencia, se realizó una fase de depuración, normalización y unificación de la información, que supuso una cantidad de tiempo considerable a lo largo del desarrollo para que pudiera ser integrada de manera correcta en el sistema.
+Para poder comprender el tiempo invertido cabe destacar que los valores cargados en los horarios se introducían o modificaban a través de validadores de datos, en este caso listas o desplegables. Con lo que cada vez que se modificaba el valor de uno de estos datos en la hoja correspondiente, había que ir a las hojas de los horarios respectivas en las que se encontraba el dato y volver a seleccionarlo para que se actualizada, esto para cada una de las celdas que contenía ese dato.
+
+Entre los problemas de unificación encontrados están los siguientes:
+
+\begin{enumerate}
+	\item \textbf{Inconsistencia en el formato de colores.} Aunque visualmente había colores que podían parecer similares, la tonalidad o código era distinto para representar una misma categoría. El grupo teórico de inglés tenía el mismo color designado que el grupo teórico para el segundo grupo de teoría.
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Se decidió qué color y tonalidad iba a tener cada categoría encontrada, y 
+	\end{itemize}
+	\item \textbf{Introducción manual de datos.} Se encontraron datos que en vez de haber sido añadidos mediante el validador se habían introducido a mano en la celda, en vez de ser añadidos en la lista de celdas de la que el validador extraía los datos.
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Se analizó y detectó que datos habían sido introducidos de manera manual, se añadió su valor a la lista del validador, y se eligió mediante este.
+	\end{itemize}
+	\item \textbf{Inconsistencia en la nomenclatura de los laboratorios.} Para referirse a los laboratorios, se utilizaban diferentes abreviaturas (Lab., Lab, Lb., L.). La última de estas abreviaturas provocaba que alguna asignatura la identificase como aula por acabar con l. Por ejemplo, APL. BASES DE DATOS (Aplicación de base de datos).
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Se unificó la abreviatura a Lab. o Lab para todos los laboratorios. Y posteriormente, se tuvo que actualizar en cada celda en la que se encontraba uno de los laboratorios modificados. 
+	\end{itemize}
+	\item \textbf{Inconsistencia en la separación de aulas combinadas.} Las combinaciones de aulas eran separadas por diferentes caracteres especiales (',', '/', '-')
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Se unificó el separador de las aulas a '\textit{/}' en el validador, y se actualizó en cada celda que aparecía la combinación de todos los horarios para que se aplicaran los cambios.
+	\end{itemize}
+	\item \textbf{Inconsistencia en las abreviaturas de las asignaturas.} Se encontró que las abreviaturas de las asignaturas no eran homogéneas. La misma asignatura podía encontrarse en el mismo horario con tilde y sin ella, o directamente la abreviatura fuese totalmente diferente. Por ejemplo, se podía encontrar: AMP. CALC., AMP. CÁLCULO o AMP. CALCULO
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Unificar la abreviatura de las asignaturas en la hoja de Asignaturas, e ir actualizando en el horario del grado y semestre correspondiente.
+	\end{itemize}
+	\item \textbf{Valores con fuente blanca.} Se encontraron celdas en las que el fondo era blanco y la fuente también, es decir, estos valores existían pero no se veían.
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Se detectaron que valores se imprimían que no entraban dentro de las estructuras predefinidas con colores, y se puso el color de la fuente a negro y se eliminaron los valores.
+	\end{itemize}
+	\item \textbf{Filas ocultas.} Se encontraron filas ocultas que estaban dando error porque no tenían los nombre unificados, y tras tiempo analizando bien la situación resultó que no se veían y estaban ocultas.
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Se expandieron todas las filas en las que se producía salto y no eran contiguas, y se eliminaron.
+	\end{itemize}
+	\item \textbf{Clases sin aula asignada.} Algunas clases no tienen definida el aula por no conocerse si finalmente van a ser impartidas o no, corresponden a asignaturas optativas. Pero para poder realizar la reserva, es obligatorio introducir un aula.
+	\begin{itemize}
+		\item \textbf{Solución aplicada:} Se implementó en las distintas estructuras del analizador léxico que si no se encontraba un valor de tipo Aula en la celda correspondiente se le iba a asignar el valor Aula 0. Y en base de datos se añadió un Aula 0 que no existe, solamente es provisional para poder realizar la reserva.
+	\end{itemize}
+\end{enumerate}
+
+
+Tras terminar la fase preparación y unificación de la hoja de cálculo, y finalizar de forma correcta la implementación del parser, para poder cargar las reservas en base de datos, hubo que cargar previamente todas las asignaturas y aulas con sus respectivos campos en base de datos.
+
+
+
