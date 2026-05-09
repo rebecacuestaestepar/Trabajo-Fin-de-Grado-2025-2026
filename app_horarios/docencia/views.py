@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from app_horarios.calendario.models import Curso
+from calendario.models import Curso
 from reservas.excel_parser import parsear_horario_excel
 from reservas.services_excel import generar_reservas_periodicas
 
