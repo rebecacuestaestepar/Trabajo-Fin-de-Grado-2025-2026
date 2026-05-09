@@ -19,6 +19,7 @@ import Examenes from './examenes/Examenes.jsx';
 import GestionReservas from './reservas/listado-paginas/GestionarReservas.jsx';
 import LoginPage from "./login/LoginPage.jsx";
 import ListaCursos from "./horarios/pages/ListaCursos.jsx";
+import CrearCalendario from "./calendario/pages/CrearCalendario.jsx";
 
 import ItemCurso from "./horarios/componentes/ItemCurso.jsx";
 import SeccionFechas from "./calendario/componentes/SeccionFechas.jsx";
@@ -52,6 +53,7 @@ function App() {
 
           <Route path="/campos/calendario" element={<SeccionFechas />} />
           <Route path="/festivos/calendario" element={<SelectorFestivos />} />
+          <Route path="/calendario/crear" element={<CrearCalendario />} />
         </Route>
       </Routes>
     </BrowserRouter>

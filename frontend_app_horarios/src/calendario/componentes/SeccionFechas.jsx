@@ -3,15 +3,15 @@ import { Campo } from "../../reservas/formulario-componentes/ui/Campo";
 import { EntradaTexto } from "../../reservas/formulario-componentes/ui/Inputs";
 
 export default function SeccionFechas({ datos, onChange}) {
-    datos = {
-        curso: "",
-        fechaInicioCurso: "",
-        fechaFinCurso: "",
-        inicioSemestre1: "",
-        finSemestre1: "",
-        inicioSemestre2: "",
-        finSemestre2: ""
-    };
+    // datos = {
+    //     curso: "",
+    //     fechaInicioCurso: "",
+    //     fechaFinCurso: "",
+    //     inicioSemestre1: "",
+    //     finSemestre1: "",
+    //     inicioSemestre2: "",
+    //     finSemestre2: ""
+    // };
     return (
         <div className="space-y-6">
 

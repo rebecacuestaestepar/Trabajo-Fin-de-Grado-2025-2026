@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { cargarHorarioExcel } from "../../api/docencia";
 import ItemCurso from "../componentes/ItemCurso";
+import { useNavigate } from "react-router-dom";
 
 export default function ListaCursos() {
+  const navigate = useNavigate();
 
   const [cursos, setCursos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -53,6 +55,10 @@ export default function ListaCursos() {
             </div>
         );
     }
+  
+  const nuevoCurso = () => {
+    navigate("/calendario/crear");
+  };
 
   return (
     <div className="p-4">
@@ -60,6 +66,7 @@ export default function ListaCursos() {
             <h1 className="text-xl font-semibold">Lista de Cursos Disponibles</h1>
             <button
                 type="button"
+                onClick={nuevoCurso}
                 className={[
                     "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm",
                     "bg-[#7a1e1e] hover:bg-[#651818]",

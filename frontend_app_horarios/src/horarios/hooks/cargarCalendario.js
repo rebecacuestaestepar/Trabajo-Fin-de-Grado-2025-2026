@@ -1,6 +1,6 @@
 import { cargarHorarioExcel } from "../api/docencia";
 
-const enviarExcel = async (archivoExcel, curso) => {
+export const enviarExcel = async (archivoExcel, curso) => {
     const formData = new FormData();
     formData.append("archivo_excel", archivoExcel);
     formData.append("curso", curso);

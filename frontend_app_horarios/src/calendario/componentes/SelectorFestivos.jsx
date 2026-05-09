@@ -7,9 +7,9 @@ import esLocale from '@fullcalendar/core/locales/es';
 export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setFestivos }) {
     const [expandido, setExpandido] = useState(false);
 
-    fechaInicio = "2024-09-01";
-    fechaFin = "2025-07-30";
-    festivos = ["2024-12-25", "2025-01-01"];
+    // fechaInicio = "2024-09-01";
+    // fechaFin = "2025-07-30";
+    // festivos = ["2024-12-25", "2025-01-01"];
 
     const cantidadDeMeses = useMemo(() => {
         if (!fechaInicio || !fechaFin) return 0;
