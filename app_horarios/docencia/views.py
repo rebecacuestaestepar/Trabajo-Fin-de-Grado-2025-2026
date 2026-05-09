@@ -6,6 +6,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from calendario.models import Curso
 from reservas.excel_parser import parsear_horario_excel
 from reservas.services_excel import generar_reservas_periodicas
+import traceback
 
 # Create your views here.
 class CargarHorarioExcelView(APIView):
@@ -28,6 +29,7 @@ class CargarHorarioExcelView(APIView):
 
             return Response({'message': 'Horario cargado y reservas generadas correctamente'}, status=200)
         except Exception as e:
+            traceback.print_exc()
             return Response({'error': str(e)}, status=500)
 
 class ObtenerCursosView(APIView):
