@@ -21,6 +21,7 @@ import LoginPage from "./login/LoginPage.jsx";
 import ListaCursos from "./horarios/pages/ListaCursos.jsx";
 
 import ItemCurso from "./horarios/componentes/ItemCurso.jsx";
+import SeccionFechas from "./calendario/componentes/SeccionFechas.jsx";
 
 
 
@@ -47,6 +48,8 @@ function App() {
           <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
           <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
           <Route path="/examenes" element={<Examenes />} />
+
+          <Route path="/calendario/crear" element={<SeccionFechas />} />
         </Route>
       </Routes>
     </BrowserRouter>
