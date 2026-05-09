@@ -1,32 +1,62 @@
 import { useEffect, useState } from "react";
-//import { obtenerCursos } from "../../api/docencia";
+import { cargarHorarioExcel } from "../../api/docencia";
+import ItemCurso from "../componentes/ItemCurso";
 
 export default function ListaCursos() {
 
   const [cursos, setCursos] = useState([]);
-  const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     const obtenerCursos = async () => {
-            try {
-                const response = await fetch('http://localhost:8000/api/docencia/cursos/');
-                if (response.ok) {
-                    const data = await response.json();
-                    setCursos(data); // data será el array: ['2023-24', '2024-25']
-                } else {
-                    console.error("Error en la respuesta del servidor");
-                }
-            } catch (error) {
-                console.error("Error de conexión:", error);
+        try {
+            const response = await fetch('http://localhost:8000/api/docencia/cursos/');
+            if (response.ok) {
+                const data = await response.json();
+                setCursos(data);
+            } else {
+                console.error("Error en la respuesta del servidor");
             }
-        };
+        } catch (error) {
+            console.error("Error de conexión:", error);
+        } finally {
+            setCargando(false);
+        }
+    };
 
-        obtenerCursos();
-    }, []);
+    obtenerCursos();
+  }, []);
+
+  const enviarBack = async (archivo, idCurso) => {
+    const formData = new FormData();
+    formData.append('fichero', archivo);
+    formData.append('id_curso', idCurso);
+
+    
+    try {
+        const data = await cargarHorarioExcel(formData);
+        
+        alert(`¡Éxito! Archivo enviado para el curso ${idCurso}`);
+        console.log("Respuesta de Django:", data);
+        
+        // Cerrar el desplegable
+    } catch (error) {
+        console.error("Fallo del servidor:", error);
+        alert(`No se pudo cargar el archivo: ${error.message}`);
+    }
+  };
+
+  if (cargando) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <p className="text-slate-500 text-lg animate-pulse">Cargando cursos...</p>
+            </div>
+        );
+    }
 
   return (
     <div className="p-4">
-        <div className="sm:space-between">
+        <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-semibold">Lista de Cursos Disponibles</h1>
             <button
                 type="button"
@@ -40,24 +70,21 @@ export default function ListaCursos() {
             </button>
         </div>
         <div>
-            {cursos.length === 0 ? (
-                <p className="text-gray-500">No hay cursos disponibles.</p>
-            ) : (
-                <ul className="space-y-2">
-                    {cursos.map((curso) => (
-                        <li key={curso} className="border-b border-gray-200 py-2">
-                            <button
-                                type="button"
-                                className="text-blue-500 hover:text-blue-700"
-                                onClick={() => setCursoSeleccionado(curso)}
-                            >
-                                Seleccionar
-                            </button>
-                            {curso}
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                {cursos.length > 0 ? (
+                    cursos.map((curso) => (
+                        <ItemCurso 
+                            key={curso.idcurso} 
+                            idCurso={curso.idcurso} 
+                            enviarBack={enviarBack}
+                        />
+                    ))
+                ) : (
+                    <div className="p-8 text-center text-slate-500">
+                        No hay cursos disponibles.
+                    </div>
+                )}
+            </div>
         </div>
     </div>
   );

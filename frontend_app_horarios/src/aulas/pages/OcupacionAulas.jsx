@@ -54,14 +54,14 @@ export default function OcupacionAulas() {
 
   return (
     <div className="max-w-5xl">
-      <h1 className="text-2xl font-bold text-slate-900">Ocupación de aulas</h1>
-      <p className="mt-1 text-sm text-slate-600">
-        Selecciona una o varias aulas para ver su ocupación.
-      </p>
-
-      <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-          <button
+      <div className="flex items-center justify-between">
+          <div>
+          <h1 className="text-2xl font-bold text-slate-900">Ocupación de aulas</h1>
+          <p className="mt-1 text-sm text-slate-600">
+            Selecciona una o varias aulas para ver su ocupación.
+          </p>
+        </div>
+        <button
             type="button"
             onClick={verOcupacion}
             disabled={totalSeleccionadas === 0}
@@ -74,7 +74,11 @@ export default function OcupacionAulas() {
           >
             Ver ocupación ({totalSeleccionadas})
           </button>
+      </div>
 
+      <div className="mt-4 rounded-lg border border-slate-200 bg-white p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <h3 className="font-bold">Lista de aulas campus</h3>
         </div>
         
         <div className="mt-4">

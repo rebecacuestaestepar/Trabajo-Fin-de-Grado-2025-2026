@@ -47,7 +47,6 @@ function App() {
           <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
           <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
           <Route path="/examenes" element={<Examenes />} />
-          <Route path="/cursos/item" element={<ItemCurso />} />
         </Route>
       </Routes>
     </BrowserRouter>

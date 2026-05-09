@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import AreaArchivo from './AreaArchivo';
 
-const ItemCurso = ({ idCurso }) => {
+const ItemCurso = ({ idCurso, enviarBack }) => {
     const [expandido, setExpandido] = useState(false);
-
-    idCurso = "2025-2026"
 
     return (
         <div className="border-2 border-slate-300 rounded-lg py-5 px-4 transition-colors duration-200 hover:bg-slate-50 last:border-b-0">
@@ -24,6 +22,7 @@ const ItemCurso = ({ idCurso }) => {
                 <div className="animate-fade-in">
                     <AreaArchivo
                         idCurso={idCurso}
+                        onArchivoSeleccionado={enviarBack}
                     />
                 </div>
             )}
