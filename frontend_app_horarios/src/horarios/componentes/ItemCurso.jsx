@@ -1,8 +1,13 @@
-const ItemCurso = ({ idCurso, enviarBack }) => {
-    const [expandido, setExpandido] = React.useState(false);
+import React, { useState } from 'react';
+import AreaArchivo from './AreaArchivo';
+
+const ItemCurso = ({ idCurso }) => {
+    const [expandido, setExpandido] = useState(false);
+
+    idCurso = "2025-2026"
 
     return (
-        <div className="border-b border-slate-200 py-5 px-4 transition-colors duration-200 hover:bg-slate-50 last:border-b-0">
+        <div className="border-2 border-slate-300 rounded-lg py-5 px-4 transition-colors duration-200 hover:bg-slate-50 last:border-b-0">
             <div
                 className={`flex justify-between items-center cursor-pointer text-slate-800 ${
                     expandido ? 'font-bold' : 'font-normal'
@@ -14,7 +19,14 @@ const ItemCurso = ({ idCurso, enviarBack }) => {
                         {expandido ? '▲' : '▼'}
                     </span>
             </div>
-
+        
+            {expandido && (
+                <div className="animate-fade-in">
+                    <AreaArchivo
+                        idCurso={idCurso}
+                    />
+                </div>
+            )}
         </div>
     );
 };
