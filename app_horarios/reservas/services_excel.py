@@ -1,5 +1,5 @@
-from limpiar_nombres_aulas import limpiar_nombre_aula
-from excel_parser import DIAS_SEMANA
+from reservas.limpiar_nombres_aulas import limpiar_nombre_aula
+from reservas.excel_parser import DIAS_SEMANA
 from aulas.models import Aula
 from reservas.models import Reserva, ReservaPeriodica
 from docencia.models import Grupo, Asignaturas
@@ -9,10 +9,9 @@ from django.db import transaction
 import uuid
 
 def generar_reservas_periodicas(clases, curso):
+    num_reservas_creadas = 0
 
     with transaction.atomic():
-
-        num_reservas_creadas = 0
 
         for clase in clases:
 
@@ -31,14 +30,14 @@ def generar_reservas_periodicas(clases, curso):
                     nombre=clase.grupo
                 )
             
-            curso = Curso.objects.filter(id=curso).first()
+            curso = Curso.objects.filter(idcurso=curso).first()
 
-            fecha_inicio_sem_1 = Semestre.objects.filter(curso=curso, numero=1).first().fecha_inicio
-            fecha_inicio_sem_2 = Semestre.objects.filter(curso=curso, numero=2).first().fecha_inicio
-            fecha_fin_sem_1 = Semestre.objects.filter(curso=curso, numero=1).first().fecha_fin
-            fecha_fin_sem_2 = Semestre.objects.filter(curso=curso, numero=2).first().fecha_fin
+            fecha_inicio_sem_1 = Semestre.objects.filter(curso_id=curso, numero=1).first().fecha_inicio
+            fecha_inicio_sem_2 = Semestre.objects.filter(curso_id=curso, numero=2).first().fecha_inicio
+            fecha_fin_sem_1 = Semestre.objects.filter(curso_id=curso, numero=1).first().fecha_fin
+            fecha_fin_sem_2 = Semestre.objects.filter(curso_id=curso, numero=2).first().fecha_fin
 
-            semestre_academico = Asignaturas.objects.filter(id=clase.cod_asig).first().semestre_academico
+            semestre_academico = Asignaturas.objects.filter(idasignatura=clase.cod_asig).first().semestre_academico
 
             result = semestre_academico % 2
             if result == 1:

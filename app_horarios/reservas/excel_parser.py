@@ -176,7 +176,7 @@ def extraer_columnas_dias(ws, fila_inicio, mapa_merge):
         tipo, valor = clasificar_celda(celda.value)
 
         if tipo == "DIA_SEMANA":
-            print(valor)
+            #print(valor)
             coord = celda.coordinate
 
             if coord in mapa_merge:
@@ -193,7 +193,7 @@ def extraer_columnas_dias(ws, fila_inicio, mapa_merge):
             }
             
             if valor.upper() == "VIERNES":
-                print("Condición de parada de los días")
+                #print("Condición de parada de los días")
                 break
                 
     return dias_rangos
@@ -390,7 +390,7 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
 def extraer_clase_practica_grupo(ws, fila_actual, col_actual, mapa_merge, celdas_visitadas, tabla, asignaturas, clases):
     celda = ws.cell(row=fila_actual, column=col_actual)
     coord = celda.coordinate
-    tipo, valor = clasificar_celda(celda.value) # 'valor' será el nombre del grupo
+    _, valor = clasificar_celda(celda.value) # 'valor' será el nombre del grupo
     
     dia = calcular_dia(tabla["mapa_dias"], col_actual)
     fila_ini_clase = celda.row
@@ -421,7 +421,7 @@ def extraer_clase_practica_grupo(ws, fila_actual, col_actual, mapa_merge, celdas
     cond = False
     if tipo_d == "AULA":
         celdas_visitadas.add(celda_derecha.coordinate)
-        cond, num_aulas, aulas = extraer_aulas(valor_d)
+        cond, _, aulas = extraer_aulas(valor_d)
     elif valor_d is None:
         valor_d = "Aula 0"
         cond = False
@@ -451,7 +451,7 @@ def extraer_clase_practica_grupo(ws, fila_actual, col_actual, mapa_merge, celdas
 def extraer_clase_rotada90(ws, fila_actual, col_actual, mapa_merge, celdas_visitadas, tabla, asignaturas, clases):
     celda = ws.cell(row=fila_actual, column=col_actual)
     coord = celda.coordinate
-    tipo, valor = clasificar_celda(celda.value) # 'valor' es la ABREV_ASIG
+    tipo, valor = clasificar_celda(celda.value)
     
     dia = calcular_dia(tabla["mapa_dias"], col_actual)
     fila_ini_clase = celda.row 
@@ -473,7 +473,7 @@ def extraer_clase_rotada90(ws, fila_actual, col_actual, mapa_merge, celdas_visit
         if celda_grupo.coordinate in mapa_merge:
             col_aula = mapa_merge[celda_grupo.coordinate]["col_fin"] + 1
         else:
-            col_aula = col_grupo + 1  # CORRECCIÓN: Antes tenías 'col + 1'
+            col_aula = col_grupo + 1 
     if celda.fill.start_color.theme == 7 and tipo_d != "GRUPO_PRACTICO":
         valor_d = "80"
         tipo = "T"
@@ -538,7 +538,7 @@ def extraer_clase_rotada90(ws, fila_actual, col_actual, mapa_merge, celdas_visit
 def extraer_practica_asig_rotacion0(ws, fila_actual, col_actual, mapa_merge, celdas_visitadas, tabla, asignaturas, clases):
     celda = ws.cell(row=fila_actual, column=col_actual)
     coord = celda.coordinate
-    tipo, valor = clasificar_celda(celda.value) # 'valor' es la abreviatura de la asignatura
+    _, valor = clasificar_celda(celda.value) # 'valor' es la abreviatura de la asignatura
     
     dia = calcular_dia(tabla["mapa_dias"], col_actual)
     fila_ini_clase = celda.row
@@ -553,7 +553,7 @@ def extraer_practica_asig_rotacion0(ws, fila_actual, col_actual, mapa_merge, cel
 
     cond = False
     if tipo_a == "AULA":
-        cond, num_aulas, aulas = extraer_aulas(valor_a)
+        cond, _, aulas = extraer_aulas(valor_a)
         celdas_visitadas.add(celda_abajo.coordinate)
     elif valor_a is None:
         valor_a = "Aula 0"
@@ -606,7 +606,7 @@ def extraer_practica_asig_rotacion0(ws, fila_actual, col_actual, mapa_merge, cel
 
 
 def extraer_clases(ws, tabla, mapa_merge, asignaturas):
-    clases = {}
+    clases = []
 
 
     celdas_visitadas = set()
@@ -623,7 +623,7 @@ def extraer_clases(ws, tabla, mapa_merge, asignaturas):
                     col = siguiente_col
                     continue
                     
-                tipo, valor = clasificar_celda(celda.value)
+                tipo, _ = clasificar_celda(celda.value)
                 
                 if tipo in ["GRUPO_PRACTICO", "GRUPO_TEORICO", "AULA", "ABREV_ASIG"]:
                     color_tema = celda.fill.start_color.theme
@@ -658,7 +658,7 @@ def escanear_hoja(ws, diccionario_cod):
 
     asignaturas = extraer_leyenda_asignaturas(ws, mapa_merge, diccionario_cod)
 
-    print(asignaturas)
+    #print(asignaturas)
     
     fila_actual = 1
     max_row = ws.max_row

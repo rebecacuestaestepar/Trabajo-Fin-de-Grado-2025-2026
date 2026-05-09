@@ -10,7 +10,7 @@ def limpiar_nombre_aula(nombre_aula):
     
     aula = str(nombre_aula).strip()
 
-    aula = re.sub(r'(?i)^Aula\s+(?!Empresa)', '', aula)
+    aula = re.sub(r'(?i)^Aula\s+(?!Empresa|0\b)', '', aula)
     aula = re.sub(r'\s*\(.*?\)', '', aula).strip()
 
     aula = re.sub(r'(?i)^Inf\.\s+', 'Informática ', aula)
