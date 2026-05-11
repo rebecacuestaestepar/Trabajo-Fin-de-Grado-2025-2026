@@ -34,5 +34,5 @@ class CargarHorarioExcelView(APIView):
 
 class ObtenerCursosView(APIView):
     def get(self, request, *args, **kwargs):
-        cursos = Curso.objects.all().values('idcurso')
+        cursos = Curso.objects.all().values('idcurso').order_by('-idcurso')
         return Response(cursos, status=200)

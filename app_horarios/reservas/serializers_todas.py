@@ -71,7 +71,6 @@ class ReservaTodasSerializer(serializers.ModelSerializer):
         ]
 
     def _puntual(self, obj):
-        # reverse OneToOne: ReservaPuntual.id_reserva -> obj.reservapuntual
         return getattr(obj, "reservapuntual", None)
 
     def get_motivo(self, obj):
