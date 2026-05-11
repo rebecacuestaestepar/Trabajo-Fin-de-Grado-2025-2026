@@ -1,5 +1,5 @@
 from django.db import transaction
-from calendario.models import Dia, Curso, Festivo, Lectivo, Semestre
+from calendario.models import CambioDocencia, Dia, Curso, Examen, Festivo, Lectivo, Semestre, Tfg
 from datetime import timedelta
 
 def generar_calendario_academico(datos):
@@ -76,8 +76,8 @@ def generar_calendario_academico(datos):
                 )
             
 
-            if (dia_actual >= datos['fecha_inicio_1_semestre'] and dia_actual <= datos['fecha_fin_1_semestre']) or (dia_actual >= datos['fecha_inicio_2_semestre'] and dia_actual <= datos['fecha_fin_2_semestre'] not in festivos and dia_semana_num != 7):
-                if dia_actual not in festivos and dia_semana_num != 7:
+            if (dia_actual >= datos['fecha_inicio_1_semestre'] and dia_actual <= datos['fecha_fin_1_semestre']) or (dia_actual >= datos['fecha_inicio_2_semestre'] and dia_actual <= datos['fecha_fin_2_semestre']):
+                if dia_actual not in festivos and dia_semana_num not in [6,7]:
                     lectivos_a_crear.append(
                         Lectivo(
                             id_dia=nuevo_dia,
@@ -89,6 +89,80 @@ def generar_calendario_academico(datos):
         Festivo.objects.bulk_create(festivos_a_crear)
         Lectivo.objects.bulk_create(lectivos_a_crear)
 
-            
+def obtener_dias_curso(curso):
+    semestres = Semestre.objects.filter(curso_id=curso)
 
+    dias = Dia.objects.filter(id_semestre__in=semestres).select_related('cambiodocencia', 'examen', 'festivo', 'lectivo', 'tfg', 'id_semestre')
+
+    diccionario_dias = {}
+
+    for dia in dias:
+        fecha_str = dia.dia.strftime('%Y-%m-%d')
+        if hasattr(dia, 'cambiodocencia'):
+            diccionario_dias[fecha_str] = {
+                "tipo": "CAMBIO_DOC",
+                "sustituye_dia": dia.cambiodocencia.sustituye_dia
+            }
+        elif hasattr(dia, 'examen'):
+            diccionario_dias[fecha_str] = {
+                "tipo": "EXAMEN",
+                "convocatoria": dia.examen.convocatoria
+            }
+        elif hasattr(dia, 'festivo'):
+            diccionario_dias[fecha_str] = {
+                "tipo": "FESTIVO",
+                "nombre": dia.festivo.nombre,
+                "alcance": dia.festivo.alcance
+            }
+        elif hasattr(dia, 'lectivo'):
+            if dia.id_semestre.numero == 1:
+                diccionario_dias[fecha_str] = {"tipo": "LECTIVO_S1"}
+            else:
+                diccionario_dias[fecha_str] = {"tipo": "LECTIVO_S2"}
+        elif hasattr(dia, 'tfg'):
+            diccionario_dias[fecha_str] = {
+                "tipo": "TFG",
+                "convocatoria": dia.tfg.convocatoria
+            }
+
+    return diccionario_dias
+
+def modificar_tipo_dia(datos):
+    fechas = datos['fechas']
+    tipo = datos['tipo']
+
+    with transaction.atomic():
+
+        for fecha in fechas:
+            dia_objeto = Dia.objects.get(dia=fecha)
+
+            Lectivo.objects.filter(id_dia=dia_objeto).delete()
+            Festivo.objects.filter(id_dia=dia_objeto).delete()
+            Examen.objects.filter(id_dia=dia_objeto).delete()
+            CambioDocencia.objects.filter(id_dia=dia_objeto).delete()
+            Tfg.objects.filter(id_dia=dia_objeto).delete()
+
+            if tipo in ['LECTIVO_S1', 'LECTIVO_S2']:
+                Lectivo.objects.create(id_dia=dia_objeto)
+            elif tipo == 'FESTIVO':
+                Festivo.objects.create(
+                    id_dia=dia_objeto,
+                    nombre=datos.get('nombre', ''),
+                    alcance=datos.get('alcance', '')
+                )
+            elif tipo == 'TFG':
+                Tfg.objects.create(
+                    id_dia=dia_objeto, 
+                    convocatoria=datos.get('convocatoria', '')
+                )
+            elif tipo == 'EXAMEN':
+                Examen.objects.create(
+                    id_dia=dia_objeto, 
+                    convocatoria=datos.get('convocatoria', '')
+                )
+            elif tipo == 'CAMBIO_DOC':
+                CambioDocencia.objects.create(
+                    id_dia=dia_objeto, 
+                    sustituye_dia=datos.get('sustituye_dia')
+                )
 
