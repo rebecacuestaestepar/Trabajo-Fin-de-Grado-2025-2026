@@ -7,3 +7,16 @@ export function cargarCalendarioFormulario(payload) {
     });
 }
 
+export function obtenerCalendarioCurso(id_curso) {
+    return apiRequest(`/calendario/curso/${id_curso}/`, {
+        method: "GET",
+    });
+}
+
+export function modificarTipoDiaCalendario(payload) {
+    return apiRequest("/calendario/dia/modificar/", {
+        method: "POST",
+        body: payload,
+    });
+}
+

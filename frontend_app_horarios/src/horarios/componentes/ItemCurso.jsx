@@ -8,7 +8,7 @@ const ItemCurso = ({ idCurso, enviarBack, modoNavegacion = false }) => {
 
     const manejarClic = () => {
         if (modoNavegacion) {
-            navigate(`/horarios/curso/${idCurso}`);
+            navigate(`/calendario/cursos/${idCurso}`);
         } else{
             setExpandido(!expandido);
         }

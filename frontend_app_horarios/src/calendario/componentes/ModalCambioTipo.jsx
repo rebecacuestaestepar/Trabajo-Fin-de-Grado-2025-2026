@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { TIPOS_DIA, DIAS_SEMANA_LECTIVOS, ALCANCES_FESTIVO } from '../utiles/calendarioConfig';
 
 export default function ModalCambioTipo({ diaSeleccionado, datosActuales, alCerrar, alGuardar }) {
-    const [tipo, setTipo] = useState('NO_LECTIVO');
+    const [tipo, setTipo] = useState(datosActuales?.tipo || 'NO_LECTIVO');
 
     const [formData, setFormData] = useState({
         nombre: datosActuales?.nombre || '',

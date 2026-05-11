@@ -7,7 +7,7 @@ export default function LeyendaCalendario() {
             {Object.values(TIPOS_DIA).map((tipo) => (
                 <div key={tipo.id} className='flex items-center text-sm font-medium text-slate-600'>
                     <div
-                        className='w-4 h-4 mr-2 shadow-sm'
+                        className='w-4 h-4 mr-2 shadow-sm border-1 border-black'
                         style={{ backgroundColor: tipo.color }}
                     ></div>
                     {tipo.label}

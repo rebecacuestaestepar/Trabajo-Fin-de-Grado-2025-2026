@@ -25,6 +25,8 @@ import ItemCurso from "./horarios/componentes/ItemCurso.jsx";
 import SeccionFechas from "./calendario/componentes/SeccionFechas.jsx";
 import SelectorFestivos from "./calendario/componentes/SelectorFestivos.jsx";
 import ConsultaCalendarios from "./horarios/pages/ConsultarCalendarios.jsx";
+import VistaDetalleCalendario from "./calendario/pages/VistaDetalleCalendario.jsx";
+import LeyendaCalendario from "./calendario/componentes/LeyendaCalendario.jsx";
 
 
 
@@ -54,6 +56,10 @@ function App() {
 
           <Route path="/calendario/crear" element={<CrearCalendario />} />
           <Route path="/calendario/cursos" element={<ConsultaCalendarios />} />
+          <Route path="/calendario/cursos/:id_curso" element={<VistaDetalleCalendario />} />
+
+          <Route path="/calendario/leyenda" element={<LeyendaCalendario />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
