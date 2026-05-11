@@ -17,6 +17,9 @@ export default function CrearCalendario() {
 
     const [festivos, setFestivos] = useState([]);
 
+    const [mensajeCorrecto, setMensajeCorrecto] = useState(null);
+    const [mensajeError, setMensajeError] = useState(null);
+
     const manejarCambio = (campo, valor) => {
         setDatos(prev => ({ ...prev, [campo]: valor }));
     };
@@ -37,12 +40,12 @@ export default function CrearCalendario() {
 
         const payload = {
             curso: datos.curso,
-            fecha_inicio: datos.fechaInicioCurso,
-            fecha_fin: datos.fechaFinCurso,
-            semestre1_inicio: datos.inicioSemestre1,
-            semestre1_fin: datos.finSemestre1,
-            semestre2_inicio: datos.inicioSemestre2,
-            semestre2_fin: datos.finSemestre2,
+            fecha_inicio_curso: datos.fechaInicioCurso,
+            fecha_fin_curso: datos.fechaFinCurso,
+            fecha_inicio_1_semestre: datos.inicioSemestre1,
+            fecha_fin_1_semestre: datos.finSemestre1,
+            fecha_inicio_2_semestre: datos.inicioSemestre2,
+            fecha_fin_2_semestre: datos.finSemestre2,
             festivos: festivos, 
         };
 
@@ -50,18 +53,13 @@ export default function CrearCalendario() {
             const respuesta = await cargarCalendarioFormulario(payload);
 
 
-            if (respuesta != null && !respuesta.ok) {
-                const errorData = await respuesta.json();
-                throw new Error(errorData.detail || "Error al guardar el calendario.");
-            } else {
-                alert("Calendario guardado correctamente.");
-            }
-            
-            // Opcional: Redirigir a otra página (Ej: navigate('/horarios')) o limpiar el estado
-            
+            setMensajeCorrecto("Calendario guardado correctamente.");
+            console.log(respuesta.mensaje);
+
+                        
         } catch (error) {
             console.error("Error al guardar el calendario:", error);
-            alert(`Fallo en el servidor: ${error.message}`);
+            setMensajeError(`No se pudo guardar el calendario`);
         }
     };
 
@@ -88,6 +86,19 @@ export default function CrearCalendario() {
                         festivos={festivos}
                         setFestivos={setFestivos}
                     />
+
+                    {mensajeCorrecto && (
+                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                            <span className="block sm:inline">{mensajeCorrecto}</span>
+                        </div>
+                    )}
+
+                    {mensajeError && (
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <strong className="font-bold">Error: </strong>
+                            <span className="block sm:inline">{mensajeError}</span>
+                        </div>
+                    )}
 
                     <div className="flex justify-end pt-4 border-t border-slate-100">
                         <button

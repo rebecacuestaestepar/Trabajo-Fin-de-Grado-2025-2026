@@ -4,6 +4,9 @@ import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 
+const pluginsCalendario = [multiMonthPlugin, interactionPlugin];
+const localesCalendario = [esLocale];
+
 export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setFestivos }) {
     const [expandido, setExpandido] = useState(false);
 
@@ -28,6 +31,24 @@ export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setF
             borderColor: '#7a1e1e',
         }));
     }, [festivos]);
+
+    const rangoValido = useMemo(() => {
+        if (!fechaInicio || !fechaFin) return undefined;
+        return {
+            start: fechaInicio,
+            end: new Date(new Date(fechaFin).getTime() + 86400000).toISOString().split('T')[0] 
+        };
+    }, [fechaInicio, fechaFin]);
+
+    const configuracionVistas = useMemo(() => {
+        return {
+            customMultiMonth: {
+                type: 'multiMonth',
+                duration: { months: cantidadDeMeses },
+                multiMonthMaxColumns: 3
+            }
+        };
+    }, [cantidadDeMeses]);
 
     const manejarClicDia = (info) => {
         const fechaClicada = info.dateStr; 
@@ -105,26 +126,17 @@ export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setF
                     ) : (
                         <div className="calendario-festivos-wrapper">
                             <FullCalendar
-                                plugins={[multiMonthPlugin, interactionPlugin]}
+                                plugins={pluginsCalendario}
                                 initialView="customMultiMonth"
-                                locales={[esLocale]}
+                                locales={localesCalendario}
                                 locale="es"
                                 initialDate={fechaInicio} 
                                 dateClick={manejarClicDia}
                                 events={diasFestivos}
                                 
-                                validRange={{
-                                    start: fechaInicio,
-                                    end: new Date(new Date(fechaFin).getTime() + 86400000).toISOString().split('T')[0] 
-                                }}
+                                validRange={rangoValido}
 
-                                views={{
-                                    customMultiMonth: {
-                                        type: 'multiMonth',
-                                        duration: { months: cantidadDeMeses },
-                                        multiMonthMaxColumns: 3
-                                    }
-                                }}
+                                views={configuracionVistas}
 
                                 headerToolbar={false}
                             />
