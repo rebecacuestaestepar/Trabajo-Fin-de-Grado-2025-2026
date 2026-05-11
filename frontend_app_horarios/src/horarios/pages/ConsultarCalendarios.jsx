@@ -1,45 +1,24 @@
-import { cargarHorarioExcel } from "../../api/docencia";
 import ItemCurso from "../componentes/ItemCurso";
-import { useNavigate } from "react-router-dom";
 import { useCursos } from "../hooks/useCursos";
+import { useNavigate } from "react-router-dom";
 
-export default function ListaCursos() {
+export default function ConsultaCalendarios() {
+  const { cursos, cargando } = useCursos();
   const navigate = useNavigate();
 
-  const { cursos, cargando } = useCursos();
-
-  const enviarBack = async (archivo, idCurso) => {
-    const formData = new FormData();
-    formData.append('fichero', archivo);
-    formData.append('id_curso', idCurso);
-
-    
-    try {
-        const data = await cargarHorarioExcel(formData);
-        
-        alert(`¡Éxito! Archivo enviado para el curso ${idCurso}`);
-        console.log("Respuesta de Django:", data);
-        
-        // Cerrar el desplegable
-    } catch (error) {
-        console.error("Fallo del servidor:", error);
-        alert(`No se pudo cargar el archivo: ${error.message}`);
-    }
-  };
-
-  if (cargando) {
+    if (cargando) {
         return (
             <div className="flex justify-center items-center h-64">
                 <p className="text-slate-500 text-lg animate-pulse">Cargando cursos...</p>
             </div>
         );
     }
-  
-  const nuevoCurso = () => {
-    navigate("/calendario/crear");
-  };
 
-  return (
+    const nuevoCurso = () => {
+        navigate("/calendario/crear");
+    };
+
+    return (
     <div className="p-4">
         <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-semibold">Lista de Cursos</h1>
@@ -61,8 +40,8 @@ export default function ListaCursos() {
                     cursos.map((curso) => (
                         <ItemCurso 
                             key={curso.idcurso} 
-                            idCurso={curso.idcurso} 
-                            enviarBack={enviarBack}
+                            idCurso={curso.idcurso}
+                            modoNavegacion={true}
                         />
                     ))
                 ) : (

@@ -49,6 +49,7 @@ export default function MenuLateral({ abierto }) {
           <SeccionMenu titulo="Reservas periódicas" level={1}> </SeccionMenu>
         </SeccionMenu>
         <ItemMenu a="/horarios" level={0}>Horarios</ItemMenu>
+        <ItemMenu a="/calendario/cursos" level={0}>Calendarios</ItemMenu>
 
         <SeccionMenu
           titulo="Ocupación de aulas"
