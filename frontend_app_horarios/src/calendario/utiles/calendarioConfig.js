@@ -1,4 +1,5 @@
 export const TIPOS_DIA = {
+    NO_LECTIVO: { id: 'NO_LECTIVO', label: 'Sin actividad docente', color: '#FFFFFF', clase: 'texto-oscuro border-dia' },
     LECTIVO_S1: { id: "LECTIVO_S1", label: "Primer Semestre", color: "#FCFF00", tipo: "texto-oscuro"},
     LECTIVO_S2: { id: "LECTIVO_S2", label: "Segundo Semestre", color: "#00A1FF", tipo: "texto-oscuro"},
     EXAMEN: { id: 'EXAMEN', label: 'Exámenes (1ª Conv. y 2ª Conv.)', color: '#2ADB4D', clase: 'texto-oscuro' },
@@ -6,3 +7,13 @@ export const TIPOS_DIA = {
     TFG: { id: 'TFG', label: 'Solo Trabajo Fin de Grado y de Máster', color: '#F2AD02', clase: 'texto-oscuro' },
     CAMBIO_DOC: { id: 'CAMBIO_DOC', label: 'Cambio de Docencia', color: '#600091', clase: 'texto-blanco' },
 }
+
+export const DIAS_SEMANA_LECTIVOS = [
+    { id: 1, label: 'Lunes' },
+    { id: 2, label: 'Martes' },
+    { id: 3, label: 'Miércoles' },
+    { id: 4, label: 'Jueves' },
+    { id: 5, label: 'Viernes' },
+];
+
+export const ALCANCES_FESTIVO = ['Local', 'Regional', 'Nacional', 'Universidad'];
