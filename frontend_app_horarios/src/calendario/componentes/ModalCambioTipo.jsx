@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { TIPOS_DIA, DIAS_SEMANA_LECTIVOS, ALCANCES_FESTIVO } from '../utiles/calendarioConfig';
 
-export default function ModalCambioTipo({ diaSeleccionado, datosActuales, alCerrar, alGuardar }) {
+export default function ModalCambioTipo({ diasSeleccionados, datosActuales, alCerrar, alGuardar }) {
     const [tipo, setTipo] = useState(datosActuales?.tipo || 'NO_LECTIVO');
 
     const [formData, setFormData] = useState({
@@ -12,20 +12,26 @@ export default function ModalCambioTipo({ diaSeleccionado, datosActuales, alCerr
     });
 
     const diaSemanaActualInfo = useMemo(() => {
-        if (!diaSeleccionado) return null;
+        if (!diasSeleccionados || diasSeleccionados.length === 0) return null;
+        const diaSeleccionado = diasSeleccionados[0];
         const fecha = new Date(diaSeleccionado);
         let diaNum = fecha.getDay(); 
         if (diaNum === 0) diaNum = 7;
         
         const info = DIAS_SEMANA_LECTIVOS.find(d => d.id === diaNum);
         return info ? info : { id: diaNum, label: (diaNum === 6 ? 'Sábado' : 'Domingo') };
-    }, [diaSeleccionado]);
+    }, [diasSeleccionados]);
 
     const manejarGuardar = () => {
         alGuardar({ tipo, ...formData });
     };
 
-    if (!diaSeleccionado) return null;
+    if (!diasSeleccionados || diasSeleccionados.length === 0) return null;
+
+    const textoTitulo = diasSeleccionados.length === 1 
+        ? diasSeleccionados[0] 
+        : `${diasSeleccionados.length} días seleccionados`;
+
 
     return (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
@@ -33,7 +39,7 @@ export default function ModalCambioTipo({ diaSeleccionado, datosActuales, alCerr
                 
                 <div className="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
                     <h3 className="font-bold text-slate-800">
-                        Configurar: <span className="text-[#7a1e1e]">{diaSeleccionado}</span>
+                        Configurar: <span className="text-[#7a1e1e]">{textoTitulo}</span>
                     </h3>
                     <button onClick={alCerrar} className="text-slate-400 hover:text-slate-700 text-xl leading-none">×</button>
                 </div>

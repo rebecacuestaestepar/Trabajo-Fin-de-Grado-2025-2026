@@ -13,6 +13,18 @@ import { obtenerCalendarioCurso, modificarTipoDiaCalendario } from '../../api/ca
 const pluginsCalendario = [multiMonthPlugin, interactionPlugin];
 const localesCalendario = [esLocale];
 
+const obtenerFechasEnRango = (startStr, endStr) => {
+    let fechas = [];
+    let actual = new Date(startStr);
+    let fin = new Date(endStr);
+    
+    while (actual < fin) {
+        fechas.push(actual.toISOString().split('T')[0]);
+        actual.setDate(actual.getDate() + 1);
+    }
+    return fechas;
+};
+
 export default function VistaDetalleCalendario() {
     const { id_curso } = useParams();
     const navigate = useNavigate();
@@ -21,7 +33,7 @@ export default function VistaDetalleCalendario() {
     const [datosCurso, setDatosCurso] = useState(null);
     const [diasCalendario, setDiasCalendario] = useState({}); 
     const [modalAbierto, setModalAbierto] = useState(false);
-    const [diaSeleccionado, setDiaSeleccionado] = useState(null);
+    const [diasSeleccionados, setDiasSeleccionados] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -66,31 +78,60 @@ export default function VistaDetalleCalendario() {
         });
     }, [diasCalendario]);
 
-    const manejarClicDia = (info) => {
-        setDiaSeleccionado(info.dateStr);
+    // const manejarClicDia = (info) => {
+    //     setDiasSeleccionado(info.dateStr);
+    //     setModalAbierto(true);
+    // };
+    const manejarSeleccion = (info) => {
+        // Obtenemos todos los días entre el inicio y el fin del arrastre
+        const fechas = obtenerFechasEnRango(info.startStr, info.endStr);
+        setDiasSeleccionados(fechas);
         setModalAbierto(true);
     };
 
 
-    const manejarGuardarDia = async (nuevosDatosDia) => {
+    // const manejarGuardarDia = async (nuevosDatosDia) => {
+    //     setDiasCalendario(prev => {
+    //         const copia = { ...prev };
+    //         copia[diasSeleccionado] = nuevosDatosDia; 
+    //         return copia;
+    //     });
+    //     setModalAbierto(false);
+
+    //     try {
+    //         setError(null);
+    //         const payload = {
+    //             fecha: diasSeleccionado,
+    //             ...nuevosDatosDia
+    //         };
+            
+    //         await modificarTipoDiaCalendario(payload);
+            
+    //     } catch (err) {
+    //         setError(`No se pudo modificar el día ${diasSeleccionado}.`);
+    //     }
+    // };
+
+    const manejarGuardarDias = async (nuevosDatosDia) => {
         setDiasCalendario(prev => {
             const copia = { ...prev };
-            copia[diaSeleccionado] = nuevosDatosDia; 
+            diasSeleccionados.forEach(dia => {
+                copia[dia] = nuevosDatosDia; 
+            });
             return copia;
         });
         setModalAbierto(false);
 
         try {
             setError(null);
-            const payload = {
-                fecha: diaSeleccionado,
-                ...nuevosDatosDia
+            const payload = { 
+                fechas: diasSeleccionados,
+                ...nuevosDatosDia 
             };
-            
             await modificarTipoDiaCalendario(payload);
             
         } catch (err) {
-            setError(`No se pudo modificar el día ${diaSeleccionado}.`);
+            setError(`Error al modificar algunos días de la selección.`);
         }
     };
 
@@ -176,21 +217,23 @@ export default function VistaDetalleCalendario() {
                     locale="es"
                     initialView="customMultiMonth"
                     initialDate={datosCurso.fecha_inicio}
-                    dateClick={manejarClicDia}
+                    //dateClick={manejarGuardarDias}
                     events={eventosFullCalendar}
                     validRange={rangoValido}
                     views={configuracionVistas}
                     headerToolbar={false}
+                    selectable={true}
+                    select={manejarSeleccion}
                 />
             </div>
 
             {modalAbierto && (
                 <ModalCambioTipo
-                    key={diaSeleccionado}
-                    diaSeleccionado={diaSeleccionado}
-                    datosActuales={obtenerDatosDia(diaSeleccionado)}
+                    key={diasSeleccionados[0]}
+                    diasSeleccionados={diasSeleccionados}
+                    datosActuales={obtenerDatosDia(diasSeleccionados[0])}
                     alCerrar={() => setModalAbierto(false)}
-                    alGuardar={manejarGuardarDia}
+                    alGuardar={manejarGuardarDias}
                 />
             )}
         </div>
