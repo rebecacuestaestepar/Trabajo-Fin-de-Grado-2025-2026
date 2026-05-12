@@ -1,83 +1,58 @@
 \capitulo{3}{Conceptos teóricos}
 
-En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
+En esta sección de la memoria, se pretenden recoger los conceptos teóricos más relevantes para la comprensión del proyecto.
 
-Algunos conceptos teóricos de \LaTeX{} \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.
+\subsection{Aplicaciones web y arquitecturas cliente-servidor}
 
-\section{Secciones}
+Una aplicación web es un sistema software al que se puede acceder a través de un navegador, más concretamente a través de una url, con lo que requiere tener conexión a Internet. Además está sustentada sobre una arquitectura cliente-servidor.
 
-Las secciones se incluyen con el comando section.
-
-\subsection{Subsecciones}
-
-Además de secciones tenemos subsecciones.
-
-\subsubsection{Subsubsecciones}
-
-Y subsecciones. 
-
-
-\section{Referencias}
-
-Las referencias se incluyen en el texto usando cite~\cite{wiki:latex}. Para citar webs, artículos o libros~\cite{koza92}, si se desean citar más de uno en el mismo lugar~\cite{bortolot2005, koza92}.
-
-
-\section{Imágenes}
-
-Se pueden incluir imágenes con los comandos standard de \LaTeX, pero esta plantilla dispone de comandos propios como por ejemplo el siguiente:
-
-\imagen{escudoInfor}{Autómata para una expresión vacía}{.5}
-
-
-
-\section{Listas de items}
-
-Existen tres posibilidades:
-
+Esta arquitectura o modelo tiene funciona de la siguiente manera.
 \begin{itemize}
-	\item primer item.
-	\item segundo item.
+	\item El cliente se encarga de la interacción con el usuario y la representación de la interfaz, es decir, es el que hace las peticiones de servicios al servidor y recibe las respuestas de estas.
+	\item El servidor es le que centraliza la lógica de negocio, el acceso a los datos, y recibe y procesa las peticiones del cliente etnregándoles una respuesta.
 \end{itemize}
 
-\begin{enumerate}
-	\item primer item.
-	\item segundo item.
-\end{enumerate}
+La comunicación entre el cliente y el servidor se realiza por medio de .protocolos de red. En las aplicaciones web, el más común es \textit{\textbf{HTTP}} (\textit{Hyper Text Transfer Protocol}), un protocolo de comunicación que define cómo se intercambian las peticiones y respuestas entre cliente y servidor. Gracias a este mecanismo, el cliente puede solicitar o enviar recursos o información al servidor, mientras que este puede responder con datos o el resultado de una operación concreta.
 
-\begin{description}
-	\item[Primer item] más información sobre el primer item.
-	\item[Segundo item] más información sobre el segundo item.
-\end{description}
-	
+Esta separación de responsabilidades facilita el mantenimiento, la escalabilidad y la evolución de forma independiente de las distintas partes que conforman el sistema. En este proyecto se utiliza un framework distinto para el front (cliente) que para el back (servidor).
+
+\subsection{API REST}
+
+Una API (\textit{Application Programming Interface}) es un conjunto de reglas, protocolos y definiciones que permite la comunicación entre diferentes sistemas software. En el contexto de las aplicaciones web, una API permite que el \textit{frontend} y el \textit{backend} intercambien información de una forma estructurada, sin la necesidad de que ambos softwares estén implementados con la misma tecnologías.
+
+En particular, una API REST (\textit{Representational State Transfer}) es un estilo de arquitectura ampliamente utilizado en el desarrollo de servicios web. Su objetivo principal es organizar la comunicación entre cliente y servidor mediante recursos identificados por URLs y operaciones estándar del protocolo HTTP. De esta forma permite que los recursos del sistema como, en el caso de este proyecto, un aula o una reserva, pueda ser modificado o consultado a través de una dirección concreta y utilizando unos métodos bien definidos.
+
+Entre los métodos más comunes de HHTP en una API REST se encuentran:
 \begin{itemize}
-\item 
+	\item \textit{GET}: utilizado para solicitar o recuperar información.
+	\item \textit{POST}: envía datos al servidor para crear un nuevo recurso.
+	\item \textit{PUT} o \textit{PATCH}: para modificaciones de recursos ya existentes.
+	\item \textit{DELETE}: utilizado para la eliminación de recursos existentes.
 \end{itemize}
+Con esta organización las operaciones del sistema quedan estructuradas.
 
-\section{Tablas}
-
-Igualmente se pueden usar los comandos específicos de \LaTeX o bien usar alguno de los comandos de la plantilla.
 
 \tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
 { \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-HTML5 & X & & &\\
-CSS3 & X & & &\\
-BOOTSTRAP & X & & &\\
-JavaScript & X & & &\\
-AngularJS & X & & &\\
-Bower & X & & &\\
-PHP & & X & &\\
-Karma + Jasmine & X & & &\\
-Slim framework & & X & &\\
-Idiorm & & X & &\\
-Composer & & X & &\\
-JSON & X & X & &\\
-PhpStorm & X & X & &\\
-MySQL & & & X &\\
-PhpMyAdmin & & & X &\\
-Git + BitBucket & X & X & X & X\\
-Mik\TeX{} & & & & X\\
-\TeX{}Maker & & & & X\\
-Astah & & & & X\\
-Balsamiq Mockups & X & & &\\
-VersionOne & X & X & X & X\\
+	HTML5 & X & & &\\
+	CSS3 & X & & &\\
+	BOOTSTRAP & X & & &\\
+	JavaScript & X & & &\\
+	AngularJS & X & & &\\
+	Bower & X & & &\\
+	PHP & & X & &\\
+	Karma + Jasmine & X & & &\\
+	Slim framework & & X & &\\
+	Idiorm & & X & &\\
+	Composer & & X & &\\
+	JSON & X & X & &\\
+	PhpStorm & X & X & &\\
+	MySQL & & & X &\\
+	PhpMyAdmin & & & X &\\
+	Git + BitBucket & X & X & X & X\\
+	Mik\TeX{} & & & & X\\
+	\TeX{}Maker & & & & X\\
+	Astah & & & & X\\
+	Balsamiq Mockups & X & & &\\
+	VersionOne & X & X & X & X\\
 } 
