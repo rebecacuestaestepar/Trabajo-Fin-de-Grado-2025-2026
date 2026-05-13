@@ -9,10 +9,12 @@ const localesCalendario = [esLocale];
 
 export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setFestivos }) {
     const [expandido, setExpandido] = useState(false);
-
-    // fechaInicio = "2024-09-01";
-    // fechaFin = "2025-07-30";
-    // festivos = ["2024-12-25", "2025-01-01"];
+    
+    const cambioCheck = () => {
+        if (!expandido) {
+            setFestivos([]);
+        }
+    }
 
     const cantidadDeMeses = useMemo(() => {
         if (!fechaInicio || !fechaFin) return 0;
@@ -110,7 +112,10 @@ export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setF
                     type="checkbox" 
                     className="w-4 h-4 text-[#7a1e1e] border-gray-300 rounded focus:ring-[#7a1e1e]"
                     checked={expandido}
-                    onChange={(e) => setExpandido(e.target.checked)}
+                    onChange={(e) => {
+                        setExpandido(e.target.checked);
+                        cambioCheck(e);
+                    }}
                 />
                 <span className="ml-3 text-sm font-bold text-[#1E293B]">
                     Añadir días festivos en el calendario
