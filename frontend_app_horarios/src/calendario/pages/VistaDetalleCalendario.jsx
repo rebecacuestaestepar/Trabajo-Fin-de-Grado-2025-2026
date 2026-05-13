@@ -83,7 +83,6 @@ export default function VistaDetalleCalendario() {
     //     setModalAbierto(true);
     // };
     const manejarSeleccion = (info) => {
-        // Obtenemos todos los días entre el inicio y el fin del arrastre
         const fechas = obtenerFechasEnRango(info.startStr, info.endStr);
         setDiasSeleccionados(fechas);
         setModalAbierto(true);
