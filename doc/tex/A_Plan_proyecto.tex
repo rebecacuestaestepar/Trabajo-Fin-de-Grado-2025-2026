@@ -453,7 +453,7 @@ Duración: 3 semanas
 		
 		
 		\item\bloque{Gráfico}
-		El gráfico \textit{burndown chart} se puede ver en la siguiente figura~\ref{fig:burndown-sprint19}
+		El gráfico \textit{burndown chart} se puede ver en la siguiente figura~\ref{fig:burndown-sprint20}
 		\imagen{img/Sprint 20.png}{Gráfico de los commits realizados durante el Sprint 20}{fig:burndown-sprint20}
 	\end{itemize}
 \end{Sprint}
@@ -466,6 +466,8 @@ Duración: 3 semanas
 		\begin{enumerate}
 			\item Modificar las aulas en base de datos con la nomenclatura determinada en la reunión.
 			\item Hacer flujo de carga del excel de horarios si existe el curso académico al que quiere asociarse.
+			\item Hacer flujo cuando no existe el curso académico para que permita crearlo.
+			\item Crear la vista que muestre el calendario con los días.
 			\item Quitar el atributo de capacidad máxima de la tabla grupo.
 			\item En el Excel terminar de unificar las asignaturas, y hacer una hoja con el listado de grados del que quiere extraerse la información.
 			\item Modificar entidad-relación haciendo una ISA de los grupo, ya que solamente añaden id de aulas a los grupos teóricos.
@@ -473,6 +475,29 @@ Duración: 3 semanas
 			\item Hacer vista de calendario con los diferentes colores.
 			\item Corregir memoria, y avanzar apartado de aspectos relevantes y de conceptos teóricos. Y terminar de documentar los requisitos no funcionales.
 			\item Añadir la excepción al parser de los grupos teóricos.
+		\end{enumerate}
+		\item\bloque{Revisión del Sprint}
+		Durante la reunión se han visto los resultados asociados a los objetivos propuestos para el sprint. Ha faltado por una duda surgida, comprobar que se realizan las reservas periódicas del análisis de manera correcta.
+		
+		\item\bloque{Gráfico}
+		El gráfico \textit{burndown chart} se puede ver en la siguiente figura~\ref{fig:burndown-sprint21}
+		\imagen{img/Sprint 21.png}{Gráfico de los commits realizados durante el Sprint 21}{fig:burndown-sprint21}
+	\end{itemize}
+\end{Sprint}
+
+\begin{Sprint}{21}{13/05/2026-22/05/2026}
+	Duración: 1 semana y 2 días
+	\begin{itemize}	
+		\item\bloque{Objetivos}
+		Durante la reunión de planificación de este sprint se propusieron los siguientes objetivos:
+		\begin{enumerate}
+			\item Hacer que cuando se quita el check de Añadir festivos se vacíe la lista.
+			\item Si hay más de 1 día seleccionado no permita escoger la opción de cambio de docencia.
+			\item Hacer que el sábado y el domingo no se selecciones.
+			\item Comprobar que tras cargar el horario se crean las reservas periódicas correctamente.
+			\item Hacer la sesión de usuario y que compruebe si está iniciado sesión cuando trata de acceder a través de URL.
+			\item Hacer que Django se encargue de roles y permisos.
+			\item Corregir memoria, y avanzar apartado de aspectos relevantes y de conceptos teóricos.
 		\end{enumerate}
 		\item\bloque{Revisión del Sprint}
 		
