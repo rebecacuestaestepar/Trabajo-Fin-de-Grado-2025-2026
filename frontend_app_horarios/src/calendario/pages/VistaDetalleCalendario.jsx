@@ -19,7 +19,14 @@ const obtenerFechasEnRango = (startStr, endStr) => {
     let fin = new Date(endStr);
     
     while (actual < fin) {
+        const diaSemana = actual.getDay();
+        
+        if (fechas.length > 0 && (diaSemana === 0 || diaSemana === 6)) {
+            actual.setDate(actual.getDate() + 1);
+            continue;
+        }
         fechas.push(actual.toISOString().split('T')[0]);
+
         actual.setDate(actual.getDate() + 1);
     }
     return fechas;
@@ -84,6 +91,11 @@ export default function VistaDetalleCalendario() {
     // };
     const manejarSeleccion = (info) => {
         const fechas = obtenerFechasEnRango(info.startStr, info.endStr);
+
+        if (fechas.length == 0) {
+            return;
+        }
+
         setDiasSeleccionados(fechas);
         setModalAbierto(true);
     };
