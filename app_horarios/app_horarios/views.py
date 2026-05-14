@@ -1,3 +1,17 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from calendario.models import Curso
 
-# Create your views here.
+class ListaHorariosView(APIView):
+    def get(self, request):
+        horarios_cargados = Curso.objects.filter(horario_cargado=True).order_by('-idcurso')
+
+        datos = []
+
+        for h in horarios_cargados:
+            datos.append({
+                'curso': h.idcurso,
+                'horario_cargado': h.horario_cargado
+            })
+        return Response(datos, status=200)
