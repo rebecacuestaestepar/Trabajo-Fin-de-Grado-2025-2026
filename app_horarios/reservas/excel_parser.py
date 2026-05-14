@@ -228,7 +228,7 @@ def extraer_filas_tramos(ws, fila_inicio, mapa_merge):
         else:
             contador+=1
             if contador > 0:
-                print("Condición de parada tramos horarios")
+                #print("Condición de parada tramos horarios")
                 break
                 
         fila_actual += 1
@@ -313,7 +313,7 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
             #print(f"AULA: {valor_aula}, color: {celda_aula.fill.start_color.theme}")
             celdas_visitadas.add(celda_aula.coordinate)
             
-            if celda_aula.coordinate in mapa_merge:
+            if celda_aula.coordinate in mapa_merge:      
                 col_grupo = mapa_merge[celda_aula.coordinate]["col_fin"] + 1
             else:
                 col_grupo = col_aula + 1
@@ -352,8 +352,16 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
                             nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
                             clases.append(nueva_clase)
                 else:
-                    nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=valor_aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
-                    clases.append(nueva_clase)
+                    if celda_asig.fill.start_color.theme == 9:
+                        valor_grupo = "1"
+                        #print(f"Grupo teórico: {valor_grupo}")
+                        nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=valor_aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
+                        clases.append(nueva_clase)
+                    elif celda_asig.fill.start_color.theme == 7:
+                        valor_grupo = "80"
+                        #print(f"Grupo teórico: {valor_grupo}")
+                        nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=valor_aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
+                        clases.append(nueva_clase)
 
         else:
             celda_abajo = ws.cell(row=f + 1, column=col_actual)
@@ -629,7 +637,7 @@ def extraer_clases(ws, tabla, mapa_merge, asignaturas):
                     color_tema = celda.fill.start_color.theme
                     color_rgb = celda.fill.start_color.rgb
 
-                    print("")
+                    #print("")
 
                     if color_tema in [2,7,9] and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 90:
                         siguiente_col = extraer_clase_rotada90(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)

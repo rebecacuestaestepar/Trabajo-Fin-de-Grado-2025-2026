@@ -119,5 +119,6 @@ class ListaAulasAPIView(ListAPIView):
     serializer_class = AulaMenuSerializer
     def get_queryset(self):
         return Aula.objects.all().order_by("nombre")
+    #"OBTENER POR CAMPUS"
 
 

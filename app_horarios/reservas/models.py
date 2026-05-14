@@ -2,14 +2,15 @@ from django.db import models
 
 from aulas.models import Aula
 from calendario.models import Dia
-from docencia.models import Asignaturas
+from docencia.models import Grupo
 from django.utils import timezone
 
 
 # Create your models here.
 
 class Reserva(models.Model):
-    idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=12)  # Field name made lowercase.
+    #idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=12)  # Field name made lowercase.
+    idreserva = models.AutoField(db_column='IDRESERVA', primary_key=True)  # Field name made lowercase.
     id_aula = models.ForeignKey(Aula, models.CASCADE, db_column='ID_AULA')  # Field name made lowercase.
     id_dia = models.ForeignKey(Dia, models.CASCADE, db_column='ID_DIA')  # Field name made lowercase.
     estado = models.CharField(db_column='ESTADO', max_length=1, blank=True, null=True)  # Field name made lowercase.
@@ -22,20 +23,20 @@ class Reserva(models.Model):
         managed = False
         db_table = 'reserva'
 
-    @classmethod
+    # @classmethod
     
-    def next_id(cls):
-        ultimo = cls.objects.aggregate(max_id=models.Max('idreserva'))['max_id']
-        if not ultimo:
-            return 'R0001'
-        numero = int(ultimo[1:]) + 1
-        return f'R{numero:04d}'
+    # def next_id(cls):
+    #     ultimo = cls.objects.aggregate(max_id=models.Max('idreserva'))['max_id']
+    #     if not ultimo:
+    #         return 'R0001'
+    #     numero = int(ultimo[1:]) + 1
+    #     return f'R{numero:11d}'
 
 
 
 class ReservaPeriodica(models.Model):
     id_reserva = models.OneToOneField(Reserva, models.CASCADE, db_column='ID_RESERVA', primary_key=True)  # Field name made lowercase.
-    id_grupo = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_GRUPO', max_length=10)  # Field name made lowercase.
+    id_grupo = models.ForeignKey(Grupo, models.CASCADE, db_column='ID_GRUPO', max_length=10)  # Field name made lowercase.
     dia_semana = models.SmallIntegerField(db_column='DIA_SEMANA')  # Field name made lowercase.
     fecha_inicio = models.DateField(db_column='FECHA_INICIO')  # Field name made lowercase.
     fecha_fin = models.DateField(db_column='FECHA_FIN')  # Field name made lowercase.

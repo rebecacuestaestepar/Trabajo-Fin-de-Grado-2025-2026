@@ -147,7 +147,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 aula_final = qs.values_list("id", flat=True).first()
 
             reserva = Reserva.objects.create(
-                idreserva=Reserva.next_id(),
                 id_aula_id=aula_final,   
                 id_dia=dia,
                 estado=estado_final,
@@ -313,7 +312,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
             fin_dt = datetime.combine(f, hora_fin)
 
             reserva = Reserva.objects.create(
-                idreserva=Reserva.next_id(),
                 id_aula_id=aula_final,
                 id_dia=dia_obj,
                 estado=estado_final,
