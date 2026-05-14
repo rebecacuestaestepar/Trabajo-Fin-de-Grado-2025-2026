@@ -107,6 +107,8 @@ def generar_reservas_periodicas(clases, curso):
                     dia_actual += timedelta(days=1)
 
                 num_reservas_creadas += 1
+        curso_objeto.horario_cargado = True
+        curso_objeto.save()
 
         
 

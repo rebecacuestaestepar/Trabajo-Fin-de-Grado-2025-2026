@@ -6,6 +6,7 @@ class Curso(models.Model):
     idcurso = models.CharField(db_column='IDCURSO', primary_key=True, max_length=10)  # Field name made lowercase.
     fecha_inicio = models.DateField(db_column='FECHA_INICIO')  # Field name made lowercase.
     fecha_fin = models.DateField(db_column='FECHA_FIN')  # Field name made lowercase.
+    horario_cargado = models.BooleanField(db_column='HORARIO_CARGADO', default=False)  # Field name made lowercase.
 
     class Meta:
         managed = False

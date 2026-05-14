@@ -15,7 +15,8 @@ def generar_calendario_academico(datos):
             defaults={
                 'fecha_inicio': fecha_inicio_curso,
                 'fecha_fin': fecha_fin_curso
-            }
+            },
+            horario_cargado=False
         )
 
         sem_1_objeto, _ = Semestre.objects.update_or_create(
