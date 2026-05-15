@@ -13,6 +13,12 @@ export function obtenerCursos() {
     });
 }
 
+export function obtenerCursosConHorario() {
+    return apiRequest("/horarios", {
+        method: "GET",
+    });
+}
+
 /*export function enviarArchivoCurso(payload) {
     return apiRequest("/docencia/cursos/enviar/", {
         method: "POST",
