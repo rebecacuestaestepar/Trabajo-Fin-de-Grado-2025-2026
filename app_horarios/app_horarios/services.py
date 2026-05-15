@@ -1,10 +1,12 @@
+from calendario.models import Curso
 from reservas.models import Reserva, ReservaPeriodica, Aula
-from docencia.models import Asignaturas, Docente, Grupo
+from docencia.models import Asignaturas, Docente, Grado, Grupo
 
-def obtener_horario_grado(datos):
-    curso = datos['curso']
-    asignaturas = Asignaturas.objects.get(grado_id = curso)
-    grupo = Grupo.objects.get(id_asignatura = asignaturas)
+def obtener_cursos_con_horario():
+    return Curso.objects.filter(horario_cargado=True).order_by('-idcurso')
 
-    reservasPeriodicas = ReservaPeriodica.objects.filter(grupo_id = grupo)
-    reservas = Reserva.objects.filter(grupo_id = grupo)
+def obtener_grados_con_horario(curso):
+    return Grado.objects.filter(
+        asignaturas__grupo__reservaperiodica__fecha_inicio__gte=curso.fecha_inicio,
+        asignaturas__grupo__reservaperiodica__fecha_inicio__lte=curso.fecha_fin
+    ).distinct().order_by('nombre')

@@ -26,7 +26,7 @@ class Semestre(models.Model):
 
 class Dia(models.Model):
     dia = models.DateField(db_column='DIA', primary_key=True)  # Field name made lowercase.
-    id_semestre = models.ForeignKey(Semestre, models.CASCADE, db_column='ID_SEMESTRE', max_length=10)  # Field name made lowercase.
+    id_semestre = models.ForeignKey(Semestre, models.CASCADE, db_column='ID_SEMESTRE', max_length=10, null=True)  # Field name made lowercase.
     dia_semana = models.DecimalField(db_column='DIA_SEMANA', max_digits=10, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
