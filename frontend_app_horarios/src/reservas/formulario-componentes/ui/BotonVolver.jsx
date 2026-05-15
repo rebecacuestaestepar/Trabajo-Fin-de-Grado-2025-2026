@@ -1,4 +1,5 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import React from 'react';
 
 export default function BotonVolver({
   fallback = "/reservas",
@@ -6,11 +7,23 @@ export default function BotonVolver({
   children = "← Volver",
 }) {
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from || fallback;
+  // const location = useLocation();
+  // const from = location.state?.from || fallback;
+
+  const manejarClic = () => {
+        if (window.history.state && window.history.state.idx > 0) {
+            navigate(-1);
+        } else {
+            navigate(fallback);
+        }
+    };
 
   return (
-    <button type="button" onClick={() => navigate(from)} className={className}>
+    // <button type="button" onClick={() => navigate(from)} className={className}>
+    <button 
+            onClick={manejarClic}
+            className={`flex items-center text-sm font-medium text-slate-600 hover:text-slate-900 border border-slate-200 bg-white px-3 py-1.5 rounded-md hover:bg-slate-50 transition-colors shadow-sm ${className}`}
+        >
       {children}
     </button>
   );
