@@ -7,6 +7,12 @@ export function cargarCalendarioFormulario(payload) {
     });
 }
 
+export function obtenerCursos() {
+    return apiRequest("/docencia/cursos/", {
+        method: "GET",
+    });
+}
+
 export function obtenerCalendarioCurso(id_curso) {
     return apiRequest(`/calendario/curso/${id_curso}/`, {
         method: "GET",

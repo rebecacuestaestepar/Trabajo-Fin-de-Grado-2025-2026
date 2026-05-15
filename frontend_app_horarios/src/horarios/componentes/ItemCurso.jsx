@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AreaArchivo from './AreaArchivo';
 import { useNavigate } from 'react-router-dom';
 
-const ItemCurso = ({ idCurso, enviarBack, modoNavegacion = false, rutaDestino, titulo = `Curso ` }) => {
+const ItemCurso = ({ idCurso, enviarBack, modoNavegacion = false, rutaDestino, titulo}) => {
     const [expandido, setExpandido] = useState(false);
     const navigate = useNavigate();
 

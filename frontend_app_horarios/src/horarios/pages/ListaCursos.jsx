@@ -2,11 +2,14 @@ import { cargarHorarioExcel } from "../../api/docencia";
 import ItemCurso from "../componentes/ItemCurso";
 import { useNavigate } from "react-router-dom";
 import { useCursos } from "../hooks/useCursos";
+import React from "react";
 
 export default function ListaCursos() {
   const navigate = useNavigate();
 
   const { cursos, cargando } = useCursos();
+
+  console.log("Cursos obtenidos:", cursos);
 
   const enviarBack = async (archivo, idCurso) => {
     const formData = new FormData();
