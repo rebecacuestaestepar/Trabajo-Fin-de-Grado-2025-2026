@@ -11,7 +11,7 @@ class ListaHorariosView(APIView):
 
         for h in horarios_cargados:
             datos.append({
-                'curso': h.idcurso,
+                'idcurso': h.idcurso,
                 'horario_cargado': h.horario_cargado
             })
         return Response(datos, status=200)
