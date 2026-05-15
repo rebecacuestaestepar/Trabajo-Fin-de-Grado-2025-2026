@@ -64,6 +64,7 @@ export default function ListaCursos() {
                             idCurso={curso.idcurso} 
                             enviarBack={enviarBack}
                             rutaDestino={`/calendario/cursos/${curso.idcurso}`}
+                            titulo={`Curso ${curso.idcurso}`}
                         />
                     ))
                 ) : (

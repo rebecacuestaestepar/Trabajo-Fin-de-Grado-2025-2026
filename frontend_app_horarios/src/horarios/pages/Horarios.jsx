@@ -46,7 +46,7 @@ export default function Horarios() {
           </button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-transparent overflow-hidden">
 
           {cargando && <div className="p-10 text-center text-slate-500">Buscando horarios...</div>}
 
@@ -64,7 +64,7 @@ export default function Horarios() {
                             idCurso={horario.idcurso}
                             modoNavegacion={true}
                             rutaDestino={`/horarios/${horario.idcurso}`}
-                            prefijoTitulo={`Horario del Curso `}
+                            titulo={`Horario del curso ${horario.idcurso}`}
                         />
                     ))}
                 </div>

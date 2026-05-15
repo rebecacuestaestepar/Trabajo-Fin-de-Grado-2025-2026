@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AreaArchivo from './AreaArchivo';
 import { useNavigate } from 'react-router-dom';
 
-const ItemCurso = ({ idCurso, enviarBack, modoNavegacion = false, rutaDestino, prefijoTitulo = `Curso ` }) => {
+const ItemCurso = ({ idCurso, enviarBack, modoNavegacion = false, rutaDestino, titulo = `Curso ` }) => {
     const [expandido, setExpandido] = useState(false);
     const navigate = useNavigate();
 
@@ -14,6 +14,9 @@ const ItemCurso = ({ idCurso, enviarBack, modoNavegacion = false, rutaDestino, p
         }
     };
 
+    const esRutaHorario = rutaDestino && rutaDestino.startsWith('/horarios');
+    const textoTitulo = titulo ? titulo : (esRutaHorario ? `Horario ${idCurso}` : `Curso ${idCurso}`);
+
     return (
         <div className="border-2 border-slate-300 rounded-lg py-5 px-4 transition-colors duration-200 hover:bg-slate-50 last:border-b-0">
             <div
@@ -22,7 +25,7 @@ const ItemCurso = ({ idCurso, enviarBack, modoNavegacion = false, rutaDestino, p
                 }`}
                 onClick={manejarClic}
             >
-                <span className="text-lg">{prefijoTitulo} {idCurso}</span>
+                <span className="text-lg">{textoTitulo}</span>
                 {!modoNavegacion && (
                     <span className="text-slate-400 transition-transform duration-200">
                         {expandido ? '▲' : '▼'}
