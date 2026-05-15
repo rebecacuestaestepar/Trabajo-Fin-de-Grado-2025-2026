@@ -5,7 +5,7 @@ from reservas.excel_parser import DIAS_SEMANA
 from aulas.models import Aula
 from reservas.models import Reserva, ReservaPeriodica
 from docencia.models import Grupo, Asignaturas
-from calendario.models import Curso, Festivo, Semestre, Dia, CambioDocencia
+from calendario.models import Curso, Festivo, Lectivo, Semestre, Dia, CambioDocencia
 from django.db import transaction
 
 import uuid
@@ -65,6 +65,7 @@ def generar_reservas_periodicas(clases, curso):
                         dia_actual += timedelta(days=1)
                         continue
                     dia_cambio = CambioDocencia.objects.filter(sustituye_dia=dia_num).first()
+                    lectivo = Lectivo.objects.filter(id_dia=dia_bd).first()
                     if dia_cambio and dia_cambio.sustituye_dia == dia_num:
                         reserva_cambio = Reserva.objects.create(
                             id_aula=aula_objeto,
@@ -83,26 +84,29 @@ def generar_reservas_periodicas(clases, curso):
                             fecha_fin=fecha_fin_sem,
                             intervalo_semanas=1
                         )
+                        dia_actual += timedelta(days=1)
+                        continue
+                        
+                    if lectivo:
+                        reserva = Reserva.objects.create(
+                            id_aula=aula_objeto,
+                            id_dia=dia_bd,
+                            estado='A',
+                            tipo='R',
+                            hora_inicio=clase.hora_inicio,
+                            hora_fin=clase.hora_fin
+                        )
 
-                    reserva = Reserva.objects.create(
-                        id_aula=aula_objeto,
-                        id_dia=dia_bd,
-                        estado='A',
-                        tipo='R',
-                        hora_inicio=clase.hora_inicio,
-                        hora_fin=clase.hora_fin
-                    )
+                        ReservaPeriodica.objects.create(
+                            id_reserva=reserva,
+                            id_grupo=grupo_objeto,
+                            dia_semana=dia_num,
+                            fecha_inicio=fecha_inicio_sem,
+                            fecha_fin=fecha_fin_sem,
+                            intervalo_semanas=1
+                        )
 
-                    ReservaPeriodica.objects.create(
-                        id_reserva=reserva,
-                        id_grupo=grupo_objeto,
-                        dia_semana=dia_num,
-                        fecha_inicio=fecha_inicio_sem,
-                        fecha_fin=fecha_fin_sem,
-                        intervalo_semanas=1
-                    )
-
-                    dia_actual += timedelta(days=1)
+                        dia_actual += timedelta(days=1)
                 else:
                     dia_actual += timedelta(days=1)
 

@@ -46,10 +46,8 @@ export function useEventosAula({ aulasNombres = [], tipo }) {
         })
       );
 
-      // Esperamos a que todas las promesas se resuelvan
       const resultados = await Promise.all(promesas);
 
-      // Juntamos todos los arrays de eventos en uno solo y lo normalizamos
       const todosLosEventos = resultados.flat().map(normalizarEvento);
 
       setEvents(todosLosEventos);

@@ -73,82 +73,110 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
             })
 
     # -------------------------
-    # 2) Reservas periódicas (expansión)
+    # 2) Reservas periódicas
     # -------------------------
+    # if tipo in ("AMBAS", "PERIODICA"):
+    #     qs_periodica = (
+    #         ReservaPeriodica.objects
+    #         .select_related("id_reserva", "id_reserva__id_aula", "id_grupo")
+    #         .filter(id_reserva__id_aula__nombre=aula_nombre)
+    #         #.filter(fecha_inicio__lt=end_dt.date(), fecha_fin__gt=start_dt.date())  # solapa con el rango visible
+    #         .filter(id_reserva__estado__in=["A"])  # solo mostrar las reservas aceptadas
+    #         .order_by("fecha_inicio", "dia_semana")
+    #     )
+
+    #     start_date = start_dt.date()
+    #     end_date_excl = (end_dt.date() + timedelta(days=1))
+
+    #     for per in qs_periodica:
+    #         r = per.id_reserva
+
+    #         fi = per.fecha_inicio
+    #         ff = per.fecha_fin
+
+    #         rango_ini = max(start_date, fi)
+    #         rango_fin_excl = min(end_date_excl, ff + timedelta(days=1))
+
+    #         if rango_ini >= rango_fin_excl:
+    #             continue
+
+    #         dia_semana = int(per.dia_semana)
+    #         intervalo = int(per.intervalo_semanas) or 1
+
+    #         for d in _iter_dias(rango_ini, rango_fin_excl):
+    #             if d.isoweekday() != dia_semana:
+    #                 continue
+
+    #             weeks = (d - fi).days // 7
+    #             if weeks % intervalo != 0:
+    #                 continue
+
+    #             ev_start = _combine(d, r.hora_inicio)
+    #             ev_end = _combine(d, r.hora_fin)
+
+    #             if ev_end <= start_dt or ev_start >= end_dt:
+    #                 continue
+
+    #             ocurrencia_id = f"{r.idreserva}-{d.isoformat()}"
+
+    #             grupo = getattr(per, "id_grupo", None)
+
+    #             if grupo:
+    #                 asignatura_obj = getattr(grupo, "id_asignatura", None)
+    #                 asignatura_nombre = getattr(asignatura_obj, "nombre", None) or getattr(asignatura_obj, "id", None)
+    #                 nombre_grupo = getattr(grupo, "nombre", "")
+    #                 titulo = f"{asignatura_nombre} - {nombre_grupo}".strip() if asignatura_nombre else f"Grupo {nombre_grupo}"
+    #             else:
+    #                 titulo = f"Periódica {r.idreserva}"
+
+    #             # Título: asignatura
+    #             #asignatura = getattr(per.id_asignatura, "nombre", None) or getattr(per.id_asignatura, "id", None)
+    #             #titulo = f"{asignatura}" if asignatura else f"Periódica {r.idreserva}"
+
+    #             eventos.append({
+    #                 "id": ocurrencia_id,
+    #                 "title": titulo,
+    #                 "start": ev_start.isoformat(),
+    #                 "end": ev_end.isoformat(),
+    #                 "tipo": "PERIODICA",
+    #                 "serie_id": str(r.idreserva),
+    #                 #"estado": r.estado,
+    #                 "aula": r.id_aula.nombre if r.id_aula else "",
+    #                 "fecha": d.isoformat(),
+    #             })
+
     if tipo in ("AMBAS", "PERIODICA"):
         qs_periodica = (
             ReservaPeriodica.objects
-            .select_related("id_reserva", "id_reserva__id_aula", "id_grupo")
+            .select_related("id_reserva", "id_reserva__id_aula", "id_reserva__id_dia", "id_grupo__id_asignatura")
             .filter(id_reserva__id_aula__nombre=aula_nombre)
-            #.filter(fecha_inicio__lt=end_dt.date(), fecha_fin__gt=start_dt.date())  # solapa con el rango visible
-            .filter(id_reserva__estado__in=["A"])  # solo mostrar las reservas aceptadas
-            .order_by("fecha_inicio", "dia_semana")
+            .filter(id_reserva__id_dia__dia__gte=start_dt.date(), 
+                    id_reserva__id_dia__dia__lte=end_dt.date())
+            .filter(id_reserva__estado__in=["A"])
         )
-
-        start_date = start_dt.date()
-        # Para incluir el último día si el rango acaba en mitad del día
-        end_date_excl = (end_dt.date() + timedelta(days=1))
 
         for per in qs_periodica:
             r = per.id_reserva
+            
+            fecha_clase = r.id_dia.dia 
+            
+            ev_start = _combine(fecha_clase, r.hora_inicio)
+            ev_end = _combine(fecha_clase, r.hora_fin)
 
-            # Ventana de la serie
-            fi = per.fecha_inicio
-            ff = per.fecha_fin
+            grupo = per.id_grupo
+            if grupo:
+                asignatura_nombre = grupo.id_asignatura.nombre if grupo.id_asignatura else "Asignatura"
+                titulo = f"{asignatura_nombre} - {grupo.nombre}"
+            else:
+                titulo = f"Clase {r.idreserva}"
 
-            # Recortamos al rango visible
-            rango_ini = max(start_date, fi)
-            rango_fin_excl = min(end_date_excl, ff + timedelta(days=1))  # +1 para hacerlo exclusivo
-
-            if rango_ini >= rango_fin_excl:
-                continue
-
-            dia_semana = int(per.dia_semana)
-            intervalo = int(per.intervalo_semanas) or 1
-
-            for d in _iter_dias(rango_ini, rango_fin_excl):
-                if d.isoweekday() != dia_semana:
-                    continue
-
-                # Intervalo semanal: semanas desde fi
-                weeks = (d - fi).days // 7
-                if weeks % intervalo != 0:
-                    continue
-
-                ev_start = _combine(d, r.hora_inicio)
-                ev_end = _combine(d, r.hora_fin)
-
-                # Aseguramos solape con el rango
-                if ev_end <= start_dt or ev_start >= end_dt:
-                    continue
-
-                # ID único por ocurrencia (serie + fecha)
-                ocurrencia_id = f"{r.idreserva}-{d.isoformat()}"
-
-                grupo = getattr(per, "id_grupo", None)
-
-                if grupo:
-                    asignatura_obj = getattr(grupo, "id_asignatura", None)
-                    asignatura_nombre = getattr(asignatura_obj, "nombre", None) or getattr(asignatura_obj, "id", None)
-                    nombre_grupo = getattr(grupo, "nombre", "")
-                    titulo = f"{asignatura_nombre} - {nombre_grupo}".strip() if asignatura_nombre else f"Grupo {nombre_grupo}"
-                else:
-                    titulo = f"Periódica {r.idreserva}"
-
-                # Título: asignatura
-                #asignatura = getattr(per.id_asignatura, "nombre", None) or getattr(per.id_asignatura, "id", None)
-                #titulo = f"{asignatura}" if asignatura else f"Periódica {r.idreserva}"
-
-                eventos.append({
-                    "id": ocurrencia_id,
-                    "title": titulo,
-                    "start": ev_start.isoformat(),
-                    "end": ev_end.isoformat(),
-                    "tipo": "PERIODICA",
-                    "serie_id": str(r.idreserva),
-                    #"estado": r.estado,
-                    "aula": r.id_aula.nombre if r.id_aula else "",
-                    "fecha": d.isoformat(),
-                })
+            eventos.append({
+                "id": str(r.idreserva),
+                "title": titulo,
+                "start": ev_start.isoformat(),
+                "end": ev_end.isoformat(),
+                "tipo": "PERIODICA",
+                "aula": r.id_aula.nombre if r.id_aula else "",
+            })
 
     return eventos

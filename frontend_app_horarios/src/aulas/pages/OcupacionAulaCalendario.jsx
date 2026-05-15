@@ -11,6 +11,7 @@ import { useEventosAula } from "../hooks/useEventosAula";
 import BotonVolver from "../../reservas/formulario-componentes/ui/BotonVolver";
 import LeyendaAulas from "../components/calendario/LeyendaAulas";
 import { generarMapaColores } from "../ocupacion-utiles/coloresAulas";
+import es from "@fullcalendar/core/locales/es";
 
 
 export default function OcupacionAulaCalendario() {
@@ -18,7 +19,6 @@ export default function OcupacionAulaCalendario() {
   const location = useLocation();
   const calRef = useRef(null);
 
-  // Leemos los parámetros de la URL para saber qué aulas mostrar
   const [searchParams] = useSearchParams();
   const aulasSeleccionadasNombres = searchParams.getAll("aula");
 
@@ -32,12 +32,13 @@ export default function OcupacionAulaCalendario() {
 
   const { events, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadasNombres, tipo });
 
+  console.log("Eventos obtenidos:", events);
+
 
   const mapaColores = useMemo(() => {
     return generarMapaColores(objetosAulas);
   }, [objetosAulas]);
 
-  // Función paa manejar ir con el click a la vista de día
   const handleDateClick = (arg) => {
     const calendarApi = calRef.current.getApi();
     calendarApi.changeView('timeGridDay', arg.date);
@@ -47,7 +48,6 @@ export default function OcupacionAulaCalendario() {
     <div className="space-y-3">
       <BotonVolver fallback="/ocupacion-aulas" />
     
-      {/* Cabecera indicando qué aulas se están mostrando */}
       <div className="rounded-lg border border-slate-200 bg-white p-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="text-sm font-semibold text-slate-800">
@@ -56,7 +56,6 @@ export default function OcupacionAulaCalendario() {
         </div>
       </div>
 
-      {/* Toolbar custom (con filtro) */}
         <div className="mt-3">
           <ToolbarAulaCalendar
             title={calendarioTitulo}
@@ -70,29 +69,29 @@ export default function OcupacionAulaCalendario() {
           />
         </div>
 
-        {/* Leyenda */}
         <div className="mt-3">
           <LeyendaAulas mapaColores={mapaColores} />
         </div>
 
 
-      {/* Calendario */}
       <div className="rounded-lg border border-slate-200 bg-white p-3">
         <FullCalendar
           ref={calRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"          // por defecto semanal
-          firstDay={1}                        // lunes
+          initialView="timeGridWeek"          
+          firstDay={1}                        
           nowIndicator={true}
           height="75vh"
           expandRows={true}
           events={events}
+          locale={es}
 
-          navLinks={true} // Para que los días sean links nativos
-          dateClick={handleDateClick} // Captura el clic en celdas vacías
+          timeZone="UTC"
+
+          navLinks={true} 
+          dateClick={handleDateClick}
 
           eventDidMount={(arg) => {
-            // aplica colores según tipo
             const tipoEv = arg.event.extendedProps?.tipo;
             const aulaEv = arg.event.extendedProps?.aula;
 
@@ -109,18 +108,15 @@ export default function OcupacionAulaCalendario() {
             setCalendarioView(arg.view.type);
 
             setRange((prev) => {
-              // Si no había rango previo, lo guardamos
               if (!prev) return { start: arg.start, end: arg.end };
               
-              // Comparamos el valor numérico de las fechas 
               if (
                 prev.start.getTime() === arg.start.getTime() &&
                 prev.end.getTime() === arg.end.getTime()
               ) {
-                return prev; // No hacemos NADA, evitando el render y el bucle
+                return prev; 
               }
               
-              // Solo actualizamos si las fechas son genuinamente distintas
               return { start: arg.start, end: arg.end };
             });
           }}

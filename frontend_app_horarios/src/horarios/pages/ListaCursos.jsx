@@ -2,10 +2,15 @@ import { cargarHorarioExcel } from "../../api/docencia";
 import ItemCurso from "../componentes/ItemCurso";
 import { useNavigate } from "react-router-dom";
 import { useCursos } from "../hooks/useCursos";
-import React from "react";
+import React, { useState } from "react";
 
 export default function ListaCursos() {
   const navigate = useNavigate();
+
+  const [generandoDatos, setGenerandoDatos] = useState(false);
+  const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState(null);
+  
 
   const { cursos, cargando } = useCursos();
 
@@ -16,17 +21,18 @@ export default function ListaCursos() {
     formData.append('fichero', archivo);
     formData.append('id_curso', idCurso);
 
-    
+    setGenerandoDatos(true);
     try {
         const data = await cargarHorarioExcel(formData);
         
-        alert(`¡Éxito! Archivo enviado para el curso ${idCurso}`);
-        console.log("Respuesta de Django:", data);
+        setMensaje(`Se ha cargado el horario para el curso ${idCurso} correctamente.`);
+        //console.log("Respuesta de Django:", data);
         
-        // Cerrar el desplegable
     } catch (error) {
         console.error("Fallo del servidor:", error);
-        alert(`No se pudo cargar el archivo: ${error.message}`);
+        setError(`No se pudo cargar el archivo`);
+    } finally {
+        setGenerandoDatos(false);
     }
   };
 
@@ -60,6 +66,16 @@ export default function ListaCursos() {
         </div>
         <div>
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                {error && (
+                    <div className="p-4 mb-4 text-red-700 bg-red-100 rounded">
+                        {error}
+                    </div>
+                )}
+                {mensaje && (
+                    <div className="p-4 mb-4 text-green-700 bg-green-100 rounded">
+                        {mensaje}
+                    </div>
+                )}
                 {cursos.length > 0 ? (
                     cursos.map((curso) => (
                         <ItemCurso 
