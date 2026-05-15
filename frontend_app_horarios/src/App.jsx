@@ -21,9 +21,7 @@ import LoginPage from "./login/LoginPage.jsx";
 import ListaCursos from "./horarios/pages/ListaCursos.jsx";
 import CrearCalendario from "./calendario/pages/CrearCalendario.jsx";
 
-import ItemCurso from "./horarios/componentes/ItemCurso.jsx";
-import SeccionFechas from "./calendario/componentes/SeccionFechas.jsx";
-import SelectorFestivos from "./calendario/componentes/SelectorFestivos.jsx";
+import ListaGrados from "./horarios/pages/ListaGrados.jsx";
 import ConsultaCalendarios from "./horarios/pages/ConsultarCalendarios.jsx";
 import VistaDetalleCalendario from "./calendario/pages/VistaDetalleCalendario.jsx";
 import LeyendaCalendario from "./calendario/componentes/LeyendaCalendario.jsx";
@@ -50,6 +48,7 @@ function App() {
 
           <Route path="/horarios" element={<Horarios />} />
           <Route path="/horarios/cargar/cursos" element={<ListaCursos />} />
+          <Route path="/horarios/:id_curso/grados" element={<ListaGrados />} />
           <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
           <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
           <Route path="/examenes" element={<Examenes />} />

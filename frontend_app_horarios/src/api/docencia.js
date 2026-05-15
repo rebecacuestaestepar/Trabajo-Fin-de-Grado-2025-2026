@@ -19,6 +19,12 @@ export function obtenerCursosConHorario() {
     });
 }
 
+export function obtenerGradosPorCurso(idCurso) {
+    return apiRequest(`/horarios/${idCurso}/grados/`, {
+        method: "GET",
+    });
+}
+
 /*export function enviarArchivoCurso(payload) {
     return apiRequest("/docencia/cursos/enviar/", {
         method: "POST",
