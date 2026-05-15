@@ -21,7 +21,7 @@ const obtenerFechasEnRango = (startStr, endStr) => {
     while (actual < fin) {
         const diaSemana = actual.getDay();
         
-        if (fechas.length > 0 && (diaSemana === 0 || diaSemana === 6)) {
+        if (fechas.length > 0 && (diaSemana === 0 || diaSemana === 6) && actual !=fin) {
             actual.setDate(actual.getDate() + 1);
             continue;
         }

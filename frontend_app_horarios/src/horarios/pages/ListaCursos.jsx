@@ -41,7 +41,7 @@ export default function ListaCursos() {
 
   return (
     <div className="p-4">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between mb-4">
             <h1 className="text-xl font-semibold">Lista de Cursos</h1>
             <button
                 type="button"
@@ -63,6 +63,7 @@ export default function ListaCursos() {
                             key={curso.idcurso} 
                             idCurso={curso.idcurso} 
                             enviarBack={enviarBack}
+                            rutaDestino={`/calendario/cursos/${curso.idcurso}`}
                         />
                     ))
                 ) : (
