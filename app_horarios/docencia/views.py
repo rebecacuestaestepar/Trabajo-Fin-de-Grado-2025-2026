@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from docencia.services import obtener_semestres_por_grado
+from docencia.serializers import HorarioSerializer
+from docencia.services import obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre
 from calendario.models import Curso
 from reservas.excel_parser import parsear_horario_excel
 from reservas.services_excel import generar_reservas_periodicas
@@ -48,6 +49,24 @@ class SemestresPorGradoView(APIView):
         try:
             semestres = obtener_semestres_por_grado(id_grado)
             return Response({'semestres': semestres}, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=404)
+
+
+class ObtenerAsignaturasPorGradoYSemestreView(APIView):
+    def get(self, request, *args, **kwargs):
+        id_curso = request.query_params.get('id_curso')
+        id_grado = request.query_params.get('id_grado')
+        semestre_academico = request.query_params.get('semestre_academico')
+
+        if not id_curso or not id_grado or not semestre_academico:
+            return Response({'error': 'Faltan parámetros requeridos'}, status=400)
+
+        try:
+            reservas = obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, int(semestre_academico))
+            serializer = HorarioSerializer(reservas, many=True)
+            return Response(serializer.data, status=200)
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=404)
