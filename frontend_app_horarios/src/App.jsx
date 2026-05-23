@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import PlantillaApp from './general/layout/PlantillaApp.jsx';
 
+import RutaProtegida from "./auth/RutaProtegida.jsx";
+
 //import SolicitudReserva from './reservas/SolicitudReserva.jsx'
 import SolicitudReservas from './reservas/formulario-paginas/SolicitudReservas.jsx';
 import FormularioCargar from './calendario/FormularioCargar.jsx';
@@ -29,36 +31,35 @@ import LeyendaCalendario from "./calendario/componentes/LeyendaCalendario.jsx";
 
 
 function App() {
-  //const [count, setCount] = useState(0)
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route element={<PlantillaApp />}>
+        <Route element={<RutaProtegida />}>
+          <Route element={<PlantillaApp />}>
+            <Route path="/reservas/gestion" element={<GestionReservas />} />
+            <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
+            <Route path="/reservas/crear" element={<CrearReserva />} />
+            <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
+            <Route path="/reservas/puntuales/:id" element={<EditarReservas />} />
+            <Route path="/cargar-calendario" element={<FormularioCargar />} />
+            <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
 
-          <Route path="/reservas/gestion" element={<GestionReservas />} />
-          <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
-          <Route path="/reservas/crear" element={<CrearReserva />} />
-          <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
-          <Route path="/reservas/puntuales/:id" element={<EditarReservas />} />
-          <Route path="/cargar-calendario" element={<FormularioCargar />} />
-          {/* <Route path="/reservas/todas" element={<TodasReservas />} /> */}
-          <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
+            <Route path="/horarios" element={<Horarios />} />
+            <Route path="/horarios/cargar/cursos" element={<ListaCursos />} />
+            <Route path="/horarios/:id_curso/grados" element={<ListaGrados />} />
+            <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
+            <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
+            <Route path="/examenes" element={<Examenes />} />
 
-          <Route path="/horarios" element={<Horarios />} />
-          <Route path="/horarios/cargar/cursos" element={<ListaCursos />} />
-          <Route path="/horarios/:id_curso/grados" element={<ListaGrados />} />
-          <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
-          <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
-          <Route path="/examenes" element={<Examenes />} />
+            <Route path="/calendario/crear" element={<CrearCalendario />} />
+            <Route path="/calendario/cursos" element={<ConsultaCalendarios />} />
+            <Route path="/calendario/cursos/:id_curso" element={<VistaDetalleCalendario />} />
 
-          <Route path="/calendario/crear" element={<CrearCalendario />} />
-          <Route path="/calendario/cursos" element={<ConsultaCalendarios />} />
-          <Route path="/calendario/cursos/:id_curso" element={<VistaDetalleCalendario />} />
+            <Route path="/calendario/leyenda" element={<LeyendaCalendario />} />
 
-          <Route path="/calendario/leyenda" element={<LeyendaCalendario />} />
-
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
