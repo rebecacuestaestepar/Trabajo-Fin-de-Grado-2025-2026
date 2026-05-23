@@ -28,7 +28,7 @@ export default function SeccionFechas({ datos, onChange}) {
                 </Campo>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 p-4 bg-slate-50 border border-slate-100 rounded-md">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <Campo etiqueta="Inicio del Curso">
                     <EntradaTexto
                         type="date"
@@ -45,9 +45,6 @@ export default function SeccionFechas({ datos, onChange}) {
                         required
                     />
                 </Campo>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <Campo etiqueta="Inicio 1º Semestre">
                     <EntradaTexto
                         type="date"
