@@ -175,7 +175,8 @@ export default function VistaDetalleCalendario() {
             customMultiMonth: {
                 type: 'multiMonth',
                 duration: { months: cantidadDeMeses },
-                multiMonthMaxColumns: 3
+                multiMonthMaxColumns: 3,
+                showNonCurrentDates: false
             }
         };
     }, [cantidadDeMeses]);
