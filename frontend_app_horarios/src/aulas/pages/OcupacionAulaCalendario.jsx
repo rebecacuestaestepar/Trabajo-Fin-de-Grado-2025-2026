@@ -44,6 +44,17 @@ export default function OcupacionAulaCalendario() {
     calendarApi.changeView('timeGridDay', arg.date);
   };
 
+  const eventosConTextosNativos = useMemo(() => {
+    return events.map(ev => {
+      const tipoEv = ev.extendedProps?.tipo;
+      
+      return {
+        ...ev,
+        textColor: tipoEv === "PERIODICA" ? "#1e293b" : "#ffffff", 
+      };
+    });
+  }, [events]);
+
   return (
     <div className="space-y-3">
       <BotonVolver fallback="/ocupacion-aulas" />
@@ -83,7 +94,7 @@ export default function OcupacionAulaCalendario() {
           nowIndicator={true}
           height="75vh"
           expandRows={true}
-          events={events}
+          events={eventosConTextosNativos}
           locale={es}
 
           timeZone="UTC"
