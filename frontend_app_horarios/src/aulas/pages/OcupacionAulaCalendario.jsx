@@ -95,13 +95,18 @@ export default function OcupacionAulaCalendario() {
             const tipoEv = arg.event.extendedProps?.tipo;
             const aulaEv = arg.event.extendedProps?.aula;
 
+            const nombreCompleto = arg.event.extendedProps?.nombre_comleto || arg.event.title;
+
+            // Agregar tooltip con el nombre completo del evento
+            arg.el.setAttribute("title", nombreCompleto);
+
             const coloresAula = mapaColores[aulaEv] || { oscuro: "#475569", claro: "#cbd5e1" };
             
             const bgColor = tipoEv === "PUNTUAL" ? coloresAula.oscuro : coloresAula.claro;
 
             arg.el.style.backgroundColor = bgColor;
             arg.el.style.borderColor = bgColor;
-            arg.el.style.color = tipoEv === "PERIODICA" ? "#1e293b" : "#ffffff";
+            //arg.el.style.color = tipoEv === "PERIODICA" ? "#1e293b" : "#ffffff";
           }}
           datesSet={(arg) => {
             setCalendarioTitulo(arg.view.title);

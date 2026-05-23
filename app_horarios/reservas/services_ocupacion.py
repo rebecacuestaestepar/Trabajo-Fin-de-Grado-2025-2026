@@ -166,7 +166,8 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
             grupo = per.id_grupo
             if grupo:
                 asignatura_nombre = grupo.id_asignatura.nombre if grupo.id_asignatura else "Asignatura"
-                titulo = f"{asignatura_nombre} - {grupo.nombre}"
+                abreviatura_asignatura = grupo.id_asignatura.abreviatura if grupo.id_asignatura and grupo.id_asignatura.abreviatura else None
+                titulo = f"{abreviatura_asignatura} - {grupo.nombre}"
             else:
                 titulo = f"Clase {r.idreserva}"
 
@@ -174,6 +175,7 @@ def obtener_eventos_ocupacion_aula(*, aula_nombre: str, start_dt: datetime, end_
                 "id": str(r.idreserva),
                 "title": titulo,
                 "start": ev_start.isoformat(),
+                "nombre_completo": f"{asignatura_nombre} - {grupo.nombre}" if grupo else f"Clase {r.idreserva}",
                 "end": ev_end.isoformat(),
                 "tipo": "PERIODICA",
                 "aula": r.id_aula.nombre if r.id_aula else "",

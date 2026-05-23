@@ -11,6 +11,7 @@ function normalizarEvento(e) {
       ...e,
       tipo: e.tipo, 
       aula: e.aula, 
+      nombre_comleto: e.nombre_completo,
     },
   };
 }
