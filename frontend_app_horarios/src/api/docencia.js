@@ -25,9 +25,14 @@ export function obtenerGradosPorCurso(idCurso) {
     });
 }
 
-/*export function enviarArchivoCurso(payload) {
-    return apiRequest("/docencia/cursos/enviar/", {
-        method: "POST",
-        body: payload,
+export function obtenerSemestresPorGrado(idGrado) {
+    return apiRequest(`/horarios/${idGrado}/semestres/`, {
+        method: "GET",
     });
-}*/
+}
+
+export function obtenerAsignaturasPorGradoYSemestre(idGrado, idSemestre) {
+    return apiRequest(`/horarios/${idGrado}/asignaturas/?id_semestre=${idSemestre}`, {
+        method: "GET",
+    });
+}
