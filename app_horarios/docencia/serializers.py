@@ -26,5 +26,12 @@ class HorarioSerializer(serializers.ModelSerializer):
         hi = obj.id_reserva.hora_inicio.strftime("%H:%M")
         hf = obj.id_reserva.hora_fin.strftime("%H:%M")
         return f"{asig}|{grupo}|{dia}|{hi}|{hf}"
+    
+class MoverSerieReservaSerializer(serializers.Serializer):
+    distint_serie = serializers.CharField()
+    nuevo_dia = serializers.IntegerField(min_value=1, max_value=7)
+    nuevo_hora_inicio = serializers.TimeField()
+    nuevo_hora_fin = serializers.TimeField()
+    forzar = serializers.BooleanField(default=False)
 
     
