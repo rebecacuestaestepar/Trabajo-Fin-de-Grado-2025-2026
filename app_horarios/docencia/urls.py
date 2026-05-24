@@ -4,6 +4,6 @@ from .views import CargarHorarioExcelView, ObtenerAsignaturasPorGradoYSemestreVi
 urlpatterns = [
     path('cargar-horario/', CargarHorarioExcelView.as_view(), name='cargar_horario_excel'),
     path('cursos/', ObtenerCursosView.as_view(), name='obtener_cursos'),
-    path('semestres-grado/', SemestresPorGradoView.as_view(), name='semestres_por_grado'),
-    path('asignaturas-grado-semestre/', ObtenerAsignaturasPorGradoYSemestreView.as_view(), name='asignaturas_por_grado_semestre'),
+    path('<str:id_grado>/semestres/', SemestresPorGradoView.as_view(), name='semestres_por_grado'),
+    path('<str:id_grado>/asignaturas/semestre/<str:id_semestre>/', ObtenerAsignaturasPorGradoYSemestreView.as_view(), name='asignaturas_por_grado_semestre'),
 ]

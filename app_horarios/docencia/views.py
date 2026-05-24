@@ -40,11 +40,8 @@ class ObtenerCursosView(APIView):
         return Response(cursos, status=200)
     
 class SemestresPorGradoView(APIView):
-    def get(self, request, *args, **kwargs):
-        id_grado = request.query_params.get('id_grado')
+    def get(self, request, id_grado, *args, **kwargs):
 
-        if not id_grado:
-            return Response({'error': 'No se ha proporcionado el ID del grado'}, status=400)
 
         try:
             semestres = obtener_semestres_por_grado(id_grado)
@@ -55,16 +52,14 @@ class SemestresPorGradoView(APIView):
 
 
 class ObtenerAsignaturasPorGradoYSemestreView(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, id_grado, id_semestre, *args, **kwargs):
         id_curso = request.query_params.get('id_curso')
-        id_grado = request.query_params.get('id_grado')
-        semestre_academico = request.query_params.get('semestre_academico')
 
-        if not id_curso or not id_grado or not semestre_academico:
-            return Response({'error': 'Faltan parámetros requeridos'}, status=400)
+        if not id_curso:
+            return Response({'error': 'No se ha proporcionado el ID del curso'}, status=400)
 
         try:
-            reservas = obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, int(semestre_academico))
+            reservas = obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, int(id_semestre))
             serializer = HorarioSerializer(reservas, many=True)
             return Response(serializer.data, status=200)
         except Exception as e:
