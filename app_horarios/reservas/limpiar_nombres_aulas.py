@@ -17,7 +17,7 @@ def limpiar_nombre_aula(nombre_aula):
 
     aula = re.sub(r'(?i)^Lab\.?\s+(?=\d{2}-[a-zA-Z]\d)', 'Lab ', aula)
 
-    aula = re.sub(r'(?i)^Lab\.?\s+', 'Laboratorio ', aula)
+    aula = re.sub(r'(?i)^Lab\.?\s+(?!\d{2}-[a-zA-Z]\d)', 'Laboratorio ', aula)
 
     return aula.strip()
     

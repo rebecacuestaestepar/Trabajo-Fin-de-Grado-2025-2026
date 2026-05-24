@@ -16,8 +16,6 @@ class HorarioSerializer(serializers.ModelSerializer):
         fields = ['id_reserva', 'asignatura', 'aula', 'hora_inicio', 'hora_fin', 'grupo', 'dia_semana', 'distint']
 
     def get_asignatura(self, obj):
-        # asig = obj.id_grupo.id_asignatura
-        # return asig.abreviatura if asig else "Sin asignatura asignada"
         grupo = getattr(obj, 'id_grupo', None)
         if grupo and grupo.id_asignatura:
             asig = grupo.id_asignatura

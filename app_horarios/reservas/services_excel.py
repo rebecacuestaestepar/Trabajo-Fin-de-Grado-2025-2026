@@ -105,8 +105,9 @@ def generar_reservas_periodicas(clases, curso):
                             fecha_fin=fecha_fin_sem,
                             intervalo_semanas=1
                         )
+                    
 
-                        dia_actual += timedelta(days=1)
+                    dia_actual += timedelta(days=1)
                 else:
                     dia_actual += timedelta(days=1)
 
