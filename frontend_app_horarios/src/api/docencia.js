@@ -26,13 +26,13 @@ export function obtenerGradosPorCurso(idCurso) {
 }
 
 export function obtenerSemestresPorGrado(idGrado) {
-    return apiRequest(`/horarios/${idGrado}/semestres/`, {
+    return apiRequest(`/docencia/${idGrado}/semestres/`, {
         method: "GET",
     });
 }
 
-export function obtenerAsignaturasPorGradoYSemestre(idGrado, idSemestre) {
-    return apiRequest(`/horarios/${idGrado}/asignaturas/?id_semestre=${idSemestre}`, {
+export function obtenerAsignaturasPorGradoYSemestre(idGrado, idSemestre, idCurso) {
+    return apiRequest(`/docencia/${idGrado}/asignaturas/semestre/${idSemestre}/?id_curso=${idCurso}`, {
         method: "GET",
     });
 }

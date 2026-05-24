@@ -27,6 +27,9 @@ import ListaGrados from "./horarios/pages/ListaGrados.jsx";
 import ConsultaCalendarios from "./horarios/pages/ConsultarCalendarios.jsx";
 import VistaDetalleCalendario from "./calendario/pages/VistaDetalleCalendario.jsx";
 import LeyendaCalendario from "./calendario/componentes/LeyendaCalendario.jsx";
+import SelectorSemestre from "./horarios/componentes/SelectorSemestre.jsx";
+import HorarioSemanal from "./horarios/componentes/HorarioSemanal.jsx";
+import VistaHorarioSemanalGrado from "./horarios/pages/HorarioSemanalPorGrado.jsx";
 
 
 
@@ -58,6 +61,11 @@ function App() {
             <Route path="/calendario/cursos/:id_curso" element={<VistaDetalleCalendario />} />
 
             <Route path="/calendario/leyenda" element={<LeyendaCalendario />} />
+
+
+            <Route path="/horario/selectorLeyenda" element={<SelectorSemestre />} />
+            <Route path="/horario/horarioSemanal" element={<HorarioSemanal />} />
+            <Route path="/horarios/:id_curso/grados/:id_grado" element={<VistaHorarioSemanalGrado />} />
 
           </Route>
         </Route>
