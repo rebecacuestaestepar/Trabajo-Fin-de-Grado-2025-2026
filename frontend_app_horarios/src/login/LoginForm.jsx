@@ -38,8 +38,11 @@ export default function LoginForm() {
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('username', data.usuario);
+                sessionStorage.setItem('token', data.access);
+                sessionStorage.setItem('refresh', data.refresh);
+                sessionStorage.setItem('username', data.usuario.username);
+                sessionStorage.setItem('nombre', data.usuario.nombre);
+                sessionStorage.setItem('apellidos', data.usuario.apellidos);
                 console.log("Sesión inciada correctamente:", data);
 
                 navigate("/reservas/gestion");
