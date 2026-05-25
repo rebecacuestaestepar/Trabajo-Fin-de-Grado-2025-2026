@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
+from docencia.services_periodicas import obtener_grados
 from docencia.serializers import HorarioSerializer
 from docencia.services import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre
 from calendario.models import Curso
@@ -79,6 +80,15 @@ class MoverSerieReservasView(APIView):
         try:
             resultado = mover_serie_reservas(id_curso, int(semestre_num), datos_movimiento)
             return Response(resultado, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=500)
+
+class ObtenerGradosView(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            grados = obtener_grados()
+            return Response({'grados': grados}, status=200)
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=500)

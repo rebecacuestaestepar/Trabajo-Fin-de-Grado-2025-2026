@@ -3,6 +3,7 @@ from calendario.models import CambioDocencia, Dia, Lectivo, Semestre
 from reservas.models import Reserva, ReservaPeriodica
 from datetime import timedelta
 from django.db import transaction
+from .utils import calcular_nuevas_fechas
 
 def obtener_semestres_por_grado(id_grado):
     semestres = (
