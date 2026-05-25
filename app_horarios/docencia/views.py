@@ -110,3 +110,17 @@ class ObtenerSemestresPorGradoView(APIView):
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=500)
+        
+class ObtenerAsignaturasPorGradoSemestreView(APIView):
+    def get(self, request, id_grado, id_semestre, *args, **kwargs):
+        id_curso = request.query_params.get('id_curso')
+
+        if not id_curso:
+            return Response({'error': 'No se ha proporcionado el ID del curso'}, status=400)
+
+        try:
+            asignaturas = obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, int(id_semestre))
+            return Response({'asignaturas': asignaturas}, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=500)

@@ -12,3 +12,7 @@ def obtener_semestres_por_grado_semestre(id_grado, curso_grado):
     semestres = Asignaturas.objects.filter(grado_id=id_grado, curso_grado=curso_grado).values_list('semestre_academico', flat=True).distinct().order_by('semestre_academico')
     semestres_curso = semestres[curso_grado-1:curso_grado]
     return [int(semestre) for semestre in semestres_curso if semestre is not None]
+
+def obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, semestre_academico):
+    asignaturas = Asignaturas.objects.filter(grado_id=id_grado, curso_grado=id_curso, semestre_academico=semestre_academico).values('idasignatura', 'nombre', 'abreviatura')
+    return list(asignaturas)
