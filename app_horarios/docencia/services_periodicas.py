@@ -1,4 +1,4 @@
-from .models import Asignaturas, Grado
+from .models import Asignaturas, Grado, Grupo
 
 def obtener_grados():
     grados = Grado.objects.all().values('idgrado', 'nombre').order_by('nombre')
@@ -16,3 +16,7 @@ def obtener_semestres_por_grado_semestre(id_grado, curso_grado):
 def obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, semestre_academico):
     asignaturas = Asignaturas.objects.filter(grado_id=id_grado, curso_grado=id_curso, semestre_academico=semestre_academico).values('idasignatura', 'nombre', 'abreviatura')
     return list(asignaturas)
+
+def obtener_grupos_asignatura(id_asignatura):
+    grupos = Grupo.objects.filter(id_asignatura=id_asignatura).values('grupoid', 'nombre')
+    return list(grupos)
