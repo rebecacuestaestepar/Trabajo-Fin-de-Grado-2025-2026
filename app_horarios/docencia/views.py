@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from docencia.services_periodicas import obtener_cursos_grado, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre
+from docencia.services_periodicas import obtener_asignaturas_por_grado_curso_semestre, obtener_cursos_grado, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre
 from docencia.serializers import HorarioSerializer
 from docencia.services import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre
 from calendario.models import Curso
@@ -111,15 +111,11 @@ class ObtenerSemestresPorGradoView(APIView):
             traceback.print_exc()
             return Response({'error': str(e)}, status=500)
         
-class ObtenerAsignaturasPorGradoSemestreView(APIView):
-    def get(self, request, id_grado, semestre, *args, **kwargs):
-        id_curso = request.query_params.get('id_curso')
-
-        if not id_curso:
-            return Response({'error': 'No se ha proporcionado el ID del curso'}, status=400)
+class ObtenerAsignaturasPorGradoCursoSemestreView(APIView):
+    def get(self, request, id_grado, curso_grado, semestre, *args, **kwargs):
 
         try:
-            asignaturas = obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, int(id_semestre))
+            asignaturas = obtener_asignaturas_por_grado_curso_semestre(curso_grado, id_grado, semestre)
             return Response({'asignaturas': asignaturas}, status=200)
         except Exception as e:
             traceback.print_exc()
