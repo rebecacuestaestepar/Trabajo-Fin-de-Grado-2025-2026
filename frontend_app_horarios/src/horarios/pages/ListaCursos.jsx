@@ -23,10 +23,11 @@ export default function ListaCursos() {
 
     setGenerandoDatos(true);
     try {
-        const data = await cargarHorarioExcel(formData);
+        setError(null);
+        setGenerandoDatos(true);
+        await cargarHorarioExcel(formData);
         
         setMensaje(`Se ha cargado el horario para el curso ${idCurso} correctamente.`);
-        //console.log("Respuesta de Django:", data);
         
     } catch (error) {
         console.error("Fallo del servidor:", error);
@@ -74,6 +75,11 @@ export default function ListaCursos() {
                 {mensaje && (
                     <div className="p-4 mb-4 text-green-700 bg-green-100 rounded">
                         {mensaje}
+                    </div>
+                )}
+                {generandoDatos && (
+                    <div className="p-4 mb-4 text-black bg-grey-100 rounded">
+                        Generando datos para el curso...
                     </div>
                 )}
                 {cursos.length > 0 ? (

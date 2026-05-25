@@ -75,12 +75,12 @@ export default function VistaHorarioSemanalGrado() {
     const manejarMovimientoEvento = (info) => {
         const { event, revert } = info;
         
-        const firma = event.extendedProps.firma_serie;
+        const distint = event.extendedProps.distint;
         const nuevoDiaSemana = event.start.getUTCDay();
         const nuevaHoraInicio = event.start.toISOString().substring(11, 19);
         const nuevaHoraFin = event.end.toISOString().substring(11, 19);
 
-        console.log("Intentando mover serie:", firma);
+        console.log("Intentando mover serie:", distint);
         console.log("Al día:", nuevoDiaSemana, "Hora:", nuevaHoraInicio, "-", nuevaHoraFin);
 
         revert(); 
