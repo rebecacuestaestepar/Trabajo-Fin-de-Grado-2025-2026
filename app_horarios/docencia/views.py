@@ -112,7 +112,7 @@ class ObtenerSemestresPorGradoView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ObtenerAsignaturasPorGradoSemestreView(APIView):
-    def get(self, request, id_grado, id_semestre, *args, **kwargs):
+    def get(self, request, id_grado, semestre, *args, **kwargs):
         id_curso = request.query_params.get('id_curso')
 
         if not id_curso:
