@@ -1,5 +1,7 @@
 from .models import Asignaturas, Grado, Grupo
+from reservas.models import ReservaPeriodica
 from decimal import Decimal
+from aulas.models import Aula
 
 def obtener_grados():
     grados = Grado.objects.all().values('idgrado', 'nombre').order_by('nombre')
@@ -11,7 +13,6 @@ def obtener_cursos_grado(id_grado):
 
 def obtener_semestres_por_grado_semestre(id_grado, curso_grado):
     semestres = Asignaturas.objects.filter(grado_id=id_grado, curso_grado=curso_grado).values_list('semestre_academico', flat=True).distinct().order_by('semestre_academico')
-    #semestres_curso = semestres[int(curso_grado)-1:int(curso_grado)+1]
     return [int(semestre) for semestre in semestres if semestre is not None]
 
 def obtener_asignaturas_por_grado_curso_semestre(id_curso, id_grado, semestre_academico):
@@ -26,3 +27,24 @@ def obtener_asignaturas_por_grado_curso_semestre(id_curso, id_grado, semestre_ac
 def obtener_grupos_asignatura(id_asignatura):
     grupos = Grupo.objects.filter(id_asignatura=id_asignatura).values('grupoid', 'nombre')
     return list(grupos)
+
+
+def obtener_aulas_libres(dia_semana, hora_inicio, hora_fin):
+    reservas_solapadas = ReservaPeriodica.objects.filter(
+        dia_semana=int(dia_semana),
+        id_reserva__hora_inicio__lt=hora_fin,
+        id_reserva__hora_fin__gt=hora_inicio
+    )
+
+    ids_aulas_ocupadas = reservas_solapadas.values_list('id_reserva__id_aula', flat=True)
+
+    aulas_libres = Aula.objects.exclude(
+        pk__in=ids_aulas_ocupadas
+    ).values(
+        'id',
+        'nombre', 
+        'capacidad', 
+        'num_ordenadores'
+    ).order_by('nombre')
+
+    return list(aulas_libres)
