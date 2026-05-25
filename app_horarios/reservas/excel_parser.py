@@ -35,7 +35,7 @@ class ConfigurarHorario:
 
     AULA = re.compile(r"(?i)(aula|lab|sala|lb)")
     GRUPO_PRACTICO = re.compile(r"^\s*\(?\d{3}\)?\s*$")
-    GRUPO_TEORICO = re.compile(r"^\s*\d{1,2}\s*$")   # Mirar si tiene que ser dos por el grupo teórico de Inglés (80)
+    GRUPO_TEORICO = re.compile(r"^\s*\d{1,2}\s*$")
 
     CODIGO = re.compile(r"^\s*\d{4}-?E?\s*$")
 
@@ -492,6 +492,20 @@ def extraer_clase_rotada90(ws, fila_actual, col_actual, mapa_merge, celdas_visit
     elif celda.fill.start_color.theme == 9 and tipo_d != "GRUPO_PRACTICO":
         valor_d = "1"
         tipo = "T"
+        if tipo_d == "AULA":
+            col_aula = col_grupo
+        else:
+            col_aula = col_grupo + 1
+    elif celda.fill.start_color.theme == 6 and tipo_d == "GRUPO_PRACTICO":
+        valor_d = "801"
+        tipo = "P"
+        if tipo_d == "AULA":
+            col_aula = col_grupo
+        else:
+            col_aula = col_grupo + 1
+    elif celda.fill.start_color.theme == 8 and tipo_d == "GRUPO_PRACTICO":
+        valor_d = "101"
+        tipo = "P"
         if tipo_d == "AULA":
             col_aula = col_grupo
         else:
