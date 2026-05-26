@@ -13,6 +13,7 @@ Esta arquitectura o modelo tiene funciona de la siguiente manera.
 \end{itemize}
 
 La comunicación entre el cliente y el servidor se realiza por medio de .protocolos de red. En las aplicaciones web, el más común es \textit{\textbf{HTTP}} (\textit{Hyper Text Transfer Protocol}), un protocolo de comunicación que define cómo se intercambian las peticiones y respuestas entre cliente y servidor. Gracias a este mecanismo, el cliente puede solicitar o enviar recursos o información al servidor, mientras que este puede responder con datos o el resultado de una operación concreta.
+\cite{clienteservidor:Fernan}
 
 Esta separación de responsabilidades facilita el mantenimiento, la escalabilidad y la evolución de forma independiente de las distintas partes que conforman el sistema. En este proyecto se utiliza un framework distinto para el front (cliente) que para el back (servidor).
 
@@ -22,7 +23,7 @@ Una API (\textit{Application Programming Interface}) es un conjunto de reglas, p
 
 En particular, una API REST (\textit{Representational State Transfer}) es un estilo de arquitectura ampliamente utilizado en el desarrollo de servicios web. Su objetivo principal es organizar la comunicación entre cliente y servidor mediante recursos identificados por URLs y operaciones estándar del protocolo HTTP. De esta forma permite que los recursos del sistema como, en el caso de este proyecto, un aula o una reserva, pueda ser modificado o consultado a través de una dirección concreta y utilizando unos métodos bien definidos.
 
-Entre los métodos más comunes de HHTP en una API REST se encuentran:
+Entre los métodos más comunes de HTTP en una API REST se encuentran:
 \begin{itemize}
 	\item \textit{GET}: utilizado para solicitar o recuperar información.
 	\item \textit{POST}: envía datos al servidor para crear un nuevo recurso.
@@ -30,6 +31,7 @@ Entre los métodos más comunes de HHTP en una API REST se encuentran:
 	\item \textit{DELETE}: utilizado para la eliminación de recursos existentes.
 \end{itemize}
 Con esta organización las operaciones del sistema quedan estructuradas.
+\cite{metodosHttp:Oscar}
 
 
 \tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
