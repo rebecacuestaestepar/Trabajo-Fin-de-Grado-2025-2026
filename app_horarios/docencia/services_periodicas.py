@@ -117,10 +117,13 @@ def obtener_datos_reserva_periodica(id_reserva):
         return None
     
 def reserva_desde_horario_grado(id_grado, semestre_academico):
+    grado = Grado.objects.filter(idgrado=id_grado).values('idgrado', 'nombre').first()
     curso = Asignaturas.objects.filter(grado_id=id_grado, semestre_academico=semestre_academico).values_list('curso_grado', flat=True).distinct().first()
     asignaturas = Asignaturas.objects.filter(grado_id=id_grado, semestre_academico=semestre_academico)
 
     return {
+        'grado': grado,
+        'semestre_academico': semestre_academico,
         'curso': curso,
         'asignaturas': list(asignaturas.values('idasignatura', 'nombre', 'abreviatura'))
     }

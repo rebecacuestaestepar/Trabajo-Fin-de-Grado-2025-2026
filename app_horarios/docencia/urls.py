@@ -14,5 +14,5 @@ urlpatterns = [
     path('aulas-libres/', ObtenerAulasLibresView.as_view(), name='obtener_aulas_libres'),
     path('crear-reserva-periodica/', CrearReservaPeriodicaView.as_view(), name='crear_reserva_periodica'),
     path('datos-reserva-periodica/<int:id_reserva>/', ObtenerDatosReservaPeriodicaView.as_view(), name='obtener_datos_reserva_periodica'),
-    path('cargar-asignaturas/', ReservaDesdeHorarioAsignaturasView.as_view(), name='reserva_desde_horario_grado'),
+    path('cargar-asignaturas/grado/<int:id_grado>/semestre/<int:id_semestre>/', ReservaDesdeHorarioAsignaturasView.as_view(), name='reserva_desde_horario_grado'),
 ]
