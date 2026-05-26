@@ -87,8 +87,8 @@ export function obtenerDatosReservaPeriodica(idReserva) {
     });
 }
 
-export function reservaDesdeHorarioGrado(datos) {
-    return apiRequest(`/docencia/cargar-asignaturas/grado/${datos.id_grado}/semestre/${datos.id_semestre}/`, {
+export function reservaDesdeHorarioGrado(id_grado, semestre) {
+    return apiRequest(`/docencia/cargar-asignaturas/grado/${id_grado}/semestre/${semestre}/`, {
         method: "GET",
     });
 }
