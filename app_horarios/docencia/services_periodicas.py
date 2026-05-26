@@ -19,12 +19,7 @@ def obtener_semestres_por_grado_semestre(id_grado, curso_grado):
     return [int(semestre) for semestre in semestres if semestre is not None]
 
 def obtener_asignaturas_por_grado_curso_semestre(id_curso, id_grado, semestre_academico):
-    print("--- DEPURACIÓN ASIGNATURAS ---")
-    print(f"Grado recibido: {repr(id_grado)}")
-    print(f"Curso recibido: {repr(id_curso)}")
-    print(f"Semestre recibido: {repr(semestre_academico)}")
     asignaturas = Asignaturas.objects.filter(grado_id=int(id_grado), curso_grado=Decimal(id_curso), semestre_academico=Decimal(semestre_academico)).values('idasignatura', 'nombre', 'abreviatura')
-    print(f"Asignaturas obtenidas para grado {id_grado}, curso {id_curso} y semestre {semestre_academico}: {list(asignaturas)}")
     return list(asignaturas)
 
 def obtener_grupos_asignatura(id_asignatura):
@@ -102,16 +97,23 @@ def crear_reserva_periodica(id_curso, semestre_num, datos_reserva):
 def obtener_datos_reserva_periodica(id_reserva):
     try:
         reserva_periodica = ReservaPeriodica.objects.select_related('id_reserva', 'id_grupo').get(id_reserva=id_reserva)
+        asignatura = Grupo.objects.select_related('id_asignatura').get(grupoid=reserva_periodica.id_grupo.grupoid).id_asignatura
+        semestre = Asignaturas.objects.filter(idasignatura=asignatura.idasignatura).values_list('semestre_academico', flat=True).first()
+        curso = Asignaturas.objects.filter(idasignatura=asignatura.idasignatura).values_list('curso_grado', flat=True).first()
+        id_grado = Asignaturas.objects.filter(idasignatura=asignatura.idasignatura).values_list('grado_id', flat=True).first()
+
         return {
             'id_reserva': reserva_periodica.id_reserva.idreserva,
-            'id_aula': reserva_periodica.id_reserva.id_aula.nombre if reserva_periodica.id_reserva.id_aula else None,
-            'id_dia': reserva_periodica.id_reserva.id_dia.id if reserva_periodica.id_reserva.id_dia else None,
+            'aula': reserva_periodica.id_reserva.id_aula.nombre if reserva_periodica.id_reserva.id_aula else None,
+            'id_dia': reserva_periodica.id_reserva.id_dia.dia if reserva_periodica.id_reserva.id_dia else None,
             'hora_inicio': reserva_periodica.id_reserva.hora_inicio.strftime("%H:%M"),
             'hora_fin': reserva_periodica.id_reserva.hora_fin.strftime("%H:%M"),
-            'grupo': reserva_periodica.id_grupo.nombre if reserva_periodica.id_grupo else None,
+            'grupo': reserva_periodica.id_grupo.grupoid if reserva_periodica.id_grupo else None,
             'dia_semana': reserva_periodica.dia_semana,
-            'fecha_inicio': reserva_periodica.fecha_inicio.strftime("%Y-%m-%d"),
-            'fecha_fin': reserva_periodica.fecha_fin.strftime("%Y-%m-%d"),
+            'semestre': semestre,
+            'curso': curso,
+            'grado': id_grado,
+            'asignatura': asignatura.idasignatura if asignatura else None
         }
     except ReservaPeriodica.DoesNotExist:
         return None
