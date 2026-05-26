@@ -3,7 +3,7 @@
 El objetivo general de este proyecto es diseñar e implementar una página web que permita centralizar y optimizar la gestión de horarios, reservas de aulas y planificación académica del campus, mejorando la organziación y gestión interna y facilitando la consulta de información tanto a los gestores como al profesorado.
 
 
-Este proyecto, consiste en diseñar e implementar una aplicación web destinada a las personas relacionadas con la gestión de reservas en facultades de la Universidad de Burgos, en concreto se ha limitado en esta primera versión al campus Vena. En el acceso a la aplicación se distinguirán diferentes roles: administrador, gestor editor, gestor no editor y el personal docente de investigación (PDI). Según el rol del usuario que inicie sesión, se le permitirá acceder a unas funcionalidades u otras, según los permisos que disponga.
+Este proyecto, consiste en diseñar e implementar una aplicación web destinada a las personas relacionadas con la gestión de reservas en las facultades de la Universidad de Burgos, en concreto se ha limitado en esta primera versión al campus Vena. En el acceso a la aplicación se distinguirán diferentes roles: administrador, gestor editor, gestor no editor y el personal docente investigador (PDI). Según el rol del usuario que inicie sesión, se le permitirá acceder a unas funcionalidades u otras, según los permisos que disponga.
 
 \section{Objetivos funcionales}
 
@@ -20,11 +20,11 @@ Este proyecto, consiste en diseñar e implementar una aplicación web destinada 
 
 \begin{enumerate}
 	\item \textbf{Modelo de bases de datos relacional:} se ha diseñado para permitir el almacenamiento de forma estructurada de la información relativa a aulas, grados, asignaturas, reservas, horarios, exámenes y usuarios.
-	\item \textbf{Arquitectura web:} su implementación se ha basado en la separación entre el frontend y el backend, favoreciendo de esta forma la modularidad y mantenibilidad
+	\item \textbf{Arquitectura web:} su implementación se ha basado en la separación entre el \textit{frontend} y el \textit{backend}, favoreciendo de esta forma la modularidad y mantenibilidad
 	\item \textbf{Sistema de permisos:} se ha implementado un sistema de control de acceso basado en roles que limita las acciones disponibles en la aplicación según el tipo de usuario.
 	\item \textbf{Cálculo de disponibilidad:} que garantiza la actualización de manera automática de la ocupación de las aulas ante cualquier cambio que se realice en las reservas o los horarios.
 	\item \textbf{Generación de informes:} permitiendo extraerlos en formato pdf para su posterior publicación.
-	\item \textbf{Validación de restricciones:} al realizar una acción se comprueba que no viole ninguna de las restricciones definidaa.
+	\item \textbf{Validación de restricciones:} al realizar una acción se comprueba que no viole ninguna de las restricciones definida.
 	\item \textbf{Calidad:} se realizan validaciones y manejo de errores.
 \end{enumerate}
 
