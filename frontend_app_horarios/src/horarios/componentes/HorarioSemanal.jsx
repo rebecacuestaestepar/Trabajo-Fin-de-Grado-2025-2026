@@ -4,7 +4,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 
-export default function HorarioSemanal({ eventos, cargando, onEventoSoltado }) {
+export default function HorarioSemanal({ eventos, cargando, onEventoSoltado, onEventoClick }) {
     const calendarRef = useRef(null);
 
     const renderizarContenidoEvento = (eventInfo) => {
@@ -56,6 +56,7 @@ export default function HorarioSemanal({ eventos, cargando, onEventoSoltado }) {
                 locale={'es'}
                 dayHeaderFormat={{ weekday: 'long' }}
                 dayHeaderContent={renderizarCabeceraDia}
+                eventClick={onEventoClick}
             />
         </div>
     );

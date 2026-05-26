@@ -46,7 +46,15 @@ export default function MenuLateral({ abierto }) {
             <ItemMenu a="/reservas/gestion" level={2}>Gestionar Reservas</ItemMenu>
             <ItemMenu a="/reservas/solicitud" level={2}>Solicitar reserva</ItemMenu>
           </SeccionMenu>
-          <SeccionMenu titulo="Reservas periódicas" level={1}> </SeccionMenu>
+          <SeccionMenu 
+          titulo="Reservas periódicas" 
+          level={1}
+          abierta={!!estados["periodicas"]}
+          alAlternar={() => toggle("periodicas", "reservas")}
+          >
+            <ItemMenu a="/reservas/periodicas/crear" level={2}>Crear Reserva Periódica</ItemMenu>
+          </SeccionMenu>
+            
         </SeccionMenu>
         <ItemMenu a="/horarios" level={0}>Horarios</ItemMenu>
         <ItemMenu a="/calendario/cursos" level={0}>Calendarios</ItemMenu>

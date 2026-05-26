@@ -1,6 +1,5 @@
-// src/views/VistaHorarioSemanalGrado.jsx
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { obtenerSemestresPorGrado, obtenerAsignaturasPorGradoYSemestre } from '../../api/docencia';
 import { obtenerColorGrupo } from '../utiles/coloresGrupo';
 import SelectorSemestre from '../componentes/SelectorSemestre';
@@ -9,6 +8,7 @@ import BotonVolver from '../../reservas/formulario-componentes/ui/BotonVolver';
 
 export default function VistaHorarioSemanalGrado() {
     const { id_curso, id_grado } = useParams();
+    const navigate = useNavigate();
 
     const [semestres, setSemestres] = useState([]);
     const [semestreActivo, setSemestreActivo] = useState("");
@@ -86,9 +86,37 @@ export default function VistaHorarioSemanalGrado() {
         revert(); 
     };
 
+    const manejarClickEvento = (info) => {
+        const idReserva = info.event.id;
+        if (idReserva) {
+            // Ajusta esta ruta a como la tengas en tu App.js o main.jsx
+            navigate(`/reservas/periodicas/ver/${idReserva}`); 
+        } else {
+            console.warn("Este evento no tiene un ID de reserva asociado.");
+        }
+    };
+
+    const irACrearReserva = () => {
+        navigate('/reservas/periodicas/crear', { 
+            state: { 
+                grado: id_grado, 
+                semestre: semestreActivo 
+            } 
+        });
+    };
+
     return (
         <div className="max-w-7xl mx-auto p-4 space-y-4">
-            <BotonVolver fallback={`/horarios/${id_curso}/grados`} />
+            <div className="flex items-center justify-between">
+                <BotonVolver fallback={`/horarios/${id_curso}/grados`} />
+                
+                <button
+                    onClick={irACrearReserva}
+                    className="inline-flex items-center justify-center rounded-md bg-[#7a1e1e] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#631818] focus:outline-none focus:ring-2 focus:ring-[#7a1e1e] focus:ring-offset-2"
+                >
+                    Crear Reserva Periódica
+                </button>
+            </div>
             
             <SelectorSemestre 
                 idCurso={id_curso}
@@ -103,6 +131,7 @@ export default function VistaHorarioSemanalGrado() {
                 eventos={eventos}
                 cargando={cargando}
                 onEventoSoltado={manejarMovimientoEvento}
+                onEventoClick={manejarClickEvento}
             />
         </div>
     );

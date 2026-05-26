@@ -30,7 +30,9 @@ import LeyendaCalendario from "./calendario/componentes/LeyendaCalendario.jsx";
 import SelectorSemestre from "./horarios/componentes/SelectorSemestre.jsx";
 import HorarioSemanal from "./horarios/componentes/HorarioSemanal.jsx";
 import VistaHorarioSemanalGrado from "./horarios/pages/HorarioSemanalPorGrado.jsx";
-
+import CrearReservaPeriodica from "./reservas/reservas-periodicas/pages/CrearReservaPeriodica.jsx";
+import DetallesReservaPeriodica from "./reservas/reservas-periodicas/pages/DetallesReservaPeriodica.jsx";
+import EditarReservaPeriodica from "./reservas/reservas-periodicas/pages/EditarReservaPeriodica.jsx";
 
 
 function App() {
@@ -66,6 +68,10 @@ function App() {
             <Route path="/horario/selectorLeyenda" element={<SelectorSemestre />} />
             <Route path="/horario/horarioSemanal" element={<HorarioSemanal />} />
             <Route path="/horarios/:id_curso/grados/:id_grado" element={<VistaHorarioSemanalGrado />} />
+
+            <Route path="/reservas/periodicas/crear" element={<CrearReservaPeriodica />} />
+            <Route path="/reservas/periodicas/ver/:id" element={<DetallesReservaPeriodica />} />
+            <Route path="/reservas/periodicas/editar/:id" element={<EditarReservaPeriodica />} />
 
           </Route>
         </Route>

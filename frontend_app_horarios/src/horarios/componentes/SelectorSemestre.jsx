@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function SelectorSemestre({idCurso, idGrado, semestres, semestreActivo, onSeleccionarSemestre, cargando}) {
-    semestres = [1, 2, 3, 4, 5, 6, 7, 8]
     return (
         <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
             <div>
