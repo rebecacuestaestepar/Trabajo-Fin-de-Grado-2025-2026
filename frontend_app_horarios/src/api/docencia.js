@@ -66,3 +66,29 @@ export function obtenerGruposAsignatura(idAsignatura) {
         method: "GET",
     });
 }
+
+export function obtenerAulasLibres({diaSemana, horaInicio, horaFin}) {
+    const params = new URLSearchParams({dia_semana: diaSemana, hora_inicio: horaInicio, hora_fin: horaFin});
+    return apiRequest(`/docencia/aulas-libres/?${params.toString()}`, {
+        method: "GET",
+    });
+}
+
+export function crearReservaPeriodica(datosReserva) {
+    return apiRequest("/docencia/crear-reserva-periodica/", {
+        method: "POST",
+        body: JSON.stringify(datosReserva),
+    });
+}
+
+export function obtenerDatosReservaPeriodica(idReserva) {
+    return apiRequest(`/docencia/datos-reserva-periodica/${idReserva}/`, {
+        method: "GET",
+    });
+}
+
+export function reservaDesdeHorarioGrado(datos) {
+    return apiRequest(`/docencia/cargar-asignaturas/grado/${datos.id_grado}/semestre/${datos.id_semestre}/`, {
+        method: "GET",
+    });
+}
