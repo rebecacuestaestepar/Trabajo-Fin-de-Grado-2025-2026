@@ -1,7 +1,10 @@
 from .models import Asignaturas, Grado, Grupo
-from reservas.models import ReservaPeriodica
+from reservas.models import Reserva, ReservaPeriodica
 from decimal import Decimal
 from aulas.models import Aula
+from calendario.models import Semestre, Dia, Lectivo, CambioDocencia
+from datetime import timedelta
+from django.db import transaction
 
 def obtener_grados():
     grados = Grado.objects.all().values('idgrado', 'nombre').order_by('nombre')
@@ -48,3 +51,80 @@ def obtener_aulas_libres(dia_semana, hora_inicio, hora_fin):
     ).order_by('nombre')
 
     return list(aulas_libres)
+
+
+def crear_reserva_periodica(id_curso, semestre_num, datos_reserva):
+    num_dia = datos_reserva.get('dia_semana')
+    grupo = datos_reserva.get('id_grupo')
+    aula = datos_reserva.get('id_aula')
+    hora_inicio = datos_reserva.get('hora_inicio')
+    hora_fin = datos_reserva.get('hora_fin')
+
+    semestre = 2
+    if semestre_num % 2 == 1:
+        semestre = 1
+    
+    semestre_obj = Semestre.objects.filter(curso_id=id_curso, numero=semestre).first()
+
+    dia_actual = semestre_obj.fecha_inicio
+
+    with transaction.atomic():
+
+        while dia_actual <= semestre_obj.fecha_fin:
+            dia = Dia.objects.filter(fecha=dia_actual).first()
+
+            if dia and dia.numero_semana == num_dia:
+                lectivo = Lectivo.objects.filter(dia_id=dia.id).first()
+                cambio_docencia = CambioDocencia.objects.filter(dia_id=dia.id).first()
+
+                if (lectivo and not cambio_docencia) or (cambio_docencia and cambio_docencia.sustituye_dia == num_dia):
+                    reserva = Reserva.objects.create(
+                        id_aula = aula,
+                        id_dia = dia.id,
+                        estado = 'A',
+                        tipo = 'R',
+                        hora_inicio = hora_inicio,
+                        hora_fin = hora_fin
+                    )
+
+                    ReservaPeriodica.objects.create(
+                        id_reserva = reserva,
+                        id_grupo = grupo,
+                        dia_semana = num_dia,
+                        fecha_inicio = semestre_obj.fecha_inicio,
+                        fecha_fin = semestre_obj.fecha_fin,
+                    )
+                    dia_actual += timedelta(days=1)
+                    continue
+            dia_actual += timedelta(days=1)
+
+
+def obtener_datos_reserva_periodica(id_reserva):
+    try:
+        reserva_periodica = ReservaPeriodica.objects.select_related('id_reserva', 'id_grupo').get(id_reserva=id_reserva)
+        return {
+            'id_reserva': reserva_periodica.id_reserva.idreserva,
+            'id_aula': reserva_periodica.id_reserva.id_aula.nombre if reserva_periodica.id_reserva.id_aula else None,
+            'id_dia': reserva_periodica.id_reserva.id_dia.id if reserva_periodica.id_reserva.id_dia else None,
+            'hora_inicio': reserva_periodica.id_reserva.hora_inicio.strftime("%H:%M"),
+            'hora_fin': reserva_periodica.id_reserva.hora_fin.strftime("%H:%M"),
+            'grupo': reserva_periodica.id_grupo.nombre if reserva_periodica.id_grupo else None,
+            'dia_semana': reserva_periodica.dia_semana,
+            'fecha_inicio': reserva_periodica.fecha_inicio.strftime("%Y-%m-%d"),
+            'fecha_fin': reserva_periodica.fecha_fin.strftime("%Y-%m-%d"),
+        }
+    except ReservaPeriodica.DoesNotExist:
+        return None
+    
+def reserva_desde_horario_grado(id_grado, semestre_academico):
+    curso = Asignaturas.objects.filter(grado_id=id_grado, semestre_academico=semestre_academico).values_list('curso_grado', flat=True).distinct().first()
+    asignaturas = Asignaturas.objects.filter(grado_id=id_grado, semestre_academico=semestre_academico)
+
+    return {
+        'curso': curso,
+        'asignaturas': list(asignaturas.values('idasignatura', 'nombre', 'abreviatura'))
+    }
+            
+
+
+    

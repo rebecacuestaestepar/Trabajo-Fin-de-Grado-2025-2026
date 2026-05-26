@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from docencia.services_periodicas import obtener_asignaturas_por_grado_curso_semestre, obtener_aulas_libres, obtener_cursos_grado, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre
+from docencia.services_periodicas import crear_reserva_periodica, obtener_asignaturas_por_grado_curso_semestre, obtener_aulas_libres, obtener_cursos_grado, obtener_datos_reserva_periodica, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre, reserva_desde_horario_grado
 from docencia.serializers import HorarioSerializer
 from docencia.services import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre
 from calendario.models import Curso
@@ -145,3 +145,38 @@ class ObtenerAulasLibresView(APIView):
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=500)
+
+class CrearReservaPeriodicaView(APIView):
+    def post(self, request, *args, **kwargs):
+        id_curso = request.data.get('id_curso')
+        semestre_num = request.data.get('semestre_num')
+        datos_reserva = request.data.get('datos_reserva')
+
+        if not id_curso or not semestre_num or not datos_reserva:
+            return Response({'error': 'Faltan parámetros requeridos'}, status=400)
+
+        try:
+            resultado = crear_reserva_periodica(id_curso, int(semestre_num), datos_reserva)
+            return Response(resultado, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=500)
+        
+class ObtenerDatosReservaView(APIView):
+    def get(self, request, id_reserva, *args, **kwargs):
+        try:
+            reserva = obtener_datos_reserva_periodica(id_reserva)
+            return Response({'reserva': reserva}, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=500)
+
+class ReservaDesdeHorarioAsignaturasView(APIView):
+    def get(self, request, id_grado, semestre, *args, **kwargs):
+        try:
+            resultado = reserva_desde_horario_grado(id_grado, semestre)
+            return Response(resultado, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=500)
+            
