@@ -162,7 +162,7 @@ class CrearReservaPeriodicaView(APIView):
             traceback.print_exc()
             return Response({'error': str(e)}, status=500)
         
-class ObtenerDatosReservaView(APIView):
+class ObtenerDatosReservaPeriodicaView(APIView):
     def get(self, request, id_reserva, *args, **kwargs):
         try:
             reserva = obtener_datos_reserva_periodica(id_reserva)
