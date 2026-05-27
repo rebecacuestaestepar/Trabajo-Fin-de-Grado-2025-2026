@@ -36,12 +36,7 @@ Una vez seleccionado Python como lenguaje principal del proyecto, se decidió ut
 
 Django favorece este enfoque mediante su organización basada en aplicaciones, permitiendo dividir el proyecto en módulos reutilizables e independientes, con el fin de dividir la lógica del proyecto, facilitando el crecimiento del mismo y reduciendo el acoplamiento entre distintas funcionalidades.
 
-Además, Django se apoya en el patrón arquitectónico MVT (Modelo-Vista-Plantilla), que guía la separación de responsabilidades:
-\begin{itemize}
-	\item \textbf{Modelo (Model):} define la estructura de datos y la interacción con la base de datos mediante el ORM \textit{(Object-Relational Mapping)}.
-	\item \textbf{Vista (View):} contiene la lógica de negocio y gestiona las peticiones/respuestas, es decir, procesa las solicitudes que entran por parte de los usuarios y 
-	\item \textbf{Plantilla (Template):} se encarga de la presentación de los datos al usuario; en este proyecto, esta separación sigue siendo útil aunque el \textit{frontend} se implemente con React, ya que el \textit{backend} se centra en exponer servicios y lógica.
-\end{itemize}
+Además, Django se apoya en el patrón arquitectónico MVT (Modelo-Vista-Plantilla), separando así las responsabilidades del sistema de forma que favorece la mantenibilidad y escalabilidad del proyecto
 
 \subsection{Backend: Django REST Framework}
 
