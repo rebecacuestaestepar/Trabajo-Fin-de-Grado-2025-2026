@@ -47,6 +47,13 @@ El uso de este patrón arquitectónico ayuda a reducir el acoplamiento entre com
 \cite{modeloArquitectonicoDjango}
 \cite{mvt:geek}
 
+\subsection{ORM y persistencia de datos}
+La persistencia de datos es el mecanismo que permite que la información gestionada por una aplicación no se pierda al finalizar su ejecución, sino que quede almacenada de forma estable en una base de datos para poder ser consultada, modificada o reutilizada posteriormente. En aplicaciones web como la desarrollada en este proyecto, la persistencia resulta esencial, ya que permite conservar de manera estructurada la información relativa a usuarios, roles, reservas, aulas, docencia u horarios.
+
+Para facilitar la interacción entre la aplicación y la base de datos, Django incorpora un ORM (\textit{Object-Relational Mapping}). Un ORM es una técnica que permite representar las tablas de una base de datos relacional mediante clases del lenguaje de programación (Python), y sus registros mediante objetos. De este modo, el desarrollador puede trabajar con entidades del dominio del problema utilizando abstracciones propias del lenguaje, reduciendo la necesidad de escribir manualmente consultas SQL en las operaciones más habituales.
+
+En Django, un modelo es la fuente principal de información sobre los datos almacenados. Cada modelo se define como una clase de Python y, de forma general, se corresponde con un tabla de la base de datos. A su vez, cada atributo del modelo representa a un campo de esa tabla. Gracias a esto, el \textit{framework} genera de manera automática una API de acceso de datos que permite realizar consultas, inserciones, modificaciones y eliminaciones de una forma más mantenible y sencilla.
+
 \tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
 { \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
 	HTML5 & X & & &\\
