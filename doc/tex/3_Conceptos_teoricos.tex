@@ -33,6 +33,19 @@ Entre los métodos más comunes de HTTP en una API REST se encuentran:
 Con esta organización las operaciones del sistema quedan estructuradas.
 \cite{metodosHttp:Oscar}
 
+\subsection{Patrón arquitectónico MVT}
+
+Django se apoya en el patrón arquitectónico MVT (\textit{Model-View-Template}), una variante del modelo de separación de responsabilidades que es utilizada de forma frecuente en el desarrollo de aplicaciones web. Este tipo de patrón permite estructurar el sistema separando la gestión de los datos, el procesamiento de las peticiones y la presentación de información, favoreciendo así una organización más clara y mantenible del código.
+
+\begin{itemize}
+	\item El componente Modelo (\textit{Model}) representa la estructura de datos y la interacción con la base de datos. En Django, los modelos son la fuente principal de información sobre los datos almacenados y permiten definir tanto sus atributos como ciertos comportamientos asociados. Además se integran con el ORM (\textit{Object-Relational Mapping}) del \textit{framework}, lo que facilita la forma de trabajar con la base de datos ya que en vez de hacerlo a través de consultas SQL de manera exclusiva, se puede realizar mediante objetos del propio lenguaje.
+	\item La Vista (\textit{View}) es el elemento encargado de recibir una petición HTTP, procesarla y devolver una respuesta. En ella se encuentra la lógica necesaria para decidir qué información debe obtenerse, validarse o transformarse antes de ser enviada al cliente. De esta forma, la vista actúa como un intermediario entre los datos definidos en los modelos y la respuesta final que recibe el usuario o la aplicación cliente.
+	\item La Plantilla (\textit{Template}) se encarga de la presentación y visualización de la información. Su función es definir cómo presentar los datos al usuario, separando así la lógica de presentación del resto de responsabilidades del sistema. Aunque en el caso de este proyecto la interfaz de usuario se implementa con React y, por tanto, la representación gráfica del lado del cliente no recae sobre las plantillas de Django. Este patrón sigue siendo útil a un nivel conceptual, debido a que el \textit{backend} mantiene la separación entre accesos a datos, lógica de negocio y exposición de servicios.
+\end{itemize}
+
+El uso de este patrón arquitectónico ayuda a reducir el acoplamiento entre componentes, facilitando el mantenimiento del sistema y mejorando su escalabilidad. Asimismo, permite que las distintas partes de la aplicación puedan evolucionar de una forma más independiente, algo que es bastante relevante en proyectos en los que el \textit{backend} se desarrolla de manera desacoplada al \textit{frontend}.
+\cite{modeloArquitectonicoDjango}
+\cite{mvt:geek}
 
 \tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
 { \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
