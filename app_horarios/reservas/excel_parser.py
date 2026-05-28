@@ -603,7 +603,10 @@ def extraer_practica_asig_rotacion0(ws, fila_actual, col_actual, mapa_merge, cel
         else:
             salto_col = col_grupo + 1
     else:
-        valor_d = 101 
+        if celda.fill.start_color.theme == 6:
+            valor_d = 801
+        elif celda.fill.start_color.theme == 8:
+            valor_d = 101 
         salto_col = col_grupo 
     
     if cond:
