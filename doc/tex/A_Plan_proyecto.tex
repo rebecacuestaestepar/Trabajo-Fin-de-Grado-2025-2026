@@ -485,7 +485,7 @@ Duración: 3 semanas
 	\end{itemize}
 \end{Sprint}
 
-\begin{Sprint}{21}{13/05/2026-22/05/2026}
+\begin{Sprint}{22}{13/05/2026-22/05/2026}
 	Duración: 1 semana y 2 días
 	\begin{itemize}	
 		\item\bloque{Objetivos}
@@ -508,7 +508,7 @@ Duración: 3 semanas
 	\end{itemize}
 \end{Sprint}
 
-\begin{Sprint}{22}{22/05/2026-27/05/2026}
+\begin{Sprint}{23}{22/05/2026-27/05/2026}
 	Duración: 5 días
 	\begin{itemize}	
 		\item\bloque{Objetivos}
@@ -524,12 +524,42 @@ Duración: 3 semanas
 			\item Corregir memoria, y avanzar apartado de trabajos relacionados y de conceptos teóricos.
 		\end{enumerate}
 		\item\bloque{Revisión del Sprint}
-		Durante este sprint por ser fechas de exámenes no se han podido cumplir todos los objetivos. Como se ha mostrado en la revisión, se han podido cumplir los primeros 4 objetivos, con lo que los otros 3 pasan al siguiente sprint.
+		En la revisión del sprint se han visto los avances realizados durante la semana, a falta de terminar de realizar que django se encargue de la gestión de usuarios y roles, y avanzar los trabajos relacionados. Respecto a los objetivos cumplidos se han propuesto algunas mejoras en cuanto a usabilidad del usuario de la aplicación que pasan a ser objetivos del siguiente sprint.
+		
+		\item\bloque{Gráfico}
+		El gráfico \textit{burndown chart} se puede ver en la siguiente figura~\ref{fig:burndown-sprint23}
+		\imagen{img/Sprint 23.png}{Gráfico de los commits realizados durante el Sprint 23}{fig:burndown-sprint23}
+	\end{itemize}
+\end{Sprint}
+
+\begin{Sprint}{24}{27/05/2026-03/06/2026}
+	Duración: 1 semana
+	\begin{itemize}	
+		\item\bloque{Objetivos}
+		Durante la reunión de planificación de este sprint se propusieron los siguientes objetivos:
+		\begin{enumerate}
+			\item Hacer desplegable con los grados para los horarios y quitar la página anterior que contiene el listado de cursos
+			\item Hacer que el analizador léxico recorra todas las filas del tramo horario.
+			\item Debuguear para ver porqué no coge Exp. Gráfica I del doble grado.
+			\item Quitar el día actual del horario.
+			\item Al cargar un horario dar aviso de que se van a eliminar todas las reservas de los grados con docencia de ese año, y eliminarlas previamente.
+			\item Hacer validación de restricciones que compruebe al realizar drag and drop, salga modal si se violan restricciones, y si se da a Continuar modifique todas las reservas periódicas afectadas.
+			\item Listar los aulas en 3 columnas, se puede hacer división de aulas, laboratorios y otros aulas.
+			\item Mostrar en el \textit{hover} del horario la asignatura, el grupo y el aula para que se vean completo.
+			\item Unificar nombres Laboratorio Ing. Eléctrica y Sala de Juntas en la hoja de cálculo y base de datos.
+			\item Hacer el panel de administrador.
+			\item Hacer que Django se encargue de roles y permisos.
+			\item Contrastar usuario y rol contra la base de datos, sino se encuentra se crea la entrada con rol PDI y pasar el rol al \textit{frontend}.
+			\item Meter la importación y exportación para realizarla en la interfaz.
+			\item Meter la solicitud de reserva comonavegación de creación de reserva para el PDI y quitarle el menú.
+			\item Corregir memoria, y avanzar apartados de trabajos relacionados,  conceptos teóricos y aspectos relevantes.
+		\end{enumerate}
+		\item\bloque{Revisión del Sprint}
+
 		
 		\item\bloque{Gráfico}
 	\end{itemize}
 \end{Sprint}
-
 
 \section{Estudio de viabilidad}
 
