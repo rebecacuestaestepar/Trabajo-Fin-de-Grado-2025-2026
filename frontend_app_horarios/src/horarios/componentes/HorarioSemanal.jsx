@@ -28,6 +28,11 @@ export default function HorarioSemanal({ eventos, cargando, onEventoSoltado, onE
 
     return (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 relative">
+            <style>{`
+                .fc .fc-day-today {
+                    background-color: transparent !important;
+                }
+            `}</style>
             {cargando && (
                 <div className="absolute inset-0 z-20 bg-white/60 flex items-center justify-center rounded-xl backdrop-blur-[1px]">
                     <span className="font-bold text-[#7a1e1e] animate-pulse bg-white px-4 py-2 rounded-full shadow-sm border border-indigo-100">
