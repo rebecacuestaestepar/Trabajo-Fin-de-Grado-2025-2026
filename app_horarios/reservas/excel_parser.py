@@ -342,7 +342,7 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
                     col_salto = nuevo_salto 
             else:
                 if cond:
-                    for aula in aulas:
+                    for aula in aulas.values():
                         if celda_asig.fill.start_color.theme == 9:
                             valor_grupo = "1"
                             nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
@@ -376,7 +376,7 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
             if celda_asig.fill.start_color.theme == 7:
                 valor_grupo = "80"
                 if cond:
-                    for aula in aulas:
+                    for aula in aulas.values():
                         nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
                         clases.append(nueva_clase)
                 else:
@@ -385,7 +385,7 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
             elif celda_asig.fill.start_color.theme == 9:
                 valor_grupo = "1"
                 if cond:
-                    for aula in aulas:
+                    for aula in aulas.values():
                         nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
                         clases.append(nueva_clase)
                 else:
