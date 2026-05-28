@@ -638,39 +638,43 @@ def extraer_clases(ws, tabla, mapa_merge, asignaturas):
 
     for dia, limites in tabla["mapa_dias"].items():
         for tramo in tabla["lista_tramos"]:
-            fila_actual = tramo["fila_inicio"]
+            #fila_actual = tramo["fila_inicio"]
             col = limites["col_inicio"]
             while col <= limites["col_fin"]:
-                celda = ws.cell(row=fila_actual, column=col)
-                coord = celda.coordinate
-                siguiente_col = col + 1
-                if coord in celdas_visitadas:
-                    col = siguiente_col
-                    continue
+                salto_maximo = col + 1
+                for fila_actual in range(tramo["fila_inicio"], tramo["fila_fin"] + 1):
+                    celda = ws.cell(row=fila_actual, column=col)
+                    coord = celda.coordinate
+                    #siguiente_col = col + 1
+                    if coord in celdas_visitadas:
+                        continue
+                        
+                    tipo, _ = clasificar_celda(celda.value)
                     
-                tipo, _ = clasificar_celda(celda.value)
-                
-                if tipo in ["GRUPO_PRACTICO", "GRUPO_TEORICO", "AULA", "ABREV_ASIG"]:
-                    color_tema = celda.fill.start_color.theme
-                    color_rgb = celda.fill.start_color.rgb
+                    if tipo in ["GRUPO_PRACTICO", "GRUPO_TEORICO", "AULA", "ABREV_ASIG"]:
+                        color_tema = celda.fill.start_color.theme
+                        color_rgb = celda.fill.start_color.rgb
 
-                    #print("")
+                        nuevo_salto = col + 1
 
-                    if color_tema in [2,7,9] and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 90:
-                        siguiente_col = extraer_clase_rotada90(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
-                    
-                    elif color_tema in [2,7,9] and tipo == "ABREV_ASIG" and coord in mapa_merge:
-                        siguiente_col = extraer_teoricas(ws, tramo["fila_inicio"], tramo["fila_fin"], col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
-                            
-                    elif (color_tema in [6,8] or color_rgb == "FFF1FA78") and tipo == "GRUPO_PRACTICO":
-                        siguiente_col = extraer_clase_practica_grupo(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
-                            
-                    elif (color_tema in [6,8] or color_rgb == "FFF1FA78") and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 90:
-                        siguiente_col = extraer_clase_rotada90(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
+                        if color_tema in [2,7,9] and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 90:
+                            nuevo_salto = extraer_clase_rotada90(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
+                        
+                        elif color_tema in [2,7,9] and tipo == "ABREV_ASIG" and coord in mapa_merge:
+                            nuevo_salto = extraer_teoricas(ws, tramo["fila_inicio"], tramo["fila_fin"], col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
                                 
-                    elif (color_tema in [6,8] or color_rgb == "FFF1FA78") and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 0:
-                        siguiente_col = extraer_practica_asig_rotacion0(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
-                col = siguiente_col
+                        elif (color_tema in [6,8] or color_rgb == "FFF1FA78") and tipo == "GRUPO_PRACTICO":
+                            nuevo_salto = extraer_clase_practica_grupo(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
+                                
+                        elif (color_tema in [6,8] or color_rgb == "FFF1FA78") and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 90:
+                            nuevo_salto = extraer_clase_rotada90(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
+                                    
+                        elif (color_tema in [6,8] or color_rgb == "FFF1FA78") and tipo == "ABREV_ASIG" and celda.alignment.textRotation == 0:
+                            nuevo_salto = extraer_practica_asig_rotacion0(ws, fila_actual, col, mapa_merge, celdas_visitadas, tabla, asignaturas, clases)
+                        
+                        if nuevo_salto > salto_maximo:
+                            salto_maximo = nuevo_salto
+                col = salto_maximo
     return clases
 
 
