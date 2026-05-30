@@ -5,7 +5,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from docencia.services_periodicas import crear_reserva_periodica, obtener_asignaturas_por_grado_curso_semestre, obtener_aulas_libres, obtener_cursos_grado, obtener_datos_reserva_periodica, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre, reserva_desde_horario_grado
 from docencia.serializers import HorarioSerializer
-from docencia.services import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre
+from docencia.services import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre, validar_restricciones_movimiento
 from calendario.models import Curso
 from reservas.excel_parser import parsear_horario_excel
 from reservas.services_excel import generar_reservas_periodicas
@@ -66,12 +66,23 @@ class ObtenerAsignaturasPorGradoYSemestreView(APIView):
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=404)
+
+class ValidarRestriccionesView(APIView):
+    def post(self, request, *args, **kwargs):
+        id_curso = request.data.get('id_curso')
+        semestre_num = request.data.get('semestre_num')
+        id_grado = request.data.get('id_grado')
+        datos_movimiento = request.data.get('datos_movimiento')
+
+        resultado = validar_restricciones_movimiento(id_curso, int(semestre_num), id_grado, datos_movimiento)
+        return Response(resultado, status=200)
         
 
 class MoverSerieReservasView(APIView):
     def post(self, request, *args, **kwargs):
         id_curso = request.data.get('id_curso')
         semestre_num = request.data.get('semestre_num')
+        #id_grado = request.data.get('id_grado')
         datos_movimiento = request.data.get('datos_movimiento')
 
         if not id_curso or not semestre_num or not datos_movimiento:
