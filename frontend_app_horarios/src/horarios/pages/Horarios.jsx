@@ -63,7 +63,7 @@ export default function Horarios() {
                             key={horario.idcurso}
                             idCurso={horario.idcurso}
                             modoNavegacion={true}
-                            rutaDestino={`/horarios/${horario.idcurso}/grados`}
+                            rutaDestino={`/horarios/${horario.idcurso}`}
                             titulo={`Horario del curso ${horario.idcurso}`}
                         />
                     ))}
