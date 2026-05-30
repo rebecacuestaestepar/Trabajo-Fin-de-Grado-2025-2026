@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { obtenerSemestresPorGrado, obtenerAsignaturasPorGradoYSemestre, obtenerGradosPorCurso } from '../../api/docencia';
+import { obtenerSemestresPorGrado, obtenerAsignaturasPorGradoYSemestre, obtenerGradosPorCurso, validarRestricciones, moverReservaPeriodica } from '../../api/docencia';
 import { obtenerColorGrupo } from '../utiles/coloresGrupo';
 import SelectorSemestre from '../componentes/SelectorSemestre';
 import CalendarioSemanal from '../componentes/HorarioSemanal';
 import BotonVolver from '../../reservas/formulario-componentes/ui/BotonVolver';
+import ModalRestricciones from '../componentes/ModalRestricciones';
 
 export default function VistaHorarioSemanalGrado() {
     const { id_curso } = useParams();
@@ -17,6 +18,12 @@ export default function VistaHorarioSemanalGrado() {
     const [semestreActivo, setSemestreActivo] = useState("");
     const [eventos, setEventos] = useState([]);
     const [cargando, setCargando] = useState(true);
+
+    const [modalConfirmacion, setModalConfirmacion] = useState(false);
+    const [motivosAlerta, setMotivosAlerta] = useState([]);
+    const [movimientoPendiente, setMovimientoPendiente] = useState(null);
+
+    const [recarga, setRecarga] = useState(0);
 
     useEffect(() => {
         const cargarGrados = async () => {
@@ -104,20 +111,60 @@ export default function VistaHorarioSemanalGrado() {
         };
 
         cargarHorario();
-    }, [gradoActivo, semestreActivo, id_curso]);
+    }, [gradoActivo, semestreActivo, id_curso, recarga]);
 
-    const manejarMovimientoEvento = (info) => {
+    const manejarMovimientoEvento = async (info) => {
         const { event, revert } = info;
         
-        const distint = event.extendedProps.distint;
-        const nuevoDiaSemana = event.start.getUTCDay();
-        const nuevaHoraInicio = event.start.toISOString().substring(11, 19);
-        const nuevaHoraFin = event.end.toISOString().substring(11, 19);
+        const payloadMovimiento = {
+            firma_serie: event.extendedProps.distint,
+            nuevo_dia: event.start.getUTCDay(),
+            nueva_hora_inicio: event.start.toISOString().substring(11, 19),
+            nueva_hora_fin: event.end.toISOString().substring(11, 19),
+            forzar: false
+        };
 
-        console.log("Intentando mover serie:", distint);
-        console.log("Al día:", nuevoDiaSemana, "Hora:", nuevaHoraInicio, "-", nuevaHoraFin);
+        try {
+            const data = await validarRestricciones(id_curso, semestreActivo, gradoActivo, payloadMovimiento);
 
-        revert(); 
+            if (data.valido) {
+                ejecutarMovimientoReal(payloadMovimiento);
+            } else {
+                setMotivosAlerta(data.motivos);
+                setMovimientoPendiente({ payload: payloadMovimiento, revertFunc: revert });
+                setModalConfirmacion(true);
+            }
+        } catch (err) {
+            console.error("Error al validar:", err);
+            revert();
+        }
+    };
+
+    const ejecutarMovimientoReal = async (payload) => {
+        try {
+            await moverReservaPeriodica(id_curso, semestreActivo, payload);
+            
+            setRecarga(prev => prev + 1);
+        } catch (error) {
+            console.error("Error al mover:", error);
+        }
+    };
+
+    const cancelarMovimiento = () => {
+        if (movimientoPendiente) {
+            movimientoPendiente.revertFunc();
+        }
+        setModalConfirmacion(false);
+        setMovimientoPendiente(null);
+    };
+
+    const forzarMovimiento = () => {
+        if (movimientoPendiente) {
+            const payloadForzado = { ...movimientoPendiente.payload, forzar: true };
+            ejecutarMovimientoReal(payloadForzado);
+        }
+        setModalConfirmacion(false);
+        setMovimientoPendiente(null);
     };
 
     const manejarClickEvento = (info) => {
@@ -175,6 +222,13 @@ export default function VistaHorarioSemanalGrado() {
                     onEventoClick={manejarClickEvento}
                 />
             )}
+
+            <ModalRestricciones
+                abierto={modalConfirmacion}
+                motivos={motivosAlerta}
+                onCancelar={cancelarMovimiento}
+                onContinuar={forzarMovimiento}
+            />
         </div>
     );
 }

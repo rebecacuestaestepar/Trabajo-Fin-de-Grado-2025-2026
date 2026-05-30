@@ -33,6 +33,7 @@ import VistaHorarioSemanalGrado from "./horarios/pages/HorarioSemanalPorGrado.js
 import CrearReservaPeriodica from "./reservas/reservas-periodicas/pages/CrearReservaPeriodica.jsx";
 import DetallesReservaPeriodica from "./reservas/reservas-periodicas/pages/DetallesReservaPeriodica.jsx";
 import EditarReservaPeriodica from "./reservas/reservas-periodicas/pages/EditarReservaPeriodica.jsx";
+import ModalRestricciones from "./horarios/componentes/ModalRestricciones.jsx";
 
 
 function App() {
@@ -70,6 +71,8 @@ function App() {
             <Route path="/reservas/periodicas/crear" element={<CrearReservaPeriodica />} />
             <Route path="/reservas/periodicas/ver/:id" element={<DetallesReservaPeriodica />} />
             <Route path="/reservas/periodicas/editar/:id" element={<EditarReservaPeriodica />} />
+
+            <Route path="/horarios/modal" element={<ModalRestricciones />} />
 
           </Route>
         </Route>
