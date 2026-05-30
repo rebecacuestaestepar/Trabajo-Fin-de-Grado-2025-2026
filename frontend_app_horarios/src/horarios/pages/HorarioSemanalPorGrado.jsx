@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { obtenerSemestresPorGrado, obtenerAsignaturasPorGradoYSemestre } from '../../api/docencia';
+import { obtenerSemestresPorGrado, obtenerAsignaturasPorGradoYSemestre, obtenerGradosPorCurso } from '../../api/docencia';
 import { obtenerColorGrupo } from '../utiles/coloresGrupo';
 import SelectorSemestre from '../componentes/SelectorSemestre';
 import CalendarioSemanal from '../componentes/HorarioSemanal';
 import BotonVolver from '../../reservas/formulario-componentes/ui/BotonVolver';
 
 export default function VistaHorarioSemanalGrado() {
-    const { id_curso, id_grado } = useParams();
+    const { id_curso } = useParams();
     const navigate = useNavigate();
+
+    const [grados, setGrados] = useState([]);
+    const [gradoActivo, setGradoActivo] = useState("");
 
     const [semestres, setSemestres] = useState([]);
     const [semestreActivo, setSemestreActivo] = useState("");
@@ -16,31 +19,63 @@ export default function VistaHorarioSemanalGrado() {
     const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
-        const cargarSemestres = async () => {
+        const cargarGrados = async () => {
+            setCargando(true);
             try {
-                const data = await obtenerSemestresPorGrado(id_grado);
+                const data = await obtenerGradosPorCurso(id_curso);
+                setGrados(data);
+                if (data.length > 0) {
+                    setGradoActivo(data[0].idgrado);
+                }
+            } catch (error) {
+                console.error("Error al cargar grados:", error);
+            } finally {
+                setCargando(false);
+            }
+        };
+        cargarGrados();
+    }, [id_curso]);
+
+    useEffect(() => {
+        if (!gradoActivo) {
+            setSemestres([]);
+            setSemestreActivo("");
+            setEventos([]);
+            return;
+        }
+
+        const cargarSemestres = async () => {
+            setCargando(true);
+            try {
+                const data = await obtenerSemestresPorGrado(gradoActivo);
                 const listaSemestres = data.semestres ? data.semestres : data;
                 setSemestres(listaSemestres);
+                
                 if (listaSemestres.length > 0) {
                     setSemestreActivo(listaSemestres[0]);
+                } else {
+                    setSemestreActivo("");
+                    setEventos([]);
                 }
             } catch (error) {
                 console.error("Error al cargar semestres:", error);
+            } finally {
+                setCargando(false);
             }
         };
         cargarSemestres();
-    }, [id_grado]);
+    }, [gradoActivo]);
 
     useEffect(() => {
-        if (!semestreActivo) return;
+        if (!gradoActivo || !semestreActivo) return;
 
         const cargarHorario = async () => {
             setCargando(true);
             try {
-                const reservas = await obtenerAsignaturasPorGradoYSemestre(id_grado, semestreActivo, id_curso);
+                const reservas = await obtenerAsignaturasPorGradoYSemestre(gradoActivo, semestreActivo, id_curso);
                 
                 const eventosFormateados = reservas.map(res => {
-                    const estilo = obtenerColorGrupo(res.grupo_nombre);
+                    const estilo = obtenerColorGrupo(String(res.grupo_nombre));
                     return {
                         id: res.id_reserva,
                         startTime: res.hora_inicio, 
@@ -50,7 +85,7 @@ export default function VistaHorarioSemanalGrado() {
                         borderColor: '#94a3b8',
                         textColor: estilo.texto,
                         extendedProps: {
-                            asignatura: res.asignatura_abreviatura,
+                            asignatura: res.asignatura_abreviatura || res.asignatura_nombre,
                             nombreCompleto: res.asignatura_nombre,
                             aula: res.aula_nombre,
                             grupo: res.grupo_nombre,
@@ -59,19 +94,17 @@ export default function VistaHorarioSemanalGrado() {
                         }
                     };
                 });
-
-                console.log("Eventos formateados para el calendario:", eventosFormateados);
-
                 setEventos(eventosFormateados);
             } catch (error) {
                 console.error("Error al cargar las asignaturas:", error);
+                setEventos([]);
             } finally {
                 setCargando(false);
             }
         };
 
         cargarHorario();
-    }, [id_grado, semestreActivo, id_curso]);
+    }, [gradoActivo, semestreActivo, id_curso]);
 
     const manejarMovimientoEvento = (info) => {
         const { event, revert } = info;
@@ -90,7 +123,6 @@ export default function VistaHorarioSemanalGrado() {
     const manejarClickEvento = (info) => {
         const idReserva = info.event.id;
         if (idReserva) {
-            // Ajusta esta ruta a como la tengas en tu App.js o main.jsx
             navigate(`/reservas/periodicas/ver/${idReserva}`); 
         } else {
             console.warn("Este evento no tiene un ID de reserva asociado.");
@@ -100,7 +132,7 @@ export default function VistaHorarioSemanalGrado() {
     const irACrearReserva = () => {
         navigate('/reservas/periodicas/crear', { 
             state: { 
-                grado: id_grado, 
+                grado: gradoActivo, 
                 semestre: semestreActivo 
             } 
         });
@@ -109,10 +141,11 @@ export default function VistaHorarioSemanalGrado() {
     return (
         <div className="max-w-7xl mx-auto p-4 space-y-4">
             <div className="flex items-center justify-between">
-                <BotonVolver fallback={`/horarios/${id_curso}/grados`} />
+                <BotonVolver fallback={`/horarios/cargar/cursos`} />
                 
                 <button
                     onClick={irACrearReserva}
+                    disabled={!gradoActivo || !semestreActivo}
                     className="inline-flex items-center justify-center rounded-md bg-[#7a1e1e] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#631818] focus:outline-none focus:ring-2 focus:ring-[#7a1e1e] focus:ring-offset-2"
                 >
                     Crear Reserva Periódica
@@ -121,19 +154,27 @@ export default function VistaHorarioSemanalGrado() {
             
             <SelectorSemestre 
                 idCurso={id_curso}
-                idGrado={id_grado}
+                grados={grados}
+                gradoActivo={gradoActivo}
+                onSeleccionarGrado={setGradoActivo}
                 semestres={semestres}
                 semestreActivo={semestreActivo}
                 onSeleccionarSemestre={setSemestreActivo}
                 cargando={cargando}
             />
 
-            <CalendarioSemanal 
-                eventos={eventos}
-                cargando={cargando}
-                onEventoSoltado={manejarMovimientoEvento}
-                onEventoClick={manejarClickEvento}
-            />
+            {(!gradoActivo || !semestreActivo) && !cargando ? (
+                <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-10 text-center text-slate-500">
+                    Selecciona un grado y un semestre para ver su horario.
+                </div>
+            ) : (
+                <CalendarioSemanal 
+                    eventos={eventos}
+                    cargando={cargando}
+                    onEventoSoltado={manejarMovimientoEvento}
+                    onEventoClick={manejarClickEvento}
+                />
+            )}
         </div>
     );
 }
