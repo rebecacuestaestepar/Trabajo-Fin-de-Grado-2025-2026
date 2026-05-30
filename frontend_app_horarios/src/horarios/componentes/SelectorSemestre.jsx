@@ -8,7 +8,7 @@ export default function SelectorSemestre({idCurso, grados, gradoActivo, onSelecc
                 <p className="text-sm text-slate-500">Curso: <span className="font-semibold">{idCurso}</span></p>
             </div>
 
-            <div className="items-center gap-6">
+            <div className="flex flex-col items-end gap-3">
                 <div className="flex items-center gap-2 mb-4">
                     <label className="text-sm font-semibold text-slate-700">Grado:</label>
                     <select 
