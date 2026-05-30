@@ -53,7 +53,7 @@ function App() {
 
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/horarios/cargar/cursos" element={<ListaCursos />} />
-            <Route path="/horarios/:id_curso/grados" element={<ListaGrados />} />
+            {/* <Route path="/horarios/:id_curso/grados" element={<ListaGrados />} /> */}
             <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
             <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
             <Route path="/examenes" element={<Examenes />} />
@@ -65,9 +65,7 @@ function App() {
             <Route path="/calendario/leyenda" element={<LeyendaCalendario />} />
 
 
-            <Route path="/horario/selectorLeyenda" element={<SelectorSemestre />} />
-            <Route path="/horario/horarioSemanal" element={<HorarioSemanal />} />
-            <Route path="/horarios/:id_curso/grados/:id_grado" element={<VistaHorarioSemanalGrado />} />
+            <Route path="/horarios/:id_curso" element={<VistaHorarioSemanalGrado />} />
 
             <Route path="/reservas/periodicas/crear" element={<CrearReservaPeriodica />} />
             <Route path="/reservas/periodicas/ver/:id" element={<DetallesReservaPeriodica />} />
