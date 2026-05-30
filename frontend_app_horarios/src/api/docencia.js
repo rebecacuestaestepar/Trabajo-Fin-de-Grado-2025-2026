@@ -37,6 +37,20 @@ export function obtenerAsignaturasPorGradoYSemestre(idGrado, idSemestre, idCurso
     });
 }
 
+export function validarRestricciones(id_curso, semestre_num, id_grado, datos_movimiento) {
+    return apiRequest("/docencia/validar-restricciones/", {
+        method: "POST",
+        body: { id_curso, semestre_num, id_grado, datos_movimiento }
+    });
+}
+
+export function moverReservaPeriodica(id_curso, semestre_num, datos_movimiento) {
+    return apiRequest("/docencia/mover-reserva-periodica/", {
+        method: "POST",
+        body: { id_curso, semestre_num, datos_movimiento }
+    });
+}
+
 export function obtenerGrados() {
     return apiRequest("/docencia/grados/", {
         method: "GET",
