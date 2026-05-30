@@ -43,6 +43,7 @@ def obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, semestre_academ
     vistos = set()
 
     for r in reservas:
+        asignatura_nombre = r.id_grupo.id_asignatura.nombre
         asignatura_id = r.id_grupo.id_asignatura.idasignatura
         grupo_id = r.id_grupo.grupoid
         aula_id = r.id_reserva.id_aula.id if r.id_reserva.id_aula else "Sin aula"
@@ -54,7 +55,16 @@ def obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, semestre_academ
 
         if distint not in vistos:
             vistos.add(distint)
-            reservas_unicas.append(r)
+            reserva_dict = {
+                "asignatura_id": asignatura_id,
+                "asignatura_nombre": asignatura_nombre,
+                "grupo_id": grupo_id,
+                "aula_id": aula_id,
+                "dia_semana": dia_semana,
+                "hora_inicio": hora_inicio,
+                "hora_fin": hora_fin,
+            }
+            reservas_unicas.append(reserva_dict)
 
     return reservas_unicas
 

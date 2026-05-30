@@ -4,6 +4,7 @@ from reservas.models import ReservaPeriodica
 class HorarioSerializer(serializers.ModelSerializer):
     id_reserva = serializers.IntegerField(source='id_reserva.idreserva')
     asignatura = serializers.SerializerMethodField()
+    nombre_completo = serializers.SerializerMethodField()
     aula = serializers.CharField(source='id_reserva.id_aula.nombre', default="Sin aula asignada")
     hora_inicio = serializers.TimeField(source='id_reserva.hora_inicio', format="%H:%M:%S")
     hora_fin = serializers.TimeField(source='id_reserva.hora_fin', format="%H:%M:%S")
@@ -20,6 +21,12 @@ class HorarioSerializer(serializers.ModelSerializer):
         if grupo and grupo.id_asignatura:
             asig = grupo.id_asignatura
             return asig.abreviatura if asig.abreviatura else asig.nombre
+        return "Sin asignatura asignada"
+    
+    def get_nombre_completo(self, obj):
+        grupo = getattr(obj, 'id_grupo', None)
+        if grupo and grupo.id_asignatura:
+            return grupo.id_asignatura.nombre
         return "Sin asignatura asignada"
     
     def get_grupo(self, obj):
