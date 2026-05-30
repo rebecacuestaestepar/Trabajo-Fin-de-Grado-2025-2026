@@ -14,7 +14,7 @@ class HorarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReservaPeriodica
-        fields = ['id_reserva', 'asignatura', 'aula', 'hora_inicio', 'hora_fin', 'grupo', 'dia_semana', 'distint']
+        fields = ['id_reserva', 'asignatura', 'nombre_completo', 'aula', 'hora_inicio', 'hora_fin', 'grupo', 'dia_semana', 'distint']
 
     def get_asignatura(self, obj):
         grupo = getattr(obj, 'id_grupo', None)

@@ -45,21 +45,28 @@ def obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, semestre_academ
     for r in reservas:
         asignatura_nombre = r.id_grupo.id_asignatura.nombre
         asignatura_id = r.id_grupo.id_asignatura.idasignatura
+        asignatura_abreviatura = r.id_grupo.id_asignatura.abreviatura
         grupo_id = r.id_grupo.grupoid
         aula_id = r.id_reserva.id_aula.id if r.id_reserva.id_aula else "Sin aula"
         dia_semana = r.dia_semana
         hora_inicio = r.id_reserva.hora_inicio.strftime("%H:%M")
         hora_fin = r.id_reserva.hora_fin.strftime("%H:%M")
+        grupo_nombre = r.id_grupo.nombre
+        aula_nombre = r.id_reserva.id_aula.nombre if r.id_reserva.id_aula else "Sin aula"
 
         distint = f"{asignatura_id}-{grupo_id}-{dia_semana}-{hora_inicio}-{hora_fin}-{aula_id}"
 
         if distint not in vistos:
             vistos.add(distint)
             reserva_dict = {
+                "id_reserva": r.id_reserva.idreserva,
                 "asignatura_id": asignatura_id,
                 "asignatura_nombre": asignatura_nombre,
+                "asignatura_abreviatura": asignatura_abreviatura,
                 "grupo_id": grupo_id,
+                "grupo_nombre": grupo_nombre,
                 "aula_id": aula_id,
+                "aula_nombre": aula_nombre,
                 "dia_semana": dia_semana,
                 "hora_inicio": hora_inicio,
                 "hora_fin": hora_fin,

@@ -61,8 +61,8 @@ class ObtenerAsignaturasPorGradoYSemestreView(APIView):
 
         try:
             reservas = obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, int(id_semestre))
-            serializer = HorarioSerializer(reservas, many=True)
-            return Response(serializer.data, status=200)
+            #serializer = HorarioSerializer(reservas, many=True)
+            return Response(reservas, status=200)
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=404)
