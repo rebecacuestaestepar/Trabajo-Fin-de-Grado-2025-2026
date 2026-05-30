@@ -15,7 +15,7 @@ def aulas_candidatas_por_requisitos(
     Si el usuario pide X (True), el aula debe tener True.
     Si el usuario no lo pide (False), no imponemos nada.
     """
-    qs = Aula.objects.all()
+    qs = Aula.objects.exclude(nombre__iexact="Aula 0")
 
     # Capacidad mínima
     qs = qs.filter(capacidad__gte=capacidad)
@@ -68,7 +68,6 @@ def aulas_disponibles_en_fecha_hora(
         hora_fin__gt=hora_inicio,
     )
 
-    # Ignoramos las reservas pendientes y rechazadas, que no bloquean el aula
     solape = solape.exclude(estado='R')
     solape = solape.exclude(estado='P')
 
@@ -135,7 +134,6 @@ def aula_disponible_en_varias_fechas(
     Devuelve aulas libres en TODAS las fechas.
     Implementación robusta: intersección por nombres usando el servicio diario.
     """
-    # 1) Partimos de candidatas por requisitos
     candidatas_qs = aulas_candidatas_por_requisitos(
         capacidad=capacidad,
         num_ordenadores=num_ordenadores,
@@ -147,7 +145,6 @@ def aula_disponible_en_varias_fechas(
 
     candidatas_ids = set(candidatas_qs.values_list("id", flat=True))
 
-    # 2) Intersección con disponibles por cada fecha
     comunes = candidatas_ids.copy()
 
     for f in fechas:
@@ -168,5 +165,4 @@ def aula_disponible_en_varias_fechas(
         if not comunes:
             break
 
-    # 3) Devolvemos queryset de Aula ordenado
     return Aula.objects.filter(id__in=comunes).order_by("nombre")

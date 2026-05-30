@@ -38,6 +38,8 @@ def obtener_aulas_libres(dia_semana, hora_inicio, hora_fin):
 
     aulas_libres = Aula.objects.exclude(
         pk__in=ids_aulas_ocupadas
+    ).exclude(
+        nombre__iexact="Aula 0"
     ).values(
         'id',
         'nombre', 
