@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAulas } from "../../general/hooks/useAulas";
+import ColumnaAulas from "../components/lista-aulas/ColumnaAulas";
 
 export default function OcupacionAulas() {
   const navigate = useNavigate();
@@ -10,12 +11,35 @@ export default function OcupacionAulas() {
 
   const [seleccionadas, setSeleccionadas] = useState(() => new Set());
 
-  /* Ordena la lista de aulas recibida  */
-  const listaOrdenada = useMemo(() => {
+
+  const { aulasEstandar, laboratorios, otros } = useMemo(() => {
     const arr = Array.isArray(aulas) ? [...aulas] : [];
     arr.sort((a, b) => String(a?.nombre ?? "").localeCompare(String(b?.nombre ?? "")));
-    console.log("Aulas ordenadas:", arr);
-    return arr;
+
+    const regexAulaEstandar = /^[1-9][1-9]-A[1-9]$/i;
+    
+    const catAulas = [];
+    const catLabs = [];
+    const catOtros = [];
+
+    arr.forEach((aula) => {
+      const nombre = String(aula?.nombre ?? "").trim();
+      if (!nombre) return;
+
+      if (regexAulaEstandar.test(nombre)) {
+        catAulas.push(aula);
+      } else if (nombre.toLowerCase().includes("lab")) {
+        catLabs.push(aula);
+      } else {
+        catOtros.push(aula);
+      }
+    });
+
+    return {
+      aulasEstandar: catAulas,
+      laboratorios: catLabs,
+      otros: catOtros,
+    };
   }, [aulas]);
 
   const totalSeleccionadas = seleccionadas.size;
@@ -49,8 +73,6 @@ export default function OcupacionAulas() {
       },
     });
   }
-
-  
 
   return (
     <div className="max-w-5xl">
@@ -86,39 +108,26 @@ export default function OcupacionAulas() {
           {error && <div className="text-sm text-rose-700">Error: {error}</div>}
 
           {!cargando && !error && (
-            <ul className="divide-y divide-slate-100 rounded-md border border-slate-200">
-              {listaOrdenada.map((aula) => {
-                const id = String(aula?.id ?? "");
-                const nombre = String(aula?.nombre ?? "").trim();
-                if (!nombre) return null;
-
-                const marcada = seleccionadas.has(nombre);
-
-                return (
-                  <li
-                    key={id}
-                    //value={nombre}
-                    className="flex items-center justify-between px-3 py-3 hover:bg-slate-50"
-                  >
-                    <label className="flex items-center gap-3 cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        checked={marcada}
-                        onChange={() => alternarAula(nombre)}
-                      />
-                      <span className="text-sm font-medium text-slate-900">
-                        {nombre}
-                      </span>
-                    </label>
-
-                    <div className="text-xs text-slate-500">
-                      {aula?.edificio ? `Edif. ${aula.edificio}` : ""}
-                      {aula?.capacidad != null ? ` · Cap ${aula.capacidad}` : ""}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <ColumnaAulas 
+              titulo="Aulas de Teoría" 
+              listaAulas={aulasEstandar} 
+              seleccionadas={seleccionadas}
+              alternarAula={alternarAula}
+            />
+            <ColumnaAulas 
+              titulo="Laboratorios" 
+              listaAulas={laboratorios} 
+              seleccionadas={seleccionadas}
+              alternarAula={alternarAula}
+            />
+            <ColumnaAulas 
+              titulo="Otras Aulas" 
+              listaAulas={otros} 
+              seleccionadas={seleccionadas}
+              alternarAula={alternarAula}
+            />
+          </div>
           )}
         </div>
         
