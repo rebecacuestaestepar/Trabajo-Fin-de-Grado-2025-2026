@@ -40,7 +40,7 @@ export default function VistaHorarioSemanalGrado() {
                 const reservas = await obtenerAsignaturasPorGradoYSemestre(id_grado, semestreActivo, id_curso);
                 
                 const eventosFormateados = reservas.map(res => {
-                    const estilo = obtenerColorGrupo(res.grupo);
+                    const estilo = obtenerColorGrupo(res.grupo_nombre);
                     return {
                         id: res.id_reserva,
                         startTime: res.hora_inicio, 
@@ -50,9 +50,10 @@ export default function VistaHorarioSemanalGrado() {
                         borderColor: '#94a3b8',
                         textColor: estilo.texto,
                         extendedProps: {
-                            asignatura: res.asignatura,
-                            aula: res.aula,
-                            grupo: res.grupo,
+                            asignatura: res.asignatura_abreviatura,
+                            nombreCompleto: res.asignatura_nombre,
+                            aula: res.aula_nombre,
+                            grupo: res.grupo_nombre,
                             distint: res.distint,
                             tipo: estilo.tipo
                         }

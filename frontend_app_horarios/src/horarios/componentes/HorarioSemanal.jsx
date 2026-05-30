@@ -8,12 +8,12 @@ export default function HorarioSemanal({ eventos, cargando, onEventoSoltado, onE
     const calendarRef = useRef(null);
 
     const renderizarContenidoEvento = (eventInfo) => {
-        const { asignatura, aula, grupo } = eventInfo.event.extendedProps;
+        const { asignatura, aula, grupo, nombreCompleto } = eventInfo.event.extendedProps;
+        const texto = `${nombreCompleto}\nGrupo: ${grupo}\nAula: ${aula}`;
         return (
-            <div className="relative flex flex-col h-full p-1 overflow-hidden leading-tight cursor-move">
+            <div title={texto} className="relative flex flex-col h-full p-1 overflow-hidden leading-tight cursor-move">
                 <div className="font-bold text-xs truncate">{asignatura}</div>
                 <div className="text-[10px] opacity-80 truncate mb-4">{aula}</div>
-                {/* <div className="mt-auto self-end font-bold text-[10px] bg-white/50 px-1 rounded border border-black/10"> */}
                 <div className="absolute bottom-1 left-1 font-bold text-[9px] bg-white/70 px-1 rounded shadow-sm text-black border border-black/10">
                     G{grupo}
                 </div>
