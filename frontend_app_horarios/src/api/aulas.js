@@ -1,4 +1,4 @@
-import { apiGet } from "./client";
+import { apiGet, apiRequest } from "./client";
 
 export async function obtenerAulas() {
   const respuesta = await fetch("http://localhost:8000/api/aulas/");
@@ -17,4 +17,36 @@ export async function getEventosAula({ aulaNombre, start, end, tipo = "AMBAS" })
   console.log("GET /aulas/ocupacion", params.toString());
 
   return apiGet(`/aulas/ocupacion?${params.toString()}`);
+}
+
+export function crearAula(datos) {
+  return apiRequest("/aulas/crear/", {
+    method: "POST",
+    body: datos
+  });
+}
+
+export function actualizarAula(aulaId, datos) {
+  return apiRequest(`/aulas/actualizar/${aulaId}/`, {
+    method: "PUT",
+    body: datos
+  });
+}
+
+export function eliminarAula(aulaId) {
+  return apiRequest(`/aulas/eliminar/${aulaId}/`, {
+    method: "DELETE"
+  });
+}
+
+export function obtenerDetalleAula(aulaId) {
+  return apiRequest(`/aulas/${aulaId}/`, {
+    method: "GET",
+  });
+}
+
+export function listaAulas() {
+  return apiRequest("/aulas/lista/", {
+    method: "GET",
+  });
 }
