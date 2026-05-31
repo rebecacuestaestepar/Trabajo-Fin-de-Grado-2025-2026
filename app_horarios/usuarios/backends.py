@@ -1,5 +1,6 @@
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from .moodle_api import ClienteMoodle
 from django.conf import settings
 
@@ -29,6 +30,9 @@ class BackendUniversidadMoodle(BaseBackend):
             usuario.first_name = info_usuario.get('firstname', '')
             usuario.last_name = info_usuario.get('lastname', '')
             usuario.save()
+
+            #grupo_pdi = Group.objects.get(name='pdi')
+            #usuario.groups.add(grupo_pdi)
         return usuario
     
     def get_user(self, user_id):

@@ -17,6 +17,7 @@ class LoginUniversidadAPIView(APIView):
 
         if user is not None:
             refresh = RefreshToken.for_user(user)
+            #roles_usuario = list(user.groups.values_list('name', flat=True))
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
@@ -24,6 +25,7 @@ class LoginUniversidadAPIView(APIView):
                     'username': user.username,
                     'nombre': user.first_name,
                     'apellidos': user.last_name,
+                    #'roles': roles_usuario                
                 }
             }, status=status.HTTP_200_OK)
         else:
