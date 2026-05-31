@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 class GradoService:
     @staticmethod
     def lista_mini_grados():
-        return Grado.objects.values('idgrado', 'nombre').order_by('idgrado')
+        return Grado.objects.values('idgrado', 'nombre').order_by('nombre')
     
     @staticmethod
     def listar_grados():
@@ -34,7 +34,7 @@ class GradoService:
 class AsignaturaService:
     @staticmethod
     def lista_mini_asignaturas():
-        return Asignaturas.objects.values('idasignatura', 'nombre').order_by('idasignatura')
+        return Asignaturas.objects.values('idasignatura', 'nombre').order_by('nombre')
 
     @staticmethod
     def listar_asignaturas():
