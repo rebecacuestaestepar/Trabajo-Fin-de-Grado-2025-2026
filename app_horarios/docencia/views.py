@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from .services import GradoService, AsignaturaService, GrupoService
+from .services import GradoService, AsignaturaService, GrupoService, DocenteService
 
 import traceback
 
@@ -86,6 +86,29 @@ class GrupoViewSet(viewsets.ViewSet):
     
     def eliminar_grupo(self, request, pk=None):
         GrupoService.eliminar_grupo(pk)
+        return Response(status=204)
+
+class DocenteViewSet(viewsets.ViewSet):
+    def lista_docentes(self, request):
+        docentes = DocenteService.lista_docentes()
+        return Response(docentes, status=200)
+    
+    def obtener_docente_por_id(self, request, pk=None):
+        docente = DocenteService.obtener_docente_por_id(pk)
+        return Response(docente, status=200)
+    
+    def crear_docente(self, request):
+        datos_docente = request.data
+        docente = DocenteService.crear_docente(datos_docente)
+        return Response(docente, status=201)
+    
+    def actualizar_docente(self, request, pk=None):
+        datos_actualizados = request.data
+        docente = DocenteService.actualizar_docente(pk, datos_actualizados)
+        return Response(docente, status=200)
+    
+    def eliminar_docente(self, request, pk=None):
+        DocenteService.eliminar_docente(pk)
         return Response(status=204)
 
 

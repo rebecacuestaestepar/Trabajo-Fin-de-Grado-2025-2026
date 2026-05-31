@@ -1,6 +1,6 @@
 from django.urls import include, path
 from .views_horario import CargarHorarioExcelView, MoverSerieReservasView, ObtenerAsignaturasPorGradoYSemestreView, ObtenerCursosView, ValidarRestriccionesView, SemestresPorGradoView
-from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet
+from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet
 from .views_periodicas import ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView
 from rest_framework.routers import DefaultRouter
 
@@ -11,6 +11,8 @@ routerAsignatura = DefaultRouter()
 routerAsignatura.register(r'asignaturas', AsignaturaViewSet, basename='asignatura')
 routerGrupo = DefaultRouter()
 routerGrupo.register(r'grupos', GrupoViewSet, basename='grupo')
+routerDocente = DefaultRouter()
+routerDocente.register(r'docentes', DocenteViewSet, basename='docente')
 
 urlpatterns = [
     path('cargar-horario/', CargarHorarioExcelView.as_view(), name='cargar_horario_excel'),
@@ -32,4 +34,6 @@ urlpatterns = [
     path('', include(routerGrado.urls)),
     path('', include(routerAsignatura.urls)),
     path('', include(routerGrupo.urls)),
+    path('', include(routerDocente.urls)),
+    
 ]
