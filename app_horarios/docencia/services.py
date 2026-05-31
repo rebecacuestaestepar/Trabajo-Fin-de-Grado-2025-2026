@@ -52,3 +52,29 @@ class AsignaturaService:
     def eliminar_asignatura(asignatura_id):
         asignatura = AsignaturaService.obtener_asignatura_por_id(asignatura_id)
         asignatura.delete()
+
+class GrupoService:
+    @staticmethod
+    def listar_grupos():
+        return Grupo.objects.all().order_by('grupoid')
+
+    @staticmethod
+    def obtener_grupo_por_id(grupo_id):
+        return get_object_or_404(Grupo, grupoid=grupo_id)
+
+    @staticmethod
+    def crear_grupo(datos_grupo):
+        return Grupo.objects.create(**datos_grupo)
+
+    @staticmethod
+    def actualizar_grupo(grupo_id, datos_actualizados):
+        grupo = get_object_or_404(Grupo, grupoid=grupo_id)
+        for campo, valor in datos_actualizados.items():
+            setattr(grupo, campo, valor)
+        grupo.save()
+        return grupo
+
+    @staticmethod
+    def eliminar_grupo(grupo_id):
+        grupo = GrupoService.obtener_grupo_por_id(grupo_id)
+        grupo.delete()
