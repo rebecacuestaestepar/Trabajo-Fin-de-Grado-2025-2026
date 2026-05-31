@@ -3,6 +3,10 @@ from django.shortcuts import get_object_or_404
 
 class GradoService:
     @staticmethod
+    def lista_mini_grados():
+        return Grado.objects.values('idgrado', 'nombre').order_by('idgrado')
+    
+    @staticmethod
     def listar_grados():
         return Grado.objects.all().order_by('idgrado')
 
@@ -29,6 +33,10 @@ class GradoService:
 
 class AsignaturaService:
     @staticmethod
+    def lista_mini_asignaturas():
+        return Asignaturas.objects.values('idasignatura', 'nombre').order_by('idasignatura')
+
+    @staticmethod
     def listar_asignaturas():
         return Asignaturas.objects.all().order_by('idasignatura')
 
@@ -54,6 +62,11 @@ class AsignaturaService:
         asignatura.delete()
 
 class GrupoService:
+
+    @staticmethod
+    def lista_mini_grupos():
+        return Grupo.objects.values('grupoid', 'nombre').order_by('grupoid')
+
     @staticmethod
     def listar_grupos():
         return Grupo.objects.all().order_by('grupoid')
@@ -80,13 +93,18 @@ class GrupoService:
         grupo.delete()
 
 class DocenteService:
+    
+    @staticmethod
+    def lista_mini_docentes():
+        return Docente.objects.values('codigo', 'nombre').order_by('codigo')
+
     @staticmethod
     def listar_docentes():
-        return Docente.objects.all().order_by('iddocente')
+        return Docente.objects.all().order_by('codigo')
 
     @staticmethod
     def obtener_docente_por_id(docente_id):
-        return get_object_or_404(Docente, iddocente=docente_id)
+        return get_object_or_404(Docente, codigo=docente_id)
 
     @staticmethod
     def crear_docente(datos_docente):
@@ -94,7 +112,7 @@ class DocenteService:
 
     @staticmethod
     def actualizar_docente(docente_id, datos_actualizados):
-        docente = get_object_or_404(Docente, iddocente=docente_id)
+        docente = get_object_or_404(Docente, codigo=docente_id)
         for campo, valor in datos_actualizados.items():
             setattr(docente, campo, valor)
         docente.save()
