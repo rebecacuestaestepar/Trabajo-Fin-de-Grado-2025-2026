@@ -7,6 +7,9 @@ from rest_framework.routers import DefaultRouter
 routerGrado = DefaultRouter()
 routerGrado.register(r'grados', GradoViewSet, basename='grado')
 
+routerAsignatura = DefaultRouter()
+routerAsignatura.register(r'asignaturas', GradoViewSet, basename='asignatura')
+
 urlpatterns = [
     path('cargar-horario/', CargarHorarioExcelView.as_view(), name='cargar_horario_excel'),
     path('cursos/', ObtenerCursosView.as_view(), name='obtener_cursos'),
@@ -25,4 +28,5 @@ urlpatterns = [
     path('mover-reserva-periodica/', MoverSerieReservasView.as_view(), name='validar_movimiento_reserva_periodica'),
 
     path('', include(routerGrado.urls)),
+    path('', include(routerAsignatura.urls)),
 ]
