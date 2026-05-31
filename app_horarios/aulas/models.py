@@ -19,7 +19,7 @@ class Aula(models.Model):
     otros = models.CharField(db_column='OTROS', max_length=30, blank=True, null=True)  # Field name made lowercase.
     grado_id = models.ForeignKey(Grado, models.CASCADE, db_column='GRADO_ID', max_length=10, blank=True, null=True)  # Field name made lowercase.
     semestre_academico = models.DecimalField(db_column='SEMESTRE_ACADEMICO', max_digits=1, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
-    #campus = models.CharField(db_column='CAMPUS', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    campus = models.CharField(db_column='CAMPUS', max_length=1, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

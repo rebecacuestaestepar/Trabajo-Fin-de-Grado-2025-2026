@@ -17,34 +17,34 @@ from reservas.services import (
 )
 
 class AulaViewSet(viewsets.ViewSet):
-    def lista_aulas(self, request):
-        aulas = AulaService.listar_aulas()
+    def list(self, request):
+        aulas = AulaService.list()
         serializer = AulaSerializer(aulas, many=True)
         return Response(serializer.data)
 
-    def obtener_aula(self, request, pk=None):
-        aula = AulaService.obtener_aula_por_id(pk)
+    def retrieve(self, request, pk=None):
+        aula = AulaService.retrieve(pk)
         serializer = AulaSerializer(aula)
         return Response(serializer.data)
 
-    def crear_aula(self, request):
+    def create(self, request):
         serializer = AulaSerializer(data=request.data)
         if serializer.is_valid():
-            nueva_aula = AulaService.crear_aula(serializer.validated_data)
+            nueva_aula = AulaService.create(serializer.validated_data)
             return Response(AulaSerializer(nueva_aula).data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def actualizar_aula(self, request, pk=None):
+    def update(self, request, pk=None):
         serializer = AulaSerializer(data=request.data)
         if serializer.is_valid():
-            aula_actualizada = AulaService.actualizar_aula(pk, serializer.validated_data)
+            aula_actualizada = AulaService.update(pk, serializer.validated_data)
             return Response(AulaSerializer(aula_actualizada).data)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def eliminar_aula(self, request, pk=None):
-        AulaService.eliminar_aula(pk)
+    def destroy(self, request, pk=None):
+        AulaService.destroy(pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AulasDisponiblesAPIView(APIView):

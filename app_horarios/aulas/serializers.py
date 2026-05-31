@@ -50,6 +50,8 @@ class OcupacionAulaEventosQuerySerializer(serializers.Serializer):
 class AulaSerializer(serializers.ModelSerializer):
     campus_formateado = serializers.CharField(source='get_campus_display', read_only=True)
 
+    m2 = serializers.FloatField(required=False)
+
     class Meta:
         model = Aula
         fields = '__all__'
