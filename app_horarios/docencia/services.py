@@ -27,3 +27,28 @@ class GradoService:
         grado = GradoService.obtener_grado_por_id(grado_id)
         grado.delete()
 
+class AsignaturaService:
+    @staticmethod
+    def listar_asignaturas():
+        return Asignaturas.objects.all().order_by('idasignatura')
+
+    @staticmethod
+    def obtener_asignatura_por_id(asignatura_id):
+        return get_object_or_404(Asignaturas, idasignatura=asignatura_id)
+
+    @staticmethod
+    def crear_asignatura(datos_asignatura):
+        return Asignaturas.objects.create(**datos_asignatura)
+
+    @staticmethod
+    def actualizar_asignatura(asignatura_id, datos_actualizados):
+        asignatura = get_object_or_404(Asignaturas, idasignatura=asignatura_id)
+        for campo, valor in datos_actualizados.items():
+            setattr(asignatura, campo, valor)
+        asignatura.save()
+        return asignatura
+
+    @staticmethod
+    def eliminar_asignatura(asignatura_id):
+        asignatura = AsignaturaService.obtener_asignatura_por_id(asignatura_id)
+        asignatura.delete()
