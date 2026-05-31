@@ -70,7 +70,22 @@ export default function MenuLateral({ abierto }) {
           <ItemMenu a="/" level={1}>Campus Milanera</ItemMenu>
         </SeccionMenu>
 
-        <ItemMenu a="/examenes" level={0}>Exámenes</ItemMenu>
+        <SeccionMenu
+          titulo="Administración"
+          level={0}
+          abierta={!!estados["admin"]}
+          alAlternar={() => toggle("admin")}
+        >
+          <ItemMenu a="/admin/aulas" level={1}>Aulas</ItemMenu>
+          <ItemMenu a="/admin/grados" level={1}>Grados</ItemMenu>
+          <ItemMenu a="/admin/asignaturas" level={1}>Asignaturas</ItemMenu>
+          <ItemMenu a="/admin/grupos" level={1}>Grupos</ItemMenu>
+          <ItemMenu a="/admin/docentes" level={1}>Docentes</ItemMenu>
+          <ItemMenu a="/admin/responsables" level={1}>Responsables</ItemMenu>
+          <ItemMenu a="/admin/imparte" level={1}>Asignaciones</ItemMenu>
+          <ItemMenu a="/admin/usuarios" level={1}>Usuarios</ItemMenu>
+          <ItemMenu a="/admin/roles" level={1}>Roles</ItemMenu>
+        </SeccionMenu>
       </nav>
     </aside>
   );
