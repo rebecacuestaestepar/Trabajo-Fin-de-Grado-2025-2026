@@ -1,10 +1,7 @@
 from .models import Grado, Asignaturas, Grupo, Docente
 from django.shortcuts import get_object_or_404
 
-class GradoService:
-    @staticmethod
-    def lista_mini_grados():
-        return Grado.objects.values('idgrado', 'nombre').order_by('nombre')
+class GradoService:    
     
     @staticmethod
     def listar_grados():
@@ -31,10 +28,10 @@ class GradoService:
         grado = GradoService.obtener_grado_por_id(grado_id)
         grado.delete()
 
+def lista_mini_grados():
+        return Grado.objects.values('idgrado', 'nombre').order_by('nombre')
+
 class AsignaturaService:
-    @staticmethod
-    def lista_mini_asignaturas():
-        return Asignaturas.objects.values('idasignatura', 'nombre').order_by('nombre')
 
     @staticmethod
     def listar_asignaturas():
@@ -61,11 +58,10 @@ class AsignaturaService:
         asignatura = AsignaturaService.obtener_asignatura_por_id(asignatura_id)
         asignatura.delete()
 
-class GrupoService:
+def lista_mini_asignaturas():
+    return Asignaturas.objects.values('idasignatura', 'nombre').order_by('nombre')
 
-    @staticmethod
-    def lista_mini_grupos():
-        return Grupo.objects.values('grupoid', 'nombre').order_by('grupoid')
+class GrupoService:
 
     @staticmethod
     def listar_grupos():
@@ -92,11 +88,10 @@ class GrupoService:
         grupo = GrupoService.obtener_grupo_por_id(grupo_id)
         grupo.delete()
 
-class DocenteService:
-    
-    @staticmethod
-    def lista_mini_docentes():
-        return Docente.objects.values('codigo', 'nombre').order_by('codigo')
+def lista_mini_grupos():
+        return Grupo.objects.values('grupoid', 'nombre').order_by('grupoid')
+
+class DocenteService:    
 
     @staticmethod
     def listar_docentes():
@@ -122,3 +117,6 @@ class DocenteService:
     def eliminar_docente(docente_id):
         docente = DocenteService.obtener_docente_por_id(docente_id)
         docente.delete()
+
+def lista_mini_docentes():
+        return Docente.objects.values('codigo', 'nombre').order_by('codigo')

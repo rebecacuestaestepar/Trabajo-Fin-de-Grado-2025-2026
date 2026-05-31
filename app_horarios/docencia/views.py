@@ -1,16 +1,14 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .services import GradoService, AsignaturaService, GrupoService, DocenteService
+from .services import GradoService, AsignaturaService, GrupoService, DocenteService, lista_mini_asignaturas, lista_mini_docentes, lista_mini_grados, lista_mini_grupos
 
 import traceback
 
 # Create your views here.
 class GradoViewSet(viewsets.ViewSet):
-    def lista_mini_grados(self, request):
-        grados = GradoService.lista_mini_grados()
-        return Response(grados, status=200)
     
     def listar_grados(self, request):
         grados = GradoService.listar_grados()
@@ -33,11 +31,13 @@ class GradoViewSet(viewsets.ViewSet):
     def eliminar_grado(self, request, pk=None):
         GradoService.eliminar_grado(pk)
         return Response(status=204)
+
+class ListaMiniGradosView(APIView):
+    def get(self, request, *args, **kwargs):
+        grados = lista_mini_grados()
+        return Response(grados, status=200)
     
 class AsignaturaViewSet(viewsets.ViewSet):
-    def lista_mini_asignaturas(self, request):
-        asignaturas = AsignaturaService.lista_mini_asignaturas()
-        return Response(asignaturas, status=200)
 
     def listar_asignaturas(self, request):
         asignaturas = AsignaturaService.listar_asignaturas()
@@ -61,10 +61,12 @@ class AsignaturaViewSet(viewsets.ViewSet):
         AsignaturaService.eliminar_asignatura(pk)
         return Response(status=204)
 
+class ListaMiniAsignaturasView(APIView):
+    def get(self, request, *args, **kwargs):
+        asignaturas = lista_mini_asignaturas()
+        return Response(asignaturas, status=200)
+
 class GrupoViewSet(viewsets.ViewSet):
-    def lista_mini_grupos(self, request):
-        grupos = GrupoService.lista_mini_grupos()
-        return Response(grupos, status=200)
     
     def lista_grupos(self, request):
         grupos = GrupoService.lista_grupos()
@@ -88,6 +90,11 @@ class GrupoViewSet(viewsets.ViewSet):
         GrupoService.eliminar_grupo(pk)
         return Response(status=204)
 
+class ListaMiniGruposView(APIView):
+    def get(self, request, *args, **kwargs):
+            grupos = lista_mini_grupos()
+            return Response(grupos, status=200)
+
 class DocenteViewSet(viewsets.ViewSet):
     def lista_docentes(self, request):
         docentes = DocenteService.lista_docentes()
@@ -110,6 +117,11 @@ class DocenteViewSet(viewsets.ViewSet):
     def eliminar_docente(self, request, pk=None):
         DocenteService.eliminar_docente(pk)
         return Response(status=204)
+
+class ListaMiniDocentesView(APIView):
+    def get(self, request, *args, **kwargs):
+        docentes = lista_mini_docentes()
+        return Response(docentes, status=200)
 
 
 

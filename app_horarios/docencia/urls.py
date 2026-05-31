@@ -1,6 +1,6 @@
 from django.urls import include, path
 from .views_horario import CargarHorarioExcelView, MoverSerieReservasView, ObtenerAsignaturasPorGradoYSemestreView, ObtenerCursosView, ValidarRestriccionesView, SemestresPorGradoView
-from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet
+from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet, ListaMiniDocentesView, ListaMiniGruposView, ListaMiniGradosView, ListaMiniAsignaturasView
 from .views_periodicas import ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView
 from rest_framework.routers import DefaultRouter
 
@@ -35,5 +35,9 @@ urlpatterns = [
     path('', include(routerAsignatura.urls)),
     path('', include(routerGrupo.urls)),
     path('', include(routerDocente.urls)),
+    path('mini-grados/', ListaMiniGradosView.as_view(), name='lista_mini_grados'),
+    path('mini-asignaturas/', ListaMiniAsignaturasView.as_view(), name='lista_mini_asignaturas'),
+    path('mini-docentes/', ListaMiniDocentesView.as_view(), name='lista_mini_docentes'),
+    path('mini-grupos/', ListaMiniGruposView.as_view(), name='lista_mini_grupos'),
     
 ]
