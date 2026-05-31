@@ -4,19 +4,19 @@ from django.shortcuts import get_object_or_404
 class GradoService:    
     
     @staticmethod
-    def listar_grados():
+    def list():
         return Grado.objects.all().order_by('idgrado')
 
     @staticmethod
-    def obtener_grado_por_id(grado_id):
+    def retrieve(grado_id):
         return get_object_or_404(Grado, idgrado=grado_id)
 
     @staticmethod
-    def crear_grado(datos_grado):
+    def create(datos_grado):
         return Grado.objects.create(**datos_grado)
 
     @staticmethod
-    def actualizar_grado(grado_id, datos_actualizados):
+    def update(grado_id, datos_actualizados):
         grado = get_object_or_404(Grado, idgrado=grado_id)
         for campo, valor in datos_actualizados.items():
             setattr(grado, campo, valor)
@@ -24,8 +24,8 @@ class GradoService:
         return grado
 
     @staticmethod
-    def eliminar_grado(grado_id):
-        grado = GradoService.obtener_grado_por_id(grado_id)
+    def delete(grado_id):
+        grado = GradoService.retrieve(grado_id)
         grado.delete()
 
 def lista_mini_grados():
@@ -34,19 +34,19 @@ def lista_mini_grados():
 class AsignaturaService:
 
     @staticmethod
-    def listar_asignaturas():
+    def list():
         return Asignaturas.objects.all().order_by('idasignatura')
 
     @staticmethod
-    def obtener_asignatura_por_id(asignatura_id):
+    def retrieve(asignatura_id):
         return get_object_or_404(Asignaturas, idasignatura=asignatura_id)
 
     @staticmethod
-    def crear_asignatura(datos_asignatura):
+    def create(datos_asignatura):
         return Asignaturas.objects.create(**datos_asignatura)
 
     @staticmethod
-    def actualizar_asignatura(asignatura_id, datos_actualizados):
+    def update(asignatura_id, datos_actualizados):
         asignatura = get_object_or_404(Asignaturas, idasignatura=asignatura_id)
         for campo, valor in datos_actualizados.items():
             setattr(asignatura, campo, valor)
@@ -54,8 +54,8 @@ class AsignaturaService:
         return asignatura
 
     @staticmethod
-    def eliminar_asignatura(asignatura_id):
-        asignatura = AsignaturaService.obtener_asignatura_por_id(asignatura_id)
+    def delete(asignatura_id):
+        asignatura = AsignaturaService.retrieve(asignatura_id)
         asignatura.delete()
 
 def lista_mini_asignaturas():
@@ -64,19 +64,19 @@ def lista_mini_asignaturas():
 class GrupoService:
 
     @staticmethod
-    def listar_grupos():
+    def list():
         return Grupo.objects.all().order_by('grupoid')
 
     @staticmethod
-    def obtener_grupo_por_id(grupo_id):
+    def retrieve(grupo_id):
         return get_object_or_404(Grupo, grupoid=grupo_id)
 
     @staticmethod
-    def crear_grupo(datos_grupo):
+    def create(datos_grupo):
         return Grupo.objects.create(**datos_grupo)
 
     @staticmethod
-    def actualizar_grupo(grupo_id, datos_actualizados):
+    def update(grupo_id, datos_actualizados):
         grupo = get_object_or_404(Grupo, grupoid=grupo_id)
         for campo, valor in datos_actualizados.items():
             setattr(grupo, campo, valor)
@@ -84,8 +84,8 @@ class GrupoService:
         return grupo
 
     @staticmethod
-    def eliminar_grupo(grupo_id):
-        grupo = GrupoService.obtener_grupo_por_id(grupo_id)
+    def delete(grupo_id):
+        grupo = GrupoService.retrieve(grupo_id)
         grupo.delete()
 
 def lista_mini_grupos():
@@ -94,19 +94,19 @@ def lista_mini_grupos():
 class DocenteService:    
 
     @staticmethod
-    def listar_docentes():
+    def list():
         return Docente.objects.all().order_by('codigo')
 
     @staticmethod
-    def obtener_docente_por_id(docente_id):
+    def retrieve(docente_id):
         return get_object_or_404(Docente, codigo=docente_id)
 
     @staticmethod
-    def crear_docente(datos_docente):
+    def create(datos_docente):
         return Docente.objects.create(**datos_docente)
 
     @staticmethod
-    def actualizar_docente(docente_id, datos_actualizados):
+    def update(docente_id, datos_actualizados):
         docente = get_object_or_404(Docente, codigo=docente_id)
         for campo, valor in datos_actualizados.items():
             setattr(docente, campo, valor)
@@ -114,8 +114,8 @@ class DocenteService:
         return docente
 
     @staticmethod
-    def eliminar_docente(docente_id):
-        docente = DocenteService.obtener_docente_por_id(docente_id)
+    def delete(docente_id):
+        docente = DocenteService.retrieve(docente_id)
         docente.delete()
 
 def lista_mini_docentes():

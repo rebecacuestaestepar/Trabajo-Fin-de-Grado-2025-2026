@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from reservas.models import ReservaPeriodica
+from docencia.models import Asignaturas, Grado
 
 class HorarioSerializer(serializers.ModelSerializer):
     id_reserva = serializers.IntegerField(source='id_reserva.idreserva')
@@ -57,4 +58,26 @@ class MoverSerieReservaSerializer(serializers.Serializer):
     nuevo_hora_fin = serializers.TimeField()
     forzar = serializers.BooleanField(default=False)
 
+class AsignaturaSerializer(serializers.ModelSerializer):
+    tipo_formateado = serializers.CharField(source='get_tipo_display', read_only=True)
+
+    grado_nombre = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Asignaturas
+        fields = '__all__'
+    
+    def get_grado_nombre(self, obj):
+        if not obj.grado_id:
+            return "Sin grado"
+            
+        if hasattr(obj.grado_id, 'nombre'):
+            return obj.grado_id.nombre
+            
+        try:
+            id_limpio = str(obj.grado_id).strip()
+            grado = Grado.objects.get(idgrado=id_limpio)
+            return grado.nombre
+        except Grado.DoesNotExist:
+            return f"Desconocido (ID: '{obj.grado_id}')"
     
