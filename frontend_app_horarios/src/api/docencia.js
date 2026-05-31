@@ -106,3 +106,156 @@ export function reservaDesdeHorarioGrado(id_grado, semestre) {
         method: "GET",
     });
 }
+
+export function crearGrado(datos) {
+    return apiRequest("/docencia/grados/", {
+        method: "POST",
+        body: datos
+    });
+}
+
+export function actualizarGrado(gradoId, datos) {
+    return apiRequest(`/docencia/grados/${gradoId}/`, {
+        method: "PUT",
+        body: datos
+    });
+}
+
+export function eliminarGrado(gradoId) {
+    return apiRequest(`/docencia/grados/${gradoId}/`, {
+        method: "DELETE"
+    });
+}
+
+export function obtenerDetalleGrado(gradoId) {
+    return apiRequest(`/docencia/grados/${gradoId}/`, {
+        method: "GET",
+    });
+}
+
+export function listaGrados() {
+    return apiRequest("/docencia/grados/", {
+        method: "GET",
+    });
+}
+
+export function listaMiniGrados() {
+    return apiRequest("/docencia/mini-grados/", {
+        method: "GET",
+    });
+}
+
+export function listaMiniAsignaturas() {
+    return apiRequest("/docencia/mini-asignaturas/", {
+        method: "GET",
+    });
+}
+
+export function listaMiniDocentes() {
+    return apiRequest("/docencia/mini-docentes/", {
+        method: "GET",
+    });
+}
+
+export function listaMiniGrupos() {
+    return apiRequest("/docencia/mini-grupos/", {
+        method: "GET",
+    });
+}
+
+export function obtenerDetalleAsignatura(asignaturaId) {
+    return apiRequest(`/docencia/asignaturas/${asignaturaId}/`, {
+        method: "GET",
+    });
+}
+
+export function crearAsignatura(datos) {
+    return apiRequest("/docencia/asignaturas/", {
+        method: "POST",
+        body: datos
+    });
+}
+
+export function actualizarAsignatura(asignaturaId, datos) {
+    return apiRequest(`/docencia/asignaturas/${asignaturaId}/`, {
+        method: "PUT",
+        body: datos
+    });
+}
+
+export function eliminarAsignatura(asignaturaId) {
+    return apiRequest(`/docencia/asignaturas/${asignaturaId}/`, {
+        method: "DELETE"
+    });
+}
+
+export function listaAsignaturas() {
+    return apiRequest("/docencia/asignaturas/", {
+        method: "GET",
+    });
+}
+
+export function obtenerDetalleDocente(docenteId) {
+    return apiRequest(`/docencia/docentes/${docenteId}/`, {
+        method: "GET",
+    });
+}
+
+export function crearDocente(datos) {
+    return apiRequest("/docencia/docentes/", {
+        method: "POST",
+        body: datos
+    });
+}
+
+export function actualizarDocente(docenteId, datos) {
+    return apiRequest(`/docencia/docentes/${docenteId}/`, {
+        method: "PUT",
+        body: datos
+    });
+}
+
+export function eliminarDocente(docenteId) {
+    return apiRequest(`/docencia/docentes/${docenteId}/`, {
+        method: "DELETE"
+    });
+}
+
+export function listaDocentes() {
+    return apiRequest("/docencia/docentes/", {
+        method: "GET",
+    });
+}
+
+export function obtenerDetalleGrupo(grupoId) {
+    return apiRequest(`/docencia/grupos/${grupoId}/`, {
+        method: "GET",
+    });
+}
+
+export function crearGrupo(datos) {
+    return apiRequest("/docencia/grupos/", {
+        method: "POST",
+        body: datos
+    });
+}
+
+export function actualizarGrupo(grupoId, datos) {
+    return apiRequest(`/docencia/grupos/${grupoId}/`, {
+        method: "PUT",
+        body: datos
+    });
+}
+
+export function eliminarGrupo(grupoId) {
+    return apiRequest(`/docencia/grupos/${grupoId}/`, {
+        method: "DELETE"
+    });
+}
+
+export function listaGrupos() {
+    return apiRequest("/docencia/grupos/", {
+        method: "GET",
+    });
+}
+

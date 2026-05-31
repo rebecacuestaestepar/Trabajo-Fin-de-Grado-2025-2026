@@ -1,7 +1,7 @@
 import { apiGet, apiRequest } from "./client";
 
 export async function obtenerAulas() {
-  const respuesta = await fetch("http://localhost:8000/api/aulas/");
+  const respuesta = await fetch("http://localhost:8000/api/aulas/lista/");
   if (!respuesta.ok) throw new Error("No se pudieron cargar las aulas");
   return respuesta.json();
 }
@@ -20,21 +20,21 @@ export async function getEventosAula({ aulaNombre, start, end, tipo = "AMBAS" })
 }
 
 export function crearAula(datos) {
-  return apiRequest("/aulas/crear/", {
+  return apiRequest("/aulas/", {
     method: "POST",
     body: datos
   });
 }
 
 export function actualizarAula(aulaId, datos) {
-  return apiRequest(`/aulas/actualizar/${aulaId}/`, {
+  return apiRequest(`/aulas/${aulaId}/`, {
     method: "PUT",
     body: datos
   });
 }
 
 export function eliminarAula(aulaId) {
-  return apiRequest(`/aulas/eliminar/${aulaId}/`, {
+  return apiRequest(`/aulas/${aulaId}/`, {
     method: "DELETE"
   });
 }
@@ -46,7 +46,7 @@ export function obtenerDetalleAula(aulaId) {
 }
 
 export function listaAulas() {
-  return apiRequest("/aulas/lista/", {
+  return apiRequest("/aulas/", {
     method: "GET",
   });
 }
