@@ -46,3 +46,10 @@ class OcupacionAulaEventosQuerySerializer(serializers.Serializer):
         required=False,
         default="AMBAS"
     )
+
+class AulaSerializer(serializers.ModelSerializer):
+    campus_formateado = serializers.CharField(source='get_campus_display', read_only=True)
+
+    class Meta:
+        model = Aula
+        fields = '__all__'

@@ -7,9 +7,10 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 
 
+from app_horarios.aulas.services import actualizar_aula, crear_aula, eliminar_aula, listar_aulas
 from aulas.models import Aula
 from calendario.models import Dia
-from aulas.serializers import AulaDisponibleRequestSerializer, AulaMenuSerializer, AulaMiniSerializer
+from aulas.serializers import AulaDisponibleRequestSerializer, AulaMenuSerializer, AulaMiniSerializer, AulaSerializer
 from reservas.services import (
     aulas_disponibles_en_fecha_hora,
     aula_disponible_en_varias_fechas,
@@ -121,4 +122,51 @@ class ListaAulasAPIView(ListAPIView):
         return Aula.objects.exclude(nombre__iexact="Aula 0").order_by("nombre")
     #"OBTENER POR CAMPUS"
 
+class ListaAulasMiniAPIView(ListAPIView):
+    def get_queryset(self):
+        try:
+            aulas = listar_aulas()
+            serializer = AulaSerializer(aulas, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class DetalleAulaAPIView(APIView):
+    def get(self, request, aula_id):
+        try:
+            aula = Aula.objects.get(id=aula_id)
+            serializer = AulaSerializer(aula)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Aula.DoesNotExist:
+            return Response({"error": "Aula no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class CrearAulaAPIView(APIView):
+    def post(self, request):
+        serializer = AulaSerializer(data=request.data)
+        if serializer.is_valid():
+            nueva_aula = crear_aula(serializer.validated_data)
+            return Response(AulaSerializer(nueva_aula).data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ActualizarAulaAPIView(APIView):
+    def put(self, request, aula_id):
+        try:
+            serializer = AulaSerializer(data=request.data)
+            if serializer.is_valid():
+                aula_actualizada = actualizar_aula(aula_id, serializer.validated_data)
+                return Response(AulaSerializer(aula_actualizada).data, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Aula.DoesNotExist:
+            return Response({"error": "Aula no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+
+class EliminarAulaAPIView(APIView):
+    def delete(self, request, aula_id):
+        try:
+            eliminar_aula(aula_id)
+            return Response({"message": "Aula eliminada correctamente"}, status=status.HTTP_200_OK)
+        except Aula.DoesNotExist:
+            return Response({"error": "Aula no encontrada"}, status=status.HTTP_404_NOT_FOUND)
