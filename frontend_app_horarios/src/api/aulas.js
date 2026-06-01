@@ -50,3 +50,9 @@ export function listaAulas() {
     method: "GET",
   });
 }
+
+export function listaMiniAulas() {
+  return apiRequest("/aulas/lista-mini/", {
+    method: "GET",
+  });
+}

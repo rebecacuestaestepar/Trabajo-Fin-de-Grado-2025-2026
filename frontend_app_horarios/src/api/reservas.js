@@ -83,3 +83,35 @@ export function eliminarReserva(id) {
 export function eliminarReservasMasivo(ids) {
   return apiPost(`/reservas/eliminar-masivo/`, { ids });
 }
+
+export function crearResponsable(datos) {
+  return apiRequest("/responsables/", {
+    method: "POST",
+    body: datos
+  });
+}
+
+export function actualizarResponsable(correo, datos) {
+  return apiRequest(`/responsables/${correo}/`, {
+    method: "PUT",
+    body: datos
+  });
+}
+
+export function eliminarResponsable(correo) {
+  return apiRequest(`/responsables/${correo}/`, {
+    method: "DELETE",
+  });
+}
+
+export function obtenerDetalleResponsable(correo) {
+  return apiRequest(`/responsables/${correo}/`, {
+    method: "GET",
+  });
+}
+
+export function obtenerResponsables() {
+  return apiRequest("/responsables/", {
+    method: "GET",
+  });
+}

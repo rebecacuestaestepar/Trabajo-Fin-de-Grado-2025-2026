@@ -52,7 +52,7 @@ export function moverReservaPeriodica(id_curso, semestre_num, datos_movimiento) 
 }
 
 export function obtenerGrados() {
-    return apiRequest("/docencia/grados/", {
+    return apiRequest("/docencia/grados/lista/", {
         method: "GET",
     });
 }
