@@ -16,7 +16,10 @@ from reservas.services import (
     aula_disponible_en_varias_fechas,
 )
 
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+
 class AulaViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
     def list(self, request):
         aulas = AulaService.list()
         serializer = AulaSerializer(aulas, many=True)
