@@ -133,6 +133,24 @@ En el contexto de este proyecto, las expresiones regulares constituyen una herra
 \cite{regex:david}
 \cite{regex:manuel}
 
+\subsection{Autómatas finitos}
+
+Los autómatas finitos son modelos matemáticos utilizados para describir y reconocer lenguajes formales definidos mediante un conjunto finito de estados y transiciones. Su funcionamiento se basa en procesar una cadena de entrada símbolo a símbolo, cambiando de estado según las reglas previamente definidas, hasta determinar si la secuencia analizada es aceptada o rechazada.
+
+Desde el punto de vista del análisis léxico, los autómatas finitos constituyen una de las bases teóricas más relevantes para el reconocimiento de patrones. A partir de expresiones regulares, es posible construir mecanismos que permitan decidir de forma sistemática si una determinada secuencia de caracteres se ajusta o no al formato esperado. De este modo, los autómatas proporcionan un fundamento formal para identificar \textit{tokens} dentro de una entrada de texto.
+
+Existen dos tipos principales de autómatas finitos:
+\begin{itemize}
+	\item Autómatas finitos deterministas: para cada estado y símbolo de entrada existe una única transición posible. Resultan especialmente adecuados para la implementación eficiente de analizadores léxicos, debido a que permiten recorrer la entrada de manera directa y sin ambigüedad.
+	\item Autómatas finitos no deterministas: para cada estado y símbolo de entrada pueden existir varias alternativas.
+\end{itemize}
+
+La relación entre expresiones regulares y autómatas finitos resulta especialmente importante, ya que ambos describen la misma familia de lenguajes, conocidos como lenguajes regulates. Gracias a esta equivalencia, los patrones definidos formalmente mediante expresiones regulares pueden transformarse en estructuras de reconocimiento basadas en estados y transiciones, lo que facilita su aplicación práctica en procesos automáticos de análisis.
+
+En el contexto del proyecto, la utilidad de estos conceptos no reside tanto en la construcción de autómatas finitos como en comprender la base formal sobre la que se apoya el reconocimiento de patrones dentro del procesamiento de horarios académicos. Esta perspectiva resulta útil para entender cómo determinadas cadenas pueden ser reconocidas, segmentadas y validadas antes de transformarse en reservas periódicas dentro del sistema.
+
+\cite{wiki:automatas}
+
 
 
 
