@@ -81,6 +81,17 @@ En una aplicación como la desarrollada en este proyecto ambos conceptos son muy
 
 \cite{authn-authz}
 
+\subsection{Arquitectura basada en componentes}
+
+En el desarrollo de interfaces modernas y de proyectos de buenas prácticas se suele buscar una arquitectura basada en componentes. Esta idea trata de que la interfaz del usuario se construye a partir de componentes independientes y reutilizables, que encapsulan su propia estructura y comportamiento. Este enfoque permite descomponer interfaces complejas y largas en piezas más pequeñas que faciliten tanto su desarrollo como su mantenimiento.
+
+React adopta este método como uno de sus principios fundamentales. En esta biblioteca, una interfaz se define como una composición jerárquica de componentes, que pueden combinarse entre sí para formar elementos más complejos, como pueden ser páginas completas o vistas con múltiples secciones. Gracias a ello, es posible reutilizar la misma lógica o estructura visual en diferentes partes de la aplicación, evitando así duplicidad de código y favoreciendo una mayor modularidad.
+
+La arquitectura basada en componentes también favorece una mejor separación de responsabilidades dentro del \textit{frontend}. Debido a que cada componente puede asumir una función concreta dentro de la interfaz, como mostrar información, recoger datos del usuario o coordinar otras partes de la vista. Esta organización no solamente mejora la claridad del código, sino que también facilita la escalabilidad del sistema, ya que nuevas funcionalidades pueden incorporarse mediante nuevos componentes o ampliaciones de los ya existentes.
+
+En este proyecto, el \textit{frontend} se apoya en este modelo de desarrollo, permitiendo estructurar la interfaz en elementos reutilizables y desacoplados. Esto puede resultar bastante útil para una aplicación con múltiples vistas, formularios, tablas y paneles de gestión, donde la reutilización y ña organización clara de la interfaz contribuyen de forma directa a la mantenibilidad del sistema.
+
+\cite{arq-comp}
 
 
 \tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
