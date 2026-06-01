@@ -44,6 +44,10 @@ Django se apoya en el patrón arquitectónico MVT (\textit{Model-View-Template})
 \end{itemize}
 
 El uso de este patrón arquitectónico ayuda a reducir el acoplamiento entre componentes, facilitando el mantenimiento del sistema y mejorando su escalabilidad. Asimismo, permite que las distintas partes de la aplicación puedan evolucionar de una forma más independiente, algo que es bastante relevante en proyectos en los que el \textit{backend} se desarrolla de manera desacoplada al \textit{frontend}.
+
+A continuación, se adjunta la figura~\ref{fig:patron-mvt}, en la que en un esquema muy simple explica de manera gráfica el funcionamiento de este patrón arquitectónico.
+\imagen{img/django_mvt_image_geeks_for_geeks.jpg}{Imagen patrón arquitectónico MVT}{fig:patron-mvt}
+
 \cite{modeloArquitectonicoDjango}
 \cite{mvt:geek}
 
@@ -52,7 +56,14 @@ La persistencia de datos es el mecanismo que permite que la información gestion
 
 Para facilitar la interacción entre la aplicación y la base de datos, Django incorpora un ORM (\textit{Object-Relational Mapping}). Un ORM es una técnica que permite representar las tablas de una base de datos relacional mediante clases del lenguaje de programación (Python), y sus registros mediante objetos. De este modo, el desarrollador puede trabajar con entidades del dominio del problema utilizando abstracciones propias del lenguaje, reduciendo la necesidad de escribir manualmente consultas SQL en las operaciones más habituales.
 
-En Django, un modelo es la fuente principal de información sobre los datos almacenados. Cada modelo se define como una clase de Python y, de forma general, se corresponde con un tabla de la base de datos. A su vez, cada atributo del modelo representa a un campo de esa tabla. Gracias a esto, el \textit{framework} genera de manera automática una API de acceso de datos que permite realizar consultas, inserciones, modificaciones y eliminaciones de una forma más mantenible y sencilla.
+En Django, un modelo es la fuente principal de información sobre los datos almacenados. Cada modelo se define como una clase de Python y, de forma general, se corresponde con un tabla de la base de datos. A su vez, cada atributo del modelo representa a un campo de esa tabla. Gracias a esto, el \textit{framework} genera de manera automática una API de acceso de datos que permite realizar consultas, inserciones, modificaciones y eliminaciones de una forma más mantenible y sencilla. 
+
+El uso de un ORM aporta ciertas ventajas en el desarrollo del sistema. En primer lugar, mejora la legibilidad del código al permitir trabajr con objetos y relaciones de alto nivel en lugar de hacerlo directamente con sentencias SQL. En segundo lugar, facilita el mantenimiento, ya que los cambios en la estructura de datos pueden gestionarse a través de los propios modelos y sus migraciones.
+
+No obstante, el uso de un ORM no elimina completamente la importancia del modelo relacional. Sigue siendo necesario diseñar adecuadamente las entidades, sus relaciones y restricciones para poder garantizar la consistencia de los datos y el correcto funcionamiento de la aplicación. Aunque en este proyecto, la gestión de la persistencia se ha realizado de manera mixta. Por un lado, la parte del esquema relacional asociada a la gestión académica y organizativa de la escuela, ya se encontraba definida previamente mediante un \textit{script SQL}. Y por otro lado, la gestión de usuarios, roles y permisos se apoya en los mecanismos que proporciona Django, combinando así elementos definidos de manera externa con otros elementos administrados a través del propio \textit{framework}.
+
+\cite{orm-jorge}
+\cite{orm-urian}
 
 \tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
 { \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
