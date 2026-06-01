@@ -8,6 +8,13 @@ from calendario.models import Dia, Festivo
 from reservas.models import Reserva, ReservaPuntual, Responsable
 from aulas.models import Aula
 
+class ResponsableSerializer(serializers.ModelSerializer):
+    telefono = serializers.IntegerField(required=False, allow_null=True)
+
+    class Meta:
+        model = Responsable
+        fields = '__all__'
+
 
 class ReservaPuntualCreateSerializer(serializers.Serializer):
     fecha = serializers.DateField()

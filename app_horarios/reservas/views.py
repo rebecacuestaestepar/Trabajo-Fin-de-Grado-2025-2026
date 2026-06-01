@@ -2,19 +2,50 @@ from datetime import timedelta, date
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
 from reservas.serializers_todas import ReservaResumenSerializer, ReservaTodasSerializer
-from .serializers import ReservaPuntualCreateSerializer
+from .serializers import ReservaPuntualCreateSerializer, ResponsableSerializer
 from .serializers_pendientes import ( ReservaPendienteListItemSerializer, ReservaDetalleSerializer, AulasDisponiblesInputSerializer, ReservaBulkIdsSerializer)
 from reservas.models import Reserva, ReservaPuntual, Responsable
 from calendario.models import Dia
 from reservas.services import aulas_disponibles_en_fecha_hora, aula_disponible_en_varias_fechas
 
 
+class ResponsableViewSet(viewsets.ViewSet):
+    def list(self, request):
+        responsables = Responsable.objects.all()
+        serializer = ResponsableSerializer(responsables, many=True)
+        return Response(serializer.data)
 
+    def retrieve(self, request, pk=None):
+        responsable = get_object_or_404(Responsable, pk=pk)
+        serializer = ResponsableSerializer(responsable)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = ResponsableSerializer(data=request.data)
+        if serializer.is_valid():
+            nuevo_responsable = serializer.save()
+            return Response(ResponsableSerializer(nuevo_responsable).data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None):
+        responsable = get_object_or_404(Responsable, pk=pk)
+        serializer = ResponsableSerializer(instance=responsable, data=request.data)
+        if serializer.is_valid():
+            responsable_actualizado = serializer.save()
+            return Response(ResponsableSerializer(responsable_actualizado).data)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk=None):
+        responsable = get_object_or_404(Responsable, pk=pk)
+        responsable.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 """

@@ -1,6 +1,33 @@
 from django.db.models import Exists, OuterRef, Q
-from reservas.models import Reserva
+from reservas.models import Reserva, ReservaPuntual, ReservaPeriodica, Responsable
 from aulas.models import Aula
+from django.shortcuts import get_object_or_404
+
+class ResponsableService:
+    @staticmethod
+    def list():
+        return Responsable.objects.all().order_by('id_docente')
+    
+    @staticmethod
+    def retrieve(correo):
+        return get_object_or_404(Responsable, correo=correo)
+
+    @staticmethod
+    def create(datos_responsable):
+        return Responsable.objects.create(**datos_responsable)
+    
+    @staticmethod
+    def update(correo, datos_actualizados):
+        responsable = get_object_or_404(Responsable, correo=correo)
+        for campo, valor in datos_actualizados.items():
+            setattr(responsable, campo, valor)
+        responsable.save()
+        return responsable
+
+    @staticmethod
+    def delete(correo):
+        responsable = ResponsableService.retrieve(correo)
+        responsable.delete()
 
 def aulas_candidatas_por_requisitos(
     capacidad: int,
