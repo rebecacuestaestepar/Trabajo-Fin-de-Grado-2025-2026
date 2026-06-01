@@ -106,6 +106,20 @@ En este proyecto, el análisis léxico se utiliza para procesar la información 
 \cite{wiki:latex}
 \cite{uco:analizador}
 
+\subsection{Token, lexema y patrón}
+
+Dentro del análisis léxico, tres de los conceptos fundamentales son \textit{token}, \textit{lexema} y \textit{patrón}. Estos términos permite describir cómo una secuencia de caracteres puede descomponerse en unidades reconocibles por el sistema.
+
+\begin{itemize}
+	\item Un \textit{token} representa una categoría léxica, es decir, un tipo abstracto de elemento que el analizador es capaz de identificar. Por ejemplo, en un lenguaje formal pueden existir \textit{tokens} para identificadores, números, operadores o palabras reservadas. El \textit{token} no hace referencia a una cadena concreta, sino a la clase a la que pertenece un fragmento de la entrada.
+	\item Un lexema, en cambio, es la secuencia concreta de caracteres reconocida en la entrada como una instancia de un determinado \textit{token}. Dicho de otra forma, el lexema es la aparición real en el texto, mientras que el \textit{token} es la categoría abstracta a la que esa aparición pertence. Así, distintos lexemas pueden corresponder al mismo tipo de token si cumplen la misma función léxica.
+	\item Un patrón define la forma que deben tener los lexemas para ser reconocidos como pertenecientes a un determinado \textit{token}. Normalmente, estos patrones se expresan mediante reglas formales, como expresiones regulares, que permiten describir de manera precisa qué combinaciones de caracteres son válidas.
+\end{itemize}
+
+En el contexto de este proyecto, estos conceptos resultan útiles para entender cómo se procesa la información procedente de los horarios académicos. Determinadas cadenas de texto pueden interpretarse como lexemas que representan elementos concretos del horario, mientras que el sistema los clasifica en categorías de interés para su posterior transformación en reservas periódicas. De este forma el análisis léxico permite identificar de forma estructurada los componentes relevantes de la entrada antes de que sean integrados en la lógica de la aplicación.
+
+\cite{tok-lex-patr}
+
 
 %\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
 %{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
