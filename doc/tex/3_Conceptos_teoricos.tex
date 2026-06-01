@@ -60,10 +60,28 @@ En Django, un modelo es la fuente principal de información sobre los datos alma
 
 El uso de un ORM aporta ciertas ventajas en el desarrollo del sistema. En primer lugar, mejora la legibilidad del código al permitir trabajr con objetos y relaciones de alto nivel en lugar de hacerlo directamente con sentencias SQL. En segundo lugar, facilita el mantenimiento, ya que los cambios en la estructura de datos pueden gestionarse a través de los propios modelos y sus migraciones.
 
-No obstante, el uso de un ORM no elimina completamente la importancia del modelo relacional. Sigue siendo necesario diseñar adecuadamente las entidades, sus relaciones y restricciones para poder garantizar la consistencia de los datos y el correcto funcionamiento de la aplicación. Aunque en este proyecto, la gestión de la persistencia se ha realizado de manera mixta. Por un lado, la parte del esquema relacional asociada a la gestión académica y organizativa de la escuela, ya se encontraba definida previamente mediante un \textit{script SQL}. Y por otro lado, la gestión de usuarios, roles y permisos se apoya en los mecanismos que proporciona Django, combinando así elementos definidos de manera externa con otros elementos administrados a través del propio \textit{framework}.
+No obstante, el uso de un ORM no elimina completamente la importancia del modelo relacional. Sigue siendo necesario diseñar adecuadamente las entidades, sus relaciones y restricciones para poder garantizar la consistencia de los datos y el correcto funcionamiento de la aplicación. 
+
+Cabe destacar que en este proyecto, la gestión de la persistencia se ha realizado de manera mixta. Por un lado, la parte del esquema relacional asociada a la gestión académica y organizativa de la escuela, ya se encontraba definida previamente mediante un \textit{script SQL}. Y por otro lado, la gestión de usuarios, roles y permisos se apoya en los mecanismos que proporciona Django, combinando así elementos definidos de manera externa con otros elementos administrados a través del propio \textit{framework}.
 
 \cite{orm-jorge}
 \cite{orm-urian}
+
+\subsection{Autenticación, autorización y control de acceso basado en roles}
+
+En aplicaciones con diferentes tipos de usuario, es muy importante distinguir entre el concepto de autenticación y autorización. La autenticación es el proceso por el cual se verifica y se valida la identidad de un usuario, es decir, se comprueba que las credenciales introducidas corresponden a una cuenta válida. Por otro lado, la autorización determina qué recursos puede consultar ese usuario y qué acciones puede realizar, todo ello habiendo se autenticado previamente de manera correcta.
+
+En proyecto actual, la autenticación no se gestiona directamente contra la base de datos propia de la aplicación, sino que se delega en la API institucional de la universidad. De este modo, para poder iniciar sesión es necesario utilizar las credenciales proporcionadas por la propia institución.
+
+Una vez se ha verificado la identidad del usuario a través del servicio externo, la aplicación consulta su propia base de datos pare recoger la información asociada a ese usaurio dentro del sistema, más concretamente su rol y los permisos asociados. Esta segunda función no tiene como objetivo autenticar de nuevo al usuario, sino determinar que nivel de acceso a las distintas funcionalidades de la aplicación.
+
+Por tanto, el control de accesos se basa en un modelo de roles y permisos. Un rol agrupa un conjunto de capacidades o acciones asociadas a un determinado tipo de usuario, mientras que los permisos permiten restringir de forma más concreta el acceso a determinadas vistas, operaciones o recursos. Gracias a este mecanismo, el sistema permite diferenciar entre administrador, gestores o solicitantes (PDI).
+
+En una aplicación como la desarrollada en este proyecto ambos conceptos son muy importantes, por dar acceso solamente a las personas relacionadas a la institución para la gestión de una parte de ella (Escuela Politécnica Superior). Y también por restringir las acciones que puede realizar los diferentes tipos de usuarios para no permitir realizar gestiones a nivel académico al Personal Docente Investigador.
+
+\cite{authn-authz}
+
+
 
 \tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
 { \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
