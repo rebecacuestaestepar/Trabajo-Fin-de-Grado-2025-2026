@@ -93,28 +93,41 @@ En este proyecto, el \textit{frontend} se apoya en este modelo de desarrollo, pe
 
 \cite{arq-comp}
 
+\subsection{Análisis léxico}
 
-\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-	HTML5 & X & & &\\
-	CSS3 & X & & &\\
-	BOOTSTRAP & X & & &\\
-	JavaScript & X & & &\\
-	AngularJS & X & & &\\
-	Bower & X & & &\\
-	PHP & & X & &\\
-	Karma + Jasmine & X & & &\\
-	Slim framework & & X & &\\
-	Idiorm & & X & &\\
-	Composer & & X & &\\
-	JSON & X & X & &\\
-	PhpStorm & X & X & &\\
-	MySQL & & & X &\\
-	PhpMyAdmin & & & X &\\
-	Git + BitBucket & X & X & X & X\\
-	Mik\TeX{} & & & & X\\
-	\TeX{}Maker & & & & X\\
-	Astah & & & & X\\
-	Balsamiq Mockups & X & & &\\
-	VersionOne & X & X & X & X\\
-} 
+El análisis léxico es una de las fases fundamentales en el procesamiento automático de cadenas de texto. Su función principal consiste en recorrer una secuencia de caracteres de entrada y agruparla en unidades con significado propio, denominadas \textit{tokens}. De este modo, una entrada textual que inicialmente se presenta como una cadena continua puede transformarse en una secuencia estructurada de elementos más simples y manejables.
+
+Este proceso resulta especialmente útil cuando se trabaja con lenguajes formales, expresiones definidas por una sintaxis concreta o entradas que deben ser interpretadas automáticamente por un sistema. En lugar de analizar cada carácter de manera aislada, el análisis léxico permite recnocer componentes con valor propio, como palabras clave, identificadores, números, separadores o símbolos especiales. Gracias a ello, se simplifica el tratamiento posterior de la información.
+
+Desde un punto de vista funcional, el anlizador léxico actúa como un primer filtro sobre la entrada. Su objetivo no es interpretar completamente su significado, sino segmentarla y clasificarla de acuerdo con unas reglas previamente definidas. Esta fase permite detectar patrones válidos, aislar elementos relevantes e identificar errores tempranos cuando la entrada no se ajusta al formato esperado.
+
+En este proyecto, el análisis léxico se utiliza para procesar la información procedente de los horarios académicos de los distintos grados. A partir de dicha información, el sistema identifica y extrae los elementos necesarios para interpretar cada bloque docente, con el objetivo de transformar las clases impartidas en reservas periódicas que posteriormente se cargan en la base de datos de la aplicación. Por ello, el análisis léxico constituye una base importante dentro del proceso de automatización de la incorporación de horarios al sistema.
+
+\cite{wiki:latex}
+\cite{uco:analizador}
+
+
+%\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
+%{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
+%	HTML5 & X & & &\\
+%	CSS3 & X & & &\\
+%	BOOTSTRAP & X & & &\\
+%	JavaScript & X & & &\\
+%	AngularJS & X & & &\\
+%	Bower & X & & &\\
+%	PHP & & X & &\\
+%	Karma + Jasmine & X & & &\\
+%	Slim framework & & X & &\\
+%	Idiorm & & X & &\\
+%	Composer & & X & &\\
+%	JSON & X & X & &\\
+%	PhpStorm & X & X & &\\
+%	MySQL & & & X &\\
+%	PhpMyAdmin & & & X &\\
+%	Git + BitBucket & X & X & X & X\\
+%	Mik\TeX{} & & & & X\\
+%	\TeX{}Maker & & & & X\\
+%	Astah & & & & X\\
+%	Balsamiq Mockups & X & & &\\
+%	VersionOne & X & X & X & X\\
+%} 
