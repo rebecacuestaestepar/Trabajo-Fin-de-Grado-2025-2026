@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from reservas.models import ReservaPeriodica
-from docencia.models import Asignaturas, Grado
+from docencia.models import Asignaturas, Docente, Grado, Grupo
+from django.core.exceptions import ObjectDoesNotExist
 
 class HorarioSerializer(serializers.ModelSerializer):
     id_reserva = serializers.IntegerField(source='id_reserva.idreserva')
@@ -80,4 +81,54 @@ class AsignaturaSerializer(serializers.ModelSerializer):
             return grado.nombre
         except Grado.DoesNotExist:
             return f"Desconocido (ID: '{obj.grado_id}')"
+
+class DocenteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Docente
+        fields = ['codigo', 'nombre', 'apellidos', 'correo', 'telefono']
+
+class GrupoSerializer(serializers.ModelSerializer):
+    asignatura_nombre = serializers.SerializerMethodField()
+    aula_nombre = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Grupo
+        fields = '__all__'
+
+    def get_asignatura_nombre(self, obj):
+        # if not obj.id_asignatura:
+        #     return "Sin asignatura"
+        # if hasattr(obj.id_asignatura, 'nombre'):
+        #     return obj.id_asignatura.nombre
+        # return str(obj.id_asignatura)
+        try:
+            # Al intentar leer obj.id_asignatura, Django hace la consulta a la BD
+            if not obj.id_asignatura:
+                return "Sin asignatura"
+            return obj.id_asignatura.nombre
+            
+        except ObjectDoesNotExist:
+            # Si explota, usamos el sufijo '_id' mágico de Django para sacar el valor crudo de la columna
+            id_huerfano = getattr(obj, 'id_asignatura_id', 'Desconocido')
+            return f"Asignatura no encontrada (ID: {id_huerfano})"
+
+    def get_aula_nombre(self, obj):
+        # if not obj.id_aula:
+        #     return "Sin aula"
+        # if hasattr(obj.id_aula, 'nombre'):
+        #     return obj.id_aula.nombre
+        # return str(obj.id_aula)
+        try:
+            if not obj.id_aula:
+                return "Sin aula"
+            return obj.id_aula.nombre
+            
+        except ObjectDoesNotExist:
+            id_huerfano = getattr(obj, 'id_aula_id', 'Desconocido')
+            return f"Aula no encontrada (ID: {id_huerfano})"
+
+class GradoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grado
+        fields = '__all__'
     
