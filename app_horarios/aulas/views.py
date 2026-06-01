@@ -7,7 +7,7 @@ from rest_framework import status, viewsets
 from rest_framework.generics import ListAPIView
 
 
-from aulas.services import AulaService
+from aulas.services import AulaService, lista_mini_aulas
 from aulas.models import Aula
 from calendario.models import Dia
 from aulas.serializers import AulaDisponibleRequestSerializer, AulaMenuSerializer, AulaMiniSerializer, AulaSerializer
@@ -46,6 +46,11 @@ class AulaViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         AulaService.destroy(pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ListaMiniAulasAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        aulas = lista_mini_aulas()
+        return Response(aulas, status=200)
 
 class AulasDisponiblesAPIView(APIView):
     def post(self, request):

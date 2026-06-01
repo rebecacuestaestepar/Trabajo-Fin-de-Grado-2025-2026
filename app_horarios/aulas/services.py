@@ -26,3 +26,6 @@ class AulaService:
         def destroy(aula_id):
             aula = AulaService.retrieve(aula_id)
             aula.delete()
+
+def lista_mini_aulas():
+    return Aula.objects.values('id', 'nombre').exclude(nombre__iexact='Aula 0').order_by('id')
