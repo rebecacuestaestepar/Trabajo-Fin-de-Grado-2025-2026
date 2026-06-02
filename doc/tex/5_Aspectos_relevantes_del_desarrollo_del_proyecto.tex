@@ -82,6 +82,43 @@ Entre los problemas de unificación encontrados están los siguientes:
 
 Tras terminar la fase preparación y unificación de la hoja de cálculo, y finalizar de forma correcta la implementación del \textit{parser}, para poder cargar las reservas en base de datos, hubo que cargar previamente todas las asignaturas y aulas con sus respectivos campos en base de datos.
 
+\section{Roles y permisos}
+
+Dado que la aplicación está dirigida a distintos tipos de usuarios con responsabilidades diferenciadas, fue necesario diseñar un modelo de control de acceso basado en roles y permisos. Este aspecto no solamente afecta a la seguridad, sino también a la organización funcional del sistema, ya que determina qué vistas puede consultar cada usuario y qué operaciones puede ejecutar.
+
+La aplicación distingue entre los siguientes roles: administrador, gestor editor, gestor no editor y personal docente e investigador, cada uno de ellos con un conjunto concreto de capacidades.
+
+Se van a distinguir los permisos de los que dispone cada uno de los roles.
+\begin{itemize}
+	\item Administrador (admin):
+	\begin{itemize}
+		\item Acceder al apartado de administración
+		\item Administrar usuarios, roles y permisos
+		\item Cargar un nuevo horario en base de datos
+		\item Todas las acciones que pueden realizar los siguientes roles
+	\end{itemize}
+	\item Gestor editor:
+	\begin{itemize}
+		\item Modificar clases de los horarios y crear nuevas
+		\item Crear y modificar nuevos cursos académicos
+		\item Todas las acciones que realizan los siguientes roles
+	\end{itemize}
+	\item Gestor no editor:
+	\begin{itemize}
+		\item Consultar horarios
+		\item Consultar ocupación de aulas
+		\item Consultar reservas puntuales
+		\item Gestión de reservas puntuales: crear, editar (aceptar, rechazar, modificar datos) y eliminar.
+	\end{itemize}
+	\item Personal Docente e Investigador (PDI):
+	\begin{itemize}
+		\item Solicitar una nueva reserva
+		\item Consultar el estado de sus reservas
+		\item Editar mientras que el estado de su reserva sea Pendiente
+	\end{itemize}
+\end{itemize}
+
+Dvidiéndose así, de forma clara las operaciones que puede realizar cada uno de los roles y las funcionalidades a las que puede acceder, adaptándose así a los diferentes tipos de perfiles que van a hacer uso de esta herramienta.
 
 
 
