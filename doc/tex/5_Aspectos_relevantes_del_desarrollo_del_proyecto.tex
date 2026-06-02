@@ -22,6 +22,18 @@ De esta forma, se dividieron las tareas, delegando así el proceso de autenticac
 
 Esto ha permitido combinar un acceso institucional unificado a una gestión interna de permisos ajustada a las necesidades reales del sistema.
 
+\section{Gestión del calendario académico}
+
+Otro de los aspectos relevantes del desarrollo fue la necesidad de incorporar al sistema la gestión del calendario académico. Durante el análisis del problema se observó que la simple definición de reservas periódicas no era suficiente para poder representar las clases, ya que la ocupación efectiva de las aulas depende también del tipo de día académico sobre el que se proyecta cada actividad.
+
+En el contexto universitario, no todos los días del curso tienen el mismo comportamiento. Existen jornadas de docencia lectiva, periodos de exámenes, días festivos, cambios de docencia y días dedicado exclusivamente a Trabajo de Fin de Grado y Trabajos de Fin de Máster. Por este motivo, se consideró necesario añadir esta información dentro de la propia aplicación, evitando depender de una interpretación estática de los horarios.
+
+Como respuesta a esta necesidad, se introdujo la entidad curso académico, estructurado a su vez en semestres, y asociado a una clasificación de los días y sus tipos. Con esta organización se buscó representar de una forma más precisa y adaptada la planificación temporal al contexto en el que se desarrollan las actividades docentes y permite que el sistema identifique cuándo debe tenerse en cuenta o añadirse una reserva periódica y cuando no.
+
+La gestión relacionada a los tipos de días aporta varias ventajas. En primer lugar, permite que la consulta de ocupación de aulas garantice la realidad académica. En segundo lugar, mejora la generación de reservas periódicas, de forma que estas se adaptan al calendario académico efectivo en lugar de repetirse de manera uniforme sobre todos los días de la semana. Por último, introduce flexibilidad dentro del sistema, debido a que permite gestionar desde la interfaz en situaciones excepcionales como festivos, periodos de exámenes o modificaciones puntuales de la docencia.
+
+Desde el punto de vista del diseño, esta decisión supone que el sistema no solo gestiona reservas y horarios, sino también se encarga del marco temporal académico que condiciona la validez de los puntos anteriores. En consecuencia, la aplicación pasa a tratar no únicamente qué actividad tiene lugar en el aula, sino también en qué contexto académico se produce, lo que refuerza su adecuación al entorno universitario y mejora la calidad de la información que ofrece.
+
 \section{Analizador léxico}
 Durante el desarrollo del proyecto, se decidió realizar un analizador léxico para la carga de los horarios de los grados en el sistema, los cuales se encuentran ahora mismo en una hoja de cálculo. Esta decisión fue tomada debido a que para poder modificar la franja horario en la que se imparte una clase tiene que estar cargada en base de datos, y habría que cargar de manera manual las reservas en el sistema. Lo que no es viable ya que con la extracción de los datos de la hoja de cálculo, el número de clases o reservas extraídas supera las 1000 reservas periódicas.
 
@@ -69,6 +81,7 @@ Entre los problemas de unificación encontrados están los siguientes:
 
 
 Tras terminar la fase preparación y unificación de la hoja de cálculo, y finalizar de forma correcta la implementación del \textit{parser}, para poder cargar las reservas en base de datos, hubo que cargar previamente todas las asignaturas y aulas con sus respectivos campos en base de datos.
+
 
 
 
