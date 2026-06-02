@@ -1,0 +1,29 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import FormularioDinamico from '../../paginas/Formulario';
+import { useEsquemaDocente } from './useEsquemaDocente';
+import { crearDocente } from '../../../api/docencia';
+
+export default function CrearDocente() {
+    const navigate = useNavigate();
+    const esquema = useEsquemaDocente();
+
+    const manejarGuardar = async (datos) => {
+        try {
+            await crearDocente(datos);
+            navigate('/admin/docentes'); 
+        } catch (error) {
+            console.error("Error al crear el docente:", error);
+            alert("No se pudo crear el docente. Revisa la consola.");
+        }
+    };
+
+    return (
+        <FormularioDinamico 
+            titulo="Añadir Nuevo Docente"
+            esquema={esquema}
+            alGuardar={manejarGuardar}
+            rutaVolver="/admin/docentes"
+        />
+    );
+}
