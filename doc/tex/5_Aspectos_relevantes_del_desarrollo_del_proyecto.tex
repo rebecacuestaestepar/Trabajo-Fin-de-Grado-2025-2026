@@ -10,8 +10,19 @@ Esta decisión permitió reutilizar la estructura de datos preexistente, evitand
 
 Desde el punto de vista práctico, este modelo híbrido permitió combinar una base de datos académica ya definida con un sistema de seguridad y gestión de usuarios más flexible, delegando la lógica de acceso a la aplicación en un servicio externo, y manteniendo en la base de datos propia la asignación de roles y permisos a cada usuario.
 
+\section{Integración con la autenticación institucional}
 
-\subsection{Analizador léxico}
+Otro aspecto destacado del desarrollo fue la decisión de delegar la autenticación de usuarios en la API institucional de la universidad. De este modo el sistema no valida directamente las credenciales contra la base de datos propia, sino que utiliza las credenciales oficiales proporcionadas por la institución, apoyándose así en un mecanismo externo ya consolidado y en funcionamiento.
+
+Esta decisión fue tomada debido a que la aplicación va a ser utilizada y gestionada por personas relacionadas a la Universidad de Burgos, de forma que así se controla los usuarios que pueden acceder a la página y evitando así tener que hacer un registro de usuario, provocando que el usuario tenga que crear otra contraseña nueva para tareas relacionadas con la institución. Por lo que se llegó a la conclusión de que este paso no era necesario.
+
+Para la integración se tomó de ejemplo su implementación en otro proyecto programado en Java, que también delegaba la autenticación a la API del moodle. Con este proyecto como base se siguieron los pasos necesarios para su correcta integración.
+
+De esta forma, se dividieron las tareas, delegando así el proceso de autenticación de usuarios y validación de credenciales a la API del moodle de la Universidad e Burgos. Una vez el usuario se autentica de forma correcta, se comprueba en la base de datos propia la existencia de una entrada para el usuario logueado para poder obtener el rol de este, dándole acceso a las operaciones permitidas según los permisos asignados que tenga su rol. Si no se encuentra una entrada en la base de datos para el usuario se decidió crear una entrada en base de datos de manera automática pero asignándole el rol de PDI, es decir, el rol con menos privilegios asignados. De forma que no pueda realizar operaciones críticas en el sistema, y manteniendo así la seguridad e integridad del mismo.
+
+Esto ha permitido combinar un acceso institucional unificado a una gestión interna de permisos ajustada a las necesidades reales del sistema.
+
+\section{Analizador léxico}
 Durante el desarrollo del proyecto, se decidió realizar un analizador léxico para la carga de los horarios de los grados en el sistema, los cuales se encuentran ahora mismo en una hoja de cálculo. Esta decisión fue tomada debido a que para poder modificar la franja horario en la que se imparte una clase tiene que estar cargada en base de datos, y habría que cargar de manera manual las reservas en el sistema. Lo que no es viable ya que con la extracción de los datos de la hoja de cálculo, el número de clases o reservas extraídas supera las 1000 reservas periódicas.
 
 Para comenzar se analizó en profundidad la estructura que presentaban las clases teóricas y prácticas de la hoja de cálculo que se utiliza actualmente para la gestión de los horarios. Tras el análisis se supuso que las clases teóricas podían ser encontradas con tres estructuras diferentes, y las clases prácticas con otras tres estructuras, con una estructura de ellas común entre los dos tipos de clases. También se observó que las clases teóricas tenían un color y las prácticas otro a nivel general incluyendo las clases en inglés del grado de Organización Industrial. También se analizaron los datos que era importante extraer para poder realizar las cargas en base de datos de las reservas periódicas, entre los que se encuentran, la asignatura, su código (identificador de la asignatura en base de datos), el grupo, el aula, el día de la semana y la franja horaria en la que se imparte la clase. 
