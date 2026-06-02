@@ -1,5 +1,16 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
+Este capítulo recoge los aspectos más relevantes del desarrollo práctico del proyecto, poniendo el foco en aquellas decisiones de análisis, diseño e implementación que han condicionado de forma significativa la solución final. Su finalidad no es reproducir de manera literal fragmentos de código o elementos ya presentes en los anexos, sino justificar los principales caminos de solución adoptados.
+
+\section{Modelo híbrido de persistencia}
+
+Uno de los aspectos más relevantes del desarrollo ha sido el integrar dos enfoques distintos de persistencia dentro de un mismo sistema. Por un lado, la parte de la base de datos asociada a la gestión académica y organización de la escuela que se ha realizado a través de un \textit{script} SQL cuya base o prototipo fue realizado al principio del proyecto, previo a elegir \textit{frameworks} o lenguajes de programación. Y por otro lado, tenemos la gestión de usuarios, roles y permisos se implementó con los mecanismos que proporciona Django.
+
+Esta decisión permitió reutilizar la estructura de datos preexistente, evitando redefinir las entidades ya consolidadas en el \textit{script}, y a su vez aprovechar las facilidades que ofrece el \textit{framework} para la autenticación, autorización y administración de accesos. No obstante, hubo que integrar las entidades, relaciones y reglas de acceso para aprovechas las ventajas del ORM que ofrece Django. Para ello se volcaron los modelos a Django mediante el comando \textit{inspectdb}.
+
+Desde el punto de vista práctico, este modelo híbrido permitió combinar una base de datos académica ya definida con un sistema de seguridad y gestión de usuarios más flexible, delegando la lógica de acceso a la aplicación en un servicio externo, y manteniendo en la base de datos propia la asignación de roles y permisos a cada usuario.
+
+
 \subsection{Analizador léxico}
 Durante el desarrollo del proyecto, se decidió realizar un analizador léxico para la carga de los horarios de los grados en el sistema, los cuales se encuentran ahora mismo en una hoja de cálculo. Esta decisión fue tomada debido a que para poder modificar la franja horario en la que se imparte una clase tiene que estar cargada en base de datos, y habría que cargar de manera manual las reservas en el sistema. Lo que no es viable ya que con la extracción de los datos de la hoja de cálculo, el número de clases o reservas extraídas supera las 1000 reservas periódicas.
 
