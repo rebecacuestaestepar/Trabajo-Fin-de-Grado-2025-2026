@@ -55,7 +55,6 @@ export default function CabeceraTabla({
                         📤 Exportar Datos
                     </button>
 
-                    {/* Input oculto para subir archivos */}
                     <input 
                         type="file" 
                         accept=".xlsx, .xls, .csv" 
