@@ -1,6 +1,7 @@
 from django.urls import include, path
 from .views import (
     CrearReservaPuntualAPIView,
+    ReservasUsuarioAPIView,
     ResponsableViewSet,
     SolicitarReservaPuntualAPIView,
     AulasDisponiblesAPIView,
@@ -23,10 +24,10 @@ router.register(r'responsables', ResponsableViewSet, basename='responsable')
 urlpatterns = [
     #path('reservas/puntuales/solicitar/', SolicitarReservaPuntualAPIView.as_view()),
          #name='solicitar-reserva-puntual'),
-    path("aulas/disponibles/", AulasDisponiblesAPIView.as_view()),
+    #path("aulas/buscar-aulas-disponibles/", AulasDisponiblesAPIView.as_view()),
     path("reservas/solicitar/", SolicitarReservaPuntualAPIView.as_view()),
     path("reservas/crear/", CrearReservaPuntualAPIView.as_view()),
-
+    path("reservas/todas/<str:usuario>/", ReservasUsuarioAPIView.as_view()),
     path("reservas/pendientes/", ReservasPendientesListAPIView.as_view()),
     path("reservas/aprobar-masivo/", ReservaAprobarMasivoAPIView.as_view()),
     path("reservas/rechazar-masivo/", ReservaRechazarMasivoAPIView.as_view()),

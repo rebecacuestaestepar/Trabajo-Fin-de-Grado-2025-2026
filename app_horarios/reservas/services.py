@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 class ResponsableService:
     @staticmethod
     def list():
-        return Responsable.objects.all().order_by('id_docente')
+        return Responsable.objects.all().order_by('correo')
     
     @staticmethod
     def retrieve(correo):

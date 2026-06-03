@@ -3,15 +3,21 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import Docente, Grado, Grupo, Asignaturas
+
 from .serializers import GrupoSerializer, DocenteSerializer, GradoSerializer
 from docencia.serializers import AsignaturaSerializer
 
 from .services import GradoService, AsignaturaService, GrupoService, DocenteService, lista_mini_asignaturas, lista_mini_docentes, lista_mini_grados, lista_mini_grupos
 
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+
 import traceback
 
 # Create your views here.
 class GradoViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Grado.objects.none()
     
     def list(self, request):
         grados = GradoService.list()
@@ -40,11 +46,14 @@ class GradoViewSet(viewsets.ViewSet):
         return Response(status=204)
 
 class ListaMiniGradosView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         grados = lista_mini_grados()
         return Response(grados, status=200)
     
 class AsignaturaViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Asignaturas.objects.none()
 
     def list(self, request):
         asignaturas = AsignaturaService.list()
@@ -73,12 +82,15 @@ class AsignaturaViewSet(viewsets.ViewSet):
         return Response(status=204)
 
 class ListaMiniAsignaturasView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         asignaturas = lista_mini_asignaturas()
         return Response(asignaturas, status=200)
 
 class GrupoViewSet(viewsets.ViewSet):
-    
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Grupo.objects.none()
+
     def list(self, request):
         grupos = GrupoService.list()
         serializer = GrupoSerializer(grupos, many=True)
@@ -111,6 +123,8 @@ class ListaMiniGruposView(APIView):
             return Response(grupos, status=200)
 
 class DocenteViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Docente.objects.none()
     def list(self, request):
         docentes = DocenteService.list()
         serializer = DocenteSerializer(docentes, many=True)
@@ -138,6 +152,7 @@ class DocenteViewSet(viewsets.ViewSet):
         return Response(status=204)
 
 class ListaMiniDocentesView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         docentes = lista_mini_docentes()
         return Response(docentes, status=200)

@@ -14,7 +14,6 @@ def get_db_tables() -> List[str]:
     with connection.cursor() as cursor:
         tables = connection.introspection.table_names(cursor)
 
-    # Ajusta si tienes otras tablas internas
     ignore_prefixes = ("django_", "auth_", "admin_", "sessions_", "django_content_type")
     ignore_exact = {"django_migrations"}
 
@@ -158,7 +157,7 @@ class Command(BaseCommand):
             with connection.cursor() as cursor:
                 cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
                 for t in delete_order:
-                    if t in sheet_names:  # solo tablas presentes en el Excel
+                    if t in sheet_names: 
                         cursor.execute(f"DELETE FROM {sql_ident(t)};")
                 cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
 
@@ -186,7 +185,6 @@ class Command(BaseCommand):
 
                 # normaliza booleanos (si hay columnas booleanas)
                 for c in excel_cols:
-                    # ajusta aquí si tienes nombres concretos
                     if c.upper() in {"ALTAVOCES", "PROYECTOR", "CAMARAS", "ENCHUFES"}:
                         df[c] = df[c].map(normalize_bool)
 
@@ -194,11 +192,6 @@ class Command(BaseCommand):
                 placeholders = ", ".join(["%s"] * len(excel_cols))
                 sql = f"INSERT INTO {sql_ident(table)} ({cols_sql}) VALUES ({placeholders})"
 
-                #rows = [tuple(row[c] for c in excel_cols) for _, row in df.iterrows()]
-                #rows = [
-                #    tuple(to_db_value(row[c]) for c in excel_cols)
-                #    for _, row in df.iterrows()
-                #]
                 rows = []
                 for record in df.to_dict('records'):
                     rows.append(tuple(to_db_value(record[c]) for c in excel_cols))

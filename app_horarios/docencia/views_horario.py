@@ -9,10 +9,15 @@ from reservas.excel_parser import parsear_horario_excel
 from reservas.services_excel import generar_reservas_periodicas
 import traceback
 
+from rest_framework.permissions import IsAuthenticated
+
 class CargarHorarioExcelView(APIView):
+    permission_classes = [IsAuthenticated]
     parser_clases = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
+        if not request.user.has_perm(["reservas.add_reservaperiodica", "reservas.add_reserva"]):
+            return Response({'error': 'No tienes permiso para cargar horarios.'}, status=403)
         fichero = request.FILES.get('fichero')
         curso = request.data.get('id_curso')
 
@@ -33,14 +38,17 @@ class CargarHorarioExcelView(APIView):
             return Response({'error': str(e)}, status=500)
 
 class ObtenerCursosView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
+        if not (request.user.has_perm("reservas.add_reservaperiodica") or request.user.has_perm("calendario.view_curso")):
+            return Response({'error': 'No tienes permiso para consultar los cursos.'}, status=403)
         cursos = Curso.objects.all().values('idcurso').order_by('-idcurso')
         return Response(cursos, status=200)
     
 class SemestresPorGradoView(APIView):
     def get(self, request, id_grado, *args, **kwargs):
-
-
+        if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
+            return Response({'error': 'No tienes permiso para consultar los semestres.'}, status=403)
         try:
             semestres = obtener_semestres_por_grado(id_grado)
             return Response({'semestres': semestres}, status=200)
@@ -50,7 +58,10 @@ class SemestresPorGradoView(APIView):
 
 
 class ObtenerAsignaturasPorGradoYSemestreView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, id_grado, id_semestre, *args, **kwargs):
+        if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
+            return Response({'error': 'No tienes permiso para consultar las asignaturas.'}, status=403)
         id_curso = request.query_params.get('id_curso')
 
         if not id_curso:
@@ -64,7 +75,10 @@ class ObtenerAsignaturasPorGradoYSemestreView(APIView):
             return Response({'error': str(e)}, status=404)
 
 class ValidarRestriccionesView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
+        if not request.user.has_perm("reservas.change_reservaperiodica"):
+            return Response({'error': 'No tienes permiso para validar las restricciones.'}, status=403)
         id_curso = request.data.get('id_curso')
         semestre_num = request.data.get('semestre_num')
         id_grado = request.data.get('id_grado')
@@ -75,7 +89,10 @@ class ValidarRestriccionesView(APIView):
         
 
 class MoverSerieReservasView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
+        if not request.user.has_perm("reservas.change_reservaperiodica"):
+            return Response({'error': 'No tienes permiso para mover series de reservas.'}, status=403)
         id_curso = request.data.get('id_curso')
         semestre_num = request.data.get('semestre_num')
         datos_movimiento = request.data.get('datos_movimiento')

@@ -24,3 +24,7 @@ class Aula(models.Model):
     class Meta:
         managed = False
         db_table = 'aula'
+
+        permissions = [
+            ("view_ocupacion_aula", "Can view occupation of aula"),
+        ]

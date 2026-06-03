@@ -1,6 +1,6 @@
 from datetime import timedelta, date
 from django.shortcuts import render
-from rest_framework.views import APIView
+from rest_framework.views import APIView, PermissionDenied
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from django.db import transaction
@@ -11,17 +11,22 @@ from .serializers import ReservaPuntualCreateSerializer, ResponsableSerializer
 from .serializers_pendientes import ( ReservaPendienteListItemSerializer, ReservaDetalleSerializer, AulasDisponiblesInputSerializer, ReservaBulkIdsSerializer)
 from reservas.models import Reserva, ReservaPuntual, Responsable
 from calendario.models import Dia
-from reservas.services import aulas_disponibles_en_fecha_hora, aula_disponible_en_varias_fechas
+from reservas.services import ResponsableService, aulas_disponibles_en_fecha_hora, aula_disponible_en_varias_fechas
+
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
 
 class ResponsableViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Responsable.objects.none()
+
     def list(self, request):
-        responsables = Responsable.objects.all()
+        responsables = ResponsableService.list()
         serializer = ResponsableSerializer(responsables, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        responsable = get_object_or_404(Responsable, pk=pk)
+        responsable = ResponsableService.retrieve(pk)
         serializer = ResponsableSerializer(responsable)
         return Response(serializer.data)
 
@@ -34,7 +39,7 @@ class ResponsableViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
-        responsable = get_object_or_404(Responsable, pk=pk)
+        responsable = ResponsableService.retrieve(pk)
         serializer = ResponsableSerializer(instance=responsable, data=request.data)
         if serializer.is_valid():
             responsable_actualizado = serializer.save()
@@ -43,8 +48,8 @@ class ResponsableViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        responsable = get_object_or_404(Responsable, pk=pk)
-        responsable.delete()
+        responsable = ResponsableService.retrieve(pk)
+        ResponsableService.delete(pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -54,7 +59,11 @@ class ResponsableViewSet(viewsets.ViewSet):
 =============================================
 """
 class SolicitarReservaPuntualAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
+
+        if not request.user.has_perm("reservas.request_reserv_puntual"):
+            raise PermissionDenied("No tienes permiso para solicitar reservas puntuales.")
         serializer = ReservaPuntualCreateSerializer(data=request.data, context={"es_solicitud": True})
         if serializer.is_valid():
             serializer.save()
@@ -65,7 +74,10 @@ class SolicitarReservaPuntualAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class CrearReservaPuntualAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
+        if not request.user.has_perms(["reservas.add_reservapuntual", "reservas.add_reserva"]):
+            raise PermissionDenied("No tienes permiso para crear reservas puntuales.")
         serializer = ReservaPuntualCreateSerializer(data=request.data, context={"es_solicitud": False})
         if serializer.is_valid():
             reserva_puntual = serializer.save()
@@ -86,7 +98,10 @@ class CrearReservaPuntualAPIView(APIView):
 # 1) ENDPOINT: POST /api/aulas/disponibles/
 # -------------------------------------------------------
 class AulasDisponiblesAPIView(APIView):
+    #permission_classes = [IsAuthenticated]
     def post(self, request):
+        #if not request.user.has_perms(["reservas.add_reserva", "reservas.add_reservapuntual", "reservas.change_reservapuntual"]):
+            #raise PermissionDenied("No tienes permiso para consultar aulas disponibles.")
         data = request.data
 
         generar_periodica = bool(data.get("generar_periodica", False))
@@ -231,59 +246,13 @@ class AulasDisponiblesAPIView(APIView):
 # 2) LISTADO: GET /api/reservas/pendientes/
 # Estado: Pendiente o Solicitado => por defecto "P" y "S"
 # -------------------------------------------------------
-"""
 class ReservasPendientesListAPIView(APIView):
-    PENDIENTES_ESTADOS = ("P")  # ajusta si tus códigos son otros
-
-    def get(self, request):
-        estados = request.query_params.getlist("estado")
-        estados = tuple(estados) if estados else self.PENDIENTES_ESTADOS
-
-        puntuales = (
-            ReservaPuntual.objects
-            .select_related("id_responsable", "id_reserva", "id_reserva__id_dia")
-            .filter(id_reserva__estado__in=estados)
-            .order_by("-momento_reserva")
-        )
-
-        data = []
-        for p in puntuales:
-            r = p.id_reserva
-
-            correo = getattr(p.id_responsable, "correo", "") if p.id_responsable else ""
-            motivo = getattr(p, "motivo", "") or ""
-
-            data.append({
-                "idreserva": r.pk,
-                "motivo": motivo,
-                "correo_responsable": correo,
-                "fecha": r.id_dia.dia if r.id_dia else None,
-                "hora_inicio": r.hora_inicio,
-                "hora_fin": r.hora_fin,
-
-                # si estos campos están en Reserva, OK; si no, se verán None/False
-                "capacidad_solicitada": getattr(p, "capacidad_solicitada", None),
-                "num_ordenadores": getattr(p, "num_ordenadores", None),
-                "altavoces": bool(getattr(p, "altavoces", False)),
-                "proyector": bool(getattr(p, "proyector", False)),
-                "camara": bool(getattr(p, "camara", False)),
-                "enchufes": bool(getattr(p, "enchufes", False)),
-
-                "nombre_aula": r.nombre_aula or "",
-                "estado": r.estado,
-                # opcional si quieres exponerlo:
-                # "momento_reserva": p.momento_reserva,
-            })
-
-        #out = ReservaPendienteListItemSerializer(data=data, many=True)
-        #out.is_valid(raise_exception=False)
-        out = ReservaPendienteListItemSerializer(instance=data, many=True)
-        return Response(out.data)
-"""
-class ReservasPendientesListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     PENDIENTES_ESTADOS = ("P")
 
     def get(self, request):
+        if not request.user.has_perms(["reservas.view_reserva_puntual", "reservas.view_reserva"]):
+            raise PermissionDenied("No tienes permiso para consultar reservas puntuales.")
         estados = request.query_params.getlist("estado")
         estados = tuple(estados) if estados else self.PENDIENTES_ESTADOS
 
@@ -324,36 +293,12 @@ class ReservasPendientesListAPIView(APIView):
 # -------------------------------------------------------
 # 3) DETALLE + PATCH: /api/reservas/<id>/
 # -------------------------------------------------------
-"""
 class ReservaPendienteDetailAPIView(APIView):
-    def get_object(self, id):
-        return get_object_or_404(Reserva.objects.select_related("id_dia"), pk=id)
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
-        reserva = self.get_object(id)
-        ser = ReservaDetalleSerializer(instance=reserva)
-        return Response(ser.data)
-
-    @transaction.atomic
-    def patch(self, request, id):
-        reserva = self.get_object(id)
-
-        if reserva.estado not in ("P", "S"):
-            return Response(
-                {"detail": "Solo se pueden editar reservas en estado Pendiente/Solicitada."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        ser = ReservaDetalleSerializer(instance=reserva, data=request.data, partial=True)
-        ser.is_valid(raise_exception=True)
-        updated = ser.update(reserva, ser.validated_data)
-
-        return Response(ReservaDetalleSerializer(instance=updated).data)
-"""
-
-
-class ReservaPendienteDetailAPIView(APIView):
-    def get(self, request, id):
+        if not request.user.has_perms(["reservas.view_reservapuntual", "reservas.view_reserva"]):
+            raise PermissionDenied("No tienes permiso para consultar reservas puntuales.")
         reserva = Reserva.objects.filter(pk=id).first()
         if not reserva:
             return Response({"detail": "Reserva no encontrada"}, status=status.HTTP_404_NOT_FOUND)
@@ -361,6 +306,8 @@ class ReservaPendienteDetailAPIView(APIView):
 
     @transaction.atomic
     def patch(self, request, id):
+        if not request.user.has_perms(["reservas.change_reservapuntual", "reservas.change_reserva"]):
+            raise PermissionDenied("No tienes permiso para modificar reservas puntuales.")
         reserva = Reserva.objects.select_for_update().filter(pk=id).first()
         if not reserva:
             return Response({"detail": "Reserva no encontrada"}, status=status.HTTP_404_NOT_FOUND)
@@ -397,6 +344,8 @@ class ReservaPendienteDetailAPIView(APIView):
         return Response({"message": "Reserva actualizada correctamente"}, status=status.HTTP_200_OK)
     
     def delete(self, request, id):
+        if not request.user.has_perms(["reservas.delete_reservapuntual", "reservas.delete_reserva"]):
+            raise PermissionDenied("No tienes permiso para eliminar reservas puntuales.")
         reserva = get_object_or_404(Reserva, idreserva=id) 
         reserva.delete()
         return Response({"message": "Reserva eliminada"}, status=status.HTTP_200_OK)
@@ -405,7 +354,10 @@ class ReservaPendienteDetailAPIView(APIView):
 # 4) AULAS CANDIDATAS: POST /api/reservas/<id>/aulas-candidatas/
 # -------------------------------------------------------
 class ReservaAulasCandidatasAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, id):
+        if not request.user.has_perms(["reservas.change_reservapuntual", "reservas.change_reserva"]):
+            raise PermissionDenied("No tienes permiso para consultar aulas candidatas.")
         _ = get_object_or_404(Reserva, pk=id)
 
         ser = AulasDisponiblesInputSerializer(data=request.data)
@@ -418,8 +370,6 @@ class ReservaAulasCandidatasAPIView(APIView):
                 "id": a.pk,
                 "nombre": a.nombre,
                 "capacidad": a.capacidad,
-                #"nombre": getattr(a, "nombre", str(a.pk)),
-                #"capacidad": getattr(a, "capacidad", None),
             })
 
         return Response({"aulas": candidatas})
@@ -429,8 +379,11 @@ class ReservaAulasCandidatasAPIView(APIView):
 # 5) APROBAR / RECHAZAR (y de forma masiva)
 # -------------------------------------------------------
 class ReservaAprobarAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request, id):
+        if not request.user.has_perm("reservas.change_estado_reserva_puntual"):
+            raise PermissionDenied("No tienes permiso para aprobar reservas puntuales.")
         reserva = get_object_or_404(Reserva, pk=id)
 
         if reserva.estado not in ("P"):
@@ -449,8 +402,11 @@ class ReservaAprobarAPIView(APIView):
 
 
 class ReservaRechazarAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request, id):
+        if not request.user.has_perm("reservas.change_estado_reserva_puntual"):
+            raise PermissionDenied("No tienes permiso para rechazar reservas puntuales.")
         reserva = get_object_or_404(Reserva, pk=id)
 
         if reserva.estado not in ("P"):
@@ -464,8 +420,11 @@ class ReservaRechazarAPIView(APIView):
     
 
 class ReservaAprobarMasivoAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request):
+        if not request.user.has_perm("reservas.change_estado_reserva_puntual"):
+            raise PermissionDenied("No tienes permiso para aprobar reservas puntuales.")
         ser = ReservaBulkIdsSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
         ids = ser.validated_data["ids"]
@@ -497,8 +456,11 @@ class ReservaAprobarMasivoAPIView(APIView):
 
 
 class ReservaRechazarMasivoAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request):
+        if not request.user.has_perm("reservas.change_estado_reserva_puntual"):
+            raise PermissionDenied("No tienes permiso para rechazar reservas puntuales.")
         ser = ReservaBulkIdsSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
         ids = ser.validated_data["ids"]
@@ -523,9 +485,11 @@ class ReservaRechazarMasivoAPIView(APIView):
 # Create your views here.
 
 class ReservasTodasAPIView(APIView):
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        if not request.user.has_perms(["reservas.view_reservapuntual", "reservas.view_reserva"]):
+            raise PermissionDenied("No tienes permiso para consultar reservas puntuales.")
         qs = (
             Reserva.objects
             .select_related("id_dia", "id_aula")  
@@ -534,12 +498,29 @@ class ReservasTodasAPIView(APIView):
         )
         return Response(ReservaTodasSerializer(qs, many=True).data)
 
+class ReservasUsuarioAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, usuario):
+        if not request.user.has_perms(["reservas.view_own_reserva_puntual", "reservas.view_own_reserva"]):
+            raise PermissionDenied("No tienes permiso para consultar reservas puntuales.")
+        qs = (
+            Reserva.objects
+            .select_related("id_dia", "id_aula")  
+            .select_related("reservapuntual", "reservapuntual__id_responsable")
+            .filter(reservapuntual__id_responsable__correo=usuario)
+            .order_by("-id_dia__dia", "-hora_inicio")
+        )
+        return Response(ReservaTodasSerializer(qs, many=True).data)
+
     
 
 class ReservasEliminarMasivoAPIView(APIView):
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        if not request.user.has_perms(["reservas.delete_reservapuntual", "reservas.delete_reserva"]):
+            raise PermissionDenied("No tienes permiso para eliminar reservas puntuales.")
         ids = request.data.get("ids", [])
 
         if not isinstance(ids, list) or not ids:

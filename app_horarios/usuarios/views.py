@@ -1,3 +1,5 @@
+from django.contrib.auth.models import Group
+
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,8 +8,14 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .services import UsuarioService, RolService, lista_mini_permisos, lista_mini_roles
 from .serializers import UsuarioSerializer, RolSerializer
+from rest_framework.permissions import AllowAny, DjangoModelPermissions, IsAuthenticated
+
+from .models import Usuario
 
 class UsuarioViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Usuario.objects.none()
+
     def list(self, request):
         usuarios = UsuarioService.list()
         serializer = UsuarioSerializer(usuarios, many=True)
@@ -40,6 +48,8 @@ class UsuarioViewSet(viewsets.ViewSet):
         return Response(status=204)
     
 class RolViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Group.objects.none()
     def list(self, request):
         roles = RolService.list()
         serializer = RolSerializer(roles, many=True)
@@ -83,6 +93,7 @@ class ListaMiniPermisosAPIView(APIView):
 
 
 class LoginUniversidadAPIView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         usuario = request.data.get('username')
         contrasena = request.data.get('password')
@@ -93,6 +104,8 @@ class LoginUniversidadAPIView(APIView):
         user = authenticate(request, username=usuario, password=contrasena)
 
         if user is not None:
+            permisos_completos = user.get_all_permissions()
+            permisos_simples = [permiso.split('.')[1] for permiso in permisos_completos]
             refresh = RefreshToken.for_user(user)
             roles_usuario = list(user.groups.values_list('name', flat=True))
             return Response({
@@ -102,7 +115,8 @@ class LoginUniversidadAPIView(APIView):
                     'username': user.username,
                     'nombre': user.first_name,
                     'apellidos': user.last_name,
-                    'roles': roles_usuario                
+                    'roles': roles_usuario,
+                    'permisos': permisos_simples,              
                 }
             }, status=status.HTTP_200_OK)
         else:

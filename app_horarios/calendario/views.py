@@ -9,8 +9,13 @@ from .models import Curso
 
 import traceback
 
+from rest_framework.permissions import IsAuthenticated
+
 class CargarCalendarioAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
+        if not request.user.has_perm("calendario.add_calendario"):
+            return Response({'error': 'No tienes permiso para cargar el calendario académico.'}, status=403)
         serializer = CargarCalendarioSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -23,7 +28,10 @@ class CargarCalendarioAPIView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ObtenerCalendarioCursoAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, id_curso, *args, **kwargs):
+        if not request.user.has_perm("calendario.view_curso"):
+            return Response({'error': 'No tienes permiso para consultar el calendario del curso.'}, status=403)
         try: 
             curso = get_object_or_404(Curso, idcurso=id_curso)
 
@@ -41,7 +49,10 @@ class ObtenerCalendarioCursoAPIView(APIView):
         
 
 class ModificarDiaCalendarioAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
+        if not request.user.has_perms(["calendario.change_curso", "calendario.change_dia", "calendario.change_cambiodocencia", "calendario.change_tfg", "calendario.change_lectivo", "calendario.change_festivo", "calendario.change_examen"]):
+            return Response({'error': 'No tienes permiso para modificar el calendario.'}, status=403)
         try:
             datos = request.data
 

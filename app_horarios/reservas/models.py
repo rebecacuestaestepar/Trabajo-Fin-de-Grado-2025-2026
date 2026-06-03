@@ -78,3 +78,11 @@ class ReservaPuntual(models.Model):
     class Meta:
         managed = False
         db_table = 'reserva_puntual'
+
+        permissions = [
+            ("request_reserv_puntual", "Can request reserva puntual"),
+            ("change_estado_reserva_puntual", "Can change estado of reserva puntual"),
+            ("view_own_reserva_puntual", "Can view own reserva puntual"),
+            ("view_own_reserva", "Can view own reserva"),
+            ("import_horario", "Can import horario"),
+        ]

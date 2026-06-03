@@ -6,13 +6,15 @@ from aulas.models import Aula
 from aulas.serializers import OcupacionAulaEventosQuerySerializer
 from reservas.services_ocupacion import obtener_eventos_ocupacion_aula
 
+from rest_framework.permissions import IsAuthenticated
+
 
 class OcupacionAulaEventosAPIView(APIView):
-    """
-    GET /api/aulas/ocupacion/eventos?aula=A-01&start=...&end=...&tipo=...
-    """
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        if not request.user.has_perm("aulas.view_ocupacion_aula"):
+            return Response({'error': 'No tienes permiso para consultar la ocupación de aulas.'}, status=403)
         ser = OcupacionAulaEventosQuerySerializer(data=request.query_params)
         ser.is_valid(raise_exception=True)
         data = ser.validated_data
