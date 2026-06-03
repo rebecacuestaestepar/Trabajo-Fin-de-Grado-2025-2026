@@ -7,7 +7,7 @@ from rest_framework import status, viewsets
 from rest_framework.generics import ListAPIView
 
 
-from aulas.services import AulaService, lista_mini_aulas
+from aulas.services import AulaService, lista_mini_aulas, obtener_aulas_menu
 from aulas.models import Aula
 from calendario.models import Dia
 from aulas.serializers import AulaDisponibleRequestSerializer, AulaMenuSerializer, AulaMiniSerializer, AulaSerializer
@@ -92,11 +92,13 @@ class ListaAulasAPIView(ListAPIView):
     def get_queryset(self):
         if not self.request.user.has_perm("aulas.view_ocupacion_aula"):
             raise PermissionDenied("No tienes permiso para consultar las aulas.")
-        queryset = Aula.objects.exclude(nombre__iexact="Aula 0").order_by("nombre")
         
         campus = self.request.query_params.get('campus')
-        if campus:
-            queryset = queryset.filter(campus=campus)
+        
+        try:
+            queryset = obtener_aulas_menu(campus)
+        except Exception as e:
+            raise PermissionDenied(f"Error al obtener las aulas para el menú: {str(e)}")
             
         return queryset
 
