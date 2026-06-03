@@ -1,14 +1,19 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+
 import { TIPOS_DIA } from '../utiles/calendarioConfig';
 import LeyendaCalendario from '../componentes/LeyendaCalendario';
 import ModalCambioTipo from '../componentes/ModalCambioTipo';
 import { obtenerCalendarioCurso, modificarTipoDiaCalendario } from '../../api/calendario';
+
+import RequierePermiso from "../../auth/RequierePermiso";
 
 const pluginsCalendario = [multiMonthPlugin, interactionPlugin];
 const localesCalendario = [esLocale];
@@ -35,6 +40,10 @@ const obtenerFechasEnRango = (startStr, endStr) => {
 export default function VistaDetalleCalendario() {
     const { id_curso } = useParams();
     const navigate = useNavigate();
+
+    const componenteRef = useRef(null);
+
+    const [exportando, setExportando] = useState(false);
 
     const [cargando, setCargando] = useState(true);
     const [datosCurso, setDatosCurso] = useState(null);
@@ -65,6 +74,83 @@ export default function VistaDetalleCalendario() {
         cargarCalendario();
     }, [id_curso]);
 
+    const exportarPDF = async () => {
+        if (!componenteRef.current) return;
+        
+        try {
+            setExportando(true);
+            setError(null);
+            
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
+            const elemento = componenteRef.current;
+            const canvas = await html2canvas(elemento, {
+                scale: 2, 
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                ignoreElements: (el) => el.classList.contains('no-exportar'),
+                
+                onclone: (documentoClonado) => {
+                    const contenedoresConScroll = documentoClonado.querySelectorAll('.fc-scroller, .calendario-interactivo, [style*="overflow"]');
+                    
+                    contenedoresConScroll.forEach(el => {
+                        el.style.height = 'auto';
+                        el.style.maxHeight = 'none';
+                        el.style.overflow = 'visible';
+                        el.style.overflowY = 'visible';
+                    });
+
+                    const todosLosElementos = documentoClonado.querySelectorAll('*');
+                    todosLosElementos.forEach(el => {
+                        const estilosCalculados = window.getComputedStyle(el);
+                        
+                        if (estilosCalculados.backgroundColor && estilosCalculados.backgroundColor.includes('oklch')) {
+                            el.style.backgroundColor = 'transparent';
+                        }
+                        if (estilosCalculados.color && estilosCalculados.color.includes('oklch')) {
+                            el.style.color = '#1e293b'; 
+                        }
+                        if (estilosCalculados.borderColor && estilosCalculados.borderColor.includes('oklch')) {
+                            el.style.borderColor = '#e2e8f0'; 
+                        }
+                        if (el.style.boxShadow) el.style.boxShadow = 'none';
+                        if (el.style.filter) el.style.filter = 'none';
+                    });
+                }
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgRenderWidth = imgWidth * ratio;
+            const imgRenderHeight = imgHeight * ratio;
+
+            const offsetX = (pdfWidth - imgRenderWidth) / 2;
+            const offsetY = 10;
+
+            pdf.addImage(imgData, 'PNG', offsetX, offsetY, imgRenderWidth, imgRenderHeight);
+            pdf.save(`Calendario_Academico_${id_curso}.pdf`);
+            
+        } catch (err) {
+            console.error("Error generando el PDF:", err);
+            setError("No se pudo generar el archivo PDF debido a los estilos del contenedor.");
+        } finally {
+            setExportando(false);
+        }
+    };
+
     const cantidadDeMeses = useMemo(() => {
         if (!datosCurso) return 0;
         const inicio = new Date(datosCurso.fecha_inicio);
@@ -85,10 +171,7 @@ export default function VistaDetalleCalendario() {
         });
     }, [diasCalendario]);
 
-    // const manejarClicDia = (info) => {
-    //     setDiasSeleccionado(info.dateStr);
-    //     setModalAbierto(true);
-    // };
+
     const manejarSeleccion = (info) => {
         const fechas = obtenerFechasEnRango(info.startStr, info.endStr);
 
@@ -99,29 +182,6 @@ export default function VistaDetalleCalendario() {
         setDiasSeleccionados(fechas);
         setModalAbierto(true);
     };
-
-
-    // const manejarGuardarDia = async (nuevosDatosDia) => {
-    //     setDiasCalendario(prev => {
-    //         const copia = { ...prev };
-    //         copia[diasSeleccionado] = nuevosDatosDia; 
-    //         return copia;
-    //     });
-    //     setModalAbierto(false);
-
-    //     try {
-    //         setError(null);
-    //         const payload = {
-    //             fecha: diasSeleccionado,
-    //             ...nuevosDatosDia
-    //         };
-            
-    //         await modificarTipoDiaCalendario(payload);
-            
-    //     } catch (err) {
-    //         setError(`No se pudo modificar el día ${diasSeleccionado}.`);
-    //     }
-    // };
 
     const manejarGuardarDias = async (nuevosDatosDia) => {
         setDiasCalendario(prev => {
@@ -194,6 +254,9 @@ export default function VistaDetalleCalendario() {
                 .calendario-interactivo .fc-bg-event { opacity: 1 !important; }
                 .calendario-interactivo .fc-daygrid-day:has(.texto-blanco) .fc-daygrid-day-number { color: white !important; font-weight: bold; position: relative; z-index: 10; }
                 .calendario-interactivo .fc-daygrid-day:has(.texto-oscuro) .fc-daygrid-day-number { color: #1e293b !important; font-weight: bold; position: relative; z-index: 10; }
+
+                .modo-impresion-pdf .fc-scroller { height: auto !important; overflow: visible !important; max-height: none !important; }
+                .modo-impresion-pdf .fc-multimonth { height: auto !important; overflow: visible !important; }
             `}</style>
 
             {error && (
@@ -212,42 +275,60 @@ export default function VistaDetalleCalendario() {
                 </div>
             )}
 
-            <div className="mb-6 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl font-bold text-slate-800">Calendario Académico {id_curso}</h1>
-                    <button onClick={() => navigate(-1)} className="text-sm font-medium text-slate-600 hover:text-slate-900 border px-3 py-1.5 rounded-md hover:bg-slate-50">
-                        ← Volver a Cursos
-                    </button>
+            <div ref={componenteRef} className="bg-slate-50 p-4 rounded-2xl">
+
+                <div className="mb-6 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <div className="flex justify-between items-center mb-4">
+                        <h1 className="text-2xl font-bold text-slate-800">Calendario Académico {id_curso}</h1>
+                        <div className="flex gap-2">
+                            {/* <button 
+                                onClick={exportarPDF} 
+                                disabled={exportando}
+                                className="no-exportar text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md shadow-sm transition-colors disabled:bg-blue-400"
+                            >
+                                {exportando ? 'Generando PDF...' : 'Exportar PDF'}
+                            </button> */}
+                            <button onClick={() => navigate(-1)} className="no-exportar text-sm font-medium text-slate-600 hover:text-slate-900 border px-3 py-1.5 rounded-md hover:bg-slate-50">
+                                ← Volver a Cursos
+                            </button>
+                            
+                        </div>
+                    </div>
+                    <LeyendaCalendario /> 
                 </div>
-                <LeyendaCalendario /> 
-            </div>
 
-            <div className="calendario-interactivo bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <FullCalendar
-                    plugins={pluginsCalendario}
-                    locales={localesCalendario}
-                    locale="es"
-                    initialView="customMultiMonth"
-                    initialDate={datosCurso.fecha_inicio}
-                    //dateClick={manejarGuardarDias}
-                    events={eventosFullCalendar}
-                    validRange={rangoValido}
-                    views={configuracionVistas}
-                    headerToolbar={false}
-                    selectable={true}
-                    select={manejarSeleccion}
-                />
-            </div>
+                <div className="calendario-interactivo bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <FullCalendar
+                        plugins={pluginsCalendario}
+                        locales={localesCalendario}
+                        locale="es"
+                        initialView="customMultiMonth"
+                        initialDate={datosCurso.fecha_inicio}
+                        //dateClick={manejarGuardarDias}
+                        events={eventosFullCalendar}
+                        validRange={rangoValido}
+                        views={configuracionVistas}
+                        headerToolbar={false}
+                        selectable={true}
+                        select={manejarSeleccion}
+                    />
+                </div>
+            </div>    
 
-            {modalAbierto && (
-                <ModalCambioTipo
-                    key={diasSeleccionados[0]}
-                    diasSeleccionados={diasSeleccionados}
-                    datosActuales={obtenerDatosDia(diasSeleccionados[0])}
-                    alCerrar={() => setModalAbierto(false)}
-                    alGuardar={manejarGuardarDias}
-                />
-            )}
+            <RequierePermiso permisos={["change_curso", "change_cambiodocencia", "change_tfg", "change_festivo", "change_tfg", "change_examen", "change_lectivo",
+                "add_curso", "add_cambiodocencia", "add_tfg", "add_festivo", "add_tfg", "add_examen", "add_lectivo",
+                "delete_cambiodocencia", "delete_tfg", "delete_festivo", "delete_tfg", "delete_examen", "delete_lectivo"
+            ]}>
+                {modalAbierto && (
+                    <ModalCambioTipo
+                        key={diasSeleccionados[0]}
+                        diasSeleccionados={diasSeleccionados}
+                        datosActuales={obtenerDatosDia(diasSeleccionados[0])}
+                        alCerrar={() => setModalAbierto(false)}
+                        alGuardar={manejarGuardarDias}
+                    />
+                )}
+            </RequierePermiso>
         </div>
     );
 }

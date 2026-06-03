@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useCursos } from "../hooks/useCursos";
 import React, { useState } from "react";
 
+import RequierePermiso from "../../auth/RequierePermiso";
+
 export default function ListaCursos() {
   const navigate = useNavigate();
 
@@ -53,17 +55,19 @@ export default function ListaCursos() {
     <div className="p-4">
         <div className="flex flex-wrap items-center justify-between mb-4">
             <h1 className="text-xl font-semibold">Lista de Cursos</h1>
-            <button
-                type="button"
-                onClick={nuevoCurso}
-                className={[
-                    "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm",
-                    "bg-[#7a1e1e] hover:bg-[#651818]",
-                    "disabled:cursor-not-allowed disabled:opacity-50",
-                    "mt-4",
-                ].join(" ")}>
-                Cargar Nuevo Curso
-            </button>
+            <RequierePermiso permisos={["add_curso"]}>
+                <button
+                    type="button"
+                    onClick={nuevoCurso}
+                    className={[
+                        "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm",
+                        "bg-[#7a1e1e] hover:bg-[#651818]",
+                        "disabled:cursor-not-allowed disabled:opacity-50",
+                        "mt-4",
+                    ].join(" ")}>
+                    Cargar Nuevo Curso
+                </button>
+            </RequierePermiso>
         </div>
         <div>
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">

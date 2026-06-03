@@ -7,6 +7,8 @@ import CalendarioSemanal from '../componentes/HorarioSemanal';
 import BotonVolver from '../../reservas/formulario-componentes/ui/BotonVolver';
 import ModalRestricciones from '../componentes/ModalRestricciones';
 
+import RequierePermiso from "../../auth/RequierePermiso";
+
 export default function VistaHorarioSemanalGrado() {
     const { id_curso } = useParams();
     const navigate = useNavigate();
@@ -190,13 +192,15 @@ export default function VistaHorarioSemanalGrado() {
             <div className="flex items-center justify-between">
                 <BotonVolver fallback={`/horarios/cargar/cursos`} />
                 
-                <button
-                    onClick={irACrearReserva}
-                    disabled={!gradoActivo || !semestreActivo}
-                    className="inline-flex items-center justify-center rounded-md bg-[#7a1e1e] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#631818] focus:outline-none focus:ring-2 focus:ring-[#7a1e1e] focus:ring-offset-2"
-                >
-                    Crear Reserva Periódica
-                </button>
+                <RequierePermiso permisos={["add_reservaperiodica"]}>
+                    <button
+                        onClick={irACrearReserva}
+                        disabled={!gradoActivo || !semestreActivo}
+                        className="inline-flex items-center justify-center rounded-md bg-[#7a1e1e] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#631818] focus:outline-none focus:ring-2 focus:ring-[#7a1e1e] focus:ring-offset-2"
+                    >
+                        Crear Reserva Periódica
+                    </button>
+                </RequierePermiso>
             </div>
             
             <SelectorSemestre 

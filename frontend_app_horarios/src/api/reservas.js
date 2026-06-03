@@ -1,4 +1,4 @@
-import { apiRequest, apiGet, apiPatch, apiPost } from "./client";
+import { apiRequest } from "./client";
 
 // ----------------------------------------------
 // --- PÁGINA DE SOLICITUD DE RESERVA PUNTUAL ---
@@ -31,39 +31,59 @@ export function crearReservaPuntual(payload) {
 // ------------------------------------------------
 // Lista pendientes
 export function getReservasPendientes() {
-  return apiGet("/reservas/pendientes/");
+  return apiRequest("/reservas/pendientes/", {
+    method: "GET",
+  });
 }
 
 // Detalle
 export function getReservaDetalle(id) {
-  return apiGet(`/reservas/${id}/`);
+  return apiRequest(`/reservas/${id}/`, {
+    method: "GET",
+  });
 }
 
 // Actualizar
 export function patchReserva(id, parcial) {
-  return apiPatch(`/reservas/${id}/`, parcial);
+  return apiRequest(`/reservas/${id}/`, {
+    method: "PATCH",
+    body: parcial
+  });
 }
 
 // Aulas candidatas
 export function postAulasCandidatas(id, payload) {
-  return apiPost(`/reservas/${id}/aulas-candidatas/`, payload);
+  return apiRequest(`/reservas/${id}/aulas-candidatas/`, {
+    method: "POST",
+    body: payload
+  });
 }
 
 // Aprobar / Rechazar
 export function aprobarReserva(id) {
-  return apiPost(`/reservas/${id}/aprobar/`);
+  return apiRequest(`/reservas/${id}/aprobar/`, {
+    method: "POST"
+  });
 }
 
 export function rechazarReserva(id) {
-  return apiPost(`/reservas/${id}/rechazar/`);
+  return apiRequest(`/reservas/${id}/rechazar/`, {
+    method: "POST"
+  });
 }
 
 export function aprobarReservasMasivo(ids) {
-  return apiPost(`/reservas/aprobar-masivo/`, { ids });
+  return apiRequest(`/reservas/aprobar-masivo/`, {
+    method: "POST",
+    body: { ids }
+  });
 }
 
 export function rechazarReservasMasivo(ids) {
-  return apiPost(`/reservas/rechazar-masivo/`, { ids });
+  return apiRequest(`/reservas/rechazar-masivo/`, {
+    method: "POST",
+    body: { ids }
+  });
 }
 
 // ------------------------------------------------
@@ -71,7 +91,17 @@ export function rechazarReservasMasivo(ids) {
 // ------------------------------------------------
 
 export function getTodasReservas() {
-  return apiGet("/reservas/todas/");
+  console.log("Obteniendo todas las reservas...");
+  return apiRequest("/reservas/todas/", {
+    method: "GET"
+  });
+}
+
+export function getReservasUsuario(usuario) {
+  console.log(`Obteniendo reservas para el usuario: ${usuario}...`);
+  return apiRequest(`/reservas/todas/${usuario}/`, {
+    method: "GET"
+  });
 }
 
 export function eliminarReserva(id) {
@@ -81,7 +111,10 @@ export function eliminarReserva(id) {
 }
 
 export function eliminarReservasMasivo(ids) {
-  return apiPost(`/reservas/eliminar-masivo/`, { ids });
+  return apiRequest(`/reservas/eliminar-masivo/`, {
+    method: "POST",
+    body: { ids }
+  });
 }
 
 export function crearResponsable(datos) {

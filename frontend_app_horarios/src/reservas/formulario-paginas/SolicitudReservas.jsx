@@ -11,6 +11,8 @@ import SeccionPeriodicidad from "../formulario-componentes/secciones/SeccionPeri
 
 import { useReservaPuntual } from "../formulario-hooks/useReservaPuntual";
 
+import BotonVolver from "../formulario-componentes/ui/BotonVolver";
+
 export default function SolicitudReservas() {
   const reserva = useReservaPuntual();
 
@@ -33,7 +35,11 @@ export default function SolicitudReservas() {
           alConfirmar={reserva.modal.onConfirm}
       />
 
-      <TarjetaPagina titulo="SOLICITAR RESERVA PUNTUAL">
+      <TarjetaPagina
+        titulo="SOLICITAR RESERVA PUNTUAL"
+        izquierda={<BotonVolver fallback="/reservas/gestion" />}
+        derecha={<span />}
+      >
         <form onSubmit={reserva.enviarFormulario} className="space-y-6">
           <CamposBaseReserva
             formulario={reserva.formulario}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { obtenerCursos } from "../../api/calendario";
 
 export function useCursos() {
     const [cursos, setCursos] = useState([]);
@@ -6,24 +7,21 @@ export function useCursos() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const obtenerCursos = async () => {
+        const cargarCursos = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/docencia/cursos/');
-                if (response.ok) {
-                    const data = await response.json();
-                    setCursos(data);
-                } else {
-                    throw new Error("Error en la respuesta del servidor");
-                }
+                const data = await obtenerCursos(); 
+                
+                setCursos(data); 
+
             } catch (err) {
                 console.error("Error de conexión:", err);
-                setError(err.message);
+                setError(err.message || "Error al cargar los cursos");
             } finally {
                 setCargando(false);
             }
         };
 
-        obtenerCursos();
+        cargarCursos();
     }, []);
 
     return { cursos, cargando, error };

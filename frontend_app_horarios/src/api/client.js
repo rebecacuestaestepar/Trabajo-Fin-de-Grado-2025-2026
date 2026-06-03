@@ -41,11 +41,16 @@ export async function apiFetch(
   // Comprueba si el body es FormData, es decir, imágenes u otros ficheros
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
 
+  const token = sessionStorage.getItem("token");
+
+  //console.log("Token que estoy enviando:", token);
+
   const opts = {
     method,
     credentials: credentials ?? "omit",
     headers: {
       Accept: "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     ...rest,

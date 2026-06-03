@@ -1,3 +1,4 @@
+import RequierePermiso from "../../../auth/RequierePermiso";
 import IconoBool from "../ui/IconoBool";
 import { formatearFechaHora } from "../ui/fecha"; 
 
@@ -5,13 +6,13 @@ function badgeEstado(estadoRaw) {
   const estado = String(estadoRaw ?? "").trim().toUpperCase();
 
 
-  if (estado === "P" || estado === "PENDIENTE") {
+  if (estado === "P") {
     return "bg-amber-50 text-amber-800 ring-1 ring-amber-200";
   }
-  if (estado === "A" || estado === "APROBADA" || estado === "APROBADO") {
+  if (estado === "A") {
     return "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200";
   }
-  if (estado === "R" || estado === "RECHAZADA" || estado === "RECHAZADO") {
+  if (estado === "R") {
     return "bg-rose-50 text-rose-800 ring-1 ring-rose-200";
   }
   return "bg-slate-50 text-slate-700 ring-1 ring-slate-200";
@@ -51,7 +52,14 @@ export default function TarjetaReserva({
   const estadoRaw = reserva.estado;
 
   const estadoStr = String(estadoRaw ?? "").trim().toUpperCase();
-  const esPendiente = estadoStr === "P" || estadoStr === "PENDIENTE";
+  const esPendiente = estadoStr === "P";
+
+  const permisos = JSON.stringify(sessionStorage.getItem("permisos") ?? "[]");
+
+  const tienePoderAbsoluto = permisos.includes("change_reservapuntual") && permisos.includes("change_reserva")
+  const esPDI = permisos.includes("request_reserv_puntual")
+
+  const puedeVerBotonEditar = tienePoderAbsoluto || (esPDI && esPendiente);
 
   console.log(reserva);
 
@@ -139,33 +147,36 @@ export default function TarjetaReserva({
         </div>
 
         <div className="flex shrink-0 flex-row flex-wrap gap-2 sm:flex-col sm:items-stretch">
-          {esPendiente ? (
-            <>
-              <button
-                onClick={() => alAceptar?.(id)}
-                className="rounded-lg !bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800"
-              >
-                Aceptar
-              </button>
+          <RequierePermiso permisos={["change_reservapuntual", "delete_reservapuntual", "change_estado_reserva_puntual"]}>
+            {esPendiente ? (
+              <>
+                <button
+                  onClick={() => alAceptar?.(id)}
+                  className="rounded-lg !bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800"
+                >
+                  Aceptar
+                </button>
 
+                <button
+                  onClick={() => alRechazar?.(id)}
+                  className="rounded-lg !bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 active:bg-red-800"
+                >
+                  Rechazar
+                </button>
+              </>
+            ) : (
+              /* Si no es pendiente, mostramos el botón de eliminar*/
               <button
-                onClick={() => alRechazar?.(id)}
-                className="rounded-lg !bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 active:bg-red-800"
+                onClick={() => alEliminar?.(id)}
+                className="rounded-lg !bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-slate-800"
+                title="Eliminar"
               >
-                Rechazar
+                Eliminar
               </button>
-            </>
-          ) : (
-            /* Si no es pendiente, mostramos el botón de eliminar*/
-            <button
-              onClick={() => alEliminar?.(id)}
-              className="rounded-lg !bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-slate-800"
-              title="Eliminar"
-            >
-              Eliminar
-            </button>
-          )}
-
+            )}
+          </RequierePermiso>
+          
+          {puedeVerBotonEditar && (
           <button
             onClick={() => alEditar?.(id)}
             className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 hover:bg-slate-50"
@@ -173,6 +184,7 @@ export default function TarjetaReserva({
           >
             ✏️ Editar
           </button>
+          )}
         </div>
       </div>
     </li>

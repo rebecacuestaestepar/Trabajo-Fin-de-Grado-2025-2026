@@ -43,6 +43,9 @@ export default function LoginForm() {
                 sessionStorage.setItem('username', data.usuario.username);
                 sessionStorage.setItem('nombre', data.usuario.nombre);
                 sessionStorage.setItem('apellidos', data.usuario.apellidos);
+
+                sessionStorage.setItem('roles', JSON.stringify(data.usuario.roles || []));
+                sessionStorage.setItem('permisos', JSON.stringify(data.usuario.permisos || []));
                 console.log("Sesión inciada correctamente:", data);
 
                 navigate("/reservas/gestion");

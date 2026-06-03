@@ -7,6 +7,7 @@ import ListaReservas from "../listado-componentes/secciones/ListaReservas";
 
 import {
   getTodasReservas,
+  getReservasUsuario,
   eliminarReserva,
   eliminarReservasMasivo,
 } from "../../api/reservas";
@@ -15,15 +16,43 @@ export default function TodasReservas() {
   const navegar = useNavigate();
   const location = useLocation();
 
+  const permisos = JSON.stringify(sessionStorage.getItem("permisos") || "[]");
+
+  const puedoCrear = permisos.includes("add_reservapuntual");
+  const puedoSolicitar = permisos.includes("request_reserv_puntual") || permisos.includes("view_own_reserva_puntual");
+
+  console.log("Permisos del usuario:", permisos);
+  console.log("Puede crear reservas:", puedoCrear);
+  console.log("Puede solicitar reservas:", puedoSolicitar);
+
   const listado = useListadoReservas({
-    cargador: getTodasReservas,
+    cargador: puedoCrear ? getTodasReservas : getReservasUsuario,
+    cargadorParams: puedoCrear ? [] : [sessionStorage.getItem("username") || ""],
   });
 
-  const alCrear = () => 
-    navegar("/reservas/crear", {
-      state: { from: location.pathname + location.search },
-    });
-    
+  // if (puedoCrear) {
+  //   const listado = useListadoReservas({
+  //     cargador: getTodasReservas,
+  //   });
+  // } else {
+  //    listado = useListadoReservas({
+  //     cargador: getReservasUsuario,
+  //     cargadorParams: [sessionStorage.getItem("username") || ""],
+  //   });
+  // }
+  
+
+  const alCrear = () => {
+    if (puedoCrear) {
+      navegar("/reservas/crear", {
+        state: { from: location.pathname + location.search },
+      });
+    } else if (puedoSolicitar) {
+      navegar("/reservas/solicitud", {
+        state: { from: location.pathname + location.search },
+      });
+    }
+  };
   const alEditar = (id) =>
     navegar(`/reservas/puntuales/${id}`, {
       state: { from: location.pathname + location.search },

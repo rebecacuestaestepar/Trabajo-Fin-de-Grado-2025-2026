@@ -1,9 +1,9 @@
-import { apiGet, apiRequest } from "./client";
+import { apiRequest } from "./client";
 
-export async function obtenerAulas() {
-  const respuesta = await fetch("http://localhost:8000/api/aulas/lista/");
-  if (!respuesta.ok) throw new Error("No se pudieron cargar las aulas");
-  return respuesta.json();
+export function obtenerAulas() {
+  return apiRequest("/aulas/lista/", {
+    method: "GET",
+  });
 }
 
 export async function getEventosAula({ aulaNombre, start, end, tipo = "AMBAS" }) {
@@ -13,11 +13,9 @@ export async function getEventosAula({ aulaNombre, start, end, tipo = "AMBAS" })
     end: end.toISOString(),
     tipo,
   });
-
-  console.log("GET /aulas/ocupacion", params.toString());
-
-  return apiGet(`/aulas/ocupacion?${params.toString()}`);
+  return apiRequest(`/aulas/ocupacion?${params.toString()}`);
 }
+
 
 export function crearAula(datos) {
   return apiRequest("/aulas/", {

@@ -46,8 +46,10 @@ export function useListadoReservas({
   }
 
   useEffect(() => {
-    cargar();
-  }, []);
+    if (cargador) {
+      cargar();
+    }
+  }, [cargador]);
 
   const reservasFiltradas = useMemo(() => {
     const motivoBuscado = normalizar(filtrosAplicados.motivo);

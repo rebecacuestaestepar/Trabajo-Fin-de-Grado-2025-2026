@@ -15,20 +15,64 @@ import {
   rechazarReserva,
   aprobarReservasMasivo,
   rechazarReservasMasivo,
+  getReservasUsuario,
 } from "../../api/reservas";
 
 export default function GestionReservas() {
   const navegar = useNavigate();
   const location = useLocation();
 
+  const permisos = JSON.stringify(sessionStorage.getItem("permisos") || "[]");
+
+  const puedoCrear = permisos.includes("add_reservapuntual");
+  const puedoSolicitar = permisos.includes("request_reserv_puntual") || permisos.includes("view_own_reserva_puntual");
+
+  const correoUsuario = sessionStorage.getItem("username");
+  const esUsuarioValido = correoUsuario && correoUsuario !== "undefined";
+
+  console.log("Permisos del usuario:", permisos);
+    console.log("Puede crear reservas:", puedoCrear);
+    console.log("Puede solicitar reservas:", puedoSolicitar);
+
+    console.log("Usuario actual:", sessionStorage.getItem("username"));
+  
+  const cargadorConfigurado = useMemo(() => {
+    if (puedoCrear) {
+      return getTodasReservas;
+    }
+    if (esUsuarioValido) {
+      return () => getReservasUsuario(correoUsuario); // <-- Aquí se inyecta el correo real
+    }
+    return null;
+  }, [puedoCrear, esUsuarioValido, correoUsuario]);
+
+  // 2. Se lo pasamos limpio al hook
   const listado = useListadoReservas({
-    cargador: getTodasReservas, 
+    cargador: cargadorConfigurado,
   });
 
-  const alCrear = () => 
-    navegar("/reservas/crear", {
-      state: { from: location.pathname + location.search },
-    });
+    console.log("Reservas obtenidas:", listado.reservas);
+
+  // const listado = useListadoReservas({
+  //   cargador: getTodasReservas, 
+  // });
+
+  const alCrear = () => {
+    if (puedoCrear) {
+      navegar("/reservas/crear", {
+        state: { from: location.pathname + location.search },
+      });
+    } else if (puedoSolicitar) {
+      navegar("/reservas/solicitud", {
+        state: { from: location.pathname + location.search },
+      });
+    }
+  };
+
+  // const alCrear = () => 
+  //   navegar("/reservas/crear", {
+  //     state: { from: location.pathname + location.search },
+  //   });
     
   const alEditar = (id) =>
     navegar(`/reservas/puntuales/${id}`, {
