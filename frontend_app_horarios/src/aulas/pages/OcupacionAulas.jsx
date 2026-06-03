@@ -6,7 +6,9 @@ import ColumnaAulas from "../components/lista-aulas/ColumnaAulas";
 export default function OcupacionAulas() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { aulas, cargando, error } = useAulas();
+  const queryParams = new URLSearchParams(location.search);
+  const campusSeleccionado = queryParams.get("campus");
+  const { aulas, cargando, error } = useAulas(campusSeleccionado);
 
 
   const [seleccionadas, setSeleccionadas] = useState(() => new Set());

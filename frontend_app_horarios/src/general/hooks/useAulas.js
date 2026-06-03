@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { obtenerAulas } from "../../api/aulas";
+import { obtenerAulasCampus } from "../../api/aulas";
 
-export function useAulas() {
+// Ahora el hook recibe el campus seleccionado
+export function useAulas(campus) {
   const [aulas, setAulas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -12,7 +13,7 @@ export function useAulas() {
     (async () => {
       try {
         setCargando(true);
-        const datos = await obtenerAulas();
+        const datos = await obtenerAulasCampus(campus);
         if (vivo) setAulas(datos);
       } catch (e) {
         if (vivo) setError(e?.message || "Error cargando aulas");
@@ -24,7 +25,7 @@ export function useAulas() {
     return () => {
       vivo = false;
     };
-  }, []);
+  }, [campus]);
 
   return { aulas, cargando, error };
 }

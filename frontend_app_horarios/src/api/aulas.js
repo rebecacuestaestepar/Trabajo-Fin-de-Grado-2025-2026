@@ -1,7 +1,8 @@
 import { apiRequest } from "./client";
 
-export function obtenerAulas() {
-  return apiRequest("/aulas/lista/", {
+export function obtenerAulasCampus(campus) {
+  const url = campus ? `/aulas/menu/?campus=${campus}` : "/aulas/menu/";
+  return apiRequest(url, {
     method: "GET",
   });
 }

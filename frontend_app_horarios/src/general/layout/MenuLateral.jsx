@@ -81,9 +81,9 @@ export default function MenuLateral({ abierto }) {
               abierta={!!estados["aulas"]}
               alAlternar={() => toggle("aulas")}
             >
-              <ItemMenu a="/ocupacion-aulas" level={1}>Campus Río Vena</ItemMenu>
+              <ItemMenu a="/ocupacion-aulas?campus=V" level={1}>Campus Río Vena</ItemMenu>
 
-              <ItemMenu a="/" level={1}>Campus Milanera</ItemMenu>
+              <ItemMenu a="/ocupacion-aulas?campus=M" level={1}>Campus Milanera</ItemMenu>
             </SeccionMenu>
           </RequierePermiso>
 

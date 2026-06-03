@@ -7,18 +7,21 @@ export default function ItemMenu({ a, children, level = 0 }) {
 
   const paddingLeft = level === 0 ? "1rem" : `${level * 1.5}rem`;
 
+  const tieneQueryParam = a.includes("?");
+
   return (
     <NavLink
       to={a}
       style={{ paddingLeft }}
-      className={({ isActive }) =>
-        [
+      className={({ isActive }) => {
+        const estaActivo = tieneQueryParam ? (location.pathname + location.search) === a : isActive;
+        return [
           "block px-4 py-3 text-sm font-semibold uppercase transition-all duration-200",
-          isActive 
+          estaActivo 
           ? "bg-white text-black" 
           : `${currentBg} text-white hover:brightness-110`,
         ].join(" ")
-      }
+      }}
     >
       {children}
     </NavLink>
