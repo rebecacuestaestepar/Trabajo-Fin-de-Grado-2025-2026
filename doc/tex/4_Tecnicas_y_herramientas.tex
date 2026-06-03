@@ -97,10 +97,24 @@ Su utilización resultó especialmente útil porque no solo permitía acceder al
 
 Frente a otras alternativas, \textit{openpyxl} encajaba especialmente bien por su integración con Python y por estar orientada específicamente al trabajo con ficheros Excel modernos. En consecuencia, se convirtió en una herramienta fundamental para el procesamiento de los horarios y para su posterior transformación en estructuras utilizables por el sistema, en este caso, reservas periódicas.
 
-\subsection{Gestión de \textit{tokens} y control de acceso: JWT}
+\subsection{Aitenticación basada en tokens: JWT}
+
+Para la gestión de la autenticación basada en \textit{tokens} dentro del \textit{backend} se utilizó la biblioteca \textit{djangorestframework-simplejwt}, conocida habitualmente como \textit{Simple JWT}. Esta herramienta proporciona integración con Django REST Frameowrk con \textit{JSON Web Tokens} (JWT), permitiendo gestionar el acceso autenticado a la API de forma sencilla y estandarizada \cite{simplejwt_docs}.
+
+Su utilización resultó adecuada para gestionar el acceso autenticado a la API, permitiendo trabajar con \textit{tokens} de acceso y refresco. La propia documentación de \textit{Simple JWT} contempla la configuración de ambos mediante variables de \textit{settings}, incluyendo parámetros como \texttt{ACCESS\_TOKEN\_LIFETIME} y \texttt{REFRESH\_TOKEN\_LIFETIME}, que definen el tiempo de validez de cada tipo de \textit{token}.
+
+Se establecieron tiempos de vida diferenciados para los \textit{access tokens} y los \textit{refresh tokens}. Los primeros, de duración más reducida, se utilizan para acceder a los recursos protegidos de la API, minimizando el impacto de un posible uso indebido. Los segundos, de mayor duración, permiten renovar la sesión del usuario sin requerir una autenticación completa en cada acceso, mejorando así la experiencia de uso. Esta separación permite equilibrar requisitos de seguridad y usabilidad \cite{simplejwt_settings}.
+
+Conviene señalar que el uso de JWT no sustituye por sí mismo la lógica de permisos de la aplicación, sino que actúa como mecanismo de autenticación y soporte para el mantenimiento de sesión sobre la API. La restricción efectiva de vistas y acciones continúa dependiendo del modelo de roles y permisos implementado en el sistema.
 
 \section{Otras herramientas y técnicas}
-\subsection{Analizador léxico y expresiones regulares}
+\subsection{Analizador léxico y expresiones regulares: \textit{re}}
+
+Para implementar parte del analizador léxico encargado en procesar los horarios académicos se utilizó el módulo \textit{re} de Python. Este módulo proporciona operaciones de coincidencia mediante expresiones regulares, permitiendo describir patrones textuales y reconocer cadenas que siguen una estructura concreta \cite{python_re_docs, python_regex_howto}.
+
+Su uso fue especialmente útil en aquellas fases en las que era necesario identificar estructuras recurrentes dentro del contenido de las celdas, separar componentes relevantes y validar determinadas cadenas antes de incorporarlas al proceso de extracción. De este modo, las expresiones regulares sirvieron para conseguir la detección de patrones asociados a asignaturas, grupos, aulas, comienzo de la tabla horaria, entre otros.
+
+La elección de esta herramienta se debió a que ofrecía una solución ligera, flexible y nativa dentro del propio ecosistema Python, evitando dependencias adicionales y facilitando su integración con la librería de procesamiento de hojas de cálculo y con el resto del código encargado de la carga automática para extraer los datos necesarios para la creación de la reserva periódica.
 
 \subsection{Scrum}
 
