@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from docencia.serializers import HorarioSerializer
-from docencia.services_horario import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre, validar_restricciones_movimiento
+from docencia.serializers import HorarioSerializer, CursoSerializer, GradoSerializer
+from docencia.services_horario import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre, validar_restricciones_movimiento, obtener_cursos_con_horario, obtener_grados_con_horario
 from calendario.models import Curso
 from reservas.excel_parser import parsear_horario_excel
 from reservas.services_excel import generar_reservas_periodicas
@@ -36,6 +36,32 @@ class CargarHorarioExcelView(APIView):
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=500)
+        
+class ListaHorariosView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        if not request.user.has_perm("reservas.view_reservaperiodica"):
+            return Response({'error': 'No tienes permiso para consultar los horarios.'}, status=403)
+        horarios_cargados = obtener_cursos_con_horario()
+
+        serializer = CursoSerializer(horarios_cargados, many=True)
+
+        return Response(serializer.data, status=200)
+    
+class GradosPorCursoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_curso):
+        if not request.user.has_perm("reservas.view_reservaperiodica"):
+            return Response({'error': 'No tienes permiso para consultar los horarios.'}, status=403)
+        curso = Curso.objects.filter(idcurso=id_curso).first()
+        if not curso:
+            return Response({'error': 'Curso no encontrado'}, status=404)
+        
+        grados_con_clases  = obtener_grados_con_horario(curso)
+
+        serializer = GradoSerializer(grados_con_clases, many=True)
+
+        return Response(serializer.data, status=200)
 
 class ObtenerCursosView(APIView):
     permission_classes = [IsAuthenticated]

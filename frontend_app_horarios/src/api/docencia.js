@@ -14,13 +14,13 @@ export function obtenerCursos() {
 }
 
 export function obtenerCursosConHorario() {
-    return apiRequest("/horarios", {
+    return apiRequest("/docencia", {
         method: "GET",
     });
 }
 
 export function obtenerGradosPorCurso(idCurso) {
-    return apiRequest(`/horarios/${idCurso}/grados/`, {
+    return apiRequest(`/docencia/${idCurso}/grados/`, {
         method: "GET",
     });
 }

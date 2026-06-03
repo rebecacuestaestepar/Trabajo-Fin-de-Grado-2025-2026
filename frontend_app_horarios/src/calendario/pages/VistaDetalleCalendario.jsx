@@ -1,12 +1,9 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 
 import { TIPOS_DIA } from '../utiles/calendarioConfig';
 import LeyendaCalendario from '../componentes/LeyendaCalendario';
@@ -41,10 +38,6 @@ export default function VistaDetalleCalendario() {
     const { id_curso } = useParams();
     const navigate = useNavigate();
 
-    const componenteRef = useRef(null);
-
-    const [exportando, setExportando] = useState(false);
-
     const [cargando, setCargando] = useState(true);
     const [datosCurso, setDatosCurso] = useState(null);
     const [diasCalendario, setDiasCalendario] = useState({}); 
@@ -73,83 +66,6 @@ export default function VistaDetalleCalendario() {
 
         cargarCalendario();
     }, [id_curso]);
-
-    const exportarPDF = async () => {
-        if (!componenteRef.current) return;
-        
-        try {
-            setExportando(true);
-            setError(null);
-            
-            await new Promise((resolve) => setTimeout(resolve, 300));
-
-            const elemento = componenteRef.current;
-            const canvas = await html2canvas(elemento, {
-                scale: 2, 
-                useCORS: true,
-                backgroundColor: '#ffffff',
-                ignoreElements: (el) => el.classList.contains('no-exportar'),
-                
-                onclone: (documentoClonado) => {
-                    const contenedoresConScroll = documentoClonado.querySelectorAll('.fc-scroller, .calendario-interactivo, [style*="overflow"]');
-                    
-                    contenedoresConScroll.forEach(el => {
-                        el.style.height = 'auto';
-                        el.style.maxHeight = 'none';
-                        el.style.overflow = 'visible';
-                        el.style.overflowY = 'visible';
-                    });
-
-                    const todosLosElementos = documentoClonado.querySelectorAll('*');
-                    todosLosElementos.forEach(el => {
-                        const estilosCalculados = window.getComputedStyle(el);
-                        
-                        if (estilosCalculados.backgroundColor && estilosCalculados.backgroundColor.includes('oklch')) {
-                            el.style.backgroundColor = 'transparent';
-                        }
-                        if (estilosCalculados.color && estilosCalculados.color.includes('oklch')) {
-                            el.style.color = '#1e293b'; 
-                        }
-                        if (estilosCalculados.borderColor && estilosCalculados.borderColor.includes('oklch')) {
-                            el.style.borderColor = '#e2e8f0'; 
-                        }
-                        if (el.style.boxShadow) el.style.boxShadow = 'none';
-                        if (el.style.filter) el.style.filter = 'none';
-                    });
-                }
-            });
-
-            const imgData = canvas.toDataURL('image/png');
-            
-            const pdf = new jsPDF({
-                orientation: 'landscape',
-                unit: 'mm',
-                format: 'a4'
-            });
-
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
-            
-            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-            const imgRenderWidth = imgWidth * ratio;
-            const imgRenderHeight = imgHeight * ratio;
-
-            const offsetX = (pdfWidth - imgRenderWidth) / 2;
-            const offsetY = 10;
-
-            pdf.addImage(imgData, 'PNG', offsetX, offsetY, imgRenderWidth, imgRenderHeight);
-            pdf.save(`Calendario_Academico_${id_curso}.pdf`);
-            
-        } catch (err) {
-            console.error("Error generando el PDF:", err);
-            setError("No se pudo generar el archivo PDF debido a los estilos del contenedor.");
-        } finally {
-            setExportando(false);
-        }
-    };
 
     const cantidadDeMeses = useMemo(() => {
         if (!datosCurso) return 0;
@@ -275,8 +191,6 @@ export default function VistaDetalleCalendario() {
                 </div>
             )}
 
-            <div ref={componenteRef} className="bg-slate-50 p-4 rounded-2xl">
-
                 <div className="mb-6 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                     <div className="flex justify-between items-center mb-4">
                         <h1 className="text-2xl font-bold text-slate-800">Calendario Académico {id_curso}</h1>
@@ -313,7 +227,6 @@ export default function VistaDetalleCalendario() {
                         select={manejarSeleccion}
                     />
                 </div>
-            </div>    
 
             <RequierePermiso permisos={["change_curso", "change_cambiodocencia", "change_tfg", "change_festivo", "change_tfg", "change_examen", "change_lectivo",
                 "add_curso", "add_cambiodocencia", "add_tfg", "add_festivo", "add_tfg", "add_examen", "add_lectivo",

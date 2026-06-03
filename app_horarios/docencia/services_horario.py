@@ -1,10 +1,19 @@
 from .restricciones import validar_ocupacion_aula, validar_solapamiento_grupos
-from docencia.models import Asignaturas
-from calendario.models import CambioDocencia, Dia, Lectivo, Semestre
+from docencia.models import Asignaturas, Grado
+from calendario.models import CambioDocencia, Curso, Dia, Lectivo, Semestre
 from reservas.models import Reserva, ReservaPeriodica
 from datetime import timedelta
 from django.db import transaction
 from .utils import calcular_nuevas_fechas
+
+def obtener_cursos_con_horario():
+    return Curso.objects.filter(horario_cargado=True).order_by('-idcurso')
+
+def obtener_grados_con_horario(curso):
+    return Grado.objects.filter(
+        asignaturas__grupo__reservaperiodica__fecha_inicio__gte=curso.fecha_inicio,
+        asignaturas__grupo__reservaperiodica__fecha_inicio__lte=curso.fecha_fin
+    ).distinct().order_by('nombre')
 
 def obtener_semestres_por_grado(id_grado):
     semestres = (

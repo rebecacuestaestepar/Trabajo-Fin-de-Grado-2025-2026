@@ -1,7 +1,18 @@
 from rest_framework import serializers
+from calendario.models import Curso
 from reservas.models import ReservaPeriodica
 from docencia.models import Asignaturas, Docente, Grado, Grupo
 from django.core.exceptions import ObjectDoesNotExist
+
+class CursoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Curso
+        fields = ['idcurso', 'horario_cargado']
+
+class GradoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grado
+        fields = ['idgrado', 'nombre']
 
 class HorarioSerializer(serializers.ModelSerializer):
     id_reserva = serializers.IntegerField(source='id_reserva.idreserva')
