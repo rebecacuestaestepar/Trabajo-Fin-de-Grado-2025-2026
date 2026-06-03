@@ -16,7 +16,7 @@ En este proyecto, su uso resultó útil para comprobar de manera interactiva las
 
 \subsection{Conda}
 
-Para las pruebas relacionadas con la extracción y procesamiento de horarios se empleó \textit{Conda} como herramienta de gestión del entorno de trabajo. Conda proporciona gestión de paquetes, dependencias y entornos, permitiendo crear entornos aislados con versiones concretas de Python y de las bibliotecas necesarias \cite{conda_docs}.
+Para las pruebas relacionadas con la extracción y procesamiento de horarios se empleó \textit{Conda} como herramienta de gestión del entorno de trabajo. Conda proporciona gestión de paquetes, dependencias y entornos, permitiendo crear entornos aislados con versiones concretas de Python y de las bibliotecas necesarias \cite{conda_docs, conda_taller}.
 
 Esta característica resultó especialmente útil durante el desarrollo, ya que permitió realizar pruebas y validaciones en un entorno controlado, evitando conflictos entre dependencias y facilitando que el entorno de trabajo pudiera reconstruirse con la misma configuración. Permitiendo experimentar con las librerías escogidas para ver si los recursos que ofrecían eran los necesarios para esta parte del desarrollo, concretamente la que implica el tratamiento de la hoja de cálculo.
 
@@ -90,6 +90,12 @@ En cuanto a la biblioteca de calendarios que va a ser utilizada para el \textit{
 Tras estudiar los recursos que ofrece cada una de estas bibliotecas se ha determinado que la elegida iba a ser \textit{Fullcalendar}. Aunque \textit{React Big Calendar} es una biblioteca \textit{opensource}, y por lo tanto, totalmente gratuita se ha optado por elegir la otra, ya que con las funcionalidades que ofrece de manera gratuita es suficiente para la realización de este proyecto y además, ofrece mucha mayor documentación y viene implementada ya la funcionalidad del \textit{drag and drop}. 
 
 \subsection{Procesamiento de hojas de cálculo: Openpyxl}
+
+Para el tratamiento de la hoja de cálculo utilizada en la gestión de horarios se decidió utilizar la biblioteca \textit{openpyxl}. Esta librería permite leer, modificar y escribir ficheros en Excel en formato \textit{Office Open XML}, especialmente archivos \textit{.xlsx} y \textit{.xlsm}, lo que la hacía adecuada para trabajar con la fuente de datos empleada en el proyecto \cite{openpyxl_docs}.
+
+Su utilización resultó especialmente útil porque no solo permitía acceder al contenido de las celdas, sino también inspeccionar propiedades de formato relevantes para el análisis, como colores, detección de celdas mergeadas o textos con rotación, aspectos que eran importantes en la interpretación de los horarios \cite{openpyxl_styles}. Y también inspeccionar las hojas elegidas, importante para leer solamente las que tenían información relativa a los horarios de grados de la universidad \cite{openpyxl_defined_names}. Gracias a ello, fue posible automatizar gran parte de la lectura y depuración de la información contenida en la hoja de cálculo.
+
+Frente a otras alternativas, \textit{openpyxl} encajaba especialmente bien por su integración con Python y por estar orientada específicamente al trabajo con ficheros Excel modernos. En consecuencia, se convirtió en una herramienta fundamental para el procesamiento de los horarios y para su posterior transformación en estructuras utilizables por el sistema, en este caso, reservas periódicas.
 
 \subsection{Gestión de \textit{tokens} y control de acceso: JWT}
 
