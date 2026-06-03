@@ -28,13 +28,13 @@ En esta sección se exponen las herramientas elegidas para soportar el funcionam
 
 \subsection{Sistema gestor de base de datos: MySQL}
 
-La aplicación requiere de una base de datos para almacenar y consultar toda la información relacionada horarios, reservas, y aulas. Para llevarlo a cabo se ha elegido MySQL como Sistema Gestor de Base de Datos (SGBD), por su amplio uso y por tener compatibilidad directa con Django mediante su\textit{backend}. Además, Django documenta soporte oficial para MySQL a partir de versiones modernas.
+La aplicación requiere de una base de datos para almacenar y consultar toda la información relacionada horarios, reservas, y aulas. Para llevarlo a cabo se ha elegido MySQL como Sistema Gestor de Base de Datos (SGBD), por su amplio uso y por tener compatibilidad directa con Django mediante su \textit{backend}. Además, Django documenta soporte oficial para MySQL a partir de versiones modernas.
 
 Con lo que he elegido MySQL ya que a nivel de mantenimiento permite un control independiente de la versión del sistema gestor de bases de datos, evitando que me limite la compatibilidad con versiones del \textit{framework} del \textit{backend} elegido.
 
 \subsection{Servidor y entorno de ejecución: Apache}
 Se han valorado dos alternativas: Apache y XAMPP.
-XAMMP es un paquete que tiene todo en uno, es decir, te proporciona en el mismo programa el sistema gestor de base de datos y el servidor web, incluyendo Apache y MariaDB. Sin embargo, XAMPP distribuye versiones concretas de sus componentes, lo que limitaba la obsolescencia del proyecto ya que las nuevas versiones de Django requieren versiones del sistema gestor de base de datos más actualizadas para poder tener compatibilidad. Por lo que, haber escogido XAMPP como opción, hubiese tenido que instalar versiones de Django anteriores, lo que aceleraría el proceso de desfase de la aplicación.
+XAMPP es un paquete que tiene todo en uno, es decir, te proporciona en el mismo programa el sistema gestor de base de datos y el servidor web, incluyendo Apache y MariaDB. Sin embargo, XAMPP distribuye versiones concretas de sus componentes, lo que limitaba la obsolescencia del proyecto ya que las nuevas versiones de Django requieren versiones del sistema gestor de base de datos más actualizadas para poder tener compatibilidad. Por lo que, haber escogido XAMPP como opción, hubiese tenido que instalar versiones de Django anteriores, lo que aceleraría el proceso de desfase de la aplicación.
 
 Por la razón anterior, y la independencia que da descargar por separado el sistema gestor de base de datos y el servidor web, se ha decidido instalar Apache.
 

@@ -34,7 +34,7 @@ La gestión relacionada a los tipos de días aporta varias ventajas. En primer l
 
 Desde el punto de vista del diseño, esta decisión supone que el sistema no solo gestiona reservas y horarios, sino también se encarga del marco temporal académico que condiciona la validez de los puntos anteriores. En consecuencia, la aplicación pasa a tratar no únicamente qué actividad tiene lugar en el aula, sino también en qué contexto académico se produce, lo que refuerza su adecuación al entorno universitario y mejora la calidad de la información que ofrece.
 
-\section{Analizador léxico}
+\section{Parser de horarios}
 Durante el desarrollo del proyecto, se decidió realizar un analizador léxico para la carga de los horarios de los grados en el sistema, los cuales se encuentran ahora mismo en una hoja de cálculo. Esta decisión fue tomada debido a que para poder modificar la franja horario en la que se imparte una clase tiene que estar cargada en base de datos, y habría que cargar de manera manual las reservas en el sistema. Lo que no es viable ya que con la extracción de los datos de la hoja de cálculo, el número de clases o reservas extraídas supera las 1000 reservas periódicas.
 
 Para comenzar se analizó en profundidad la estructura que presentaban las clases teóricas y prácticas de la hoja de cálculo que se utiliza actualmente para la gestión de los horarios. Tras el análisis se supuso que las clases teóricas podían ser encontradas con tres estructuras diferentes, y las clases prácticas con otras tres estructuras, con una estructura de ellas común entre los dos tipos de clases. También se observó que las clases teóricas tenían un color y las prácticas otro a nivel general incluyendo las clases en inglés del grado de Organización Industrial. También se analizaron los datos que era importante extraer para poder realizar las cargas en base de datos de las reservas periódicas, entre los que se encuentran, la asignatura, su código (identificador de la asignatura en base de datos), el grupo, el aula, el día de la semana y la franja horaria en la que se imparte la clase. 
@@ -79,8 +79,37 @@ Entre los problemas de unificación encontrados están los siguientes:
 	\end{itemize}
 \end{enumerate}
 
+Se ha adjuntado a continuación una imagen~\ref{fig:problemas-unificaciones}, en la que vamos a poder observar y analizar varios de los problemas que acaban de ser expuestos.
+
+\imagen{img/InconsistenciasExcel.png}{Imagen apreciativa de los problemas de uniformidad de la hoja de cálculo}{fig:problemas-unificaciones}
+
+En color azul, se puede observar como en la clase teórica aparece la asignatura sin tilde y separada por un guión del I, en cambio, en la clase práctica se puede observar como aparece la asignatura sin tilde y sin el guión de separación.
+De color verde se ve un caso similar, entre dos clases teóricas una de ellas sin tilde y abreviada, y la otra por el contrario con el nombre completo y la tilde asignada, algo similar al caso de color rojo o marrón.
+De color amarillo, se observa como en uno de los casos el separador es un guión y en el otro una barra. Además, fijándose en pequeños detalles que pueden pasar desapercibidos a simple vista se puede llegar a apreciar como en la primera clase Inf 1B referido al aula se encuentra separado, y en la impartida el jueves se encuentra todo seguido Inf1B.
+
+En la siguiente imagen~\ref{fig:problemas-colores}, se van a apreciar como había diferentes tonos de azul asignados para las clases prácticas del mismo grupo, en este caso, el grupo 1.
+
+\imagen{img/ColoresClasesExcel.png}{Imagen apreciativa de los diferentes tonos de color asignados a un mismo tipo de clase y grupo}{fig:problemas-colores}
+
+
+Y por último, se van a adjuntar unas imágenes~\ref{fig:problemas-estructuras-1,fig:problemas-estructuras-2,fig:problemas-estructuras-3}, en las que se van a poder ver las diferentes estructuras que se han tenido que tener en cuenta para poder extraer de manera correcta la información de las clases.
+
+\imagen{img/EstructurasClases.png}{Imagen con dos tipos de estructuras para los grupos teóricos y los prácticos}{fig:problemas-colores}
+
+En esta primera imagen se observan dos tipos de clases prácticas, ambas con el texto rotado 90º. Una con el grupo arriba de la asignatura, y la otra con el grupo a la derecha. Además se aprecian las clases teóricas con el texto sin rotación y con texto rotado 90º al igual que las prácticas. Para poder encontrarlo mejor, el color morado y carne se refieren a clases teóricas, y los colores verde y azul a clases prácticas.
+
+\imagen{img/EstructurasClases2.png}{Imagen para ver estructuras de grupos teóricos cuando hay 2}{fig:problemas-estructuras-2}
+
+En esta segunda imagen se puede apreciar que cuando hay dos grupos teóricos, en vez de aparecer el aula debajo de la asignatura aparece a la derecha, además de que también se debe guardar el número del grupo que aparece al final del bloque.
+
+\imagen{img/EstructurasClases3.png}{Imagen donde se aprecia otra estructura para los grupos prácticos}{fig:problemas-estructuras-3}
+
+En la última imagen, se observa el último tipo de estructura para los grupos prácticos, similar a una de la de los grupos teóricos, con el nombre de la asignatura y el aula debajo, sin apreciar el número del grupo que por defecto se asignará el 101.
 
 Tras terminar la fase preparación y unificación de la hoja de cálculo, y finalizar de forma correcta la implementación del \textit{parser}, para poder cargar las reservas en base de datos, hubo que cargar previamente todas las asignaturas y aulas con sus respectivos campos en base de datos.
+
+Para poner en contexto la complejidad y el esfuerzo requeridos por el desarrollo del analizador léxico y por la fase previa de unificación de la hoja de cálculo, conviene señalar que este trabajo se prolongó desde el 25 de febrero hasta el 13 de mayo, abarcando un total de 11 semanas. En términos de planificación, este proceso ocupó desde el sprint 13 hasta el sprint 21, es decir, 9 sprints en total, debido a los distintos problemas e inconsistencias que fueron surgiendo durante su desarrollo.
+
 
 \section{Roles y permisos}
 
