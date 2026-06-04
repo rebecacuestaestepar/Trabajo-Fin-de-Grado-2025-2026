@@ -30,6 +30,33 @@ async function parseResponse(res) {
   }
 }
 
+async function refrescarToken() {
+  const refreshToken = sessionStorage.getItem("refresh");
+
+  if (!refreshToken || refreshToken === "undefined") {
+    throw new Error("No hay refresh token disponible en la sesión.");
+  }
+
+  const urlRefresh = buildUrl("/auth/token/refresh/");
+
+  const res = await fetch(urlRefresh, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ refresh: refreshToken })
+  });
+
+  if (!res.ok) {
+    throw new Error("El refresh token también ha expirado.");
+  }
+
+  const data = await res.json();
+
+  sessionStorage.setItem("token", data.access);
+  return data.access;
+}
+
 // Función principal para hacer peticiones a la API
 export async function apiFetch(
   path,
@@ -42,8 +69,6 @@ export async function apiFetch(
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
 
   const token = sessionStorage.getItem("token");
-
-  //console.log("Token que estoy enviando:", token);
 
   const opts = {
     method,
@@ -66,9 +91,30 @@ export async function apiFetch(
     }
   }
 
-  const res = await fetch(url, opts);
+  let res = await fetch(url, opts);
+  
+  if (res.status === 401) {
+    console.warn("Ha caducado la sesión. Intentando renovar sesión...");
+    try {
+      const nuevoToken = await refrescarToken();
+      
+      opts.headers["Authorization"] = `Bearer ${nuevoToken}`;
+      
+      console.log(`🚀 Relanzando petición original a: ${path}`);
+      res = await fetch(url, opts);
+      
+    } catch (e) {
+      console.error("Imposible refrescar sesión. El refresh token expiró o no existe.", e);
+      sessionStorage.clear();
+      window.location.href = "/?motivo=expirado";
+      
+      const errorSesion = new Error("Tu sesión ha expirado de forma definitiva. Por favor, inicia sesión de nuevo.");
+      errorSesion.status = 401;
+      throw errorSesion;
+    }
+  }
+
   const data = await parseResponse(res);
-  // Si la respuesta no es OK, lanza un error con el mensaje adecuado
   if (!res.ok) {
     const err = new Error(
       (data && typeof data === "object" && (data.detail || data.general)) ||
