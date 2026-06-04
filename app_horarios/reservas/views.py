@@ -494,6 +494,7 @@ class ReservasTodasAPIView(APIView):
             Reserva.objects
             .select_related("id_dia", "id_aula")  
             .select_related("reservapuntual", "reservapuntual__id_responsable")
+            .filter(tipo="P")
             .order_by("-id_dia__dia", "-hora_inicio")
         )
         return Response(ReservaTodasSerializer(qs, many=True).data)
@@ -508,7 +509,7 @@ class ReservasUsuarioAPIView(APIView):
             Reserva.objects
             .select_related("id_dia", "id_aula")  
             .select_related("reservapuntual", "reservapuntual__id_responsable")
-            .filter(reservapuntual__id_responsable__correo=usuario)
+            .filter(tipo_reserva="P", reservapuntual__id_responsable__correo=usuario)
             .order_by("-id_dia__dia", "-hora_inicio")
         )
         return Response(ReservaTodasSerializer(qs, many=True).data)
