@@ -36,13 +36,19 @@ export default function EditarReservaPeriodica() {
             .catch(() => setErrorCarga("Error al cargar la reserva para edición."));
     }, [id]);
 
+    if (errorCarga) return <div className="p-6"><CajaError errores={{ mensaje: errorCarga }} /></div>;
+    if (!datosCargados) return <div className="p-6 text-sm text-slate-500">Cargando reserva...</div>;
+
+    return <FormularioEditar id={id} datos={datosCargados} />;
+}
+
+function FormularioEditar({ id, datos }) {
+    
+    // El hook ahora recibe los datos reales desde el primer renderizado
     const reserva = useReservaPeriodica({
         modo: 'editar',
-        datosIniciales: datosCargados || {}
+        datosIniciales: datos
     });
-
-    if (!datosCargados && !errorCarga) return <div className="p-6 text-sm text-slate-500">Cargando reserva...</div>;
-    if (errorCarga) return <div className="p-6"><CajaError errores={{ mensaje: errorCarga }} /></div>;
 
     const manejarGuardarEdicion = (e) => {
         e.preventDefault();
@@ -77,10 +83,13 @@ export default function EditarReservaPeriodica() {
                         estaBuscando={reserva.buscandoAulas}
                         puedeBuscar={reserva.puedeBuscarAulas}
                         modo={reserva.modoSeleccionAula}
-                        aulasDisponibles={reserva.aulasDisponibles.length > 0 ? reserva.aulasDisponibles : [{ nombre: datosCargados.aulaSeleccionada }]}
-                        aulaSeleccionada={reserva.aulaSeleccionada || datosCargados.aulaSeleccionada}
+                        aulasDisponibles={reserva.aulasDisponibles.length > 0 ? reserva.aulasDisponibles : [{ nombre: datos.aulaSeleccionada }]}
+                        aulaSeleccionada={reserva.aulaSeleccionada || datos.aulaSeleccionada}
                         alSeleccionarAula={reserva.setAulaSeleccionada}
-                        fechas={[]} aulasPorFecha={{}} seleccionPorFecha={{}} alSeleccionarPorFecha={() => {}}
+                        fechas={[]} 
+                        aulasPorFecha={{}} 
+                        seleccionPorFecha={{}} 
+                        alSeleccionarPorFecha={() => {}}
                     />
 
                     <AccionesReserva 
