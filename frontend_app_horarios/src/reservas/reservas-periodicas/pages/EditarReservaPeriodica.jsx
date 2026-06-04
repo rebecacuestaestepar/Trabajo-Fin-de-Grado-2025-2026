@@ -21,16 +21,17 @@ export default function EditarReservaPeriodica() {
     useEffect(() => {
         obtenerDatosReservaPeriodica(id)
             .then(data => {
+                const res = data.reserva;
                 setDatosCargados({
-                    grado: data.id_grado || '',
-                    curso: data.id_curso || '',
-                    semestre: data.id_semestre || '',
-                    asignatura: data.id_asignatura || '',
-                    grupo: data.id_grupo || '',
-                    diaSemana: String(data.dia_semana),
-                    horaInicio: data.hora_inicio,
-                    horaFin: data.hora_fin,
-                    aulaSeleccionada: data.id_aula
+                    grado: Number(res.grado) || '',
+                    curso: Number(res.curso) || '',
+                    semestre: Number(res.semestre) || '',
+                    asignatura: Number(res.asignatura) || '',
+                    grupo: Number(res.grupo) || '',
+                    diaSemana: String(res.dia_semana),
+                    horaInicio: res.hora_inicio,
+                    horaFin: res.hora_fin,
+                    aulaSeleccionada: res.aula
                 });
             })
             .catch(() => setErrorCarga("Error al cargar la reserva para edición."));

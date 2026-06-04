@@ -19,11 +19,23 @@ export default function AccionesReserva({ variante, ...props }) {
       </div>
     );
   }
-  const { alGuardar, deshabilitarGuardar } = props;
+  const { alGuardar, deshabilitarGuardar, alEliminar } = props;
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
 
+      {variante === "editar" && (
+        <button
+          type="button"
+          onClick={alEliminar}
+          className={[
+            "inline-flex items-center justify-center rounded-md border border-red-600 px-5 py-2.5 text-sm font-semibold text-red-600 transition",
+            "hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600/30",
+          ].join(" ")}
+        >
+          Eliminar reserva
+        </button>
+      )}
 
       <button
         type="button"

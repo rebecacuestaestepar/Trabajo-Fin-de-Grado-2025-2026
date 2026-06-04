@@ -22,7 +22,7 @@ export default function DetallesReservaPeriodica() {
         obtenerDatosReservaPeriodica(id)
             .then(data => {
                 console.log("Datos recibidos para la reserva periódica:", data);
-                const res = data.reserva || data; 
+                const res = data.reserva; 
                 setDatosCargados({
                     grado: Number(res.grado), 
                     curso: Number(res.curso), 

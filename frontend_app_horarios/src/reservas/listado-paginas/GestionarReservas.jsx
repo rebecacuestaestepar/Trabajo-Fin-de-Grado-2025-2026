@@ -41,7 +41,7 @@ export default function GestionReservas() {
       return getTodasReservas;
     }
     if (esUsuarioValido) {
-      return () => getReservasUsuario(correoUsuario); // <-- Aquí se inyecta el correo real
+      return () => getReservasUsuario(correoUsuario);
     }
     return null;
   }, [puedoCrear, esUsuarioValido, correoUsuario]);
@@ -52,10 +52,6 @@ export default function GestionReservas() {
   });
 
     console.log("Reservas obtenidas:", listado.reservas);
-
-  // const listado = useListadoReservas({
-  //   cargador: getTodasReservas, 
-  // });
 
   const alCrear = () => {
     if (puedoCrear) {
@@ -68,11 +64,6 @@ export default function GestionReservas() {
       });
     }
   };
-
-  // const alCrear = () => 
-  //   navegar("/reservas/crear", {
-  //     state: { from: location.pathname + location.search },
-  //   });
     
   const alEditar = (id) =>
     navegar(`/reservas/puntuales/${id}`, {

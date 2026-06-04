@@ -27,6 +27,11 @@ export default function VistaHorarioSemanalGrado() {
 
     const [recarga, setRecarga] = useState(0);
 
+    const permisos = JSON.stringify(sessionStorage.getItem("permisos") || "[]");
+
+    const puedoEditar = permisos.includes("change_reservaperiodica");
+    const puedoVer = permisos.includes("view_reservaperiodica");
+
     useEffect(() => {
         const cargarGrados = async () => {
             setCargando(true);
@@ -172,7 +177,11 @@ export default function VistaHorarioSemanalGrado() {
     const manejarClickEvento = (info) => {
         const idReserva = info.event.id;
         if (idReserva) {
-            navigate(`/reservas/periodicas/ver/${idReserva}`); 
+            if(puedoEditar) {
+                navigate(`/reservas/periodicas/editar/${idReserva}`); 
+            } else if (puedoVer) {
+            navigate(`/reservas/periodicas/ver/${idReserva}`);
+            }
         } else {
             console.warn("Este evento no tiene un ID de reserva asociado.");
         }
