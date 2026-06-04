@@ -4,8 +4,17 @@ import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 
+import PropTypes from 'prop-types';
+
 const pluginsCalendario = [multiMonthPlugin, interactionPlugin];
 const localesCalendario = [esLocale];
+
+SelectorFestivos.propTypes = {
+    fechaInicio: PropTypes.string,
+    fechaFin: PropTypes.string,
+    festivos: PropTypes.arrayOf(PropTypes.string),
+    setFestivos: PropTypes.func
+};
 
 export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setFestivos }) {
     const [expandido, setExpandido] = useState(false);
@@ -114,7 +123,7 @@ export default function SelectorFestivos({ fechaInicio, fechaFin, festivos, setF
                     checked={expandido}
                     onChange={(e) => {
                         setExpandido(e.target.checked);
-                        cambioCheck(e);
+                        cambioCheck();
                     }}
                 />
                 <span className="ml-3 text-sm font-bold text-[#1E293B]">
