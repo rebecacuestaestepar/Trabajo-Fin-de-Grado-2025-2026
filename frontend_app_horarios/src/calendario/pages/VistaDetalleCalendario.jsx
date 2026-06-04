@@ -23,13 +23,13 @@ const obtenerFechasEnRango = (startStr, endStr) => {
     while (actual < fin) {
         const diaSemana = actual.getDay();
         
-        if (fechas.length > 0 && (diaSemana === 0 || diaSemana === 6) && actual !=fin) {
-            actual.setDate(actual.getDate() + 1);
+        if (fechas.length > 0 && (diaSemana === 0 || diaSemana === 6) && actual.getTime() !== fin.getTime()) {
+            actual = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate() + 1);
             continue;
         }
         fechas.push(actual.toISOString().split('T')[0]);
 
-        actual.setDate(actual.getDate() + 1);
+        actual = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate() + 1);
     }
     return fechas;
 };
@@ -58,6 +58,7 @@ export default function VistaDetalleCalendario() {
                 });
                 setDiasCalendario(datos.dias);
             } catch (err) {
+                console.error("Error al obtener calendario del curso:", err);
                 setError("Error al cargar el calendario");
             } finally {
                 setCargando(false);
@@ -118,6 +119,7 @@ export default function VistaDetalleCalendario() {
             await modificarTipoDiaCalendario(payload);
             
         } catch (err) {
+            console.error("Error al modificar selección de días:", err);
             setError(`Error al modificar algunos días de la selección.`);
         }
     };
