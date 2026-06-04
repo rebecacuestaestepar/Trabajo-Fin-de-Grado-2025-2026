@@ -22,23 +22,18 @@ export function useEventosAula({ aulasNombres = [], tipo }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-
-  const aulasKey = aulasNombres.sort().join(","); 
-
-  const rangeKey = range?.start && range?.end 
-    ? `${range.start.toISOString()}_${range.end.toISOString()}` 
-    : "";
+  const aulasKey = [...aulasNombres].sort((a, b) => a.localeCompare(b)).join(",");
 
   const cargar = useCallback(async () => {
 
-    if (!aulasKey || aulasNombres.length === 0 || !range?.start || !range?.end) return;
+    if (!aulasKey || !range?.start || !range?.end) return;
 
     setLoading(true);
     setError("");
 
     try {
-      // Creamos un array de promesas para cada aula
-      const promesas = aulasNombres.map((aula) =>
+      const aulasArray = aulasKey.split(",");
+      const promesas = aulasArray.map((aula) =>
         getEventosAula({
           aulaNombre: aula,
           start: range.start,
@@ -60,7 +55,7 @@ export function useEventosAula({ aulasNombres = [], tipo }) {
     } finally {
       setLoading(false);
     }
-  }, [aulasKey, rangeKey, tipo]);
+  }, [aulasKey, range?.start, range?.end, tipo]);
   
 
   useEffect(() => {
