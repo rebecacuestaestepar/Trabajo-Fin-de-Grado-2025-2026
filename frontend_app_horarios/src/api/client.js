@@ -11,7 +11,10 @@ function buildUrl(path) {
   return `${API_ORIGIN}${p}`;   // Construimos la URL completa
 }
 
-async function parseResponse(res) {
+async function parseResponse(res, responseType) {
+  if (responseType === 'blob') {
+    return await res.blob();
+  }
   // Mira la cabecera Content-Type para decidir cómo parsear la respuesta
   const ct = res.headers.get("content-type") || "";
   // Si es JSON, parsea como JSON
@@ -60,7 +63,7 @@ async function refrescarToken() {
 // Función principal para hacer peticiones a la API
 export async function apiFetch(
   path,
-  { method = "GET", body, headers = {}, credentials, ...rest } = {}
+  { method = "GET", body, headers = {}, credentials, responseType, ...rest } = {}
 ) {
   // Construye la URL completa
   const url = buildUrl(path);
@@ -100,7 +103,6 @@ export async function apiFetch(
       
       opts.headers["Authorization"] = `Bearer ${nuevoToken}`;
       
-      console.log(`🚀 Relanzando petición original a: ${path}`);
       res = await fetch(url, opts);
       
     } catch (e) {
@@ -114,7 +116,7 @@ export async function apiFetch(
     }
   }
 
-  const data = await parseResponse(res);
+  const data = await parseResponse(res, responseType);
   if (!res.ok) {
     const err = new Error(
       (data && typeof data === "object" && (data.detail || data.general)) ||
