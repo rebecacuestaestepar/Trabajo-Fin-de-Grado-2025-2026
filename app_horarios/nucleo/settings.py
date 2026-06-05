@@ -34,31 +34,31 @@ DEBUG = True
 #     "http://localhost:3000",
 # ]
 ALLOWED_HOSTS = [
-    "https://django-production-876a.up.railway.app",
+    "django-production-876a.up.railway.app",
     "localhost",
 ]
-# CORS_ALLOWED_ORIGINS = [
-#     "https://front-react-production-25aa.up.railway.app",
-#     "http://localhost:5173",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "https://front-react-production-25aa.up.railway.app",
+    "http://localhost:5173",
+]
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_METHODS = [
-    "DELETE",
-    "GET",
-    "OPTIONS",
-    "PATCH",
-    "POST",
-    "PUT",
-]
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "authorization",
-    "content-type",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-]
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_METHODS = [
+#     "DELETE",
+#     "GET",
+#     "OPTIONS",
+#     "PATCH",
+#     "POST",
+#     "PUT",
+# ]
+# CORS_ALLOW_HEADERS = [
+#     "accept",
+#     "authorization",
+#     "content-type",
+#     "user-agent",
+#     "x-csrftoken",
+#     "x-requested-with",
+# ]
 
 
 # Application definition
