@@ -103,6 +103,7 @@ export default function MenuLateral({ abierto }) {
               <ItemMenu a="/admin/imparte" level={1}>Asignaciones</ItemMenu>
               <ItemMenu a="/admin/usuarios" level={1}>Usuarios</ItemMenu>
               <ItemMenu a="/admin/roles" level={1}>Roles</ItemMenu>
+              <ItemMenu a="/admin/mantenimiento-global" level={1}>Mantenimiento global</ItemMenu>
             </SeccionMenu>
           </RequierePermiso>
         </nav>
