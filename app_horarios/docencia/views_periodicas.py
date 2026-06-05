@@ -138,27 +138,28 @@ class EliminarReservaPeriodicaView(APIView):
     def post(self, request):
         if not request.user.has_perm("reservas.delete_reservaperiodica"):
             return Response({'error': 'No tienes permiso para eliminar reservas periódicas.'}, status=403)
-        curso = request.data.get('curso')
+        curso_academico = request.data.get('curso_academico')
         semestre_num = request.data.get('semestre_num')
         firma_serie = request.data.get('firma_serie')
 
-        if not all([curso, semestre_num, firma_serie]):
+        if not all([curso_academico, semestre_num, firma_serie]):
             return Response(
                 {
                     "exito": False,
                     "estado": "error",
-                    "mensaje": "Faltan parámetros obligatorios (id_curso, semestre_num, firma_serie).",
+                    "mensaje": "Faltan parámetros obligatorios (curso_academico, semestre_num, firma_serie).",
                 },
                 status=400
             )
 
         try:
             resultado = eliminar_reserva_periodica(
-                id_curso=int(curso),
+                id_curso=curso_academico,
                 semestre_num=int(semestre_num),
                 firma_serie=str(firma_serie)
             )
         except ValueError:
+            traceback.print_exc()
             return Response(
                 {
                     "exito": False,
@@ -171,5 +172,6 @@ class EliminarReservaPeriodicaView(APIView):
         if resultado.get("exito"):
             return Response(resultado, status=200)
         else:
+            traceback.print_exc()
             return Response(resultado, status=400)
     

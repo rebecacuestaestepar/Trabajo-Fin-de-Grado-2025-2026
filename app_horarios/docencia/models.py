@@ -29,7 +29,7 @@ class Asignaturas(models.Model):
         db_table = 'asignaturas'
 
 class Docente(models.Model):
-    codigo = models.CharField(db_column='CODIGO', primary_key=True, max_length=9)  # Field name made lowercase.
+    codigo = models.AutoField(db_column='CODIGO', primary_key=True)  # Field name made lowercase.
     nombre = models.CharField(db_column='NOMBRE', max_length=30)  # Field name made lowercase.
     apellidos = models.CharField(db_column='APELLIDOS', max_length=100)  # Field name made lowercase.
     correo = models.CharField(db_column='CORREO', max_length=30)  # Field name made lowercase.
