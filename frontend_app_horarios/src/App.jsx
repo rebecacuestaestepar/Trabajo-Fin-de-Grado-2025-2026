@@ -64,7 +64,7 @@ import GestionUsuarios from "./administrador/gestores/GestionUsuarios.jsx";
 import CrearUsuario from "./administrador/campos-formulario/usuarios/CrearUsuario.jsx";
 import EditarUsuario from "./administrador/campos-formulario/usuarios/EditarUsuario.jsx";
 
-
+import MantenimientoGlobal from "./administrador/paginas/MantenimientoGlobal.jsx";
 
 function App() {
 
@@ -136,6 +136,8 @@ function App() {
               <Route path="usuarios" element={<GestionUsuarios/>} />
               <Route path="usuarios/crear" element={<CrearUsuario/>} />
               <Route path="usuarios/editar/:id" element={<EditarUsuario/>} />
+
+              <Route path="mantenimiento-global" element={<MantenimientoGlobal />} />
             </Route>
 
           </Route>
