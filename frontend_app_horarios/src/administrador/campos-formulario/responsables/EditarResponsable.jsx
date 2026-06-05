@@ -5,7 +5,6 @@ import { useEsquemaResponsable } from './useEsquemaResponsable';
 import { obtenerDetalleResponsable, actualizarResponsable } from '../../../api/reservas';
 
 export default function EditarResponsable() {
-    // IMPORTANTE: Capturamos 'correo' en lugar de 'id' ya que es la clave primaria
     const { correo } = useParams(); 
     const navigate = useNavigate();
     const esquema = useEsquemaResponsable(); 
@@ -15,7 +14,6 @@ export default function EditarResponsable() {
     useEffect(() => {
         const cargarDetalle = async () => {
             try {
-                // Al backend le enviamos el correo para que lo busque
                 const data = await obtenerDetalleResponsable(correo);
                 setResponsableOriginal(data);
             } catch (error) {
