@@ -1,5 +1,6 @@
 from .models import Grado, Asignaturas, Grupo, Docente, Imparte
 from django.shortcuts import get_object_or_404
+from django.db.models import F
 
 class GradoService:    
     
@@ -59,7 +60,16 @@ class AsignaturaService:
         asignatura.delete()
 
 def lista_mini_asignaturas():
-    return Asignaturas.objects.values('idasignatura', 'nombre').order_by('nombre')
+    return Asignaturas.objects.annotate(
+        grado_abreviatura=F('grado_id__abreviatura')
+    ).values(
+        'idasignatura', 
+        'nombre', 
+        'grado_abreviatura'
+    ).order_by(
+        'grado_abreviatura', 
+        'nombre'
+    )
 
 class GrupoService:
 

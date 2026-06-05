@@ -3,12 +3,12 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Docente, Grado, Grupo, Asignaturas
+from .models import Docente, Grado, Grupo, Asignaturas, Imparte
 
 from .serializers import GrupoSerializer, DocenteSerializer, GradoSerializer
-from docencia.serializers import AsignaturaSerializer
+from docencia.serializers import AsignaturaSerializer, ImparteSerializer
 
-from .services import GradoService, AsignaturaService, GrupoService, DocenteService, lista_mini_asignaturas, lista_mini_docentes, lista_mini_grados, lista_mini_grupos
+from .services import GradoService, AsignaturaService, GrupoService, DocenteService, lista_mini_asignaturas, lista_mini_docentes, lista_mini_grados, lista_mini_grupos, ImparteService
 
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 
@@ -156,6 +156,15 @@ class ListaMiniDocentesView(APIView):
     def get(self, request, *args, **kwargs):
         docentes = lista_mini_docentes()
         return Response(docentes, status=200)
+    
+class ImparteViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated, DjangoModelPermissions]
+    queryset = Imparte.objects.none()
+
+    def list(self, request):
+        imparte = ImparteService.list()
+        serializer = ImparteSerializer(imparte, many=True)
+        return Response(serializer.data, status=200)
 
 
 

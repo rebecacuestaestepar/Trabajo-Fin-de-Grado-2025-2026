@@ -1,6 +1,6 @@
 from django.urls import include, path
 from .views_horario import CargarHorarioExcelView, MoverSerieReservasView, ObtenerAsignaturasPorGradoYSemestreView, ObtenerCursosView, ValidarRestriccionesView, SemestresPorGradoView, GradosPorCursoView, ListaHorariosView
-from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet, ListaMiniDocentesView, ListaMiniGruposView, ListaMiniGradosView, ListaMiniAsignaturasView
+from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet, ImparteViewSet, ListaMiniDocentesView, ListaMiniGruposView, ListaMiniGradosView, ListaMiniAsignaturasView
 from .views_periodicas import EliminarReservaPeriodicaView, ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView
 from rest_framework.routers import DefaultRouter
 
@@ -13,6 +13,8 @@ routerGrupo = DefaultRouter()
 routerGrupo.register(r'grupos', GrupoViewSet, basename='grupo')
 routerDocente = DefaultRouter()
 routerDocente.register(r'docentes', DocenteViewSet, basename='docente')
+routerImparte = DefaultRouter()
+routerImparte.register(r'imparte', ImparteViewSet, basename='imparte')
 
 urlpatterns = [
     path('', ListaHorariosView.as_view(), name='lista_horarios'),
@@ -38,6 +40,7 @@ urlpatterns = [
     path('', include(routerAsignatura.urls)),
     path('', include(routerGrupo.urls)),
     path('', include(routerDocente.urls)),
+    path('', include(routerImparte.urls)),
     path('mini-grados/', ListaMiniGradosView.as_view(), name='lista_mini_grados'),
     path('mini-asignaturas/', ListaMiniAsignaturasView.as_view(), name='lista_mini_asignaturas'),
     path('mini-docentes/', ListaMiniDocentesView.as_view(), name='lista_mini_docentes'),

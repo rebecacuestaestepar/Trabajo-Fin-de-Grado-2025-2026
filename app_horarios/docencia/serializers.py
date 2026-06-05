@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from calendario.models import Curso
 from reservas.models import ReservaPeriodica
-from docencia.models import Asignaturas, Docente, Grado, Grupo
+from docencia.models import Asignaturas, Docente, Grado, Grupo, Imparte
 from django.core.exceptions import ObjectDoesNotExist
 
 class CursoSerializer(serializers.ModelSerializer):
@@ -141,5 +141,10 @@ class GrupoSerializer(serializers.ModelSerializer):
 class GradoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grado
+        fields = '__all__'
+
+class ImparteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Imparte
         fields = '__all__'
     
