@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
     "https://django-production-876a.up.railway.app",
     "localhost",
 ]
-CORS_ALLOW_ALL_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     "https://front-react-production-25aa.up.railway.app",
     "http://localhost:5173",
 ]
