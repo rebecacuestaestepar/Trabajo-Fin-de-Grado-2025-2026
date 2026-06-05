@@ -125,23 +125,34 @@ WSGI_APPLICATION = 'nucleo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
+# DATABASE_URL = os.environ.get('DATABASE_URL')
 
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+# if DATABASE_URL:
+#     DATABASES = {
+#         'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': 'horario_db',
+#             'USER': 'root',
+#             'PASSWORD': 'quier0AprobarTFG!',
+#             'HOST': 'localhost',
+#             'PORT': '3306',
+#         }
+#     }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQLDATABASE', 'horario_db'),
+        'USER': os.environ.get('MYSQLUSER', 'root'),
+        'PASSWORD': os.environ.get('MYSQLPASSWORD', 'quier0AprobarTFG!'),
+        'HOST': os.environ.get('MYSQLHOST', 'localhost'),
+        'PORT': os.environ.get('MYSQLPORT', '3306'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'horario_db',
-            'USER': 'root',
-            'PASSWORD': 'quier0AprobarTFG!',
-            'HOST': 'localhost',
-            'PORT': '3306',
-        }
-    }
+}
 
 
 
