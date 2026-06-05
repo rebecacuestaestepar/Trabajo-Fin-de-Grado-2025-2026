@@ -91,7 +91,7 @@ export function obtenerAulasLibres({diaSemana, horaInicio, horaFin}) {
 export function crearReservaPeriodica(datosReserva) {
     return apiRequest("/docencia/crear-reserva-periodica/", {
         method: "POST",
-        body: JSON.stringify(datosReserva),
+        body: datosReserva,
     });
 }
 
@@ -101,10 +101,10 @@ export function obtenerDatosReservaPeriodica(idReserva) {
     });
 }
 
-export function eliminarReservaPeriodica(id_curso, semestre_num, firma_serie) {
+export function eliminarReservaPeriodica({ curso_academico, semestre_num, firma_serie }) {
     return apiRequest("/docencia/eliminar-reserva-periodica/", {
         method: "POST",
-        body: JSON.stringify({ id_curso, semestre_num, firma_serie }),
+        body: { curso_academico, semestre_num, firma_serie },
     });
 }
 
