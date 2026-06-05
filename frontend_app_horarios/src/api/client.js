@@ -1,7 +1,7 @@
 const API_ORIGIN = import.meta.env.VITE_API_ORIGIN || "http://localhost:8000";
 
 if (!API_ORIGIN) {
-  throw new Error("ERROR: La variable de entorno VITE_API_ORIGIN no está definida.");
+  console.error("ERROR: La variable de entorno VITE_API_ORIGIN no está definida.");
 }
 
 // Construye la URL completa para la petición
