@@ -1,7 +1,7 @@
 from django.urls import include, path
 from .views_horario import CargarHorarioExcelView, MoverSerieReservasView, ObtenerAsignaturasPorGradoYSemestreView, ObtenerCursosView, ValidarRestriccionesView, SemestresPorGradoView, GradosPorCursoView, ListaHorariosView
 from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet, ListaMiniDocentesView, ListaMiniGruposView, ListaMiniGradosView, ListaMiniAsignaturasView
-from .views_periodicas import ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView
+from .views_periodicas import EliminarReservaPeriodicaView, ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView
 from rest_framework.routers import DefaultRouter
 
 routerGrado = DefaultRouter()
@@ -32,6 +32,7 @@ urlpatterns = [
     path('cargar-asignaturas/grado/<int:id_grado>/semestre/<int:semestre>/', ReservaDesdeHorarioAsignaturasView.as_view(), name='reserva_desde_horario_grado'),
     path('validar-restricciones/', ValidarRestriccionesView.as_view(), name='validar_restricciones'),
     path('mover-reserva-periodica/', MoverSerieReservasView.as_view(), name='validar_movimiento_reserva_periodica'),
+    path('eliminar-reserva-periodica/', EliminarReservaPeriodicaView.as_view(), name='eliminar_reserva_periodica'),
 
     path('', include(routerGrado.urls)),
     path('', include(routerAsignatura.urls)),

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from docencia.services_periodicas import crear_reserva_periodica, obtener_asignaturas_por_grado_curso_semestre, obtener_aulas_libres, obtener_cursos_grado, obtener_datos_reserva_periodica, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre, reserva_desde_horario_grado
+from docencia.services_periodicas import crear_reserva_periodica, eliminar_reserva_periodica, obtener_asignaturas_por_grado_curso_semestre, obtener_aulas_libres, obtener_cursos_grado, obtener_datos_reserva_periodica, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre, reserva_desde_horario_grado, eliminar_reserva_periodica
 import traceback
 
 from rest_framework.permissions import IsAuthenticated
@@ -129,3 +129,47 @@ class ReservaDesdeHorarioAsignaturasView(APIView):
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=500)
+        
+class EliminarReservaPeriodicaView(APIView):
+    """
+    Vista para eliminar una serie de reservas periódicas mediante su firma.
+    """
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        if not request.user.has_perm("reservas.delete_reservaperiodica"):
+            return Response({'error': 'No tienes permiso para eliminar reservas periódicas.'}, status=403)
+        curso = request.data.get('curso')
+        semestre_num = request.data.get('semestre_num')
+        firma_serie = request.data.get('firma_serie')
+
+        if not all([curso, semestre_num, firma_serie]):
+            return Response(
+                {
+                    "exito": False,
+                    "estado": "error",
+                    "mensaje": "Faltan parámetros obligatorios (id_curso, semestre_num, firma_serie).",
+                },
+                status=400
+            )
+
+        try:
+            resultado = eliminar_reserva_periodica(
+                id_curso=int(curso),
+                semestre_num=int(semestre_num),
+                firma_serie=str(firma_serie)
+            )
+        except ValueError:
+            return Response(
+                {
+                    "exito": False,
+                    "estado": "error",
+                    "mensaje": "Los tipos de datos enviados no son válidos."
+                },
+                status=400
+            )
+
+        if resultado.get("exito"):
+            return Response(resultado, status=200)
+        else:
+            return Response(resultado, status=400)
+    
