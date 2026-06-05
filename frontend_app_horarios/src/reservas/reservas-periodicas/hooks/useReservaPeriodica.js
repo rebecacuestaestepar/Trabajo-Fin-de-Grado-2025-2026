@@ -10,6 +10,7 @@ export function useReservaPeriodica({ modo = 'crear', datosIniciales = {} }) {
 
     const [formulario, setFormulario] = useState({
         grado: datosIniciales.grado || '',
+        curso_academico: datosIniciales.curso_academico || '',
         curso: datosIniciales.curso || '',
         semestre: datosIniciales.semestre || '',
         asignatura: datosIniciales.asignatura || '',
@@ -135,7 +136,7 @@ export function useReservaPeriodica({ modo = 'crear', datosIniciales = {} }) {
         e.preventDefault();
         
         const payload = {
-            id_curso: formulario.curso,
+            id_curso: formulario.curso_academico,
             semestre_num: formulario.semestre,
             datos_reserva: {
                 dia_semana: parseInt(formulario.diaSemana),
@@ -145,6 +146,8 @@ export function useReservaPeriodica({ modo = 'crear', datosIniciales = {} }) {
                 hora_fin: formulario.horaFin
             }
         };
+
+        console.log("Enviando formulario con payload:", payload);
 
         crearReservaPeriodica(payload)
             .then(() => {

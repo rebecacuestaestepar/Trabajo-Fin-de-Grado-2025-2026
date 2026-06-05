@@ -191,7 +191,8 @@ export default function VistaHorarioSemanalGrado() {
         navigate('/reservas/periodicas/crear', { 
             state: { 
                 grado: gradoActivo, 
-                semestre: semestreActivo 
+                semestre: semestreActivo ,
+                cursoAcademico: id_curso
             } 
         });
     };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { obtenerDatosReservaPeriodica } from '../../../api/docencia';
+import { useParams, useNavigate } from 'react-router-dom';
+import { obtenerDatosReservaPeriodica, eliminarReservaPeriodica } from '../../../api/docencia';
 
 import TarjetaPagina from '../../formulario-componentes/ui/TarjetaPagina';
 import BotonVolver from '../../formulario-componentes/ui/BotonVolver';
@@ -12,6 +12,7 @@ import SeccionSelectorAula from '../../formulario-componentes/secciones/Selector
 import AccionesReserva from '../../formulario-componentes/secciones/AccionesReserva';
 
 import { useReservaPeriodica } from '../hooks/useReservaPeriodica';
+import ModalConfirmacion from '../../../shared/modales/ModalConfirmacion';
 
 export default function EditarReservaPeriodica() {
     const { id } = useParams();
@@ -25,6 +26,7 @@ export default function EditarReservaPeriodica() {
                 setDatosCargados({
                     grado: Number(res.grado) || '',
                     curso: Number(res.curso) || '',
+                    curso_academico: String(res.curso_academico) || '',
                     semestre: Number(res.semestre) || '',
                     asignatura: Number(res.asignatura) || '',
                     grupo: Number(res.grupo) || '',
@@ -44,16 +46,62 @@ export default function EditarReservaPeriodica() {
 }
 
 function FormularioEditar({ id, datos }) {
+
+    const navigate = useNavigate();
+
+    const [estadoEliminar, setEstadoEliminar] = useState({ exito: null, error: null });
+
+    const [mostrarModalEliminar, setMostrarModalEliminar] = useState(false);
     
-    // El hook ahora recibe los datos reales desde el primer renderizado
     const reserva = useReservaPeriodica({
         modo: 'editar',
         datosIniciales: datos
     });
 
+    const formularioModificado = 
+        String(reserva.formulario.asignatura) !== String(datos.asignatura) ||
+        String(reserva.formulario.grupo) !== String(datos.grupo) ||
+        String(reserva.formulario.diaSemana) !== String(datos.diaSemana) ||
+        reserva.formulario.horaInicio !== datos.horaInicio ||
+        reserva.formulario.horaFin !== datos.horaFin;
+
+    // La firma original se mantiene constante para identificar la reserva, incluso si el usuario modifica los campos
+    const firmaOriginal = `${datos.asignatura}|${datos.grupo}|${datos.diaSemana}|${datos.horaInicio}|${datos.horaFin}|${datos.aulaSeleccionada}`;
+
     const manejarGuardarEdicion = (e) => {
         e.preventDefault();
         console.log("Enviando cambios (PUT) de la reserva ", id, reserva.formulario);
+    };
+
+    const manejarClickEliminar = (e) => {
+        e.preventDefault();
+        setMostrarModalEliminar(true);
+    };
+
+    const confirmarEliminacion = async () => {
+        setMostrarModalEliminar(false); // Cerramos la modal
+        setEstadoEliminar({ cargando: true, error: null, exito: null });
+
+        const payloadEliminar = {
+            curso_academico: datos.curso_academico, 
+            semestre_num: datos.semestre,
+            firma_serie: firmaOriginal
+        };
+
+        console.log("Datos que se envían para eliminar:", payloadEliminar);
+
+        try {
+            await eliminarReservaPeriodica(payloadEliminar);
+            
+            setEstadoEliminar({ cargando: false, error: null, exito: "Serie de reservas eliminada correctamente." });
+            
+            setTimeout(() => {
+                navigate(-1);
+            }, 1500);
+
+        } catch (error) {
+            setEstadoEliminar({ cargando: false, error: error.message || "Hubo un error al eliminar", exito: null });
+        }
     };
 
     return (
@@ -63,13 +111,20 @@ function FormularioEditar({ id, datos }) {
                 izquierda={<BotonVolver />}
                 derecha={<span />}
             >
+
+                <ModalConfirmacion 
+                    isOpen={mostrarModalEliminar}
+                    mensaje={`¿Estás seguro de que deseas eliminar TODA la serie de reservas? Esta acción no se puede deshacer y liberará el aula para todo el semestre.`}
+                    onConfirm={confirmarEliminacion}
+                    onCancel={() => setMostrarModalEliminar(false)}
+                />
                 <form onSubmit={manejarGuardarEdicion} className="space-y-6">
                     
                     <SeccionDocencia
                         formulario={reserva.formulario}
                         listas={reserva.listas}
                         alCambiar={reserva.aplicarCambios}
-                        soloLectura={false}
+                        soloLectura={true}
                     />
 
                     <SeccionHorario 
@@ -96,7 +151,9 @@ function FormularioEditar({ id, datos }) {
                     <AccionesReserva 
                         variante="editar" 
                         deshabilitado={!reserva.puedeEnviar} 
-                        alGuardar={manejarGuardarEdicion} 
+                        alGuardar={manejarGuardarEdicion}
+                        alEliminar={manejarClickEliminar}
+                        deshabilitarEliminar={formularioModificado || estadoEliminar.cargando}
                     />
 
                     <CajaExito>{reserva.exito}</CajaExito>

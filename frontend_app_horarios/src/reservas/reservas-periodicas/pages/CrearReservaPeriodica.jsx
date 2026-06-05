@@ -20,11 +20,20 @@ export default function CrearReservaPeriodica() {
     const gradoState = location.state?.grado ? Number(location.state.grado) : '';
     const semestreState = location.state?.semestre ? Number(location.state.semestre) : '';
 
+    const cursoAcademicoState = location.state?.cursoAcademico ? String(location.state.cursoAcademico) : '';
+
+    console.log("Datos recibidos para crear reserva periódica:", {
+        grado: gradoState,
+        semestre: semestreState,
+        curso_academico: cursoAcademicoState
+     });
+
     const requiereCalcularCurso = Boolean(gradoState && semestreState);
     const [cargando, setCargando] = useState(requiereCalcularCurso);
     
     const [datosIniciales, setDatosIniciales] = useState({
         grado: gradoState,
+        curso_academico: cursoAcademicoState,
         curso: '',
         semestre: semestreState
     });
@@ -39,6 +48,7 @@ export default function CrearReservaPeriodica() {
                     setDatosIniciales({
                         grado: gradoState,
                         curso: data.curso ? Number(data.curso) : '',
+                        curso_academico: cursoAcademicoState,
                         semestre: semestreState
                     });
                 })
@@ -49,7 +59,7 @@ export default function CrearReservaPeriodica() {
                     setCargando(false);
                 });
         }
-    }, [gradoState, semestreState, requiereCalcularCurso]);
+    }, [gradoState, semestreState, cursoAcademicoState, requiereCalcularCurso]);
 
     if (cargando) return <div className="p-6 text-slate-500">Calculando datos académicos...</div>;
 

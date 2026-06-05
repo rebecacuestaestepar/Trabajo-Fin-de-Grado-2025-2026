@@ -17,8 +17,7 @@ export default function ModalRestricciones({
                     <span className="text-amber-500 text-2xl">⚠️</span> 
                     Advertencia de Movimiento
                 </h2>
-                
-                <p className="text-slate-600 mb-4 text-sm">
+                <p className="text-slate-600 mb-4">
                     El movimiento que intentas realizar incumple las siguientes restricciones:
                 </p>
                 
