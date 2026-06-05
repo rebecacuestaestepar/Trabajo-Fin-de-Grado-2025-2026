@@ -101,6 +101,13 @@ export function obtenerDatosReservaPeriodica(idReserva) {
     });
 }
 
+export function eliminarReservaPeriodica(id_curso, semestre_num, firma_serie) {
+    return apiRequest("/docencia/eliminar-reserva-periodica/", {
+        method: "POST",
+        body: JSON.stringify({ id_curso, semestre_num, firma_serie }),
+    });
+}
+
 export function reservaDesdeHorarioGrado(id_grado, semestre) {
     return apiRequest(`/docencia/cargar-asignaturas/grado/${id_grado}/semestre/${semestre}/`, {
         method: "GET",
