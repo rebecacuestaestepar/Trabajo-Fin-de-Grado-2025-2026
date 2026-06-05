@@ -67,7 +67,7 @@ export default function CabeceraTabla({
                         onClick={() => inputArchivoRef.current.click()}
                         className="flex items-center gap-2 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 transition-colors"
                     >
-                        📥 Importar Excel
+                        📥 Importar Datos
                     </button>
                     </div>
                 </div>
