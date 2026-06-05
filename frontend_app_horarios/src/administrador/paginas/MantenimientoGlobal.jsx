@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { dbService } from '../../api/basedatos';
 
+import ModalConfirmacion from '../../shared/modales/ModalConfirmacion';
+
 export default function MantenimientoGlobal() {
     const [cargando, setCargando] = useState(false);
     const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
+
+    const [modalAbierto, setModalAbierto] = useState(false);
+    const [archivoAImportar, setArchivoAImportar] = useState(null);
 
     const handleAction = async (actionFn, ...args) => {
         setCargando(true);
@@ -22,15 +27,25 @@ export default function MantenimientoGlobal() {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const confirmar = window.confirm(
-                " ¡Atención! Importar este archivo borrará y reemplazará los datos actuales en la Base de Datos. ¿Deseas continuar?"
-            );
-            if (confirmar) {
-                handleAction(dbService.importarDatos, file, 'all');
-            }
-            e.target.value = null;
+            setArchivoAImportar(file);
+            setModalAbierto(true);
+        }
+        e.target.value = null;
+    };
+
+    const confirmarImportacion = async () => {
+        setModalAbierto(false);
+        if (archivoAImportar) {
+            setCargando(true);
+            await handleAction(dbService.importarDatos, archivoAImportar, 'all');
+            setArchivoAImportar(null);
         }
     };
+
+    const cancelarImportacion = () => {
+        setModalAbierto(false);
+        setArchivoAImportar(null);
+    }
 
     return (
         <div className="p-8 max-w-4xl mx-auto">
@@ -79,6 +94,12 @@ export default function MantenimientoGlobal() {
                     </label>
                 </div>
             </div>
+            <ModalConfirmacion 
+                isOpen={modalAbierto}
+                mensaje="¡Atención! Importar este archivo borrará y reemplazará TODOS los datos actuales en la Base de Datos al completo. ¿Deseas continuar?"
+                onConfirm={confirmarImportacion}
+                onCancel={cancelarImportacion}
+            />
         </div>
     );
 }
