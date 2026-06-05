@@ -14,7 +14,7 @@ ENTIDADES = {
     "grupos": ["GRUPO"],
     "docentes": ["DOCENTE"],
     "responsables": ["RESPONSABLE"],
-    "asignaciones": ["IMPARTE"],
+    "imparte": ["IMPARTE"],
     "cursos": ["CURSO"],
     "semestres": ["SEMESTRE"],
     "dias": ["DIA"],
