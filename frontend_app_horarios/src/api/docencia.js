@@ -266,3 +266,35 @@ export function listaGrupos() {
     });
 }
 
+export function listaImparte() {
+    return apiRequest("/docencia/imparte/", {
+        method: "GET",
+    });
+}
+
+export function obtenerDetalleImparte(imparteId) {
+    return apiRequest(`/docencia/imparte/${imparteId}/`, {
+        method: "GET",
+    });
+}
+
+export function crearImparte(datos) {
+    return apiRequest("/docencia/imparte/", {
+        method: "POST",
+        body: datos
+    });
+}
+
+export function actualizarImparte(imparteId, datos) {
+    return apiRequest(`/docencia/imparte/${imparteId}/`, {
+        method: "PUT",
+        body: datos
+    });
+}
+
+export function eliminarImparte(imparteId) {
+    return apiRequest(`/docencia/imparte/${imparteId}/`, {
+        method: "DELETE"
+    });
+}
+
