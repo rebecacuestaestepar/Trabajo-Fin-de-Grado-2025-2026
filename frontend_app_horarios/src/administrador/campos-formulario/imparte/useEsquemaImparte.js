@@ -33,7 +33,7 @@ export function useEsquemaImparte() {
     }, []);
 
     return [
-        { llave: 'codigo_docente', etiqueta: 'Docente', tipo: 'selector', requerido: true, opciones: opcionesDocentes },
-        { llave: 'id_asignatura', etiqueta: 'Asignatura', tipo: 'selector', requerido: true, opciones: opcionesAsignaturas },
+        { llave: 'codigo_docente_id', etiqueta: 'Docente', tipo: 'selector', requerido: true, opciones: opcionesDocentes },
+        { llave: 'id_asignatura_id', etiqueta: 'Asignatura', tipo: 'selector', requerido: true, opciones: opcionesAsignaturas },
     ];
 }

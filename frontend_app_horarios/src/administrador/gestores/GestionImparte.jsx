@@ -12,8 +12,8 @@ export default function GestionImparte() {
     const CLAVE_ENTIDAD = 'imparte';
 
     const columnas = [
-        { llave: 'docente_apellidos', etiqueta: 'Apellidos del Docente' },
-        { llave: 'docente_nombre', etiqueta: 'Nombre' },
+        { llave: 'docente_nombre', etiqueta: 'Nombre del Docente' },
+        { llave: 'docente_apellidos', etiqueta: 'Apellidos' },
         { llave: 'asignatura_nombre', etiqueta: 'Asignatura' },
         { llave: 'grado_abreviatura', etiqueta: 'Grado' }
     ];

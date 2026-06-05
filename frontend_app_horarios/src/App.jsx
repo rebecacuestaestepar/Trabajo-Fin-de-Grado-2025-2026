@@ -56,6 +56,10 @@ import GestionResponsables from "./administrador/gestores/GestionResponsable.jsx
 import CrearResponsable from "./administrador/campos-formulario/responsables/CrearResponsable.jsx";
 import EditarResponsable from "./administrador/campos-formulario/responsables/EditarResponsable.jsx";
 
+import GestionImparte from "./administrador/gestores/GestionImparte.jsx";
+import CrearImparte from "./administrador/campos-formulario/imparte/CrearImparte.jsx";
+import EditarImparte from "./administrador/campos-formulario/imparte/EditarImparte.jsx";
+
 import GestionRoles from "./administrador/gestores/GestionRoles.jsx";
 import CrearRol from "./administrador/campos-formulario/roles/CrearRol.jsx";
 import EditarRol from "./administrador/campos-formulario/roles/EditarRol.jsx";
@@ -128,6 +132,10 @@ function App() {
               <Route path="responsables" element={<GestionResponsables/>} />
               <Route path="responsables/crear" element={<CrearResponsable/>} />
               <Route path="responsables/editar/:correo" element={<EditarResponsable/>} />
+
+              <Route path="imparte" element={<GestionImparte/>} />
+              <Route path="imparte/crear" element={<CrearImparte/>} />
+              <Route path="imparte/editar/:id" element={<EditarImparte/>} />
 
               <Route path="roles" element={<GestionRoles/>} />
               <Route path="roles/crear" element={<CrearRol/>} />
