@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { login } from "../api/usuarios";
 
 import logoUbu from "../assets/logoUbu.jpg";
 
@@ -34,17 +35,9 @@ export default function LoginForm() {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/auth/login/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(credenciales),
-            });
+            const data = await login(credenciales);
 
-            const data = await response.json();
-
-            if (response.ok) {
+            if (data.access) {
                 sessionStorage.setItem('token', data.access);
                 sessionStorage.setItem('refresh', data.refresh);
                 sessionStorage.setItem('username', data.usuario.username);

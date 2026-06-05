@@ -1,5 +1,11 @@
 import { apiRequest } from "./client";
 
+export function login(credenciales) {
+    return apiRequest("/auth/login/", {
+        method: "POST",
+        body: credenciales
+    });
+}
 export function obtenerUsuarios() {
     return apiRequest("/auth/usuarios/", {
         method: "GET",
