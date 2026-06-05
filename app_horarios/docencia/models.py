@@ -52,6 +52,7 @@ class Grupo(models.Model):
 
 
 class Imparte(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     codigo_docente = models.ForeignKey(Docente, models.CASCADE, db_column='CODIGO_DOCENTE')  # Field name made lowercase.
     id_asignatura = models.ForeignKey(Asignaturas, models.CASCADE, db_column='ID_ASIGNATURA')  # Field name made lowercase.
 

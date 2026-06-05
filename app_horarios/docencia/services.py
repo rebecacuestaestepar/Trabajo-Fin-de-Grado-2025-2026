@@ -122,28 +122,28 @@ def lista_mini_docentes():
         return Docente.objects.values('codigo', 'nombre').order_by('codigo')
 
 
-# class ImparteService:
-#     @staticmethod
-#     def list():
-#         return Imparte.objects.all()
+class ImparteService:
+    @staticmethod
+    def list():
+        return Imparte.objects.all()
 
-#     @staticmethod
-#     def retrieve(imparte_id):
-#         return get_object_or_404(Imparte, idimparte=imparte_id)
+    @staticmethod
+    def retrieve(id):
+        return get_object_or_404(Imparte, idimparte=id)
 
-#     @staticmethod
-#     def create(datos_imparte):
-#         return Imparte.objects.create(**datos_imparte)
+    @staticmethod
+    def create(datos_imparte):
+        return Imparte.objects.create(**datos_imparte)
 
-#     @staticmethod
-#     def update(imparte_id, datos_actualizados):
-#         imparte = get_object_or_404(Imparte, idimparte=imparte_id)
-#         for campo, valor in datos_actualizados.items():
-#             setattr(imparte, campo, valor)
-#         imparte.save()
-#         return imparte
+    @staticmethod
+    def update(id, datos_actualizados):
+        imparte = get_object_or_404(Imparte, id=id)
+        for campo, valor in datos_actualizados.items():
+            setattr(imparte, campo, valor)
+        imparte.save()
+        return imparte
 
-#     @staticmethod
-#     def delete(imparte_id):
-#         imparte = ImparteService.retrieve(imparte_id)
-#         imparte.delete()
+    @staticmethod
+    def delete(imparte_id):
+        imparte = ImparteService.retrieve(imparte_id)
+        imparte.delete()

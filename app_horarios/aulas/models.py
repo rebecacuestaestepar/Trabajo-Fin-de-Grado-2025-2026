@@ -8,7 +8,7 @@ class Aula(models.Model):
     Representa un aula física en la universidad.
     Modelo mapeado a una tabla preexistente de la base de datos ('aula') y su ciclo de vida no es  gestionado por las migracions de Django.
     """
-    id = models.DecimalField(db_column='ID', primary_key=True, decimal_places=0, max_digits=10)
+    id = models.AutoField(db_column='ID', primary_key=True)
     nombre = models.CharField(db_column='NOMBRE', unique=True, max_length=20)
     edificio = models.CharField(db_column='EDIFICIO', max_length=6, blank=True, null=True)
     planta = models.DecimalField(db_column='PLANTA', max_digits=1, decimal_places=0, blank=True, null=True)
