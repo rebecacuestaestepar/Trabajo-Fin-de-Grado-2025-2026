@@ -36,10 +36,17 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "django-production-876a.up.railway.app",
     "localhost",
+    "127.0.0.1",
 ]
 CORS_ALLOWED_ORIGINS = [
     "https://front-react-production-25aa.up.railway.app",
     "http://localhost:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://front-react-production-25aa.up.railway.app",
 ]
 
 # CORS_ALLOW_ALL_ORIGINS = True
