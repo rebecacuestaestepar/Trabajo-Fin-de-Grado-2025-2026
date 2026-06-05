@@ -129,13 +129,34 @@ class DocenteService:
         docente.delete()
 
 def lista_mini_docentes():
-        return Docente.objects.values('codigo', 'nombre').order_by('codigo')
+        return Docente.objects.values('codigo', 'nombre', 'apellidos').order_by('nombre', 'apellidos')
 
 
 class ImparteService:
     @staticmethod
     def list():
-        return Imparte.objects.all()
+        return Imparte.objects.select_related(
+            'codigo_docente', 
+            'id_asignatura', 
+            'id_asignatura__grado_id'
+        ).annotate(
+            docente_nombre=F('codigo_docente__nombre'),
+            docente_apellidos=F('codigo_docente__apellidos'),
+            asignatura_nombre=F('id_asignatura__nombre'),
+            grado_abreviatura=F('id_asignatura__grado_id__abreviatura')
+        ).values(
+            'id',
+            'codigo_docente',
+            'docente_nombre',
+            'docente_apellidos',
+            'id_asignatura',
+            'asignatura_nombre',
+            'grado_abreviatura'
+        ).order_by(
+            'grado_abreviatura', 
+            'asignatura_nombre', 
+            'docente_apellidos'
+        )
 
     @staticmethod
     def retrieve(id):

@@ -162,9 +162,29 @@ class ImparteViewSet(viewsets.ViewSet):
     queryset = Imparte.objects.none()
 
     def list(self, request):
-        imparte = ImparteService.list()
-        serializer = ImparteSerializer(imparte, many=True)
+        datos_imparte = ImparteService.list()
+        return Response(datos_imparte, status=200)
+    
+    def retrieve(self, request, pk=None):
+        imparte = ImparteService.retrieve(pk)
+        serializer = ImparteSerializer(imparte)
         return Response(serializer.data, status=200)
+    
+    def create(self, request):
+        datos_imparte = request.data
+        imparte = ImparteService.create(datos_imparte)
+        serializer = ImparteSerializer(imparte)
+        return Response(serializer.data, status=201)
+    
+    def update(self, request, pk=None):
+        datos_actualizados = request.data
+        imparte = ImparteService.update(pk, datos_actualizados)
+        serializer = ImparteSerializer(imparte)
+        return Response(serializer.data, status=200)
+    
+    def destroy(self, request, pk=None):
+        ImparteService.delete(pk)
+        return Response(status=204)
 
 
 
