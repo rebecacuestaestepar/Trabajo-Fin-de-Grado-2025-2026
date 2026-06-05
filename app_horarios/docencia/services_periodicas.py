@@ -131,7 +131,47 @@ def reserva_desde_horario_grado(id_grado, semestre_academico):
         'curso': curso,
         'asignaturas': list(asignaturas.values('idasignatura', 'nombre', 'abreviatura'))
     }
-            
 
+
+def eliminar_reserva_periodica(id_curso, semestre_num, firma_serie):
+    """
+    Elimina una serie de reservas periódicas
+    """
+
+    with transaction.atomic():
+        try:
+            asignatura_id, grupo_id, old_dia, old_hi, old_hf, aula_id = firma_serie.split('|')
+        except ValueError:
+            return {"exito": False, "estado": "error", "mensaje": "Firma inválida."}
+        
+        semestre = 2
+        if semestre_num % 2 == 1:
+            semestre = 1
+
+        semestre_obj = Semestre.objects.filter(curso_id=id_curso, numero=semestre).first()
+
+        if not semestre_obj:
+            return {"exito": False, "estado": "error", "mensaje": "Semestre no encontrado."}
+
+        reservas_actuales = ReservaPeriodica.objects.filter(
+            id_grupo__id_asignatura__idasignatura=asignatura_id,
+            id_grupo__grupoid=grupo_id,
+            dia_semana=old_dia,
+            id_reserva__hora_inicio=old_hi,
+            id_reserva__hora_fin=old_hf,
+            fecha_inicio__gte=semestre_obj.fecha_inicio,
+            fecha_fin__lte=semestre_obj.fecha_fin,
+        )
+
+        if not reservas_actuales.exists():
+            return {"exito": False, "estado": "error", "mensaje": "No se encontraron las reservas a eliminar."}
+
+        ids_reservas_fisicas = list(reservas_actuales.values_list('id_reserva', flat=True))
+
+        reservas_actuales.delete()
+        
+        Reserva.objects.filter(idreserva__in=ids_reservas_fisicas).delete()
+
+        return {"exito": True, "estado": "exito", "mensaje": "La serie de reservas ha sido eliminada correctamente."}
 
     
