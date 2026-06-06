@@ -160,7 +160,7 @@ class ImparteService:
 
     @staticmethod
     def retrieve(id):
-        return get_object_or_404(Imparte, idimparte=id)
+        return get_object_or_404(Imparte, id=id)
 
     @staticmethod
     def create(datos_imparte):
