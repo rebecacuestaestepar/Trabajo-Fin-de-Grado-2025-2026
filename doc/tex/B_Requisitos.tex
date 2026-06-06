@@ -125,7 +125,7 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} & RF-01 \\
-		\textbf{Descripción}          & Un usuario no autenticado, introduce las credenciales (correo y contraseña). Si son credenciales válidas , se le permite acceder a la aplicación redirigiéndole en función de su rol, si las credenciales son inválidas se mostrará el mensaje de error y no se le permitirá el acceso. \\
+		\textbf{Descripción}          & Un usuario no autenticado, introduce las credenciales (correo y contraseña), y se mandan a la API del moodle de la universidad. Si son credenciales válidas , se le permite acceder a la aplicación redirigiéndole en función de su rol, si las credenciales son inválidas se mostrará el mensaje de error y no se le permitirá el acceso. \\
 		\textbf{Precondición}         & El usuario está registrado y su cuenta se encuentra activa \\
 		\textbf{Acciones}             & 
 		\begin{enumerate}
@@ -135,8 +135,9 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 			\item Introducir contraseña
 			\item El sistema valida el formato
 			\item El sistema verifica las credenciales
+			\item El sistema comprueba el rol del usuario
 			\item Se crea la sesión
-			\item Se redirige a la pantalla correspondiente según su rol
+			\item Se redirige a la pantalla de gestión de reservas
 		\end{enumerate}\\
 		\textbf{Postcondición}        & En caso de éxito en el inicio de sesión, el usuario tendrá una sesión activa y el usuario queda en su panel correspondiente. En caso de fallo no se crea la sesión, se incrementa el contador de intentos fallidos y se muestra el mensaje de error. \\
 		\textbf{Excepciones}          & 
@@ -161,8 +162,8 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El administrador puede crear, modificar y eliminar cuentas de usuario del sistema. Incluye búsqueda y listado de los usuarios. \\
+		\textbf{Requisitos asociados} &  \\ RF-06
+		\textbf{Descripción}          & El administrador puede crear, modificar y eliminar entradas de usuario del sistema, se corresponderá al rol del usuario, ya que las credenciales no las comprueba la base de datos propia. Incluye búsqueda y listado de los usuarios. \\
 		\textbf{Precondición}         & El administrador tiene que estar autenticado, tiene que disponer de los permisos para la gestión de usuarios y la base de datos tiene que estar disponible. \\
 		\textbf{Acciones}             &
 		{\small
@@ -170,7 +171,7 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
 			\item El administrador accede a la Gestión de Usuarios
-			\item Visualiza el listado de usuarios (nombre, email, estado), y las opciones (Añadir, editar y eliminar)
+			\item Visualiza el listado de usuarios (nombre, email, rol), y las opciones (Añadir, editar y eliminar)
 			\item El administrador pulsa \emph{Añadir}
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
 				\item El sistema muestra un formulario con todos los campos correspondientes a los datos necesarios
@@ -218,37 +219,35 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-03}    & \textbf{Asignar roles}\\
+		\textbf{CU-03}    & \textbf{Gestionar roles}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} &  \\ RF-04
 		\textbf{Descripción}          & El administrador asigna, cambio o quitar roles a usuarios para determinar los permisos de acceso. \\
-		\textbf{Precondición}         & El administrador tiene que estar autenticado, que el usuario sobre el que se actúa exista, y que los roles estén disponibles. \\
+		\textbf{Precondición}         & El administrador tiene que estar autenticado, que el usuario sobre el que se actúa exista, y que los roles estén disponibles. Podrá gestionar los permisos de cada rol \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El administrador accede a \emph{Gestión de usuarios} y selecciona un usuario.
-			\item El sistema muestra los datos del usuario y sus roles actuales.
+			\item El administrador accede a \emph{Gestión de roles} y selecciona un rol.
+			\item El sistema muestra los nombres de los roles actuales.
 			\item El administrador pulsa \emph{Añadir rol}.
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
-				\item El sistema muestra el listado de roles disponibles (no asignados).
-				\item El administrador selecciona uno o varios roles y confirma.
-				\item El sistema valida compatibilidad de roles.
-				\item El sistema asigna el o los roles y confirma.
+				\item El usuario rellena el nombre del rol que quiere crear.
+				\item El administrador selecciona los permisos que quiere asignar a ese rol.
+				\item El sistema asigna los permisos al rol.
 			\end{enumerate}
 			\item El administrador pulsa \emph{Editar roles}.
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
-			\item El sistema muestra roles actuales y disponibles.
-			\item El administrador desmarca o marca roles y confirma.
-			\item El sistema valida y actualiza los roles y los confirma.
-			\item El administrador selecciona un rol asignado y pulsa \emph{Quitar  rol}.
+			\item El sistema muestra el nombre del rol.
+			\item El sistema muestra marcados los permisos de los que dispone.
+			\item El administrador actualiza el listado de permisos y confirma.
 			\end{enumerate}
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
 			\item El sistema solicita confirmación y muestra las consecuencias
 			\item El administrador confirma.
-			\item El sistema quita el rol, actualiza permisos y confirma.
+			\item El sistema elimina el rol.
 			\end{enumerate}
 		\end{enumerate}\\
 		\textbf{Postcondición}        & Se actualizan los roles del usuario, pero si falla no hay cambios y se muestra el mensaje de error \\
@@ -256,8 +255,8 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		{\small
 			\begin{itemize}
 				\tightlist
-				\item \textbf{Ex1.} Usuario inactivo o inexistente \textrightarrow{} impedir acción.
-				\item \textbf{Ex2.} No se puede dejar al usuario sin ningún rol \textrightarrow{} impedir quitar todos los roles
+				\item \textbf{Ex1.} Usuario sin permisos suficientes \textrightarrow{} el sistema impedirá el acceso a la gestión de roles y mostrará un mensaje de error indicando que no dispone de autorización.
+				\item \textbf{Ex2.} Nombre de rol duplicado \textrightarrow{} el sistema no guardará los cambios y mostrará un mensaje indicando que ya existe un rol con ese nombre
 			\end{itemize} 
 		}\\
 		\textbf{Importancia}          & Alta \\
@@ -266,49 +265,11 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 	\caption{CU-03 Asignar roles}
 \end{table}
 
-
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-04}    & \textbf{Generar informes}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El usuario genera los informes a partir de la información seleccionada (reservas puntuales, ocupación de aulas, horario de grados, exámenes) para poder exportar los resultados.\\
-		\textbf{Precondición}         & Que sea un usuario autenticado, que tenga los privilegios necesarios para poder hacerlo, que la base de datos esté disponible y que existan datos para generar los informes.\\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al módulo \emph{Generar informes}
-			\item El usuario selecciona el tipo de informe que desea generar
-			\item Elige los filtros que desea
-			\item El sistema consulta los datos en la base de datos
-			\item Se genera una vista previa del informe
-			\item El sistema genera la exportación con el archivo
-		\end{enumerate}\\
-		\textbf{Postcondición}        & El informe se genera, y si el usuario lo selecciona, se exporta el informe. Si ocurre algún fallo se muestra el mensaje de error correspondiente \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} Que no existan los datos para los filtros que ha solicitado el usuario \textrightarrow{} Mostrar el mensaje de que no hay resultados
-			\item \textbf{Ex2:} Fallo en la conexión a la base de datos \textrightarrow{} mostrar el error y cancelar la generación
-			\item \textbf{Ex3:} Fallo al generar el archivo de exportación \textrightarrow{} mostrar error
-		\end{itemize} \\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-04 Generar informes}
-\end{table}
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-05}    & \textbf{Consultar reservas puntuales}\\
+		\textbf{CU-04}    & \textbf{Consultar reservas puntuales}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -319,7 +280,7 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El usuario accede al módulo \emph{Consultar reservas puntuales}.
+			\item El usuario accede al módulo \emph{Gestionar reservas puntuales}.
 			\item El sistema muestra las reservas que existen en la base de datos
 			\item El usuario puede aplicar filtros
 			\item El sistema actualiza la lista con los resultados filtrados
@@ -410,41 +371,6 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\bottomrule
 	\end{tabularx}
 	\caption{CU-07 Consultar horario de grado}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-08}    & \textbf{Consultar calendario de exámenes}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El gestor o administrador puede consultar el calendario de los exámenes de convocatoria. El sistema muestra las fechas de los exámenes, con la asignatura el aula y la hora.  \\
-		\textbf{Precondición}         &  El usuario autenticado tiene permisos , los exámenes de los grados deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al módulo \emph{Consultar exámenes}
-			\item El sistema muestra los grados por los que filtrar.
-			\item El usuario selecciona el grado del que quiere
-			\item El sistema muestra filtros sobre los que aplicar 
-			\item El usuario selecciona si quiere filtrar o no y pulsa \emph{Buscar}
-			\item El sistema recoge los datos asociado al grado seleccionado y los filtros mostrando los exámenes
-		\end{enumerate}\\
-		\textbf{Postcondición} & Se muestra el calendario de exámenes con los filtros y grado aplicados, con la informaciónn actualizada y recogiendo los datos de la base de datos        \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
-			\tightlist
-			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error.
-			\item \textbf{Ex2:} Que no existan exámenes para los filtros seleccionados \textrightarrow mostrar mensaje de que no existen resultados
-		\end{itemize} \\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-08 Consultar calendario de exámenes}
 \end{table}
 
 \begin{table}[p]
@@ -565,143 +491,6 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 	\caption{CU-11 Gestión de reservas periódicas}
 \end{table}
 
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-12}    & \textbf{Cargar calendario exámenes}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El administrador o gestor carga en el sistema un calendario de exámenes de otro año\\
-		\textbf{Precondición}         & Que sea un usuario con permisos y que la base de datos se encuentre disponible para recoger los datos cargados \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al apartado de \emph{Exámenes}
-			\item El usuario selecciona el grado correspondiente
-			\item El usuario pulsa en \emph{Cargar calendario}
-			\item El sistema muestra la opción de cargar un archivo del sistema (csv o Excel) 
-			\item El usuario selecciona el archivo a cargar
-			\item El sistema convierte los datos del excel a datos SQL que pueda recoger la base de datos
-			\item El sistema muestra el calendario de exámenes cargado
-		\end{enumerate}\\
-		\textbf{Postcondición} &  La base de datos queda actualizada correctamente a la hora de cargar los datos, y que los muestre correctamente en la aplicación y que si hay más calendarios de distintos años para el mismo grado permita filtrar o seleccionar el curso académico    \\
-		\textbf{Excepciones}          &  
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} Error al pasar los datos de Excel a SQL \textrightarrow{} mostrar mensaje de error y cancelar la carga de datos
-			\item \textbf{Ex2:} Subir un archivo con extensión no válida \textrightarrow{} mostrar el mensaje y pedir la corrección del archivo
-		\end{itemize}\\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-12 Cargar calendario exámenes}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-13}    & \textbf{Calcular rotación de exámenes}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          &  El gestor o administrador genera una propuesta de calendario de exámenes tras hacer rotaciones asignando fechas y horas, y aulas a prueba cumpliendo con las restricciones. \\
-		\textbf{Precondición}         &  El usuario autenticado con permisos, que la base de ddatos esté disponible y todos los datos necesarios cargados como las aulas, asignaturas, grados,...\\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al apartado de \emph{Planificación de exámenes \textrightarrow Rotación}
-			\item El usuario selecciona el grado sobre el que desea hacer el cálculo de los nuevos exámenes
-			\item El usuario pulsa \emph{Calcular}
-			\item El sistema realiza el cálculo de la rotación de los exámenes y muestra una previsualización
-			\item El usuario confirma la propuesta
-		\end{enumerate}\\
-		\textbf{Postcondición}        & Se genera la rotación de exámenes para el grado seleccionado  \\
-		\textbf{Excepciones}         &  \\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-13 Calcular rotación de exámenes}
-\end{table}
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-14}    & \textbf{Modificar fecha de examen}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El gestor o administrador modifica la fecha, hora o aula asignada al examen correspondiente. El sistema verificará que el cambio no viole alguna de las restricciones y que no haya conflictos con otros exámenes o reservas. \\
-		\textbf{Precondición}         &  El usuario autenticado tenga los permisos, que el examen se encuentre ya planificado y que la base de datos y las restricciones estén disponibles \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al módulo \emph{Gestión de exámenes}
-			\item El sistema muestra el listado de los exámenes filtrando por grado u algún filtro más de manera opcional
-			\item El usuario selecciona un examen y pulsa \emph{Editar}
-			\item El sistema muestra los datos actuales del examen
-			\item El usuario modifica los datos que crea necesarios y pulsa confirmar
-			\item El sistema valida las restricciones
-			\item El sistema actualiza los datos del examen correspondiente
-		\end{enumerate}\\
-		\textbf{Postcondición} & El examen queda actualizado con los nuevos datos modificados \\
-		\textbf{Excepciones}          &  
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} Que la fecha o la hora introducida estén fuera del periodo especificado \textrightarrow{} mostrar error y solicitar nueva fecha u hora 
-			\item \textbf{Ex2:} Que el aula no esté disponible o no cumpla con el aforo necesario \textrightarrow{} impedir el cambio
-			\item \textbf{Ex3:} Que viole alguna otra restricción \textrightarrow{} Mostrar el error y no permitir el cambio
-		\end{itemize}\\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-14 Modificar fecha de examen}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-15}    & \textbf{Cargar calendario académico}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El administrador o gestor carga en el sistema un calendario académico de otro año\\
-		\textbf{Precondición}         & Que sea un usuario con permisos y que la base de datos se encuentre disponible para recoger los datos cargados \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al apartado de \emph{Calendario académico}
-			\item El usuario pulsa en \emph{Cargar calendario}
-			\item El sistema muestra una ventana con los siguientes campos: Inicio primer semestre y segundo semestre, e inicio y fin de las convocatorias de exámenes para ambos semestres.
-			\item El sistema hace los cálculos necesarios para colorear los días lectivos de ambos semestres y los de convocatoria de exámenes
-			\item El sistema muestra el calendario académico con los días 
-			\item El sistema muestra el calendario de exámenes cargado
-		\end{enumerate}\\
-		\textbf{Postcondición} &  La base de datos queda actualizada correctamente a la hora de cargar los datos, y que los muestre correctamente en la aplicación y que si hay más calendarios de distintos años grado permita seleccionar el curso académico    \\
-		\textbf{Excepciones}          &  
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} Error al cargar los datos \textrightarrow{} mostrar mensaje de error y cancelar la carga de datos
-			\item \textbf{Ex2:} Fallo de cálculos \textrightarrow{} mostrar el mensaje y pedir la corrección
-		\end{itemize}\\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-15 Cargar calendario académico}
-\end{table}
 
 \begin{table}[p]
 	\centering
@@ -912,7 +701,7 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
 		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El gestor o administrador puede consultar, modificar o eliminar reservas puntuales existentes, validando que no se violen las restricciones \\
+		\textbf{Descripción}          & El gestor o administrador puede crear, modificar o eliminar reservas puntuales existentes, validando que no se violen las restricciones \\
 		\textbf{Precondición}         & El usuario debe tener los permisos de gestionar las reservas, que estas se encuentren registradas y la base de datos y las validaciones se encuentren disponibles \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
