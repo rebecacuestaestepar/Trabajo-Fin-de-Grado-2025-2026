@@ -170,22 +170,20 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El administrador accede a la Gestión de Usuarios
+			\item El administrador accede a Administración -> Gestión de Usuarios
 			\item Visualiza el listado de usuarios (nombre, email, rol), y las opciones (Añadir, editar y eliminar)
 			\item El administrador pulsa \emph{Añadir}
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
 				\item El sistema muestra un formulario con todos los campos correspondientes a los datos necesarios
 				\item El adminsitrador completa estos campos
 				\item El sistema valida el formato del email y que este sea único
-				\item El sistema crea la cuenta con un estado y contraseña inicial (esta es aleatoria obligar a restablecer)
 				\item El sistema muestra la confirmación
 			\end{enumerate}
 			\item El administrador selecciona al usuario y pulsa \emph{Editar}
 			\begin{enumerate}[label*=\arabic*., itemsep=2pt, topsep=2pt, leftmargin=1em]
 				\item El sistema muestra los datos actuales
 				\item El administrador modifica los campos 
-				\item El sistema valida los campos modificados
-				\item El sistema guarda los cambios
+				\item El sistema valida los campos modificados y guarda los cambios
 			\end{enumerate}
 			\item El administrador pulsa \emph{Eliminar} sobre un usuario
 			\begin{enumerate}[label*=\arabic*., itemsep=2pt, topsep=2pt, leftmargin=1em]
@@ -230,7 +228,7 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El administrador accede a \emph{Gestión de roles} y selecciona un rol.
+			\item El administrador accede a \emph{Administración -> Gestión de roles} y selecciona un rol.
 			\item El sistema muestra los nombres de los roles actuales.
 			\item El administrador pulsa \emph{Añadir rol}.
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
@@ -262,153 +260,50 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-03 Asignar roles}
+	\caption{CU-03 Gestionar roles}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-04}    & \textbf{Consultar reservas puntuales}\\
+		\textbf{CU-04} & \textbf{Gestión de entidades}\\
 		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-02 \\
-		\textbf{Descripción}          & El gestor o administrador consulta las reservas que existen, y puede aplicar filtros sobre ellas y visualizar los detalles de cada una \\
-		\textbf{Precondición}         & Que sea un usuario autenticado y que tenga el rol de gestor o de administrador. Que la base de datos esté disponible y que existan reservas registradas \\
-		\textbf{Acciones}             &
+		\textbf{Versión} & 1.0 \\
+		\textbf{Autor} & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-05 \\
+		\textbf{Descripción} & El administrador gestiona las entidades principales utilizadas por la aplicación, como aulas, grados, asignaturas, docentes, responsables e imparte. Esta gestión permite mantener actualizada la información base sobre la que posteriormente se crearán horarios, reservas puntuales y reservas periódicas. \\
+		\textbf{Precondición} & El administrador debe estar autenticado, disponer de permisos de administración y la base de datos debe estar disponible. \\
+		\textbf{Acciones} &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El usuario accede al módulo \emph{Gestionar reservas puntuales}.
-			\item El sistema muestra las reservas que existen en la base de datos
-			\item El usuario puede aplicar filtros
-			\item El sistema actualiza la lista con los resultados filtrados
-			\item El usuario selecciona una reserva específica para ver más información
-			\item El sistema muestra los detalles de la reserva
+			\item El administrador accede al apartado de \emph{Administración}.
+			\item El sistema muestra las entidades disponibles para gestionar.
+			\item El administrador selecciona la entidad que desea consultar o modificar.
+			\item El sistema muestra el listado de registros existentes.
+			\item El administrador puede crear, editar o eliminar registros.
+			\item El sistema valida los datos introducidos.
+			\item El sistema guarda los cambios realizados.
 		\end{enumerate}\\
-		\textbf{Postcondición}        &  Se muestra al usuario la información de las reservas con la posibilidad de realizar filtros. No se permite la modificación de datos.\\
-		\textbf{Excepciones}          &  
-		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
-			\item \textbf{Ex1:} No existen reservas que cumplan los criterios → mostrar mensaje “no hay resultados”.
-			\item \textbf{Ex2:} Error en la conexión a la base de datos → cancelar operación y notificar fallo.
-			\item \textbf{Ex3:} Filtro inválido o mal formado → restablecer búsqueda y mostrar aviso.
+		\textbf{Postcondición} & La entidad seleccionada queda creada, modificada o eliminada correctamente. En caso de fallo, no se aplican los cambios y se muestra un mensaje de error. \\
+		\textbf{Excepciones} &
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Datos obligatorios incompletos \textrightarrow{} impedir la operación y mostrar los errores de validación.
+			\item \textbf{Ex2:} Registro duplicado \textrightarrow{} impedir la creación o edición y mostrar un mensaje de error.
 		\end{itemize}\\
-		\textbf{Importancia}          & Media-Alta \\
+		\textbf{Importancia} & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-05 Consultar reservas puntuales}
-\end{table}
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-06}    & \textbf{Consultar ocupación de aula}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-04 \\
-		\textbf{Descripción}          & El administrador o el gestor consulta la ocupación del aula para una fecha específica o semanal (solo aparecen las reservas periódicas). El sistema muestra un horario con las horas que se encuentra ocupada o disponible al aula, en función del horario y de las reservas puntuales si así se requiere.\\
-		\textbf{Precondición}         & Que sea un usuario autenticado con el rol de gestor o de administrador, que los horarios y las reservas se encuentren cargadas en el sistema y que la base de datos esté disponible. \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al apartado de \emph{Consultar ocupación de aula}.
-			\item El sistema muestra un menú con filtros de aula, fecha o semanal.
-			\item El usuario pulsa el aula y el periodo y pulsa \emph{Buscar}
-			\item El sistema recoge los datos asociado a la búsqueda realizada por el usuario
-			\item El sistema genera una vista con las horas ocupadas y disponibles.
-		\end{enumerate}\\
-		\textbf{Postcondición}        &  El sistema muestra la ocupación del aula seleccionada mostrándose claramente las horas disponibles y las ocupadas.\\
-		\textbf{Excepciones}          & 
-		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
-			\tightlist
-			\item \textbf{Ex1:} Que el aula no exista o no se haya seleccionado correctamente \textrightarrow mostrar mensaje de error.
-			\item \textbf{Ex2:} Que no existan datos para la fecha o periodo seleccionado \textrightarrow mostrar que no hay existen reservas para ese aula y no hay datos que mostrar
-			\item \textbf{Ex3:} Que la fecha introducida sea inválida \textrightarrow Mostrar mensaje de error
-			\item \textbf{Ex4:} Que haya un error al recoger los datos de la consulta \textrightarrow notificar el fallo
-		\end{itemize}\\ 
-		\textbf{Importancia}          & Media-Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-06 Generar informes}
-\end{table}
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-07}    & \textbf{Consultar horario de grado}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El gestor o administrador puede consultar el horario de grado. El sistema muestra las clases planificadas con su aula y hora.  \\
-		\textbf{Precondición}         &  El usuario autenticado tiene permisos , los horarios de los grados deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al módulo \emph{Consultar horarios de grado}
-			\item El sistema muestra los grados por los que filtrar.
-			\item El usuario selecciona el grado del que quiere
-			\item El sistema muestra filtros sobre los que aplicar 
-			\item El usuario selecciona si quiere filtrar o no y pulsa \emph{Buscar}
-			\item El sistema recoge los datos asociado al grado seleccionado y los filtros
-		\end{enumerate}\\
-		\textbf{Postcondición} & Se muestra el horario con los filtros y grado aplicados, con la informaciónn actualizada y recogiendo los datos de la base de datos        \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
-			\tightlist
-			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error.
-			\item \textbf{Ex2:} Que no existan horarios para los filtros seleccionados \textrightarrow mostrar mensaje de que no existen resultados
-		\end{itemize} \\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-07 Consultar horario de grado}
+	\caption{CU-04 Gestión de entidades}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-09}    & \textbf{Consultar calendario académico}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El gestor o administrador puede consultar el calendario académico de la politécnica. El sistema mostrará el calendario indicando los días lectivos correspondientes a ambos semestres, los días correspondientes a exámenes de convocatoria, a TFG, los días festivos y los días que se produce un cambio de docencia.  \\
-		\textbf{Precondición}         &  El usuario autenticado tiene permisos, los tipos de día deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al módulo \emph{Consultar calendario}
-			\item El sistema muestra el calendario académico con diferentes colores en función del tipo de día.
-		\end{enumerate}\\
-		\textbf{Postcondición} & Se muestra el calendario académico coloreando cada tipo de día con un color diferente (rojo: festivo, morado: cambio de docencia, amarillo: lectivos primer semestre, verde: exámenes convocatoria, azul: lectivos segundo semestre y naranja: días de TFG y TFM), recogiendo los datos de la base de datos        \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
-			\tightlist
-			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error. 
-		\end{itemize} \\
-		\textbf{Importancia}          & Media \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-09 Consultar calendario académico}
-\end{table}
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-10}    & \textbf{Cargar horario}\\
+		\textbf{CU-05}    & \textbf{Cargar horario}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -437,7 +332,7 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-10 Cargar horario}
+	\caption{CU-05 Cargar horario}
 \end{table}
 
 
@@ -445,89 +340,35 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-11}    & \textbf{Gestión de reservas periódicas}\\
+		\textbf{CU-06}    & \textbf{Consultar reservas puntuales}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-6.2 \\
-		\textbf{Descripción}          & El gestor o administrador crea, edita y cancela las reservas durante el periodo especificado, con la frecuencia especificada.  \\
-		\textbf{Precondición}         & Que sea un usuario autenticado con los permisos de reservas, los aulas y horarios disponibles estén cargados, y la base de datos se encuentre disponible.\\
+		\textbf{Requisitos asociados} & RF-02 \\
+		\textbf{Descripción}          & El gestor o administrador consulta las reservas que existen, y puede aplicar filtros sobre ellas y visualizar los detalles de cada una \\
+		\textbf{Precondición}         & Que sea un usuario autenticado y que tenga el rol de gestor o de administrador. Que la base de datos esté disponible y que existan reservas registradas \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item El usuario accede a \emph{Gestión de reservas periódicas}.
-			\item El sistema muestra el listado de reservas existentes con filtros.
-			\item El usuario pulsa \emph{Nueva reserva periódica}.
-			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
-				\tightlist
-				\item El sistema muestra un formulario con el aula, las horas, la fecha de inicio y de fin del periodo que va a durar, la frecuencia y días, la persona que lo solicita y el motivo.
-				\item El usuario completa los datos y confirma
-			\end{enumerate}
-			\item El usuario selecciona una reserva periódica y pulsa \emph{Editar}
-			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
-				\tightlist
-				\item El sistema permite cambiar los distintos campos de la reserva
-				\item El usuario aplica cambios y confirma 
-			\end{enumerate}
-			\item El sistema valida las restricciones, y actualiza o añade la reserva
-			\item El usuario selecciona una reserva periódica y pulsa \emph{Eliminar}
-			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
-				\tightlist
-				\item El sistema solicita la confirmación y muestra las consecuencias
-				\item El usuario confirma
-				\item El sistema elimina todos los datos correspondientes a esa reserva
-			\end{enumerate}			
+			\item El usuario accede al módulo \emph{Gestionar reservas puntuales}.
+			\item El sistema muestra las reservas que existen en la base de datos
+			\item El usuario puede aplicar filtros
+			\item El sistema actualiza la lista con los resultados filtrados
+			\item El usuario selecciona una reserva específica para ver más información
+			\item El sistema muestra los detalles de la reserva
 		\end{enumerate}\\
-		\textbf{Postcondición} & La reserva periódica queda creada, actualizada o eliminada según la acción     \\
-		\textbf{Excepciones}          & 
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} Viola restricciones \textrightarrow{} impide la creación o edición y muestra el error
-		\end{itemize} \\
-		\textbf{Importancia}          & Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-11 Gestión de reservas periódicas}
-\end{table}
-
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-16}    & \textbf{Modificar día}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El gestor o administrador modifica el tipo de día en el calendario académico. El sistema cambiará el tipo de día que había anteriormente por el seleccionado, y actualizará la información en la base de datos. \\
-		\textbf{Precondición}         &  El usuario autenticado tenga los permisos, que el calendario se encuentre cargado y que la base de datos esté disponible \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El usuario accede al módulo \emph{Calendario académico}
-			\item El sistema muestra el listado de los calendarios que se encuentran cargados en la base de datos mostrando el curso académico al que corresponde cada uno
-			\item El usuario selecciona un curso académico
-			\item El sistema muestra el calendario del curso correspondiente
-			\item El usuario selecciona un día
-			\item El sistema le mostrará las distintas posibilidades de tipo de día que puede seleccionar
-			\item El usuario pulsa sobre el tipo de día
-			\item El sistema cambia el tipo de día y el color correspondiente
-			\item El sistema actualiza los datos del día 
-		\end{enumerate}\\
-		\textbf{Postcondición} & El calendario queda actualizado con las modificaciones de los días realizados\\
+		\textbf{Postcondición}        &  Se muestra al usuario la información de las reservas con la posibilidad de realizar filtros. No se permite la modificación de datos.\\
 		\textbf{Excepciones}          &  
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} Que se modifique un sábado o domingo y se ponga como día lectivo o cambio de docencia\textrightarrow{} mostrar error y solicitar nuevo tipo
-			\item \textbf{Ex2:} Que viole alguna otra restricción \textrightarrow{} Mostrar el error y no permitir el cambio
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\item \textbf{Ex1:} No existen reservas que cumplan los criterios → mostrar mensaje “no hay resultados”.
+			\item \textbf{Ex2:} Error en la conexión a la base de datos → cancelar operación y notificar fallo.
+			\item \textbf{Ex3:} Filtro inválido o mal formado → restablecer búsqueda y mostrar aviso.
 		\end{itemize}\\
-		\textbf{Importancia}          & Alta \\
+		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-16 Modificar día}
+	\caption{CU-06 Consultar reservas puntuales}
 \end{table}
 
 
@@ -535,7 +376,43 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-17}    & \textbf{Crear reserva puntual}\\
+		\textbf{CU-07}    & \textbf{Consultar ocupación de aula}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-04 \\
+		\textbf{Descripción}          & El administrador o el gestor consulta la ocupación del aula para una fecha específica o semanal (solo aparecen las reservas periódicas). El sistema muestra un horario con las horas que se encuentra ocupada o disponible al aula, en función del horario y de las reservas puntuales si así se requiere.\\
+		\textbf{Precondición}         & Que sea un usuario autenticado con el rol de gestor o de administrador, que los horarios y las reservas se encuentren cargadas en el sistema y que la base de datos esté disponible. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al apartado de \emph{Consultar ocupación de aula}.
+			\item El sistema muestra un menú con filtros de aula, fecha o semanal.
+			\item El usuario pulsa el aula y el periodo y pulsa \emph{Buscar}
+			\item El sistema recoge los datos asociado a la búsqueda realizada por el usuario
+			\item El sistema genera una vista con las horas ocupadas y disponibles.
+		\end{enumerate}\\
+		\textbf{Postcondición}        &  El sistema muestra la ocupación del aula seleccionada mostrándose claramente las horas disponibles y las ocupadas.\\
+		\textbf{Excepciones}          & 
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\tightlist
+			\item \textbf{Ex1:} Que el aula no exista o no se haya seleccionado correctamente \textrightarrow mostrar mensaje de error.
+			\item \textbf{Ex2:} Que no existan datos para la fecha o periodo seleccionado \textrightarrow mostrar que no hay existen reservas para ese aula y no hay datos que mostrar
+			\item \textbf{Ex3:} Que la fecha introducida sea inválida \textrightarrow Mostrar mensaje de error
+			\item \textbf{Ex4:} Que haya un error al recoger los datos de la consulta \textrightarrow notificar el fallo
+		\end{itemize}\\ 
+		\textbf{Importancia}          & Media-Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-07 Consultar ocupación de aula}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-08}    & \textbf{Crear reserva puntual}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -565,14 +442,14 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-17 Crear reserva puntual}
+	\caption{CU-08 Crear reserva puntual}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-18}    & \textbf{Revisar solicitudes de reserva}\\
+		\textbf{CU-09}    & \textbf{Revisar solicitudes de reserva}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -600,14 +477,14 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-18 Revisar solicitudes de reserva}
+	\caption{CU-09 Revisar solicitudes de reserva}
 \end{table}
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-19}    & \textbf{Modificar campo solicitud}\\
+		\textbf{CU-10}    & \textbf{Modificar campo solicitud}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -639,15 +516,14 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Importancia}          & Media-Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-19 Modificar campo solicitud}
+	\caption{CU-10 Modificar campo solicitud}
 \end{table}
-
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-20}    & \textbf{Aprobar/rechazar reserva puntual}\\
+		\textbf{CU-11}    & \textbf{Aprobar/rechazar reserva puntual}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -688,15 +564,14 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-20 Aprobar rechazar reserva puntual}
+	\caption{CU-11 Aprobar rechazar reserva puntual}
 \end{table}
-
 
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-21}    & \textbf{Gestión de reservas puntuales}\\
+		\textbf{CU-12}    & \textbf{Gestión de reservas puntuales}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
@@ -736,11 +611,306 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-21 Gestión de reservas puntuales}
+	\caption{CU-12 Gestión de reservas puntuales}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-13}    & \textbf{Consultar horario de grado}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador puede consultar el horario de grado. El sistema muestra las clases planificadas con su aula y hora.  \\
+		\textbf{Precondición}         &  El usuario autenticado tiene permisos , los horarios de los grados deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al módulo \emph{Consultar horarios de grado}
+			\item El sistema muestra los grados por los que filtrar.
+			\item El usuario selecciona el grado del que quiere
+			\item El sistema muestra filtros sobre los que aplicar 
+			\item El usuario selecciona si quiere filtrar o no y pulsa \emph{Buscar}
+			\item El sistema recoge los datos asociado al grado seleccionado y los filtros
+		\end{enumerate}\\
+		\textbf{Postcondición} & Se muestra el horario con los filtros y grado aplicados, con la informaciónn actualizada y recogiendo los datos de la base de datos        \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\tightlist
+			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error.
+			\item \textbf{Ex2:} Que no existan horarios para los filtros seleccionados \textrightarrow mostrar mensaje de que no existen resultados
+		\end{itemize} \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-13 Consultar horario de grado}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-14}    & \textbf{Gestión de reservas periódicas}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-6.2 \\
+		\textbf{Descripción}          & El gestor o administrador crea, edita y elimina las reservas durante el periodo especificado, con la frecuencia especificada.  \\
+		\textbf{Precondición}         & Que sea un usuario autenticado con los permisos de reservas, los aulas y horarios disponibles estén cargados, y la base de datos se encuentre disponible.\\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a \emph{Horarios}.
+			\item El sistema muestra el horario para el curso y semestre seleccionados.
+			\item El usuario pulsa \emph{Crear reserva periódica}.
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema muestra un formulario con el grado, el curso y el semestre preseleccionados del horario en el que se encontraba.
+				\item El usuario modifica los datos precargados si lo cree necesario, añade la asignatura y el grupo para el que va a realizarse la reserva, y la hora de inicio y de fin y el día de la semana que va a ejecutarse, además de seleccionar un aula libre.
+				\item El usuario confirma la reserva
+			\end{enumerate}
+			\item El usuario selecciona una reserva periódica y pulsa \emph{Editar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema permite cambiar los campos relativos al día y hora, y el aula
+				\item El usuario aplica cambios y confirma 
+			\end{enumerate}
+			\item El sistema valida las restricciones, y actualiza o añade la reserva
+			\item El usuario selecciona una reserva periódica y pulsa \emph{Eliminar}
+			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
+				\tightlist
+				\item El sistema solicita la confirmación y muestra las consecuencias
+				\item El usuario confirma
+				\item El sistema elimina todos los datos correspondientes a esa reserva
+			\end{enumerate}			
+		\end{enumerate}\\
+		\textbf{Postcondición} & La reserva periódica queda creada, actualizada o eliminada según la acción     \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Viola restricciones \textrightarrow{} impide la creación o edición y muestra el error
+		\end{itemize} \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-14 Gestión de reservas periódicas}
+\end{table}
+	
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-15} & \textbf{Crear calendario académico}\\
+		\toprule
+		\textbf{Versión} & 1.0 \\
+		\textbf{Autor} & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-08 \\
+		\textbf{Descripción} & El gestor editor crea un nuevo calendario académico para un curso concreto, indicando los periodos docentes, días lectivos, festivos.\\
+		\textbf{Precondición} & El usuario debe estar autenticado, tener permisos de edición sobre el calendario académico y la base de datos debe estar disponible. \\
+		\textbf{Acciones} &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El gestor editor accede al módulo \emph{Calendarios}.
+			\item El usuario pulsa en \emph{Cargar nuevo curso}.
+			\item El sistema muestra un formulario con el curso académico y las fechas principales.
+			\item El usuario introduce los periodos docentes y los días festivos.
+			\item El sistema valida que las fechas sean correctas y que no existan solapamientos incoherentes.
+			\item El sistema crea el calendario académico.
+		\end{enumerate}\\
+		\textbf{Postcondición} & El calendario académico queda creado y disponible para su consulta, modificación y uso durante la generación de reservas periódicas. \\
+		\textbf{Excepciones} &
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Ya existe un calendario para el curso seleccionado \textrightarrow{} impedir la creación y mostrar un mensaje de aviso.
+			\item \textbf{Ex2:} Fechas incoherentes o solapadas \textrightarrow{} impedir la creación hasta que se corrijan.
+			\item \textbf{Ex3:} Error al guardar el calendario \textrightarrow{} cancelar la operación y mostrar mensaje de error.
+		\end{itemize}\\
+		\textbf{Importancia} & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-15 Crear calendario académico}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-16}    & \textbf{Consultar calendario académico}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador puede consultar el calendario académico de la politécnica. El sistema mostrará el calendario indicando los días lectivos correspondientes a ambos semestres, los días correspondientes a exámenes de convocatoria, a TFG, los días festivos y los días que se produce un cambio de docencia.  \\
+		\textbf{Precondición}         &  El usuario autenticado tiene permisos, los tipos de día deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al módulo \emph{Calendarios}
+			\item El sistema muestra una lista con los cursos que tienen calendario cargado.
+			\item El usuario selecciona el curso apara el que quiere ver el calendario.
+			\item El sistema muestra el calendario académico con diferentes colores en función del tipo de día.
+		\end{enumerate}\\
+		\textbf{Postcondición} & Se muestra el calendario académico coloreando cada tipo de día con un color diferente (rojo: festivo, morado: cambio de docencia, amarillo: lectivos primer semestre, verde: exámenes convocatoria, azul: lectivos segundo semestre y naranja: días de TFG y TFM), recogiendo los datos de la base de datos        \\
+		\textbf{Excepciones}          & 
+		\begin{itemize}[itemsep=0.15em, parsep=0pt, topsep=0pt, leftmargin=*]
+			\tightlist
+			\item \textbf{Ex1:} Error de conexión a la base de datos \textrightarrow mostrar mensaje de error. 
+		\end{itemize} \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-16 Consultar calendario académico}
 \end{table}
 
 
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-17}    & \textbf{Modificar día}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} &  \\
+		\textbf{Descripción}          & El gestor o administrador modifica el tipo de día en el calendario académico. El sistema cambiará el tipo de día que había anteriormente por el seleccionado, y actualizará la información en la base de datos. \\
+		\textbf{Precondición}         &  El usuario autenticado tenga los permisos, que el calendario se encuentre cargado y que la base de datos esté disponible \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede al módulo \emph{Calendarios}
+			\item El sistema muestra el listado de los calendarios que se encuentran cargados en la base de datos mostrando el curso académico al que corresponde cada uno
+			\item El usuario selecciona un curso académico
+			\item El sistema muestra el calendario del curso correspondiente
+			\item El usuario selecciona uno o varios días
+			\item El sistema le mostrará las distintas posibilidades de tipo de día que puede seleccionar
+			\item El usuario pulsa sobre el tipo de día
+			\item El sistema cambia el tipo de día, y por tanto se actualiza el color.
+		\end{enumerate}\\
+		\textbf{Postcondición} & El calendario queda actualizado con las modificaciones de los días realizados\\
+		\textbf{Excepciones}          &  
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} Que se modifique un sábado o domingo y se ponga como día lectivo o cambio de docencia\textrightarrow{} mostrar error y solicitar nuevo tipo
+			\item \textbf{Ex2:} Que viole alguna otra restricción \textrightarrow{} Mostrar el error y no permitir el cambio
+		\end{itemize}\\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-17 Modificar día}
+\end{table}
 
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-18} & \textbf{Solicitar reserva}\\
+		\toprule
+		\textbf{Versión} & 1.0 \\
+		\textbf{Autor} & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-03, RF-03.1 \\
+		\textbf{Descripción} & El PDI solicita una reserva puntual de aula indicando los datos necesarios, como fecha, franja horaria, motivo y recursos requeridos. El sistema registra la solicitud con estado pendiente para que posteriormente sea revisada por un gestor. \\
+		\textbf{Precondición} & El PDI debe estar autenticado, la base de datos debe estar disponible y deben existir aulas registradas en el sistema. \\
+		\textbf{Acciones} &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El PDI pulsa el botón\emph{Crear Reserva}.
+			\item El sistema muestra el formulario de solicitud.
+			\item El PDI introduce la fecha, hora de inicio, hora de fin, motivo y recursos necesarios.
+			\item El sistema valida que los campos obligatorios estén completos.
+			\item El sistema busca un aula compatible con los datos introducidos.
+			\item El PDI confirma la solicitud.
+			\item El sistema registra la reserva con estado \emph{Pendiente}.
+		\end{enumerate}\\
+		\textbf{Postcondición} & La solicitud de reserva queda registrada con estado pendiente y asociada al usuario que la ha realizado. \\
+		\textbf{Excepciones} &
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} No existe ningún aula disponible \textrightarrow{} impedir el envío y solicitar modificar los datos.
+			\item \textbf{Ex2:} Campos obligatorios incompletos \textrightarrow{} mostrar los errores de validación.
+			\item \textbf{Ex3:} Fecha u hora no válida \textrightarrow{} impedir la creación de la solicitud.
+		\end{itemize}\\
+		\textbf{Importancia} & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-18 Solicitar reserva}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-19} & \textbf{Consultar reservas propias}\\
+		\toprule
+		\textbf{Versión} & 1.0 \\
+		\textbf{Autor} & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-02 \\
+		\textbf{Descripción} & El PDI consulta las reservas y solicitudes que ha realizado, pudiendo comprobar su estado y visualizar la información asociada a cada una de ellas. \\
+		\textbf{Precondición} & El PDI debe estar autenticado y deben existir reservas o solicitudes asociadas a su usuario. \\
+		\textbf{Acciones} &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El sistema muestra el listado de reservas propias.
+			\item El PDI puede filtrar por fecha, estado o motivo.
+			\item El sistema actualiza el listado según los filtros aplicados.
+			\item El PDI puede ver los campos de la reserva de forma compacta en la lista de reservas.
+		\end{enumerate}\\
+		\textbf{Postcondición} & El PDI visualiza sus reservas y el estado en el que se encuentran, sin modificar los datos. \\
+		\textbf{Excepciones} &
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} No existen reservas propias \textrightarrow{} mostrar un mensaje indicando que no hay resultados.
+			\item \textbf{Ex2:} Error al recuperar los datos \textrightarrow{} mostrar mensaje de error y cancelar la consulta.
+		\end{itemize}\\
+		\textbf{Importancia} & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-19 Consultar reservas propias}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-20} & \textbf{Editar reservas propias}\\
+		\toprule
+		\textbf{Versión} & 1.0 \\
+		\textbf{Autor} & Rebeca Cuesta Estépar \\
+		\textbf{Requisitos asociados} & RF-03.2 \\
+		\textbf{Descripción} & El PDI modifica los datos de una reserva propia siempre que esta todavía no haya sido procesada por un gestor, es decir mientras su estado sea Pendiente. Esta funcionalidad permite corregir errores o adaptar la solicitud antes de su aprobación o rechazo. \\
+		\textbf{Precondición} & El PDI debe estar autenticado, la reserva debe pertenecerle y debe encontrarse en estado Pendiente. \\
+		\textbf{Acciones} &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El sistema muestra el listado de reservas propias.
+			\item El PDI selecciona una reserva editable.
+			\item El sistema muestra los datos actuales de la reserva.
+			\item El PDI modifica los campos necesarios.
+			\item El sistema valida los nuevos datos introducidos.
+			\item El sistema actualiza la solicitud de reserva.
+		\end{enumerate}\\
+		\textbf{Postcondición} & La reserva propia queda actualizada correctamente. Si falla la operación, se mantienen los datos anteriores. \\
+		\textbf{Excepciones} &
+		\begin{itemize}
+			\tightlist
+			\item \textbf{Ex1:} La reserva ya ha sido aprobada o rechazada \textrightarrow{} impedir la modificación.
+			\item \textbf{Ex2:} La reserva no pertenece al usuario \textrightarrow{} impedir el acceso.
+			\item \textbf{Ex3:} Los nuevos datos incumplen restricciones \textrightarrow{} no guardar los cambios y mostrar el error.
+		\end{itemize}\\
+		\textbf{Importancia} & Media-Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-20 Editar reservas propias}
+\end{table}
 
 \begin{table}[p]
 	\centering
