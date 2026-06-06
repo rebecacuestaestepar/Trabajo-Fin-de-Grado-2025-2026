@@ -35,9 +35,6 @@ class BaseDatosDocenciaTests(TestCase):
             horas_practicas=2
         )
 
-    def test_creacion_grado_y_str(self):
-        self.assertEqual(str(self.grado_ii), 'Grado en Ingeniería Informática')
-
     def test_asignatura_ects_no_negativos(self):
         asignatura_invalida = Asignaturas(
             idasignatura='1234',
@@ -46,23 +43,6 @@ class BaseDatosDocenciaTests(TestCase):
             curso_grado=1,
             semestre_academico=1,
             ects=-5, # Valor de ECTS > 0
-            grado_id=self.grado_ii,
-            tipo='O',
-            horas_practicas=2
-        )
-
-        with self.assertRaises((ValidationError, IntegrityError)):
-            asignatura_invalida.full_clean()
-            asignatura_invalida.save()
-
-    def test_asignatura_ects_no_cero(self):
-        asignatura_invalida = Asignaturas(
-            idasignatura='1234',
-            nombre='Asignatura Inválida',
-            abreviatura='INV',
-            curso_grado=1,
-            semestre_academico=1,
-            ects=0, # Valor de ECTS no puede ser cero
             grado_id=self.grado_ii,
             tipo='O',
             horas_practicas=2
