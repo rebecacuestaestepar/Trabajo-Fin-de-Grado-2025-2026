@@ -12,18 +12,18 @@ from docencia.services import (
 class GradoServiceTests(TestCase):
     def setUp(self):
         self.grado = Grado.objects.create(
-            idgrado='GII', nombre='Grado en Ingeniería Informática',
+            idgrado='596', nombre='Grado en Ingeniería Informática',
             abreviatura='GII', coordinador='Álvar Arnaiz'
         )
 
     def test_list(self):
-        Grado.objects.create(idgrado='GIM', nombre='Mecánica', abreviatura='GIM')
+        Grado.objects.create(idgrado='589', nombre='Doble Grado', abreviatura='DOB')
         resultados = GradoService.list()
         self.assertEqual(resultados.count(), 2)
-        self.assertEqual(resultados.first().idgrado, 'GII')
+        self.assertEqual(resultados.first().idgrado, '589')
 
     def test_retrieve_success(self):
-        grado = GradoService.retrieve('GII')
+        grado = GradoService.retrieve('596')
         self.assertEqual(grado.nombre, 'Grado en Ingeniería Informática')
 
     def test_retrieve_404(self):
@@ -31,19 +31,19 @@ class GradoServiceTests(TestCase):
             GradoService.retrieve('INVENTADO')
 
     def test_create(self):
-        datos = {'idgrado': 'GEE', 'nombre': 'Electrónica', 'abreviatura': 'GEE'}
+        datos = {'idgrado': '689', 'nombre': 'Electrónica', 'abreviatura': 'GEE'}
         grado = GradoService.create(datos)
         self.assertEqual(Grado.objects.count(), 2)
-        self.assertEqual(grado.idgrado, 'GEE')
+        self.assertEqual(grado.idgrado, '689')
 
     def test_update(self):
         datos = {'coordinador': 'Nuevo Coord', 'abreviatura': 'INFO'}
-        grado = GradoService.update('GII', datos)
+        grado = GradoService.update('596', datos)
         self.assertEqual(grado.coordinador, 'Nuevo Coord')
         self.assertEqual(grado.abreviatura, 'INFO')
 
     def test_delete(self):
-        GradoService.delete('GII')
+        GradoService.delete('596')
         self.assertEqual(Grado.objects.count(), 0)
 
     def test_lista_mini_grados(self):
@@ -55,7 +55,7 @@ class GradoServiceTests(TestCase):
 
 class AsignaturaServiceTests(TestCase):
     def setUp(self):
-        self.grado = Grado.objects.create(idgrado='GII', nombre='Info', abreviatura='GII')
+        self.grado = Grado.objects.create(idgrado='589', nombre='Doble Grado', abreviatura='DOB')
         self.asignatura = Asignaturas.objects.create(
             idasignatura='8797', nombre='Álgebra', abreviatura='ALG',
             curso_grado=1, semestre_academico=1, ects=6, grado_id=self.grado, tipo='O'
@@ -96,13 +96,13 @@ class AsignaturaServiceTests(TestCase):
     def test_lista_mini_asignaturas(self):
         resultados = lista_mini_asignaturas()
         self.assertEqual(len(resultados), 1)
-        self.assertEqual(resultados[0]['grado_abreviatura'], 'GII')
+        self.assertEqual(resultados[0]['grado_abreviatura'], 'DOB')
         self.assertEqual(resultados[0]['nombre'], 'Álgebra')
 
 
 class GrupoServiceTests(TestCase):
     def setUp(self):
-        self.grado = Grado.objects.create(idgrado='GII', nombre='Info', abreviatura='GII')
+        self.grado = Grado.objects.create(idgrado='596', nombre='Info', abreviatura='GII')
         self.asignatura = Asignaturas.objects.create(
             idasignatura='8797', nombre='Álgebra', curso_grado=1,
             semestre_academico=1, ects=6, grado_id=self.grado

@@ -60,8 +60,6 @@ def crear_reserva_periodica(id_curso, semestre_num, datos_reserva):
     semestre = 2
     if semestre_num % 2 == 1:
         semestre = 1
-
-    print(f"Creando reserva periódica para curso {id_curso}, semestre {semestre_num} (semestre académico {semestre}), grupo {grupo}, aula {aula}, día semana {num_dia}, hora inicio {hora_inicio}, hora fin {hora_fin}")
     
     semestre_obj = Semestre.objects.filter(curso_id=id_curso, numero=semestre).first()
 
@@ -74,11 +72,15 @@ def crear_reserva_periodica(id_curso, semestre_num, datos_reserva):
         while dia_actual <= semestre_obj.fecha_fin:
             dia = Dia.objects.filter(dia=dia_actual).first()
 
-            if dia and dia.dia_semana == num_dia:
+            if dia:
                 lectivo = Lectivo.objects.filter(id_dia=dia.dia).first()
                 cambio_docencia = CambioDocencia.objects.filter(id_dia=dia.dia).first()
 
-                if (lectivo and not cambio_docencia) or (cambio_docencia and cambio_docencia.sustituye_dia == num_dia):
+                es_dia_normal = (dia.dia_semana == num_dia) and lectivo and not cambio_docencia
+
+                es_dia_cambiado = cambio_docencia and (cambio_docencia.sustituye_dia == num_dia)
+
+                if es_dia_normal or es_dia_cambiado:
                     reserva = Reserva.objects.create(
                         id_aula = aula,
                         id_dia = dia,
