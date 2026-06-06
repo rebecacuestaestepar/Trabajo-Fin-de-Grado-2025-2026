@@ -38,54 +38,55 @@ Una muestra de cómo podría ser una tabla de casos de uso:
 En este apartado se detallan todos los requisitos que debe  satisfacer la aplicación desarrollada. Para ello se realiza la distinción entre los requisitos funcionales, que describen los servicios y comportamientos que se esperan que tenga la aplicación, y los requisitos no funcionales, que establecen las condiciones de calidad, rendimiento, seguridad y uso que deben cumplirse. Estos requisitos sirven como base para el diseño, implementación y validación del sistema.
 
 \subsection{Requisitos Funcionales}
-\begin{enumerate}
+\begin{itemize}
 	\item RF-01. Autenticación de usuarios.
 	\\La aplicación deberá permitir que los usuarios accedan al sistema mediante un mecanismo de autenticación basado en credenciales. El usuario deberá de introducir su usuario y contraseña de la universidad de Burgos para poder iniciar sesión en la aplicación y acceder a las funcionalidades disponibles. Una vez el usuario ha sido autenticado, el sistema identificará el rol asociado al usuario para determinar y restringir las acciones a las que puede y no puede acceder en función a sus permisos.
 	\item RF-02. Consultar reservas. 
 	\\La aplicación deberá permitir consultar todas las reservas registradas en el sistema, mostrando la información relevante de cada una de ellas. Entre estos datos se incluirán la fecha y hora de inicio y de fin de la reserva, el título que será el motivo de la reserva, el estado en el que se encuentra, el aula al que se encuentra asociada la reserva y los recursos que se han solicitado como la capacidad, el número de ordenadores,... Además el sistema nos permitirá filtrar estas reservas de manera que solo aparezcan las reservas pendientes o si queremos que aparezcan todas, o filtrar mediante rango de fechas, por motivo o por el correo del responsable de la reserva. De forma que permite a los usuarios autorizados a poder consultar las reservas de forma más rápida y directa.
 	\item RF-03. Gestionar reservas.
 	\\La aplicación deberá permitir la gestión de reservas de aulas, distinguiendo entre reservas puntuales y reservas periódicas. Las reservas puntuales podrán ser solicitadas por los usuarios autorizados que tendrán que rellenar un formulario para ello y asignando un aula, el usuario con permisos de edición, validará los campos de la reserva y modificará el aula asignado si lo cree conveniente. Las reservar periódicas, por el contrario, está dirigida a la organización de las clases impartidas por cada grado y tendrán prioridad sobre las reservas puntuales. Esta funcionalidad es el núcleo de la aplicación.
-	\begin{enumerate}
+	\begin{itemize}
 		\item RF-03.1. Crear reserva.
-		\\El sistema deberá permitir la creación de reservas a través del formulario correspondiente para ello. Donde se recogerán las mismas características que en el formulario de la solicitud, y en este caso, permitirá también elegir el estado de la reserva por el usuario antes de crearla. La aplicación mostrará las aulas disponibles que estén libres para la fecha y hora introducida y con los recursos solicitados. Una vez creada la reserva, se registra y se actualizan de manera automática la ocupación del aula elegido.
+		\\El sistema deberá permitir la creación de reservas puntuales a través del formulario correspondiente para ello. Donde se recogerán las mismas características que en el formulario de la solicitud, y en este caso, permitirá también elegir el estado de la reserva por el usuario antes de crearla. La aplicación mostrará las aulas disponibles que estén libres para la fecha y hora introducida y con los recursos solicitados. Una vez creada la reserva, se registra y se actualizan de manera automática la ocupación del aula elegido. En cuanto a las periódicas, se rellenará el formulario correspondiente seleccionando la asignatura y grupo para la que se quiere impartir, el día de la semana y el rango horario, y el aula libre encontrado.
 		\item RF-03.2. Editar reserva.
 		\\La aplicación deberá permitir la modificación de reservas ya existentes, si el usuario dispone de los permisos necesarios para ello. Se pueden modificar todos los campos incluido el estado de la reserva, la fecha y hora y el aula asignado a la reserva, entre otros campos. Antes de guardar los cambios, el sistema deberá de comprobar que los cambios realizados en la reserva no provoquen conflictos con otras reservas existentes o con la ocupación del aula. Si la modificación es correcta, se actualizarán los cambios de manera automática en el sistema.
 		\item RF-03.3. Eliminar reserva.
 		\\La aplicación deberá de permitir eliminar reservas existentes en el sistema, siempre que el usuario tenga los permisos adecuados para poder llevar a cabo esta acción. Al eliminar la reserva, el aula quedará  disponible para que pueda ser asignado en la fecha y horas correspondientes por otras futuras reservas. De forma que el sistema deberá garantizar que la eliminación de la reserva se refleja de manera correcta en la consulta de la ocupación. Esta operación deberá realizarse de forma controlada para evitar eliminaciones de manera accidental, incluyendo un mensaje de confirmación previo.
-	\end{enumerate}
-	\item RF-04. Generar informes.
-	\\La aplicación deberá de permitir generar informes de manera automática relacionados con la organización de docencia como exámenes y horarios y la ocupación de aulas. El objetivo de estos informes es la publicación de los mismos en la página oficial de la universidad o su divulgación en las puertas de las aulas para el caso de la ocupación. La información generada en los informes deberá estar actualizada con los últimos cambios del sistema. 
-	\begin{enumerate}
-		\item RF-04.1. Informe de horarios por grado.
-		\\La aplicación deberá de generar informes de horarios organizados por grados, y opcionalmente se podrán filtrar por grado y semestre. Este informe deberá de mostrar de forma estructurada las asignaturas que son impartidas, especificando el horario, el grado y el aula asignada. Teniendo un formato visual adecuado para poder publicarlo y en el que se distinga bien toda la información aportada. El objetivo es ofrecer una distribución semanal de cada grado de manera muy visual, de forma que sea útil tanto para estudiantes como para profesores.
-		\item RF-04.2. Informe de ocupación de aulas. La aplicación tendrá que permitir generar un informe de manera semanal de un aula concreta. Mostrándose las clases programadas para ese aula, indicando el horario y la asignatura impartida. Este informe facilitará saber la disponibilidad real de las aulas en cuanto a reservas periódicas facilitando así también, la planificación de nuevas reservas para ese aula. También será útil para generar el documento que posteriormente pueda ser colocado en la entrada del aula. La idea principal es que solamente sean incluidas las reservas periódicas o clases.
-		\item RF-04.3. Informe de exámenes convocatorias. La aplicación deberá generar informes con la planificación de los exámenes de convocatoria de un grado concreto, incluyendo en él asignatura examinada, fecha y hora, convocatoria del examen y aula reservada para su realización. Calculando de forma ordenada la fecha de exámenes calculada que variará de un curso escolar a otro. Su objetivo principal es que sirva también tanto para estudiantes como profesorado, pudiendo ser publicado en la página de la universidad.
-	\end{enumerate}
-	\item RF-05. Gestión de roles.
+	\end{itemize}
+	\item RF-04. Gestión de roles.
 	\\La aplicación deberá estar basada en la organización de permisos mediante roles. De forma que cada rol tenga las acciones o permisos limitados evitando que acceda a los de otro rol. Los roles que vamos a encontrar principalmente son el administrador, el gestor editor, el gestor no editor y el PDI (Personal Docente de Investigación) adaptando el comportamiento del sistema en función del perfil o rol, lo que a su vez también reforzará la seguridad y evitará que usuarios sin autorización puedan ejecutar a algunas acciones que puedan ser críticas, lo que hace que sea una funcionalidad muy importante en el proyecto.
-	\begin{enumerate}
-		\item RF-05.1. Crear rol. 
+	\begin{itemize}
+		\item RF-04.1. Crear rol. 
 		\\La aplicación deberá de permitir al administrador crear nuevos roles cuando lo crea necesario. Cada rol tendrá un nombre que lo identifique y unos permisos asociados. Dando cierta flexibilidad y evitando que la organización de la aplicación se defina al principio y quede cerrada. Los nuevos roles que se agreguen posteriormente podrán asignarse a los usuarios, haciendo que el sistema pueda evolucionar si la institución así lo requiriese.
-		\item RF-05.2. Editar rol.
+		\item RF-04.2. Editar rol.
 		\\La aplicación permitirá realizar modificaciones sobre un rol, tanto modificando su nombre identificativo, como los permisos que tiene asociados. Dando la posibilidad de modificar las acciones que puede realizar un perfil de usuario permitiendo restringir o ampliar las funcionalidades a cada uno de los roles. El sistema deberá de comprobar que estos cambios no produzcan inconsistencia en el sistema dando problemas con el control de accesos.
-		\item RF-05.3. Eliminar rol.
+		\item RF-04.3. Eliminar rol.
 		\\Si un rol deja de ser necesario en el sistema, la aplicación deberá de permitir eliminarlo. Antes de eliminarlo deberá de comprobar el sistema que no se deja ningún usuario sin rol asignado generando problemas de acceso e inconsistencia. En caso de que no sea así, se podrá exigir antes de eliminarlo que se reasignen los usuarios asociados al rol a otro. Esta funcionalidad ayudará a que la estructura de los roles se mantenga limpia y actualizada mientras se utilice la aplicación.
-		\item RF-05.4. Gestionar permisos.
+		\item RF-04.4. Gestionar permisos.
 		\\La aplicación deberá de permitir asociar permisos concretos a cada rol definido en el sistema. Estos permisos lo que harán será determinar que operaciones o acciones puede realizar cada usuario sobre las reservas, informes, usuarios,... Permitiendo controlar de forma precisa el acceso a las distintas acciones, implantando un modelo de seguridad basado en los roles.
-	\end{enumerate}
+	\end{itemize}
 	\item RF-06. Gestión de usuarios. 
 	\\En este caso, como se ha mencionado en el requisito de la autenticación, esta funcionalidad será controlada mediante las credenciales asignadas a cada miembro de la universidad por la misma. De forma, que solo podrán existir usuarios que hayan sido designados por la misma institución. Pudiendo acceder usuarios que no se encuentren en base de datos, o editándolos que en este caso, serían los permisos y el rol asociado.
-	\begin{enumerate}
+	\begin{itemize}
 		\item RF-06.1. Crear usuario.
 		\\El sistema deberá permitir que cuando un usuario no se encuentre en base de datos podrá iniciar sesión asignándole por defecto el rol de PDI. Aunque el sistema deberá permitir también que el administrador añada a usuarios asignándole el rol que crea necesario.
 		\item RF-06.2. Editar usuario.
 		\\Como ya se ha mencionado, el sistema permitirá la edición de los usuarios será respecto a los roles asociado modificando su entrada en base de datos. Debido a que las credenciales no podrán ser modificadas por el sistema, sino que de eso se encargaría el sistema de la institución.
 		\item RF-06.3. Eliminar usuario.
 		\\El sistema permitirá al usuario con permisos poder eliminar la entrada en base de datos del usuario correspondiente, eliminando así el rol asociado, de forma que cuando entre se le asignará el rol de PDI. Ya que denegar el acceso no dependerá del sistema de este proyecto.
-	\end{enumerate}
-	\item RF-07. Calcular fechas de exámenes.
-	\\La aplicación mediante el algoritmo especificado permitirá calcular las nuevas fechas de los exámenes para el curso especificado. Estos cálculos serán la propuesta principal, permite sufrir las modificaciones necesarias mientras no violen restricciones los cambios realizados. El objetivo de esta funcionalidad es realizar una rotación de asignaturas, manteniendo en mayor mediada posible la estructura como las fechas y las horas de convocatorias anteriores. De forma que sirva de apoyo y facilite la organización académica, reduciendo el trabajo manual en la elaboración inicial del calendario de exámenes.
-\end{enumerate}
+	\end{itemize}
+	\item RF-07. Cargar horarios desde hoja de cálculo.
+	\\ La aplicación deberá permitir la carga de horarios docentes a partir de una hoja de cálculo, con la estructura específica y unificada con las reglas expuestas. Esta funcionalidad permitirá transformar la información contenida en el fichero en reservas periódicas dentro del sistema, evitando que el gestor tenga que introducir de forma manualmente cada una de las clases. Además, permite automatizar la generación de reservas periódicas asociadas a la docencia a través del analizador léxico, y las generará teniendo en cuenta el calendario académico.
+	
+	\item RF-08. Gestión del calendario académico.
+	\\ La aplicación deberá permitir la gestión del calendario académico utilizado para la generación y validación de reservas periódicas. Este calendario será la base para determinar los días lectivos, los periodos de docencia de cada cuatrimestre, los cambios de docencia, los días festivos, los periodos de exámenes y los periodos de solamente TFG. De esta forma, el sistema podrá crear las reservas docentes de manera coherente con la planificación oficial de la universidad, evitando generar ocupaciones en fechas en las que no exista actividad académica.
+	\begin{itemize}
+		\item RF-08.1. Crear calendario académico.
+		\\ La aplicación deberá permitir al usuario autorizado crear un calendario académico. Para ello, se deberán introducir los datos principales, como el curso académico, la fecha de inicio y de fin del curso, los periodos de docencia, es decir, las fechas de inicio y de fin de ambos cuatrimestres, y los días lectivos.
+		\item RF-08.2. Editar calendario académico. 
+		\\El sistema debe permitir modificar el calendario existente, siempre que el usuario tenga los permisos necesarios. Se podrá modificar el tipo de día de uno en uno, o mediante rangos de fechas seleccionadas, permitiendo seleccionar el tipo de día al que quieren actualizarlo.
+	\end{itemize}
+\end{itemize}
 
 \subsection{Requisitos No Funcionales}
 
@@ -106,7 +107,6 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 	\item RNF-07. Mantenimiento.
 	\\La aplicación debe ser desarrollada de forma que tanto su mantenimiento como su evolución resulten sencillos. Para poder conseguirlo, es recomendable seguir una estructura modular, con la separación entre la interfaz, la lógica de negocio y el acceso a datos. También es importante que el código sea claro, esté documentado y sea fácil de modificar. Este requisito nos permite poder corregir errores, adaptar funcionalidades y ampliar el sistema con un menor coste técnico.
 \end{enumerate}
-\section{Especificación de requisitos}
 
 \section{Especificación de casos de uso}
 
