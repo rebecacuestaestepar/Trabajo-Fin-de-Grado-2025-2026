@@ -614,7 +614,7 @@ El desarrollo del proyecto se ha llevado a cabo entre el 8 de septiembre y el 10
 
 El principal coste del proyecto corresponde al tiempo dedicado al análisis, diseño, implementación, pruebas y documentación de la aplicación. Para estimar este coste se ha partido de las 457 horas registradas a partir de las estimaciones de los \textit{issues} del repositorio de GitHub.
 
-Al tratarse de un Trabajo de Fin de Grado, no ha existido un coste real de contratación. Sin embargo, para obtener una aproximación más realista, se puede considerar que el desarrollo habría sido realizado por una persona con perfil de desarrollador \textit{full stack junior}. De esta forma, el coste total de personal se calcularía multiplicando el número total de horas dedicadas por el coste horario estimado para dicho perfil. Investigando el salario medio de un trabajador para este perfil, se ha asignado el coste por hora en 13 euros.
+Al tratarse de un Trabajo de Fin de Grado, no ha existido un coste real de contratación. Sin embargo, para obtener una aproximación más realista, se puede considerar que el desarrollo habría sido realizado por una persona con perfil de desarrollador \textit{full stack junior}. De esta forma, el coste total de personal se calcularía multiplicando el número total de horas dedicadas por el coste horario estimado para dicho perfil. Investigando el salario medio de un trabajador para este perfil, se ha asignado el coste por hora en 12 euros.
 
 \[
 \text{Coste de personal} = \text{Horas dedicadas} \times \text{Coste por hora}
@@ -626,19 +626,27 @@ Sustituyendo las horas dedicadas y el coste por hora:
 \text{Coste de personal} = 457 \times 12 = 5484\ \text{euros}
 \]
 
-Además del salario bruto, en un entorno profesional la empresa debe asumir una serie de costes adicionales asociados a las cotizaciones a la Seguridad Social. Para esta estimación se ha considerado un porcentaje aproximado del 31,4 \% sobre el salario bruto.
+Además del salario bruto, en un entorno profesional la empresa debe asumir una serie de costes adicionales asociados a las cotizaciones a la Seguridad Social. Para esta estimación se ha una nómina propia, y se ha buscado el porcentaje para los accidentes de trabajo ya que varía dependiendo de la profesión \cite{accidentesTrabajo}. A través de ambas fuentes se han deducido los siguientes porcentajes:
+\begin{itemize}
+	\item Contingencias comunes: 23,6 \%
+	\item Desempleo de empresa: 6,7 \%
+	\item Accidentes de trabajo: 1,5 \%
+	\item Formación profesional: 0,6 \%
+	\item FOGASA: 0,2 \%
+\end{itemize}
+Siendo la suma total de todos los porcentajes un 32,6\%.
 
 \[
-\text{Cotizaciones empresariales} = 5484,00 \times 0,314 = 1721,98\ \text{euros}
+\text{Cotizaciones empresariales} = 5484,00 \times 0,314 = 1787,78\ \text{euros}
 \]
 
 Por tanto, el coste total de personal para la empresa sería:
 
 \[
-\text{Coste total de personal} = 5484,00 + 1721,98 = 7205,98\ \text{euros}
+\text{Coste total de personal} = 5484,00 + 1787,78 = 7271,78\ \text{euros}
 \]
 
-Como se muestra en la Tabla~\ref{tab:costes-personal}, el coste estimado al desarrollo del proyecto asciende a 7205,98 euros.
+Como se muestra en la Tabla~\ref{tab:costes-personal}, el coste estimado de personal asociado al desarrollo del proyecto asciende a 7271,78 euros.
 
 \begin{table}[H]
 \centering
@@ -646,15 +654,16 @@ Como se muestra en la Tabla~\ref{tab:costes-personal}, el coste estimado al desa
 	\toprule
 	\textbf{Concepto} & \textbf{Coste} \\
 	\midrule
-	Salario bruto estimado & 5941,00 € \\
-	Cotizaciones empresariales & 1865,47 € \\
+	Salario bruto estimado & 5484,00 € \\
+	Cotizaciones empresariales & 1787,78 € \\
 	\midrule
-	\textbf{Coste total de personal} & \textbf{7806,47 €} \\
+	\textbf{Coste total de personal} & \textbf{7271,78 €} \\
 	\bottomrule
 \end{tabular}
 \caption{Costes de personal del proyecto}
 \label{tab:costes-personal}
 \end{table}
+
 
 \subsubsection{Costes de hardware}
 
@@ -740,6 +749,65 @@ Como se recoge en la Tabla~\ref{tab:costes-infraestructura}, el coste estimado p
 	\label{tab:costes-infraestructura}
 \end{table}
 
+\subsubsection{Resumen de costes}
+
+Una vez analizados los costes de personal, hardware, software e infraestructura, se obtiene una estimación del coste total del proyecto. Esta estimación no representa un gasto real realizado durante el Trabajo de Fin de Grado, sino una aproximación al coste que tendría desarrollar una aplicación de estas características en un entorno profesional.
+
+No se han incluido costes indirectos de forma independiente, como electricidad o conexión a Internet, debido a que no se dispone de una medición exacta del consumo asociado únicamente al desarrollo del proyecto. Del mismo modo, no se ha aplicado IVA al cálculo final, ya que el objetivo del estudio no es establecer un precio de venta o facturación, sino estimar el coste interno aproximado del desarrollo.
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l r}
+		\toprule
+		\textbf{Concepto} & \textbf{Coste estimado} \\
+		\midrule
+		Costes de personal & 7271,78 € \\
+		Costes de hardware & 194,85 € \\
+		Costes de software & 145,00 € \\
+		Costes de infraestructura y despliegue & 14,00 € \\
+		\midrule
+		\textbf{Coste total estimado} & \textbf{7625,63 €} \\
+		\bottomrule
+	\end{tabular}
+	\caption{Resumen de costes del proyecto}
+	\label{tab:total}
+\end{table}
+
+Como se observa en la Tabla~\ref{tab:total}, el coste total estimado del proyecto asciende a 8160,32 euros. La mayor parte de este importe corresponde a los costes de personal, ya que el desarrollo de la aplicación ha requerido tareas de análisis, diseño, implementación, pruebas, despliegue y documentación.
+
 \subsection{Viabilidad legal}
 
+En este apartado se analiza la viabilidad legal del proyecto, teniendo en cuenta las herramientas utilizadas durante el desarrollo, sus respectivas licencias y el tratamiento de datos personales dentro de la aplicación. Este análisis resulta necesario debido a que el sistema gestiona usuarios autenticados, roles de acceso, reservas de aulas, horarios docentes e información asociada al ámbito académico.
+
+\subsubsection{Licencias de software}
+
+En la Tabla~\ref{tab:licencias>} se muestran las principales herramientas, bibliotecas y servicios utilizados durante el desarrollo del proyecto, junto con su uso dentro de la aplicación y la licencia asociada.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l l l}
+		\toprule
+		\textbf{Herramienta / Biblioteca} & \textbf{Uso en el proyecto} & \textbf{Licencia} \\
+		\midrule
+		Python & Lenguaje principal del backend & PSF License \\
+		Django & Framework de desarrollo backend & BSD-3-Clause \\
+		Django REST Framework & Desarrollo de la API REST & BSD \\
+		django-cors-headers & Configuración de CORS & MIT \\
+		Requests & Comunicación con servicios externos & Apache License 2.0 \\
+		openpyxl & Lectura y procesamiento de hojas Excel & MIT \\
+		React & Desarrollo de la interfaz frontend & MIT \\
+		Vite & Herramienta de construcción del frontend & MIT \\
+		Tailwind CSS & Diseño de estilos de la interfaz & MIT \\
+		MySQL Community Edition & Sistema gestor de base de datos & GPL \\
+		GitHub & Control de versiones y gestión de issues & Servicio externo \\
+		Railway & Despliegue de la aplicación & Servicio externo \\
+		Windows & Sistema operativo de desarrollo & Licencia propietaria \\
+		\bottomrule
+	\end{tabular}
+	\caption{Resumen de licencias de las herramientas utilizadas}
+	\label{tab:licencias}
+\end{table}
+
+Como se observa en la Tabla~\ref{tab:licencias}, la mayor parte de las tecnologías utilizadas se distribuyen bajo licencias permisivas, principalmente MIT, BSD y Apache 2.0. Estas licencias permiten utilizar, modificar y distribuir el software con pocas restricciones, siempre que se respeten las condiciones establecidas, como conservar los avisos de copyright y la información de licencia correspondiente.
 
