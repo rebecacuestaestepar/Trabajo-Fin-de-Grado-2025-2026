@@ -554,6 +554,35 @@ La tabla \textit{LECTIVO} almacena los días del calendario académico que tiene
 
 \section{Diseño arquitectónico}
 
+En esta sección se describe la arquitectura general seguida durante el desarrollo de la aplicación. El objetivo es mostrar cómo se organizan los distintos componentes del sistema, qué responsabilidades tiene cada uno de ellos y cómo se comunican entre sí para ofrecer las funcionalidades definidas en la especificación de requisitos.
+
+La aplicación se ha diseñado siguiendo una arquitectura web cliente-servidor desacoplada. En este modelo, el \textit{frontend} y el \textit{backend} se desarrollan como dos partes independientes que se comunican mediante peticiones HTTP. Esta separación permite mantener diferenciada la capa de presentación, encargada de la interacción con el usuario, de la capa de negocio, encargada de procesar las operaciones, validar datos y acceder a la base de datos.
+
+\subsection{Arquitectura general de la aplicación}
+
+La arquitectura general del sistema está formada por cuatro elementos principales: el usuario, el \textit{frontend}, el \textit{backend} y la base de datos. Además, el sistema se comunica con el servicio institucional de autenticación de la Universidad de Burgos para validar las credenciales de los usuarios.
+
+El usuario accede a la aplicación a través de un navegador web. Desde este navegador interactúa con la interfaz desarrollada en React, que actúa como cliente de la aplicación. Cuando el usuario realiza una acción, el \textit{frontend} envía una petición HTTP al \textit{backend}.
+
+El \textit{backend}, desarrollado con Django, recibe la petición, comprueba los permisos del usuario, valida los datos recibidos y ejecuta la lógica de negocio correspondiente. Si la operación requiere consultar o modificar información persistente, el \textit{backend} accede a la base de datos. Una vez procesada la operación, devuelve una respuesta al \textit{frontend}, que actualiza la interfaz y muestra el resultado al usuario.
+
+De forma general, el flujo de comunicación de la aplicación es el siguiente:
+
+\begin{enumerate}
+	\item El usuario interactúa con una pantalla de la aplicación.
+	\item El \textit{frontend} envía una petición HTTP al \textit{backend}.
+	\item El \textit{backend} valida la petición y comprueba los permisos del usuario.
+	\item Si es necesario, el \textit{backend} consulta o modifica la base de datos.
+	\item El \textit{backend} devuelve una respuesta al \textit{frontend}.
+	\item El \textit{frontend} actualiza la vista y muestra el resultado de la operación.
+\end{enumerate}
+
+Esta organización facilita la mantenibilidad del sistema, ya que cada componente tiene responsabilidades claramente diferenciadas. Además, permite que el \textit{frontend} y el \textit{backend} puedan evolucionar de forma independiente, siempre que se mantenga la interfaz de comunicación entre ambos.
+
+En la Figura~\ref{fig:arquitectura-general} se muestra la arquitectura general de la aplicación.
+
+\imagen{img/ArquitecturaGeneral.png}{Arquitectura general de la aplicación}{fig:arquitectura-general}
+
 \section{Diseño procedimental}
 
 
