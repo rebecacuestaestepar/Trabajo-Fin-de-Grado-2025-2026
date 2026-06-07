@@ -36,6 +36,522 @@ Este modelo representado en la Figura~\ref{fig:modelo-relacional} constituye la 
 
 \subsection{Diccionario de datos}
 
+El diccionario de datos recoge la descripción detallada de las tablas que forman la base de datos de la aplicación. Para cada tabla se especifican sus atributos principales, el tipo de dato utilizado, las claves primarias y ajenas, las restricciones más relevantes y una breve descripción de la información que almacena cada campo.
+
+Este apartado permite complementar el modelo relacional, ya que ofrece una visión más precisa de la estructura interna de cada tabla y facilita la comprensión de cómo se almacena la información dentro del sistema.
+
+\subsubsection{Tabla AULA}
+
+La tabla \textit{AULA}~\ref{tab:diccionario-aula} almacena la información relativa a las aulas disponibles en el sistema. Incluye datos identificativos del aula, su ubicación, capacidad y recursos disponibles, como ordenadores, proyector, altavoces o enchufes.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID & INT & PK & Identificador único del aula. Se genera automáticamente. \\
+		NOMBRE & VARCHAR(100) & UNIQUE, NOT NULL & Nombre identificativo del aula. \\
+		EDIFICIO & VARCHAR(6) &  & Edificio en el que se encuentra el aula. \\
+		PLANTA & NUMERIC(1) &  & Planta en la que se encuentra el aula. \\
+		CAPACIDAD & NUMERIC(3) & CHECK & Capacidad máxima del aula. Debe ser mayor o igual que 0. \\
+		NUM\_\newline ORDENADORES & NUMERIC(2) & CHECK & Número de ordenadores disponibles en el aula. Debe ser mayor o igual que 0. \\
+		ALTAVOCES & BOOLEAN & DEFAULT & Indica si el aula dispone de altavoces. Por defecto, su valor es falso. \\
+		PROYECTOR & BOOLEAN & DEFAULT & Indica si el aula dispone de proyector. Por defecto, su valor es falso. \\
+		CAMARA & BOOLEAN & DEFAULT & Indica si el aula dispone de cámara. Por defecto, su valor es falso. \\
+		ENCHUFES & BOOLEAN & DEFAULT & Indica si el aula dispone de enchufes. Por defecto, su valor es falso. \\
+		M2 & NUMERIC(6,2) & CHECK & Superficie aproximada del aula en metros cuadrados. Debe ser mayor o igual que 0. \\
+		OTROS & VARCHAR(30) &  & Información adicional sobre el aula. \\
+		GRADO\_ID & VARCHAR(10) & FK & Identificador del grado asociado o prioritario para el aula. Referencia a la tabla \textit{GRADO}. \\
+		SEMESTRE\_\newline ACADEMICO & NUMERIC(2) & CHECK & Semestre académico asociado al aula. Debe estar comprendido entre 1 y 12. \\
+		CAMPUS & CHAR(1) &  & Campus al que pertenece el aula. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla AULA}
+	\label{tab:diccionario-aula}
+\end{table}
+
+
+
+\subsubsection{Tabla DOCENTE}
+
+Como se muestra en la Tabla~\ref{tab:diccionario-docente}, la tabla \textit{DOCENTE} recoge los datos identificativos y de contacto del profesorado.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		CODIGO & INT & PK & Identificador único del docente. Se genera automáticamente. \\
+		NOMBRE & VARCHAR(50) & NOT NULL & Nombre del docente. \\
+		APELLIDOS & VARCHAR(100) & NOT NULL & Apellidos del docente. \\
+		CORREO & VARCHAR(50) & NOT NULL & Correo electrónico del docente. \\
+		TELEFONO & VARCHAR(9) &  & Número de teléfono de contacto del docente. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla DOCENTE}
+	\label{tab:diccionario-docente}
+\end{table}
+
+
+\subsubsection{Tabla ASIGNATURAS}
+
+ La tabla \textit{ASIGNATURAS} almacena la información relativa a las asignaturas registradas en el sistema. Esta tabla permite identificar cada asignatura, asociarla a un grado concreto y almacenar información académica relevante, como el curso, el semestre, los créditos ECTS, el tipo de asignatura y las horas prácticas. Como se muestra en la Tabla~\ref{tab:diccionario-asignaturas}, algunos campos presentan restricciones adicionales para garantizar la coherencia de los datos.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		IDASIGNATURA & VARCHAR(10) & PK & Identificador único de la asignatura. \\
+		NOMBRE & VARCHAR(100) & NOT NULL & Nombre completo de la asignatura. \\
+		ABREVIATURA & VARCHAR(20) &  & Abreviatura utilizada para identificar la asignatura de forma resumida. \\
+		CURSO\_GRADO & NUMERIC(1) & NOT NULL, CHECK & Curso del grado en el que se imparte la asignatura. Debe estar comprendido entre 1 y 6. \\
+		SEMESTRE\_\newline ACADEMICO & NUMERIC(2) & NOT NULL, CHECK & Semestre académico en el que se imparte la asignatura. Debe estar comprendido entre 1 y 12. \\
+		ECTS & NUMERIC(2) & NOT NULL, CHECK & Número de créditos ECTS de la asignatura. Debe ser mayor o igual que 0. \\
+		GRADO\_ID & VARCHAR(10) & NOT NULL, FK & Identificador del grado al que pertenece la asignatura. Referencia a la tabla \textit{GRADO}. \\
+		TIPO & CHAR(1) &  & Tipo de asignatura, por ejemplo obligatoria u optativa. \\
+		HORAS\_\newline PRACTICAS & NUMERIC(1) &  & Número de horas prácticas asociadas a la asignatura. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla ASIGNATURAS}
+	\label{tab:diccionario-asignaturas}
+\end{table}
+
+\subsubsection{Tabla IMPARTE}
+
+ La tabla \textit{IMPARTE} representa la relación entre los docentes y las asignaturas que imparten. Esta tabla actúa como tabla intermedia, ya que un docente puede impartir varias asignaturas y una asignatura puede estar asociada a varios docentes. Como se muestra en la Tabla~\ref{tab:diccionario-imparte}, se incluye una restricción de unicidad para evitar que se repita la misma combinación de docente y asignatura.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID & INT & PK & Identificador único de la relación. Se genera automáticamente. \\
+		CODIGO\_\newline DOCENTE & VARCHAR(9) & NOT NULL, FK, UNIQUE & Identificador del docente que imparte la asignatura. Referencia a la tabla \textit{DOCENTE}. \\
+		ID\_\newline ASIGNATURA & VARCHAR(10) & NOT NULL, FK, UNIQUE & Identificador de la asignatura impartida por el docente. Referencia a la tabla \textit{ASIGNATURAS}. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla IMPARTE}
+	\label{tab:diccionario-imparte}
+\end{table}
+
+\subsubsection{Tabla GRADO}
+
+ La tabla \textit{GRADO} almacena la información relativa a los grados o titulaciones registrados en el sistema. Esta tabla permite asociar asignaturas y aulas a una titulación concreta, facilitando la organización de los horarios y reservas por grado. Como se muestra en la Tabla~\ref{tab:diccionario-grado}, cada grado se identifica mediante un código único.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		IDGRADO & VARCHAR(10) & PK & Identificador único del grado. \\
+		NOMBRE & VARCHAR(150) & NOT NULL & Nombre completo del grado o titulación. \\
+		ABREVIATURA & VARCHAR(20) & NOT NULL & Abreviatura utilizada para identificar el grado de forma resumida. \\
+		COORDINADOR & VARCHAR(150) &  & Nombre del coordinador asociado al grado. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla GRADO}
+	\label{tab:diccionario-grado}
+\end{table}
+
+\subsubsection{Tabla GRUPO}
+
+ La tabla \textit{GRUPO} almacena la información relativa a los grupos asociados a cada asignatura. Esta tabla permite diferenciar los distintos grupos docentes de una misma asignatura y, de forma opcional si el grupo es teórico, asociarlos a un aula concreta. Como se muestra en la Tabla~\ref{tab:diccionario-grupo}, cada grupo queda vinculado obligatoriamente a una asignatura.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		GRUPOID & INT & PK & Identificador único del grupo. Se genera automáticamente. \\
+		NOMBRE & CHAR(3) &  & Nombre o código breve utilizado para identificar el grupo. \\
+		ID\_\newline ASIGNATURA & VARCHAR(10) & NOT NULL, FK & Identificador de la asignatura a la que pertenece el grupo. Referencia a la tabla \textit{ASIGNATURAS}. \\
+		ID\_AULA & INT & FK & Identificador del aula preferente asociada al grupo, solo grupos teóricos. Referencia a la tabla \textit{AULA}. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla GRUPO}
+	\label{tab:diccionario-grupo}
+\end{table}
+
+\subsubsection{Tabla RESPONSABLE}
+
+ La tabla \textit{RESPONSABLE} almacena la información de las personas responsables de realizar o gestionar reservas puntuales dentro del sistema. Esta tabla permite identificar a cada responsable mediante su correo electrónico y, de forma opcional, asociarlo con un docente registrado en la aplicación. Como se muestra en la Tabla~\ref{tab:diccionario-responsable}, el campo \textit{CODIGO\_DOCENTE} permite vincular un responsable con la tabla \textit{DOCENTE}.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		CORREO & VARCHAR(50) & PK & Correo electrónico del responsable. Actúa como identificador único. \\
+		NOMBRE & VARCHAR(50) & NOT NULL & Nombre del responsable. \\
+		APELLIDOS & VARCHAR(100) & NOT NULL & Apellidos del responsable. \\
+		TELEFONO & NUMERIC(9) &  & Número de teléfono de contacto del responsable. \\
+		CODIGO\_\newline DOCENTE & INT & UNIQUE, FK & Identificador del docente asociado al responsable. Referencia a la tabla \textit{DOCENTE}. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla RESPONSABLE}
+	\label{tab:diccionario-responsable}
+\end{table}
+
+\subsubsection{Tabla RESERVA}
+
+ La tabla \textit{RESERVA} almacena la información común de todas las reservas registradas en el sistema, independientemente de si son reservas puntuales o periódicas. En ella se recoge el aula reservada, el día de la reserva, el estado, el tipo y la franja horaria correspondiente. Como se muestra en la Tabla~\ref{tab:diccionario-reserva}, esta tabla permite centralizar los datos compartidos por los distintos tipos de reserva.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		IDRESERVA & INT & PK & Identificador único de la reserva. Se genera automáticamente. \\
+		ID\_AULA & INT & NOT NULL, FK & Identificador del aula asociada a la reserva. Referencia a la tabla \textit{AULA}. \\
+		ID\_DIA & DATE & NOT NULL, FK & Fecha asociada a la reserva. Referencia a la tabla \textit{DIA}. \\
+		ESTADO & CHAR(1) &  & Estado actual de la reserva. Permite diferenciar, reservas pendientes (P), aprobadas (A) o rechazadas (R). \\
+		TIPO & CHAR(1) &  & Tipo de reserva registrada, permitiendo distinguir entre reservas puntuales (P) y periódicas (R). \\
+		HORA\_\newline INICIO & TIME & NOT NULL & Hora de inicio de la reserva. \\
+		HORA\_FIN & TIME & NOT NULL, CHECK & Hora de finalización de la reserva. Debe ser posterior a la hora de inicio. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla RESERVA}
+	\label{tab:diccionario-reserva}
+\end{table}
+
+\subsubsection{Tabla RESERVA\_PUNTUAL}
+
+ La tabla \textit{RESERVA\_PUNTUAL} almacena la información específica de las reservas puntuales realizadas en el sistema. Esta tabla amplía los datos generales almacenados en la tabla \textit{RESERVA}, incorporando información propia de una solicitud concreta, como el responsable, la capacidad solicitada, los recursos requeridos, el motivo de la reserva y las observaciones asociadas. Como se muestra en la Tabla~\ref{tab:diccionario-reserva-puntual}, cada reserva puntual se identifica mediante el mismo identificador de la reserva general.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID\_\newline RESERVA & INT & PK, FK & Identificador de la reserva puntual. Referencia a la tabla \textit{RESERVA}. \\
+		ID\_\newline RESPONSABLE & VARCHAR(30) & NOT NULL, FK & Identificador del responsable asociado a la reserva. Referencia a la tabla \textit{RESPONSABLE}. \\
+		CAPACIDAD\_\newline SOLICITADA & NUMERIC(3) & CHECK & Capacidad solicitada para la reserva. Debe ser mayor o igual que 0. \\
+		MOTIVO & VARCHAR(90) &  & Motivo o título asociado a la reserva puntual. \\
+		INICIO & TIMESTAMP & NOT NULL, DEFAULT & Fecha y hora de inicio solicitada para la reserva. Por defecto, toma la fecha actual. \\
+		FIN & TIMESTAMP & NOT NULL, DEFAULT, CHECK & Fecha y hora de finalización solicitada para la reserva. Debe ser posterior o igual al inicio. \\
+		NUM\_\newline ORDENADORES\_\newline SOLICITADOS & NUMERIC(2) & CHECK & Número de ordenadores solicitados. Debe ser mayor o igual que 0. \\
+		ALTAVOCES\_\newline SOLICITADOS & BOOLEAN & NOT NULL, DEFAULT & Indica si se solicitan altavoces. Por defecto, su valor es falso. \\
+		PROYECTOR\_\newline SOLICITADO & BOOLEAN & NOT NULL, DEFAULT & Indica si se solicita proyector. Por defecto, su valor es falso. \\
+		CAMARA\_\newline SOLICITADA & BOOLEAN & NOT NULL, DEFAULT & Indica si se solicita cámara. Por defecto, su valor es falso. \\
+		ENCHUFES\_\newline SOLICITADOS & BOOLEAN & NOT NULL, DEFAULT & Indica si se solicitan enchufes. Por defecto, su valor es falso. \\
+		MOMENTO\_\newline RESERVA & TIMESTAMP & NOT NULL, DEFAULT & Fecha y hora en la que se registra la solicitud de reserva. \\
+		OBSERVACIONES & VARCHAR(300) &  & Observaciones adicionales introducidas sobre la reserva puntual. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla RESERVA\_PUNTUAL}
+	\label{tab:diccionario-reserva-puntual}
+\end{table}
+
+\subsubsection{Tabla RESERVA\_PERIODICA}
+
+ La tabla \textit{RESERVA\_PERIODICA} almacena la información específica de las reservas que se repiten durante un periodo de tiempo determinado. Este tipo de reserva está especialmente orientado a la planificación docente, ya que permite asociar una reserva a un grupo concreto y definir su repetición semanal dentro de un intervalo de fechas. Como se muestra en la Tabla~\ref{tab:diccionario-reserva-periodica}, cada reserva periódica se vincula con una reserva general y con un grupo académico.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID\_\newline RESERVA & INT & PK, FK & Identificador de la reserva periódica. Referencia a la tabla \textit{RESERVA}. \\
+		ID\_\newline GRUPO & VARCHAR(10) & NOT NULL, FK & Identificador del grupo asociado a la reserva periódica. Referencia a la tabla \textit{GRUPO}. \\
+		DIA\_\newline SEMANA & SMALLINT & NOT NULL, CHECK & Día de la semana en el que se repite la reserva. Debe estar comprendido entre 1 y 7. \\
+		FECHA\_\newline INICIO & DATE & NOT NULL, DEFAULT & Fecha de inicio del periodo en el que se repite la reserva. Por defecto, toma la fecha actual. \\
+		FECHA\_FIN & DATE & NOT NULL, DEFAULT, CHECK & Fecha de finalización del periodo en el que se repite la reserva. Debe ser posterior o igual a la fecha de inicio. \\
+		INTERVALO\_\newline SEMANAS & SMALLINT & NOT NULL, DEFAULT, CHECK & Intervalo de repetición de la reserva expresado en semanas. Debe ser mayor o igual que 1. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla RESERVA\_PERIODICA}
+	\label{tab:diccionario-reserva-periodica}
+\end{table}
+
+\subsubsection{Tabla CURSO}
+
+ La tabla \textit{CURSO} almacena la información relativa a los cursos académicos registrados en el sistema. Esta tabla permite definir el intervalo temporal de cada curso y controlar si el horario asociado a dicho curso ya ha sido cargado en la aplicación. Como se muestra en la Tabla~\ref{tab:diccionario-curso}, cada curso se identifica mediante un código único.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		IDCURSO & VARCHAR(10) & PK & Identificador único del curso académico, por ejemplo 2025-2026. \\
+		FECHA\_\newline INICIO & DATE & NOT NULL, DEFAULT & Fecha de inicio del curso académico. Por defecto, toma la fecha actual. \\
+		FECHA\_FIN & DATE & NOT NULL, DEFAULT & Fecha de finalización del curso académico. Por defecto, toma la fecha actual. \\
+		HORARIO\_\newline CARGADO & BOOLEAN & NOT NULL, DEFAULT & Indica si el horario correspondiente al curso académico ya ha sido cargado en el sistema. Por defecto, su valor es falso. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla CURSO}
+	\label{tab:diccionario-curso}
+\end{table}
+
+\subsubsection{Tabla SEMESTRE}
+
+ La tabla \textit{SEMESTRE} almacena la información relativa a los semestres académicos que forman parte de un curso. Esta tabla permite dividir el curso académico en periodos docentes diferenciados, indicando el número de semestre y las fechas de inicio y fin correspondientes. Como se muestra en la Tabla~\ref{tab:diccionario-semestre}, cada semestre queda asociado obligatoriamente a un curso académico.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		IDSEMESTRE & VARCHAR(15) & PK & Identificador único del semestre académico. \\
+		CURSO\_ID & VARCHAR(10) & NOT NULL, FK & Identificador del curso académico al que pertenece el semestre. Referencia a la tabla \textit{CURSO}. \\
+		NUMERO & NUMERIC(1) & CHECK & Número del semestre. Solo puede tomar los valores 1 o 2. \\
+		FECHA\_\newline INICIO & DATE & NOT NULL, DEFAULT & Fecha de inicio del semestre académico. Por defecto, toma la fecha actual. \\
+		FECHA\_FIN & DATE & NOT NULL, DEFAULT & Fecha de finalización del semestre académico. Por defecto, toma la fecha actual. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla SEMESTRE}
+	\label{tab:diccionario-semestre}
+\end{table}
+
+\subsubsection{Tabla DIA}
+
+ La tabla \textit{DIA} almacena las fechas que forman parte del calendario académico. Cada día puede estar asociado a un semestre y contiene información sobre el día de la semana correspondiente. Esta tabla sirve como base para clasificar posteriormente las fechas como lectivas, festivas, días de examen, cambios de docencia o periodos asociados a TFG/TFM. Como se muestra en la Tabla~\ref{tab:diccionario-dia}, la fecha actúa como identificador único de cada registro.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		DIA & DATE & PK & Fecha concreta del calendario académico. Actúa como identificador único del día. \\
+		ID\_\newline SEMESTRE & VARCHAR(15) & FK & Identificador del semestre al que pertenece el día. Referencia a la tabla \textit{SEMESTRE}. \\
+		DIA\_\newline SEMANA & NUMERIC & CHECK & Número correspondiente al día de la semana. Debe estar comprendido entre 1 y 7. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla DIA}
+	\label{tab:diccionario-dia}
+\end{table}
+
+\subsubsection{Tabla LECTIVO}
+
+La tabla \textit{LECTIVO} almacena los días del calendario académico que tienen carácter lectivo. Esta tabla permite diferenciar las fechas en las que se desarrolla actividad docente ordinaria respecto a otros tipos de día, como festivos, exámenes o cambios de docencia. Como se muestra en la Tabla~\ref{tab:diccionario-lectivo}, cada día lectivo se identifica mediante una fecha registrada previamente en la tabla \textit{DIA}.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID\_DIA & DATE & PK, FK & Fecha identificativa del día lectivo. Referencia a la tabla \textit{DIA}. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla LECTIVO}
+	\label{tab:diccionario-lectivo}
+\end{table}
+
+\subsubsection{Tabla CAMBIO\_DOCENCIA}
+
+\noindent La tabla \textit{CAMBIO\_DOCENCIA} almacena los días del calendario académico en los que se produce una modificación de la docencia habitual. Esta tabla permite indicar que una fecha concreta sustituye la planificación correspondiente a otro día de la semana. Como se muestra en la Tabla~\ref{tab:diccionario-cambio-docencia}, cada cambio de docencia queda asociado a un día registrado en la tabla \textit{DIA}.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID\_DIA & DATE & PK, FK & Fecha identificativa del cambio de docencia. Referencia a la tabla \textit{DIA}. \\
+		SUSTITUYE\_\newline DIA & NUMERIC & CHECK & Día de la semana cuya docencia se sustituye. Debe estar comprendido entre 1 y 5. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla CAMBIO\_DOCENCIA}
+	\label{tab:diccionario-cambio-docencia}
+\end{table}
+
+\subsubsection{Tabla EXAMEN}
+
+\noindent La tabla \textit{EXAMEN} almacena los días del calendario académico destinados a la realización de exámenes. Esta tabla permite identificar la convocatoria asociada a cada fecha, diferenciando entre primera y segunda convocatoria. Como se muestra en la Tabla~\ref{tab:diccionario-examen}, cada registro queda vinculado a una fecha existente en la tabla \textit{DIA}.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID\_DIA & DATE & PK, FK & Fecha identificativa del día de examen. Referencia a la tabla \textit{DIA}. \\
+		CONVOCATORIA & NUMERIC(1) & CHECK & Convocatoria asociada al examen. Solo puede tomar los valores 1 o 2. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla EXAMEN}
+	\label{tab:diccionario-examen}
+\end{table}
+
+\subsubsection{Tabla FESTIVO}
+
+\noindent La tabla \textit{FESTIVO} almacena los días del calendario académico que tienen carácter festivo. Esta tabla permite registrar el nombre del festivo y su alcance, indicando si afecta a nivel nacional, autonómico, local, universitario o de centro. Como se muestra en la Tabla~\ref{tab:diccionario-festivo}, cada festivo se identifica mediante una fecha registrada previamente en la tabla \textit{DIA}.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID\_DIA & DATE & PK, FK & Fecha identificativa del día festivo. Referencia a la tabla \textit{DIA}. \\
+		NOMBRE & VARCHAR(60) &  & Nombre descriptivo del festivo. \\
+		ALCANCE & VARCHAR(20) &  & Ámbito o alcance del festivo. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla FESTIVO}
+	\label{tab:diccionario-festivo}
+\end{table}
+
+\subsubsection{Tabla TFG}
+
+\noindent La tabla \textit{TFG} almacena los días del calendario académico destinados a la defensa o gestión de Trabajos de Fin de Grado o Trabajos de Fin de Máster. Esta tabla permite indicar la convocatoria asociada a cada fecha. Como se muestra en la Tabla~\ref{tab:diccionario-tfg}, cada registro queda vinculado a una fecha existente en la tabla \textit{DIA}.\\
+
+\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{3pt}
+	\renewcommand{\arraystretch}{1.15}
+	\begin{tabularx}{\textwidth}{@{}
+			>{\raggedright\arraybackslash}p{2.6cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			>{\raggedright\arraybackslash}p{2.2cm}
+			X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Tipo} & \textbf{Restricciones} & \textbf{Descripción} \\
+		\midrule
+		ID\_DIA & DATE & PK, FK & Fecha identificativa del día asociado a TFG o TFM. Referencia a la tabla \textit{DIA}. \\
+		CONVOCATORIA & NUMERIC(1) & CHECK & Convocatoria asociada al periodo de TFG o TFM. Solo puede tomar los valores 1 o 2. \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Diccionario de datos de la tabla TFG}
+	\label{tab:diccionario-tfg}
+\end{table}
+
+
+
 \section{Diseño arquitectónico}
 
 \section{Diseño procedimental}
