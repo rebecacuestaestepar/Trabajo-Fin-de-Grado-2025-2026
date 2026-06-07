@@ -42,10 +42,9 @@ jobs:
       - name: Ejecutar tests y cobertura
         env:
           DB_USER: root
-          DB_PASSWORD: ${ { secrets.PASSWORD_DB} }
+          DB_PASSWORD: ${{ secrets.PASSWORD_DB}}
           DB_HOST: 127.0.0.1
         run: |
-          # Nos metemos en la carpeta donde está manage.py
           cd app_horarios 
           coverage run manage.py test
           coverage xml -o coverage.xml
@@ -54,6 +53,3 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.python.coverage.reportPaths=app_horarios/coverage.xml
