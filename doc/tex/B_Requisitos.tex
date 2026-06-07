@@ -2,36 +2,34 @@
 
 \section{Introducción}
 
-Una muestra de cómo podría ser una tabla de casos de uso:
-
-% Caso de Uso 1 -> Consultar Experimentos.
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-1}    & \textbf{Ejemplo de caso de uso}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Alumno \\
-		\textbf{Requisitos asociados} & RF-xx, RF-xx \\
-		\textbf{Descripción}          & La descripción del CU \\
-		\textbf{Precondición}         & Precondiciones (podría haber más de una) \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item Pasos del CU
-			\item Pasos del CU (añadir tantos como sean necesarios)
-		\end{enumerate}\\
-		\textbf{Postcondición}        & Postcondiciones (podría haber más de una) \\
-		\textbf{Excepciones}          & Excepciones \\
-		\textbf{Importancia}          & Alta o Media o Baja... \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-1 Nombre del caso de uso.}
-\end{table}
+En este apéndice se recoge la especificación de requisitos del sistema desarrollado. El objetivo de esta sección es definir de forma clara las funcionalidades que debe proporcionar la aplicación, las restricciones que debe cumplir y los casos de uso que describen la interacción de los distintos tipos de usuario con el sistema.
 
 \section{Objetivos generales}
+
+El objetivo principal del proyecto es desarrollar una aplicación web que facilite la gestión de horarios académicos y reservas de aulas en el entorno universitario, sustituyendo procesos manuales por una solución centralizada, estructurada y adaptada a las necesidades de la planificación docente.
+
+Para alcanzar este objetivo principal, se establecen los siguientes objetivos generales:
+
+\begin{itemize}
+	\item Centralizar la información relacionada con aulas, grados, asignaturas, grupos, docentes, responsables, reservas y calendario académico en un único sistema.
+	
+	\item Permitir la autenticación de usuarios mediante credenciales institucionales, asignando posteriormente los permisos correspondientes en función del rol asociado a cada usuario.
+	
+	\item Gestionar reservas de aulas, diferenciando entre reservas puntuales solicitadas por usuarios autorizados y reservas periódicas asociadas a la docencia de los grados.
+	
+	\item Automatizar la carga de horarios docentes desde hojas de cálculo, transformando la información contenida en dichos ficheros en reservas periódicas dentro de la aplicación.
+	
+	\item Evitar conflictos de ocupación mediante la validación de fechas, horas, aulas disponibles y recursos solicitados antes de crear o modificar una reserva.
+	
+	\item Facilitar la consulta de reservas, horarios de grado, ocupación de aulas y calendario académico mediante interfaces claras y filtros que permitan acceder a la información de forma rápida.
+	
+	\item Gestionar el calendario académico del curso, teniendo en cuenta días lectivos, festivos, cambios de docencia, periodos de exámenes y días destinados a TFG o TFM.
+	
+	\item Controlar el acceso a las distintas funcionalidades mediante un sistema de roles y permisos, diferenciando las acciones disponibles para administradores, gestores y PDI.
+	
+	\item Mejorar la eficiencia en la planificación académica, reduciendo el trabajo manual necesario para crear reservas docentes y disminuyendo la posibilidad de errores en la asignación de aulas.
+	
+\end{itemize}
 
 \section{Catálogo de requisitos}
 
