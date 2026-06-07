@@ -9,7 +9,7 @@ class RawSQLTestRunner(DiscoverRunner):
     def setup_databases(self, **kwargs):
         config = super().setup_databases(**kwargs)
         
-        ruta_sql = settings.BASE_DIR.parent / 'BaseDeDatosHorario.sql'
+        ruta_sql = os.path.join(settings.BASE_DIR.parent, 'BaseDeDatosHorario.sql')
 
         print(f"\n[TestRunner] Buscando script SQL en: {ruta_sql}")
 
@@ -19,6 +19,8 @@ class RawSQLTestRunner(DiscoverRunner):
         # Leemos el archivo
         with open(ruta_sql, 'r', encoding='utf-8') as f:
             sql_script = f.read()
+
+        sql_script = sql_script.lower()
 
         sql_script = re.sub(r'/\*.*?\*/', '', sql_script, flags=re.DOTALL)
         sql_script = re.sub(r'--.*', '', sql_script)
