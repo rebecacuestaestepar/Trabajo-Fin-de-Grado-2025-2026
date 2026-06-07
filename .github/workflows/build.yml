@@ -47,7 +47,7 @@ jobs:
           MYSQLPORT: 3306
         run: |
           cd app_horarios 
-          coverage run manage.py test
+          coverage run manage.py test --noinput
           coverage xml -o coverage.xml
 
       - name: SonarQube Scan
