@@ -782,7 +782,7 @@ En este apartado se analiza la viabilidad legal del proyecto, teniendo en cuenta
 
 \subsubsection{Licencias de software}
 
-En la Tabla~\ref{tab:licencias>} se muestran las principales herramientas, bibliotecas y servicios utilizados durante el desarrollo del proyecto, junto con su uso dentro de la aplicación y la licencia asociada.
+En la Tabla~\ref{tab:licencias} se muestran las principales herramientas, bibliotecas y servicios utilizados durante el desarrollo del proyecto, junto con su uso dentro de la aplicación y la licencia asociada.\cite{pythonLicense,djangoLicense,drfLicense,reactLicense,viteLicense,tailwindLicense,mysqlLicense,openpyxlLicense,corsHeadersLicense,windowsLicense}.
 
 \begin{table}[H]
 	\centering
@@ -809,5 +809,24 @@ En la Tabla~\ref{tab:licencias>} se muestran las principales herramientas, bibli
 	\label{tab:licencias}
 \end{table}
 
-Como se observa en la Tabla~\ref{tab:licencias}, la mayor parte de las tecnologías utilizadas se distribuyen bajo licencias permisivas, principalmente MIT, BSD y Apache 2.0. Estas licencias permiten utilizar, modificar y distribuir el software con pocas restricciones, siempre que se respeten las condiciones establecidas, como conservar los avisos de copyright y la información de licencia correspondiente.
+Como se observa en la Tabla~\ref{tab:licencias}, la mayor parte de las tecnologías utilizadas se distribuyen bajo licencias permisivas, principalmente MIT, BSD y Apache 2.0. Estas licencias permiten utilizar, modificar y distribuir el software con pocas restricciones, siempre que se respeten las condiciones establecidas, como conservar los avisos de copyright y la información de licencia correspondiente \cite{mitLicense,apacheLicense,djangoLicense}.
+
+Además, se han utilizado algunos servicios externos, como GitHub para el control de versiones y Railway para el despliegue de la aplicación. Estos servicios no se incorporan como parte del código fuente del proyecto, sino que se emplean como plataformas de apoyo durante el desarrollo y la puesta en producción de la aplicación \cite{githubPricing,railwayPricing}.
+
+\subsubsection{Tipos de licencias utilizadas}
+
+Entre las licencias identificadas en el proyecto destacan las siguientes:
+
+\begin{itemize}
+	\item MIT License: es una licencia permisiva que permite usar, copiar, modificar, fusionar, publicar, distribuir y sublicenciar el software, siempre que se mantenga el aviso de copyright y la licencia original \cite{mitLicense}. Esta licencia aparece en herramientas como React, Vite, Tailwind CSS, openpyxl y django-cors-headers \cite{reactLicense,viteLicense,tailwindLicense,openpyxlLicense,corsHeadersLicense}.
+	
+	\item BSD: es una familia de licencias permisivas que permite el uso, modificación y redistribución del software, con la obligación principal de conservar los avisos de copyright. En este proyecto aparece asociada a herramientas como Django y Django REST Framework \cite{djangoLicense,drfLicense}.
+	
+	\item Apache License 2.0: permite el uso, modificación y distribución del software, incluyendo uso comercial. Además, incorpora condiciones relacionadas con la conservación de la licencia y la notificación de cambios realizados \cite{apacheLicense}. En este proyecto se encuentra asociada a bibliotecas como Requests \cite{requestsLicense}.
+	
+	\item GPL: es una licencia de tipo copyleft, orientada a garantizar la libertad de uso, modificación y distribución del software \cite{gplLicense}. En este proyecto aparece asociada a MySQL Community Edition, que se distribuye bajo licencia GPL \cite{mysqlLicense}. Su uso no impide el desarrollo académico de la aplicación, aunque debe tenerse en cuenta si en el futuro se distribuyera el sistema completo o se modificaran componentes cubiertos por esta licencia.
+	
+	\item Licencia propietaria: corresponde al sistema operativo Windows utilizado durante el desarrollo. Su uso está sujeto a las condiciones establecidas por Microsoft y no afecta directamente a la licencia del código desarrollado, ya que se utiliza únicamente como sistema operativo del entorno de trabajo \cite{windowsLicense}.
+	
+\end{itemize}
 
