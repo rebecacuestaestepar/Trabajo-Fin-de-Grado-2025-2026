@@ -2,18 +2,39 @@
 
 \section{Introducción}
 
+En este apéndice se recoge la especificación de diseño del sistema desarrollado. A partir de los requisitos funcionales y no funcionales definidos previamente, se describen las decisiones de diseño tomadas para estructurar la aplicación y representar la información que debe gestionar.
+
+El diseño de la aplicación se ha centrado especialmente en la organización de los datos, ya que el sistema trabaja con información relacionada con aulas, grados, asignaturas, docentes, grupos, reservas puntuales, reservas periódicas y calendario académico. Por este motivo, se ha considerado necesario representar primero el modelo conceptual mediante un diagrama entidad-relación y, posteriormente, su transformación al modelo relacional utilizado en la base de datos.
+
 \section{Diseño de datos}
 
+El diseño de datos define la estructura de la información que será almacenada y gestionada por la aplicación. En este proyecto, la base de datos debe permitir almacenar la información académica necesaria para la carga de horarios, la creación de reservas, la consulta de ocupación de aulas y la gestión del calendario académico.
+
+Para representar este diseño se han utilizado dos modelos complementarios: el diagrama entidad-relación y el modelo relacional. El primero permite describir de forma conceptual las entidades principales del sistema y las relaciones existentes entre ellas, mientras que el segundo muestra cómo se transforma dicho diseño conceptual en tablas, atributos, claves primarias y claves ajenas.
+
 \subsection{Diagrama entidad-relación}
-%\imagen{img/Diagrama e-r.png}{Diagrama entidad-relación}{fig:diagrama-ent-rel}
-\begin{figure}[p]
-	\centering
-	\includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{img/Diagrama e-r.png}
-	\caption{Diagrama entidad-relación}
-	\label{fig:diagrama-ent-rel}
-\end{figure}
+
+El diagrama entidad-relación representa el modelo conceptual de la base de datos. Este tipo de diagrama permite identificar las entidades principales del sistema, sus atributos más relevantes y las relaciones existentes entre ellas, sin entrar todavía en detalles concretos de implementación \cite{diagrama_er}.
+
+En el caso de esta aplicación, el diagrama entidad-relación permite representar elementos como las aulas, los grados, las asignaturas, los grupos, los docentes, las reservas y los días del calendario académico. Además, recoge relaciones importantes como la asociación entre reservas y aulas, la relación entre asignaturas y grupos, la vinculación entre docentes y asignaturas, y la clasificación de las reservas en puntuales o periódicas.
+
+También se representa la especialización de algunos conceptos. Por ejemplo, una reserva puede ser puntual o periódica, y un día del calendario académico puede clasificarse como lectivo, festivo, día de examen, día de cambio de docencia o periodo asociado a TFG/TFM. De esta forma, el diagrama permite obtener una visión general de la estructura lógica del sistema antes de su transformación al modelo relacional.
+
+Podemos ver su representación en la Figura~\ref{fig:diagrama-er}
+
 \subsection{Modelo relacional}
-\imagen{img/Modelo relacional.png}{Modelo relacional}{fig:modelo-relacional}
+
+El modelo relacional representa la transformación del diagrama entidad-relación en una estructura preparada para su implementación en una base de datos relacional. En este modelo, cada entidad o relación relevante se convierte en una tabla, cuyos atributos se representan mediante columnas \cite{modeloRelacional}.
+
+Además, el modelo relacional permite definir las claves primarias, encargadas de identificar de forma única cada registro, y las claves ajenas, que permiten establecer relaciones entre las distintas tablas. Gracias a estas claves se garantiza la integridad referencial de la información, evitando inconsistencias entre elementos relacionados, como reservas asociadas a aulas inexistentes o grupos vinculados a asignaturas no registradas.
+
+Este modelo representado en la Figura~\ref{fig:modelo-relacional} constituye la base sobre la que se ha construido la persistencia de datos de la aplicación.
+
+\imagenApaisada{img/Diagrama e-r.png}{Diagrama entidad-relación}{fig:diagrama-er}
+
+\imagenApaisada{img/Modelo relacional.png}{Modelo relacional de la base de datos}{fig:modelo-relacional}
+
+\subsection{Diccionario de datos}
 
 \section{Diseño arquitectónico}
 
