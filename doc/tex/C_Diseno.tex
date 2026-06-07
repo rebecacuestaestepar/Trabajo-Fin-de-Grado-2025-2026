@@ -583,6 +583,50 @@ En la Figura~\ref{fig:arquitectura-general} se muestra la arquitectura general d
 
 \imagen{img/ArquitecturaGeneral.png}{Arquitectura general de la aplicación}{fig:arquitectura-general}
 
+\subsection{Arquitectura del backend}
+
+El \textit{backend} constituye la capa encargada de la lógica de negocio de la aplicación. Está desarrollado con Django y se encarga de recibir las peticiones procedentes del \textit{frontend}, aplicar las reglas del sistema y acceder a la base de datos cuando resulta necesario.
+
+La arquitectura del \textit{backend} se organiza siguiendo una separación por responsabilidades. Por un lado, las vistas o controladores reciben las peticiones HTTP y devuelven las respuestas correspondientes. Por otro lado, los modelos representan las entidades persistentes de la aplicación y permiten interactuar con la base de datos. Además, se incluyen módulos auxiliares encargados de procesos específicos, como la autenticación mediante el servicio institucional, la carga de horarios desde hojas de cálculo o la validación de reservas.
+
+Las responsabilidades principales del \textit{backend} son las siguientes:
+
+\begin{itemize}
+	\item Validar las credenciales del usuario mediante el sistema institucional de la Universidad de Burgos.
+	\item Gestionar la sesión del usuario autenticado.
+	\item Comprobar el rol asociado al usuario y aplicar las restricciones de acceso según permisos.
+	\item Procesar las operaciones de creación, consulta, modificación y eliminación de reservas.
+	\item Validar la disponibilidad de aulas antes de crear o modificar una reserva.
+	\item Gestionar la carga de horarios desde hojas de cálculo.
+	\item Transformar los horarios cargados en reservas periódicas.
+	\item Aplicar las restricciones derivadas del calendario académico, como festivos, días no lectivos y cambios de docencia.
+	\item Proporcionar al \textit{frontend} los datos necesarios para mostrar horarios, reservas, aulas y calendario académico.
+\end{itemize}
+
+Esta separación permite que la lógica de negocio no quede mezclada con la interfaz de usuario y que las operaciones críticas se centralicen en el servidor. De esta forma, aunque el usuario interactúe desde el navegador, las validaciones importantes se realizan siempre en el \textit{backend}.
+
+\subsection{Arquitectura del frontend}
+
+El \textit{frontend} constituye la capa de presentación de la aplicación. Está desarrollado con React y se encarga de mostrar la interfaz de usuario, gestionar la navegación entre pantallas y enviar las peticiones correspondientes al \textit{backend}.
+
+El diseño del \textit{frontend} se basa en una arquitectura orientada a componentes. Cada pantalla o funcionalidad se divide en componentes reutilizables, como formularios, tablas, botones, filtros, cabeceras o elementos de navegación. Esta organización permite construir interfaces más mantenibles y facilita la reutilización de elementos comunes en distintas partes de la aplicación.
+
+Además de los componentes visuales, el \textit{frontend} dispone de servicios encargados de centralizar las llamadas al \textit{backend}. Estos servicios permiten separar la lógica de comunicación con la API de la lógica visual de los componentes. De esta forma, si cambia la ruta de un endpoint o la estructura de una petición, la modificación puede realizarse en un único punto sin afectar directamente a todas las pantallas.
+
+Las responsabilidades principales del \textit{frontend} son las siguientes:
+
+\begin{itemize}
+	\item Mostrar las pantallas disponibles según el rol del usuario autenticado.
+	\item Permitir la navegación entre los distintos módulos de la aplicación.
+	\item Gestionar formularios de creación y edición de reservas, usuarios, roles, entidades y calendario académico.
+	\item Mostrar listados de reservas, horarios y ocupación de aulas.
+	\item Aplicar filtros de búsqueda para facilitar la consulta de información.
+	\item Enviar peticiones al \textit{backend} y procesar las respuestas recibidas.
+	\item Mostrar mensajes de éxito, error o validación al usuario.
+\end{itemize}
+
+Esta arquitectura basada en componentes favorece la modularidad y permite que las distintas partes de la interfaz puedan evolucionar de forma independiente.
+
 \section{Diseño procedimental}
 
 
