@@ -623,21 +623,37 @@ Al tratarse de un Trabajo de Fin de Grado, no ha existido un coste real de contr
 Sustituyendo las horas dedicadas y el coste por hora:
 
 \[
-\text{Coste de personal} = 457 \times 13 = 5941\ \text{euros}
+\text{Coste de personal} = 457 \times 12 = 5484\ \text{euros}
 \]
 
-Como se muestra en la Tabla~\ref{tab:costes-personal}, el coste estimado de personal asciende a 5941,00 euros.
+Además del salario bruto, en un entorno profesional la empresa debe asumir una serie de costes adicionales asociados a las cotizaciones a la Seguridad Social. Para esta estimación se ha considerado un porcentaje aproximado del 31,4 \% sobre el salario bruto.
+
+\[
+\text{Cotizaciones empresariales} = 5484,00 \times 0,314 = 1721,98\ \text{euros}
+\]
+
+Por tanto, el coste total de personal para la empresa sería:
+
+\[
+\text{Coste total de personal} = 5484,00 + 1721,98 = 7205,98\ \text{euros}
+\]
+
+Como se muestra en la Tabla~\ref{tab:costes-personal}, el coste estimado al desarrollo del proyecto asciende a 7205,98 euros.
+
 \begin{table}[H]
-	\centering
-	\begin{tabular}{l r r r}
-		\toprule
-		\textbf{Perfil} & \textbf{Horas} & \textbf{Coste por hora} & \textbf{Coste total} \\
-		\midrule
-		Desarrollador junior & 457 h & 13,00 €/h & 5941,00 € \\
-		\bottomrule
-	\end{tabular}
-	\caption{Costes de personal del proyecto}
-	\label{tab:costes-personal}
+\centering
+\begin{tabular}{l r}
+	\toprule
+	\textbf{Concepto} & \textbf{Coste} \\
+	\midrule
+	Salario bruto estimado & 5941,00 € \\
+	Cotizaciones empresariales & 1865,47 € \\
+	\midrule
+	\textbf{Coste total de personal} & \textbf{7806,47 €} \\
+	\bottomrule
+\end{tabular}
+\caption{Costes de personal del proyecto}
+\label{tab:costes-personal}
 \end{table}
 
 \subsubsection{Costes de hardware}
@@ -665,7 +681,64 @@ En la Tabla~\ref{tab:costes-hardware} se recoge el cálculo del coste de hawdwar
 	\label{tab:costes-hardware}
 \end{table}
 
+\subsubsection{Costes de software}
 
+Durante el desarrollo se han utilizado principalmente herramientas gratuitas o de código abierto, por lo que el coste directo de software ha sido recudido. Entre estas herramientas se encuentran los entornos de desarrollo, \textit{frameworks} y bibliotecas necesarias para la construcción de la aplicación web.
+
+No obstante, en este caso, el coste del sistema operativo sí debe considerarse de forma independiente, ya que el equipo utilizado para el desarrollo fue adquirido sin sistema operativo incluido. El sistema operativo utilizado durante el desarrollo ha sido Windows 11 Home, cuyo coste se ha obtenido a partir de la tienda oficial de Microsoft \cite{windows11Home}.
+
+El resto de herramientas utilizadas para el desarrollo, control de versiones, \textit{backend}, \textit{frontend} y gestión de la base de datos no han supuesto un coste directo para el proyecto, al tratarse de herramientas gratuitas o de código abierto.
+
+Para el control de versiones y la gestión de \textit{issues} se ha utilizado GitHub, cuyo plan gratuito permite trabajar con repositorios públicos y privados sin coste mensual \cite{githubPricing}.
+
+Como se muestra en la Tabla~\ref{tab:costes-software}, el único coste directo de software corresponde a la licencia del sistema operativo Windows.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l l r}
+	\toprule
+	\textbf{Elemento} & \textbf{Uso} & \textbf{Coste} \\
+	\midrule
+	\textit{Windows} & Sistema operativo & 145,00 € \\
+	GitHub & Control de versiones y gestión de \textit{issues} & 0,00 € \\
+	Herramientas de desarrollo & Implementación del proyecto & 0,00 € \\
+	\textit{Frameworks} y bibliotecas & Desarrollo \textit{backend} y \textit{frontend} & 0,00 € \\
+	\midrule
+	\textbf{Total} & & \textbf{145,00 €} \\
+	\bottomrule
+\end{tabular}
+\caption{Costes de software del proyecto}
+\label{tab:costes-software}
+\end{table}
+
+\subsubsection{Costes de infraestructura y despliegue}
+
+Para el despliegue de la aplicación se ha utilizado Railway. Esta plataforma ofrece un periodo inicial gratuito de 30 días, lo que permite realizar pruebas de despliegue sin coste durante la fase inicial. Sin embargo, para mantener la aplicación disponible de forma continuada en un entorno real, sería necesario contratar un plan de pago una vez finalizado dicho periodo gratuito.
+
+En este proyecto se considera suficiente el plan \textit{Hobby}, ya que la aplicación está orientada a un entorno académico y su uso previsto durante la fase inicial será reducido, principalmente para pruebas, demostración y validación del sistema. Este plan tiene un coste de 5 dólares mensuales e incluye 5 dólares de consumo en recursos \cite{railwayPricing}, por lo que resulta adecuado para mantener la aplicación desplegada durante unos meses sin necesidad de contratar un plan superior.
+
+Para el estudio económico se ha estimado un periodo de despliegue de tres meses, suficiente para cubrir la fase de pruebas, revisión y defensa del proyecto.
+
+\[
+\text{Coste de despliegue} = 5 \times 3 = 15\ \text{dólares}
+\]
+
+Tomando una conversión aproximada, el coste total del despliegue durante tres meses sería de unos 14 euros.
+
+Como se recoge en la Tabla~\ref{tab:costes-infraestructura}, el coste estimado para mantener la aplicación desplegada durante tres meses mediante Railway sería de 15 dólares.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l r r r}
+		\toprule
+		\textbf{Servicio} & \textbf{Plan} & \textbf{Coste mensual} & \textbf{Coste estimado} \\
+		\midrule
+		Railway & Hobby & 5,00 \$/mes & 15,00 \$ \\
+		\bottomrule
+	\end{tabular}
+	\caption{Costes de infraestructura y despliegue}
+	\label{tab:costes-infraestructura}
+\end{table}
 
 \subsection{Viabilidad legal}
 
