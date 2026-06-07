@@ -627,6 +627,29 @@ Las responsabilidades principales del \textit{frontend} son las siguientes:
 
 Esta arquitectura basada en componentes favorece la modularidad y permite que las distintas partes de la interfaz puedan evolucionar de forma independiente.
 
+\subsection{Autenticación y control de acceso}
+
+La aplicación incorpora un sistema de autenticación basado en las credenciales institucionales de la Universidad de Burgos. El usuario introduce su nombre de usuario y contraseña en la interfaz de inicio de sesión, y el \textit{backend} se encarga de validar dichas credenciales mediante el servicio externo correspondiente.
+
+La contraseña introducida por el usuario no se almacena en la base de datos de la aplicación. Una vez validado el acceso, el sistema identifica al usuario y consulta el rol asociado en la base de datos interna. Este rol determina las funcionalidades a las que el usuario puede acceder y las acciones que puede realizar dentro del sistema.
+
+El control de acceso se basa en la existencia de varios perfiles de usuario. Entre ellos se encuentran el administrador, el gestor editor, el gestor no editor y el PDI. Cada uno de estos perfiles tiene permisos diferenciados, pero siguen un modelo en cascada, un perfil tiene sus permisos diferencias y los mismos que los siguientes. Por ejemplo, el administrador puede gestionar usuarios, roles y entidades; el gestor editor puede modificar reservas y calendario académico; el gestor no editor puede consultar información sin modificarla; y el PDI puede solicitar reservas puntuales y consultar sus propias solicitudes.
+
+Este diseño permite proteger las operaciones críticas de la aplicación y evita que usuarios sin autorización puedan realizar cambios en horarios, reservas, aulas, usuarios o calendario académico.
+
+\subsection{Despliegue de la aplicación}
+
+El despliegue de la aplicación se ha planteado utilizando Railway como plataforma de alojamiento. Esta plataforma permite desplegar el \textit{backend}, el \textit{frontend}, la base de datos MySQL y los servicios necesarios para que la aplicación pueda estar disponible en un entorno accesible a través de Internet.
+
+En un entorno de producción, el usuario accedería a la aplicación mediante un navegador web. El \textit{frontend} serviría la interfaz de usuario y se comunicaría con el \textit{backend} mediante peticiones HTTP. El \textit{backend}, por su parte, se conectaría con la base de datos para consultar o modificar la información persistente del sistema.
+
+El despliegue debe tener en cuenta la configuración de variables de entorno, especialmente aquellas relacionadas con la conexión a la base de datos, la configuración del servicio de autenticación institucional, las claves secretas de Django y los parámetros de seguridad necesarios para ejecutar la aplicación fuera del entorno local.
+
+En la Figura~\ref{fig:despliegue} se muestra el esquema general de despliegue de la aplicación.
+
+\imagen{img/DespliegueAplicacion.png}{Diagrama de despliegue de la aplicación}{fig:despliegue}
+
+
 \section{Diseño procedimental}
 
 
