@@ -180,6 +180,7 @@ def mover_serie_reservas(id_curso, semestre_num, datos_movimiento):
 
         nuevas_fechas = calcular_nuevas_fechas(semestre_obj, nuevo_dia, int(old_dia), reservas_actuales)
 
+        reservas_actuales.update(dia_semana=nuevo_dia)
 
         for id_reserva, nueva_fecha in zip(ids_reservas_originales, nuevas_fechas):
             reserva = Reserva.objects.get(idreserva=id_reserva)
@@ -187,8 +188,6 @@ def mover_serie_reservas(id_curso, semestre_num, datos_movimiento):
             reserva.hora_inicio = n_inicio
             reserva.hora_fin = n_fin
             reserva.save()
-
-        reservas_actuales.update(dia_semana=nuevo_dia)
 
 
 

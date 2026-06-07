@@ -137,6 +137,9 @@ def modificar_tipo_dia(datos):
         for fecha in fechas:
             dia_objeto = Dia.objects.get(dia=fecha)
 
+            if tipo != 'FESTIVO' and dia_objeto.dia.weekday() >= 5:
+                raise ValueError(f"La fecha {fecha} es fin de semana. Solo se pueden asignar días Festivos en fin de semana.")
+
             Lectivo.objects.filter(id_dia=dia_objeto).delete()
             Festivo.objects.filter(id_dia=dia_objeto).delete()
             Examen.objects.filter(id_dia=dia_objeto).delete()

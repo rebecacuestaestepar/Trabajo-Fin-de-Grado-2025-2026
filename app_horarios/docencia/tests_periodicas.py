@@ -176,7 +176,6 @@ class ReservasPeriodicasDocenciaServicesTests(TestCase):
             fecha_inicio=self.semestre1.fecha_inicio, fecha_fin=self.semestre1.fecha_fin, intervalo_semanas=1
         )
         
-        # Ojo al formato de la firma: asignatura_id | grupo_id | old_dia | old_hi | old_hf | aula_id
         firma = f"TEST_A|{self.grupo.grupoid}|1|10:00:00|12:00:00|{self.aula1.id}"
         resultado = eliminar_reserva_periodica("2025-2026", 1, firma) # 1 impar => Semestre 1
         
