@@ -122,11 +122,16 @@ export async function apiFetch(
 
   const data = await parseResponse(res, responseType);
   if (!res.ok) {
-    const err = new Error(
-      (data && typeof data === "object" && (data.detail || data.general)) ||
-        (typeof data === "string" && data.slice(0, 300)) ||
-        `HTTP ${res.status}`
-    );
+    let mensajeFinal = "";
+
+    if (res.status >= 500) {
+      mensajeFinal = "Error interno del servidor. Por favor, inténtalo de nuevo más tarde.";
+    } else {
+      mensajeFinal = (data && typeof data === "object" && (data.detail || data.general)) ||
+                     (typeof data === "string" && data.slice(0, 300)) ||
+                     `Error HTTP ${res.status}`;
+    }
+    const err = new Error(mensajeFinal);
     err.status = res.status;
     err.data = data;
     throw err;

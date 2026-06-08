@@ -7,6 +7,8 @@ import PanelFiltros from "../listado-componentes/secciones/PanelFiltros";
 import ListaReservas from "../listado-componentes/secciones/ListaReservas";
 import Paginador from "../listado-componentes/secciones/Paginador";
 
+import ModalConfirmacion from "../../shared/modales/ModalConfirmacion";
+
 import {
   getTodasReservas, 
   eliminarReserva,
@@ -51,7 +53,11 @@ export default function GestionReservas() {
     cargador: cargadorConfigurado,
   });
 
-    console.log("Reservas obtenidas:", listado.reservas);
+  const [modalEliminar, setModalEliminar] = useState({
+    isOpen: false,
+    tipo: null,
+    id: null,
+  });
 
   const alCrear = () => {
     if (puedoCrear) {
@@ -73,10 +79,7 @@ export default function GestionReservas() {
   const alAceptar = (id) => listado.ejecutarAccion(async () => await aprobarReserva(id));
   const alRechazar = (id) => listado.ejecutarAccion(async () => await rechazarReserva(id));
   const alEliminar = (id) => {
-    listado.ejecutarAccion(async () => {
-      await eliminarReserva(id);
-      listado.limpiarSeleccion();
-    });
+    setModalEliminar({ isOpen: true, tipo: 'individual', id: id });
   };
 
   const todasSeleccionadasSonPendientes = useMemo(() => {
@@ -112,10 +115,28 @@ export default function GestionReservas() {
 
   const alEliminarSeleccionadas = () => {
     if (listado.idsSeleccionados.size === 0) return;
-    return listado.ejecutarAccion(async () => {
-      await eliminarReservasMasivo(Array.from(listado.idsSeleccionados));
-      listado.limpiarSeleccion();
-    });
+    setModalEliminar({ isOpen: true, tipo: 'masiva', id: null });
+  };
+
+  const confirmarEliminacion = () => {
+    if (modalEliminar.tipo === 'individual') {
+      listado.ejecutarAccion(async () => {
+        await eliminarReserva(modalEliminar.id);
+        listado.limpiarSeleccion();
+      });
+    } else if (modalEliminar.tipo === 'masiva') {
+      listado.ejecutarAccion(async () => {
+        await eliminarReservasMasivo(Array.from(listado.idsSeleccionados));
+        listado.limpiarSeleccion();
+      });
+    }
+    // Cerramos el modal después de ejecutar
+    setModalEliminar({ isOpen: false, tipo: null, id: null });
+  };
+
+  const cancelarEliminacion = () => {
+    // Solo cerramos la modal
+    setModalEliminar({ isOpen: false, tipo: null, id: null });
   };
 
 
@@ -127,6 +148,7 @@ export default function GestionReservas() {
   };
 
   const handleChangeRowsPerPage = (event) => {
+    listado.limpiarError?.();
     setRowsPerPage(Number.parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -143,6 +165,10 @@ export default function GestionReservas() {
     setPrevCantidadFiltrada(listado.reservasFiltradas.length);
     setPage(0);
   }
+
+  const mensajeModal = modalEliminar.tipo === 'individual'
+    ? "¿Estás seguro de que deseas eliminar esta reserva? Esta acción no se puede deshacer."
+    : `¿Estás seguro de que deseas eliminar las ${listado.idsSeleccionados.size} reservas seleccionadas? Esta acción no se puede deshacer.`;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -250,7 +276,7 @@ export default function GestionReservas() {
             </div>
           )}
 
-          {!listado.cargando && !listado.error && listado.reservasFiltradas.length > 0 && (
+          {!listado.cargando && listado.reservasFiltradas.length > 0 && (
             <ListaReservas
               reservas={reservasPaginadas}
               idsSeleccionados={listado.idsSeleccionados}
@@ -271,6 +297,12 @@ export default function GestionReservas() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </div>
+      <ModalConfirmacion 
+        isOpen={modalEliminar.isOpen}
+        mensaje={mensajeModal}
+        onConfirm={confirmarEliminacion}
+        onCancel={cancelarEliminacion}
+      />
     </div>
   );
 }

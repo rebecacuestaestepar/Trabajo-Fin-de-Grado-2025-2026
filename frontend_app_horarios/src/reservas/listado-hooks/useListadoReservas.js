@@ -82,6 +82,7 @@ export function useListadoReservas({
   ]);
 
   function aplicarFiltros() {
+    setError(null);
     setFiltrosAplicados({
       motivo: filtroMotivo,
       responsable: filtroResponsable,
@@ -107,6 +108,7 @@ export function useListadoReservas({
   }, [idsFiltrados, idsSeleccionados]);
 
   function alternarSeleccionUno(id) {
+    setError(null);
     setIdsSeleccionados((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -116,6 +118,7 @@ export function useListadoReservas({
   }
 
   function alternarSeleccionTodoVisible() {
+    setError(null);
     setIdsSeleccionados((prev) => {
       const next = new Set(prev);
       const debeSeleccionar = !idsFiltrados.every((id) => next.has(id));
@@ -128,10 +131,12 @@ export function useListadoReservas({
   }
 
   function limpiarSeleccion() {
+    setError(null);
     setIdsSeleccionados(new Set());
   }
 
   function limpiarFiltros() {
+    setError(null);
     setFiltroMotivo("");
     setFiltroResponsable("");
     setFiltroDesde("");
