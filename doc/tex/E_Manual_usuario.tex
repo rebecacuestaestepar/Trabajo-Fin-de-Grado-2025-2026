@@ -77,20 +77,72 @@ En la Figura~\ref{fig:gestion-puntuales} se muestra la pantalla de gestión de r
 
 \imagen{img/GestionReservasPuntuales.png}{Pantalla de gestión de reservas puntuales}{fig:gestion-puntuales}
 
-
 \subsection{Crear/Editar reserva puntual}
 
+La creación o edición de una reserva puntual se realiza mediante un formulario específico. En este formulario el usuario debe introducir la información necesaria para registrar la reserva, como la fecha, la hora de inicio, la hora de fin, el motivo de la solicitud, la capacidad necesarias y los recursos requeridos. Además al crear o solicitar una reserva se da la opción de generar de forma periódica, por ejemplo si se quiere impartir durante un mes todos los martes, en vez de realizar cuatro solicitudes por separado, te da la opción de generarlas en la misma solicitud.
 
-\subsection{Acciones asociadas a la reserva}
+Entre los recursos que pueden solicitarse se encuentran ordenadores, proyectores, altavoces, cámara o enchufes. Permitiendo en función de estos recursos y de la fecha y hora seleccionada, buscar un aula libre con los recursos solicitados.
 
+Antes de guardar la reserva, el sistema comprueba que los campos obligatorios estén completos, que la hora de fin sea posterior a la hora de inicio y que exista disponibilidad para el aula y franja horaria seleccionadas. Si los datos son correctos, la reserva se registra o actualiza en el sistema. En caso contrario, se muestra un mensaje de error.
+
+La diferencia entre crear una reserva y solicitarla, se basa en que al crear se puede elegir el estado de la reserva, y al solicitar se crea con el estado Pendiente.
+
+En la Figura~\ref{fig:crear-puntual} se muestra el formulario utilizado para crear o editar una reserva puntual.
+
+\imagen{img/CrearPuntual.png}{Formulario de creación o edición de reserva puntual}{fig:crear-puntual}
+
+En la Figura~\ref{fig:opcion-periodica} se muestra el desplegable en el formulario para realizar reservas puntuales de forma periódica.
+
+\imagen{img/OpcionPuntualPeriodica.png}{Desplegable para generar reservas puntuales de forma periódica}{fig:opcion-periodica}
 
 \subsection{Ocupación de aulas}
 
+La pantalla de ocupación de aulas permite consultar la disponibilidad de una o varias aulas en un periodo determinado. Para realizar la consulta, el usuario debe de pulsar el campus al que pertenecen las aulas que quiere ver. Posteriormente selecciona una o varias aulas, y pulsa "Ver Ocupación".
+
+El sistema le redirigirá a una ventana con un calendario a través del cual puede ir pasando los meses, semanas o días depende de la vista escogida para cargar en un rango de fechas las reservas seleccionadas. Además tendrá una leyenda para saber a qué aula pertenece cada reserva, y también tendrá la opción de visualizar solo las reservas puntuales, las periódicas o ambas.
+
+Esta información permite conocer qué tramos están ocupados y cuáles permanecen disponibles, facilitando la planificación de nuevas reservas.
+
+En la Figura~\ref{fig:lista-ocupacion-aula} se muestra la pantalla para seleccionar las aulas de las que se quiere ver la ocupación.
+
+\imagen{img/ListaOcupacionAulas.png}{Pantalla de ocupación de aulas}{fig:lista-ocupacion-aula}
+
+En la Figura~\ref{fig:ocupacion-aula} se muestra la pantalla de calendario de la consulta de ocupación de aulas.
+
+\imagen{img/OcupacionAulaSemana.png}{Pantalla de ocupación de aulas}{fig:ocupacion-aula}
 
 \subsection{Calendario académico}
 
+El calendario académico permite consultar y gestionar los días que forman parte de un curso académico. Desde esta pantalla se pueden visualizar los días lectivos, festivos, periodos de exámenes, cambios de docencia y fechas asociadas a TFG/TFM. Antes de entrar a esta pantalla, el usuario deberá seleccionar el curso académico al que quiere acceder. Además, si se quiere añadir un nuevo calendario académico, basta con ir a Cargar Nuevo Curso y rellenar el formulario para crearlo, y posteriormente el usuario tendrá que terminar de modificarlo.
+
+Los usuarios con permisos de edición pueden modificar la clasificación de un día concreto. Para ello, deben seleccionar la fecha en el calendario y actualizar la información correspondiente. El sistema valida los datos introducidos antes de guardar los cambios.
+
+Esta funcionalidad es importante porque el calendario académico influye directamente en la generación y gestión de reservas periódicas. Por ejemplo, los días festivos o no lectivos deben tenerse en cuenta para evitar la creación de reservas en fechas no válidas.
+
+En la Figura~\ref{fig:lista-cursos} se muestra la pantalla de con el listado de cursos académicos para visualizar.
+
+\imagen{img/ListaCursos.png}{Pantalla de listas con cursos académicos cargados}{fig:lista-cursos}
+
+En la Figura~\ref{fig:crear-curso} se muestra la pantalla con el formulario para crear un nuevo curso académico.
+
+\imagen{img/CrearCalendario.png}{Pantalla para crear un nuevo curso}{fig:crear-curso}
+
+En la Figura~\ref{fig:vista-calendario} se muestra la pantalla de gestión del calendario académico.
+
+\imagen{img/VistaCalendario.png}{Pantalla del calendario académico}{fig:vista-calendario}
 
 \subsection{Cargar nuevo horario}
+
+La funcionalidad de carga de nuevo horario permite importar la información de horarios académicos desde una hoja de cálculo. Para ello, el usuario debe pulsar el botón de Cargar Nuevo Horario y seleccionar previamente el curso académico para el que lo quiere cargar.
+Si el curso académico para el que lo quiere cargar no existe en base de datos, podría crearlo pulsando en Cargar Nuevo Curso, pero conviene que antes configure correctamente el calendario académico para que se carguen las reservas en función de festivos y cambios de docencia.
+
+Una vez confirmada la operación, la aplicación procesa el fichero y extrae la información necesaria para generar las reservas periódicas correspondientes. Durante este proceso se validan los datos del archivo, las asignaturas, los grupos, las aulas y las franjas horarias.
+
+Si el fichero contiene errores, datos incompletos o conflictos de ocupación, el sistema muestra un mensaje de error. Si la carga se completa correctamente, las reservas periódicas se registran en la base de datos y quedan disponibles para su consulta en los horarios correspondientes.
+
+En la Figura~\ref{fig:cargar-horario} se muestra la pantalla utilizada para cargar un nuevo horario desde hoja de cálculo.
+
+\imagen{img/CargarHorario.png}{Pantalla de carga de nuevo horario}{fig:cargar-horario}
 
 
 \subsection{Ver horarios}
