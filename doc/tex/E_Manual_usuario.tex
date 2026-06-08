@@ -52,6 +52,22 @@ En caso de que la aplicación se ejecute en un entorno local o de pruebas, será
 
 En esta sección se describen las principales funcionalidades disponibles en la aplicación. Algunas opciones pueden no estar visibles para todos los usuarios, ya que el acceso a cada funcionalidad depende del rol asignado dentro del sistema.
 
+\subsection{Estructura general de la interfaz}
+
+Una vez iniciado sesión, el usuario accede a la interfaz principal de la aplicación. Esta interfaz mantiene una estructura común en las distintas pantallas, formada por un encabezado superior, un menú lateral de navegación y una zona central de contenido.
+
+En la parte superior de la pantalla se encuentra el encabezado principal. Este encabezado muestra el logotipo de la Universidad de Burgos, un mensaje de bienvenida con el nombre del usuario autenticado y el botón de cierre de sesión. Mediante este botón, el usuario puede finalizar su sesión de forma segura y volver a la pantalla de inicio de sesión.
+
+En la parte izquierda de la interfaz se encuentra el menú lateral de navegación. Este menú permite acceder a los principales módulos de la aplicación, como reservas, horarios, calendarios, ocupación de aulas y administración. Algunos apartados pueden desplegarse mediante el icono correspondiente, mostrando opciones adicionales relacionadas con la funcionalidad seleccionada. Cuando se despliega un apartado se cierra otro para que no quede un menú abierto muy extenso.
+
+Las opciones visibles en el menú dependen del rol asociado al usuario autenticado. Por este motivo, un usuario con permisos de administración podrá visualizar apartados de gestión avanzada, mientras que otros perfiles solo tendrán acceso a las funcionalidades permitidas para su rol.
+
+La zona central de la pantalla se utiliza para mostrar el contenido de cada módulo. En esta área se presentan formularios, listados, calendarios, tablas de ocupación, horarios o paneles de administración, según la opción seleccionada en el menú lateral.
+
+En la Figura~\ref{fig:interfaz-general} se muestra la estructura general de la interfaz de la aplicación, incluyendo el encabezado superior, el menú lateral y la zona principal de contenido.\\
+
+\imagen{img/InterfazGeneral.png}{Estructura general de la interfaz de usuario}{fig:interfaz-general}
+
 \subsection{Inicio de sesión}
 
 La pantalla de inicio de sesión permite acceder a la aplicación utilizando las credenciales institucionales de la Universidad de Burgos. Para entrar en el sistema, el usuario debe introducir su correo electrónico asociados y la contraseña en los campos correspondientes y debe pulsar el botón de inicio de sesión.
@@ -115,7 +131,7 @@ En la Figura~\ref{fig:ocupacion-aula} se muestra la pantalla de calendario de la
 
 El calendario académico permite consultar y gestionar los días que forman parte de un curso académico. Desde esta pantalla se pueden visualizar los días lectivos, festivos, periodos de exámenes, cambios de docencia y fechas asociadas a TFG/TFM. Antes de entrar a esta pantalla, el usuario deberá seleccionar el curso académico al que quiere acceder. Además, si se quiere añadir un nuevo calendario académico, basta con ir a Cargar Nuevo Curso y rellenar el formulario para crearlo, y posteriormente el usuario tendrá que terminar de modificarlo.
 
-Los usuarios con permisos de edición pueden modificar la clasificación de un día concreto. Para ello, deben seleccionar la fecha en el calendario y actualizar la información correspondiente. El sistema valida los datos introducidos antes de guardar los cambios.
+Los usuarios con permisos de edición pueden modificar la clasificación de un día concreto. Para ello, deben seleccionar la fecha en el calendario y actualizar la información correspondiente. El sistema valida los datos introducidos antes de guardar los cambios. En los sábados y domingos solamente permitirá cambiar el tipo de día a festivo, y si se seleccionan más de un día no podrá elegir cambio de docencia esa opción solo estará disponible para un día.
 
 Esta funcionalidad es importante porque el calendario académico influye directamente en la generación y gestión de reservas periódicas. Por ejemplo, los días festivos o no lectivos deben tenerse en cuenta para evitar la creación de reservas en fechas no válidas.
 
@@ -130,6 +146,10 @@ En la Figura~\ref{fig:crear-curso} se muestra la pantalla con el formulario para
 En la Figura~\ref{fig:vista-calendario} se muestra la pantalla de gestión del calendario académico.
 
 \imagen{img/VistaCalendario.png}{Pantalla del calendario académico}{fig:vista-calendario}
+
+En la Figura~\ref{fig:cambio-dia} se muestra la modal para cambiar el tipo de día.
+
+\imagen{img/ModalCambioDia.png}{Modal para cambiar el tipo de día}{fig:cambio-dia}
 
 \subsection{Cargar nuevo horario}
 
@@ -147,17 +167,74 @@ En la Figura~\ref{fig:cargar-horario} se muestra la pantalla utilizada para carg
 
 \subsection{Ver horarios}
 
+La pantalla de visualización de horarios permite consultar las reservas periódicas generadas para un grado, curso y semestre concreto. El usuario debe seleccionar los filtros correspondientes y la aplicación muestra el horario asociado. Previamente tendrá que seleccionar el curso académico para el que quiere ver el horario.
+
+El horario permite visualizar las clases distribuidas por días de la semana y franjas horarias. Cada reserva muestra información relevante, como la asignatura, el grupo, el aula y el horario correspondiente.
+
+Los usuarios con permisos de edición pueden acceder desde esta pantalla a la modificación de reservas periódicas. Por el contrario, los usuarios con permisos de consulta solo pueden visualizar la información del horario.
+
+En la Figura~\ref{fig:lista-horarios} se muestra la pantalla de consulta de horarios.
+
+\imagen{img/ListaHorarios.png}{Pantalla de visualización de los horarios cargados en la aplicación}{fig:lista-horarios}
+
+
+En la Figura~\ref{fig:ver-horarios} se muestra la pantalla de consulta de horarios.
+
+\imagen{img/VistaHorario.png}{Pantalla de visualización de horarios}{fig:ver-horarios}
+
 
 \subsection{Crear/Editar Reserva Periódica}
 
+La creación o edición de una reserva periódica permite gestionar reservas asociadas a la docencia de un grupo durante un periodo determinado. Esta funcionalidad se utiliza principalmente para representar clases que se repiten semanalmente dentro de un semestre académico.
+
+En el formulario de la reserva periódica para crearla, el usuario deberá de ir seleccionando el grado, el curso, el semestre, la asignatura y el grupo para el que quiere crearse. Estos son desplegables en cascada, es decir, no se habilitará el desplegable hasta que se rellene el anterior. También tendrá que rellenar el día de la semana y las horas a la que quiere que se imparta. Por último, pulsará Buscar Aula, y el sistema le devuelve la lista de aulas disponibles de reservas periódicas para la franja horaria seleccionada.
+
+Para crear una reserva se podrá hacer desde la vista de horario pulsando sobre Crear Reserva Periódica se precargará el grado, curso y semestre de la vista, y para editarla bastará con tener permisos y pulsar sobre la reserva en le horario, o mover la reserva por el calendario.
+
+En el caso de la edición de reserva, solamente se podrán modificar la franja horaria y el aula. A su vez también se pueden modificar de día y hora mediante \textit{drag \& drop}. Al modificar el día y la fecha, el sistema comprobará que no se cumpla ninguna de las restricciones, que en este caso es que el aula esté ocupada por otra reserva periódica a la misma hora y día, y que no se solape con el mismo grupo para otra asignatura del mismo grado y semestre. Si se viola alguna de estas restricciones saltará una modal de aviso, que le permitirá al usuario seguir o cancelar la acción.
+
+En la Figura~\ref{fig:formulario-periodica} se muestra el formulario de creación o edición de una reserva periódica.
+
+\imagen{img/FormularioReservaPeriodica.png}{Formulario de creación o edición de reserva periódica}{fig:formulario-periodica}
+
+En la Figura~\ref{fig:modal-advertencia} se muestra el formulario de creación o edición de una reserva periódica.
+
+\imagen{img/ModalAdvertencia.png}{Modal de aviso con las restricciones incumplidas por el cambio}{fig:modal-advertencia}
 
 \subsection{Panel de administración}
 
+El panel de administración permite acceder a las funcionalidades de gestión avanzada de la aplicación. Este apartado está destinado a usuarios con permisos de administración, por lo que no estará disponible para todos los perfiles.
+
+Desde el panel de administración se pueden gestionar distintos elementos del sistema, como usuarios, roles, permisos, aulas, grados, asignaturas, docentes, grupos y otros datos necesarios para el funcionamiento de la aplicación.
+
+El objetivo de este panel es centralizar las tareas de mantenimiento de la información base del sistema. Se accede desde el menú.
 
 \subsubsection{Entidades}
 
+Dentro del apartado de Administración, el usuario podrá ver en el menú las entidades que puede gestionar, es decir, sobre las que puede crear, editar y eliminar. Además dentro de cada entidad se podrá importar y exportar los datos, y descargar la plantilla para saber lo que se tiene que rellenar para importar de manera correcta, por si se desean introducir varias entradas para una misma entidad, a través de un Excel.
+
+Esta funcionalidad permite mantener actualizada la información base del sistema.
+
+En la Figura~\ref{fig:acceso-entidades} se muestra el acceso a las diferentes entidades.
+
+\imagen{img/AccesoEntidades.png}{Acceso a entidades en el panel de administración}{fig:acceso-entidades}
+
+En la Figura~\ref{fig:gestion-aulas} se muestra la ventana de gestión de la entidad Aula.
+
+\imagen{img/GestionAulas.png}{Página con el listado de entradas para la entidad Aula}{fig:gestion-aulas}
+
+En la Figura~\ref{fig:formulario-asignatura} se muestra el formulario para crear y editar una asignatura.
+
+\imagen{img/EditarAsignatura.png}{Formulario para la creación o edición de una asignatura}{fig:formulario-asignatura}
+
 
 \subsubsection{Mantenimiento Global}
+
+Se accede también dentro del apartado de Administración del menú. Esta funcionalidad permitirá hacer mantenimiento sobre la base de datos entera. Permitiendo exportar los datos, así también se pueden tener copias de seguridad de la base de datos. Y también se plante la opción de Descargar la Plantilla con los campos y hojas a rellenar, y de Importar los datos a la base de datos, esta acción genera un aviso ya que borrará previamente todos los datos de la base de datos.
+
+En la Figura~\ref{fig:mantenimiento-sistema} se muestra el formulario para crear y editar una asignatura.
+
+\imagen{img/MantenimientoSistema.png}{Ventana para el mantenimiento y la gestión global de todo el sistema}{fig:mantenimiento-sistema}
 
 
 
