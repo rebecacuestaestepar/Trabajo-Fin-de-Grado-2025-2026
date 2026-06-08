@@ -52,6 +52,18 @@ En caso de que la aplicación se ejecute en un entorno local o de pruebas, será
 
 En esta sección se describen las principales funcionalidades disponibles en la aplicación. Algunas opciones pueden no estar visibles para todos los usuarios, ya que el acceso a cada funcionalidad depende del rol asignado dentro del sistema.
 
+\subsection{Inicio de sesión}
+
+La pantalla de inicio de sesión permite acceder a la aplicación utilizando las credenciales institucionales de la Universidad de Burgos. Para entrar en el sistema, el usuario debe introducir su correo electrónico asociados y la contraseña en los campos correspondientes y debe pulsar el botón de inicio de sesión.
+
+Una vez enviadas las credenciales, la aplicación valida los datos introducidos mediante el sistema de autenticación institucional. Si las credenciales son correctas, el usuario accede a la pantalla principal de la aplicación. En caso contrario, se muestra un mensaje de error indicando que no ha sido posible iniciar sesión.
+
+Además, tras una autenticación correcta, el sistema identifica el rol asociado al usuario para mostrar únicamente las funcionalidades a las que tiene acceso. De esta forma, la interfaz puede variar en función de si el usuario es administrador, gestor editor, gestor no editor o PDI.
+
+En la Figura~\ref{fig:inicio-sesion} se muestra la pantalla de inicio de sesión de la aplicación.
+
+\imagen{img/InicioSesion.png}{Pantalla de inicio de sesión}{fig:inicio-sesion}
+
 \subsection{Estructura general de la interfaz}
 
 Una vez iniciado sesión, el usuario accede a la interfaz principal de la aplicación. Esta interfaz mantiene una estructura común en las distintas pantallas, formada por un encabezado superior, un menú lateral de navegación y una zona central de contenido.
@@ -68,17 +80,6 @@ En la Figura~\ref{fig:interfaz-general} se muestra la estructura general de la i
 
 \imagen{img/InterfazGeneral.png}{Estructura general de la interfaz de usuario}{fig:interfaz-general}
 
-\subsection{Inicio de sesión}
-
-La pantalla de inicio de sesión permite acceder a la aplicación utilizando las credenciales institucionales de la Universidad de Burgos. Para entrar en el sistema, el usuario debe introducir su correo electrónico asociados y la contraseña en los campos correspondientes y debe pulsar el botón de inicio de sesión.
-
-Una vez enviadas las credenciales, la aplicación valida los datos introducidos mediante el sistema de autenticación institucional. Si las credenciales son correctas, el usuario accede a la pantalla principal de la aplicación. En caso contrario, se muestra un mensaje de error indicando que no ha sido posible iniciar sesión.
-
-Además, tras una autenticación correcta, el sistema identifica el rol asociado al usuario para mostrar únicamente las funcionalidades a las que tiene acceso. De esta forma, la interfaz puede variar en función de si el usuario es administrador, gestor editor, gestor no editor o PDI.
-
-En la Figura~\ref{fig:inicio-sesion} se muestra la pantalla de inicio de sesión de la aplicación.
-
-\imagen{img/InicioSesion.png}{Pantalla de inicio de sesión}{fig:inicio-sesion}
 
 \subsection{Gestión de reservas puntuales}
 
