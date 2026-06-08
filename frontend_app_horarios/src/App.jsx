@@ -17,7 +17,6 @@ import CrearReserva from './reservas/formulario-paginas/CrearReserva.jsx';
 import Horarios from './horarios/pages/Horarios.jsx';
 import OcupacionAulas from './aulas/pages/OcupacionAulas.jsx';
 import OcupacionAulaCalendario from './aulas/pages/OcupacionAulaCalendario.jsx';
-import Examenes from './examenes/Examenes.jsx';
 import GestionReservas from './reservas/listado-paginas/GestionarReservas.jsx';
 import LoginPage from "./login/LoginPage.jsx";
 import ListaCursos from "./horarios/pages/ListaCursos.jsx";
@@ -91,7 +90,6 @@ function App() {
             {/* <Route path="/horarios/:id_curso/grados" element={<ListaGrados />} /> */}
             <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
             <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
-            <Route path="/examenes" element={<Examenes />} />
 
             <Route path="/calendario/crear" element={<CrearCalendario />} />
             <Route path="/calendario/cursos" element={<ConsultaCalendarios />} />
