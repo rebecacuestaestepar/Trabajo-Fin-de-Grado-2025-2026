@@ -2,10 +2,100 @@
 
 \section{Introducción}
 
+Este apéndice recoge la documentación dirigida a los usuarios finales de la aplicación. Su objetivo es explicar los requisitos necesarios para utilizar el sistema, el proceso de acceso a la aplicación y el funcionamiento de las principales funcionalidades disponibles según el rol del usuario autenticado.
+
+La aplicación desarrollada permite gestionar horarios académicos, reservas de aulas, calendario académico, usuarios y roles dentro del entorno universitario. Para ello, proporciona una interfaz web desde la que los usuarios autorizados pueden consultar información, solicitar reservas puntuales, cargar horarios desde hojas de cálculo, modificar reservas periódicas y gestionar la planificación académica.
+
+El acceso a las distintas funcionalidades depende del rol asignado a cada usuario. De esta forma, no todos los usuarios disponen de las mismas opciones dentro de la aplicación. Por ejemplo, un usuario con rol de administrador puede gestionar usuarios, roles y entidades del sistema, mientras que un usuario PDI puede consultar información relativa a sus propias reservas y solicitar reservas puntuales.
+
 \section{Requisitos de usuarios}
+
+Para utilizar la aplicación no es necesario instalar ningún programa adicional en el equipo del usuario, ya que se trata de una aplicación web accesible desde un navegador. No obstante, se deben cumplir una serie de requisitos mínimos para garantizar su correcto funcionamiento.
+
+\subsection{Requisitos hardware}
+
+El usuario únicamente necesita disponer de un equipo con conexión a Internet. La aplicación puede utilizarse desde un ordenador o portátil, o dispositivo móvil, siempre que permita ejecutar un navegador web actualizado.
+
+Los requisitos mínimos recomendados son los siguientes:
+
+\begin{itemize}
+	\item Dispositivo móvil.
+	\item Conexión estable a Internet.
+	\item Pantalla con resolución suficiente para visualizar correctamente tablas, formularios y calendarios.
+	\item Teclado y ratón o dispositivo equivalente para interactuar con la interfaz.
+\end{itemize}
+
+\subsection{Requisitos software}
+
+Al tratarse de una aplicación web, el principal requisito software es disponer de un navegador actualizado. Se recomienda utilizar alguno de los navegadores más habituales, como Google Chrome, Mozilla Firefox, Microsoft Edge o Safari.
+
+Los requisitos software son los siguientes:
+
+\begin{itemize}
+	\item Navegador web actualizado.
+	\item Acceso a Internet.
+	\item Credenciales institucionales de la Universidad de Burgos.
+	\item Permisos adecuados dentro de la aplicación según el tipo de usuario.
+\end{itemize}
+
+Para las funcionalidades relacionadas con la carga de horarios, el usuario deberá disponer además del fichero de hoja de cálculo correspondiente en el formato esperado por la aplicación.
 
 \section{Instalación}
 
+Desde el punto de vista del usuario final, la aplicación no requiere instalación local. El sistema se encuentra desplegado en un servidor externo y puede ser utilizado directamente a través de un navegador web.
+
+Para acceder a la aplicación, el usuario deberá introducir la dirección web proporcionada por el administrador del sistema. Una vez cargada la página, se mostrará la pantalla de inicio de sesión, donde será necesario introducir las credenciales institucionales de la Universidad de Burgos.
+
+En caso de que la aplicación se ejecute en un entorno local o de pruebas, será necesario que el administrador o desarrollador haya iniciado previamente los servicios correspondientes al \textit{frontend}, \textit{backend} y base de datos. No obstante, este proceso no forma parte del uso habitual de la aplicación por parte del usuario final.
+
 \section{Manual del usuario}
+
+En esta sección se describen las principales funcionalidades disponibles en la aplicación. Algunas opciones pueden no estar visibles para todos los usuarios, ya que el acceso a cada funcionalidad depende del rol asignado dentro del sistema.
+
+\subsection{Inicio de sesión}
+
+La pantalla de inicio de sesión permite acceder a la aplicación utilizando las credenciales institucionales de la Universidad de Burgos. Para entrar en el sistema, el usuario debe introducir su correo electrónico asociados y la contraseña en los campos correspondientes y debe pulsar el botón de inicio de sesión.
+
+Una vez enviadas las credenciales, la aplicación valida los datos introducidos mediante el sistema de autenticación institucional. Si las credenciales son correctas, el usuario accede a la pantalla principal de la aplicación. En caso contrario, se muestra un mensaje de error indicando que no ha sido posible iniciar sesión.
+
+Además, tras una autenticación correcta, el sistema identifica el rol asociado al usuario para mostrar únicamente las funcionalidades a las que tiene acceso. De esta forma, la interfaz puede variar en función de si el usuario es administrador, gestor editor, gestor no editor o PDI.
+
+En la Figura~\ref{fig:inicio-sesion} se muestra la pantalla de inicio de sesión de la aplicación.
+
+\imagen{img/InicioSesion.png}{Pantalla de inicio de sesión}{fig:inicio-sesion}
+
+
+\subsection{Gestión de reservas puntuales}
+
+
+\subsection{Crear/Editar reserva puntual}
+
+
+\subsection{Acciones asociadas a la reserva}
+
+
+\subsection{Ocupación de aulas}
+
+
+\subsection{Calendario académico}
+
+
+\subsection{Cargar nuevo horario}
+
+
+\subsection{Ver horarios}
+
+
+\subsection{Crear/Editar Reserva Periódica}
+
+
+\subsection{Panel de administración}
+
+
+\subsubsection{Entidades}
+
+
+\subsubsection{Mantenimiento Global}
+
 
 
