@@ -14,16 +14,20 @@ from datetime import timedelta
 from pathlib import Path
 import os
 import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9op17d70_c7qawk_r=&l@_xfk4r4^xnkjx)qky+z%g=c+jgmqt'
+#SECRET_KEY = 'django-insecure-9op17d70_c7qawk_r=&l@_xfk4r4^xnkjx)qky+z%g=c+jgmqt'
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -149,7 +153,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('MYSQLDATABASE', 'horario_db'),
         'USER': os.environ.get('MYSQLUSER', 'root'),
-        'PASSWORD': os.environ.get('MYSQLPASSWORD', 'quier0AprobarTFG!'),
+        'PASSWORD': os.environ.get('MYSQLPASSWORD'),
         'HOST': os.environ.get('MYSQLHOST', '127.0.0.1'),
         'PORT': os.environ.get('MYSQLPORT', '3306'),
         'OPTIONS': {

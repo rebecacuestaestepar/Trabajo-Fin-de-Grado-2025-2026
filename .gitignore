@@ -57,6 +57,7 @@ media/
 
 # Variables de entorno
 .env
+app_horarios/.env
 
 # Directorio de pruebas
 proyecto_pruebas/
