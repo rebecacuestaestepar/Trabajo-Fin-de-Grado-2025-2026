@@ -3,6 +3,9 @@
 En este apartado se van a explicar las decisiones tomadas a lo largo del desarrollo del proyecto, en cuanto las herramientas y técnicas elegidas y utilizadas en este. También se va a exponer en el caso de que se hayan valorado más opciones la motivación de decidirse por la herramienta finalmente elegida frente a otras opciones. 
 
 \section{Lenguajes y entornos de programación}
+
+En esta sección se presentan los lenguajes y entornos de programación utilizados durante el desarrollo del proyecto, así como los motivos que justifican su elección en función de las necesidades técnicas de la aplicación.
+
 \subsection{Python}
 Para la realización de este proyecto, se ha decidido utilizar \textit{python} como lenguaje de programación, por su gran popularidad en la actualidad, la importancia que está tomando en el mundo de la programación y su gran demanda en el mundo laboral. Con lo que puede ser interesante para profundizar más en su funcionamiento y mejorar y conocer más a fondo este lenguaje de programación, ampliando los conocimientos del mismo que se adquirieron en las asignaturas de Sistemas Inteligentes y Algoritmia.
 
@@ -32,13 +35,15 @@ La aplicación requiere de una base de datos para almacenar y consultar toda la 
 
 Con lo que he elegido MySQL ya que a nivel de mantenimiento permite un control independiente de la versión del sistema gestor de bases de datos, evitando que me limite la compatibilidad con versiones del \textit{framework} del \textit{backend} elegido.
 
-\subsection{Servidor y entorno de ejecución: Apache}
-Se han valorado dos alternativas: Apache y XAMPP.
-XAMPP es un paquete que tiene todo en uno, es decir, te proporciona en el mismo programa el sistema gestor de base de datos y el servidor web, incluyendo Apache y MariaDB. Sin embargo, XAMPP distribuye versiones concretas de sus componentes, lo que limitaba la obsolescencia del proyecto ya que las nuevas versiones de Django requieren versiones del sistema gestor de base de datos más actualizadas para poder tener compatibilidad. Por lo que, haber escogido XAMPP como opción, hubiese tenido que instalar versiones de Django anteriores, lo que aceleraría el proceso de desfase de la aplicación.
+\subsection{Plataforma de despliegue: Railway}
 
-Por la razón anterior, y la independencia que da descargar por separado el sistema gestor de base de datos y el servidor web, se ha decidido instalar Apache.
+Para el despliegue de la aplicación se optó por utilizar \textit{Railway}, una plataforma en la nube orientada al despliegue de aplicaciones, servicios y bases de datos. Su elección se debió principalmente a que permitía centralizar en un mismo entorno el despliegue del \textit{frontend}, del \textit{backend} y de una base de datos \textit{MySQL}, lo que facilitaba la integración de todos los componentes del sistema dentro de una única plataforma \cite{railway,railway:documentacion}.
 
+Como alternativa se valoró \textit{Vercel}, ya que se trata de una plataforma ampliamente utilizada para el despliegue de aplicaciones web. Sin embargo, aunque Vercel permite alojar aplicaciones y conectar servicios externos, su enfoque en bases de datos se apoya en integraciones de terceros a través de su \textit{Marketplace}, en lugar de proporcionar un despliegue directo de una base de datos MySQL dentro de la propia plataforma \cite{vercel:almacenamiento,vercel:marketplace-bases-de-datos, vercel:planetscale}. Por este motivo, se consideró menos adecuada para las necesidades del proyecto.
 
+Además, \textit{Railway} ofrecía una ventaja práctica importante durante el desarrollo: permitía utilizar una prueba gratuita de 30 días con créditos iniciales, sin necesidad de asociar una tarjeta de crédito para comenzar a trabajar con la plataforma \cite{railway:prueba-gratuita,railway:faqs-precios}. Esta característica resultó especialmente conveniente en el contexto de un Trabajo de Fin de Grado, al facilitar el despliegue y validación del sistema en un entorno real sin requerir una configuración de pago desde el inicio, para evitar problemas una vez pasada la prueba gratuita.
+
+Por tanto, \textit{Railway} se consideró la opción más adecuada para el proyecto, tanto por su capacidad para alojar conjuntamente los distintos componentes de la aplicación como por las facilidades que ofrecía durante la fase de despliegue y pruebas.
 
 
 \section{Frameworks}
@@ -84,6 +89,9 @@ Tras analizar la documentación sobre ambos \textit{frameworks}: \textit{Bootstr
 Por otro lado, tenemos que Tailwind CSS es \textit{utility-first}, es decir, se basa en clases atómicas que se combinan para construir diseños a medida. Este enfoque permite una mayor flexibilidad y no depende de estilos prestablecidos, además encaja con el desarrollo por componentes del \textit{frontend}. Por todos estos motivos, fue por los que elegí este \textit{framework} para los estilos del proyecto.
 
 \section{Bibliotecas}
+
+En esta sección se presentan las principales bibliotecas empleadas en el desarrollo del proyecto, seleccionadas para dar soporte a funcionalidades concretas de la aplicación y complementar las capacidades ofrecidas por los \textit{frameworks} principales.
+
 \subsection{Biblioteca de Calendarios: Fullcalendar}
 En cuanto a la biblioteca de calendarios que va a ser utilizada para el \textit{frontend}, se han valorado dos opciones: \textit{Fullcalendar} y \textit{React Big Calendar}.
 
@@ -108,6 +116,9 @@ Se establecieron tiempos de vida diferenciados para los \textit{access tokens} y
 Conviene señalar que el uso de JWT no sustituye por sí mismo la lógica de permisos de la aplicación, sino que actúa como mecanismo de autenticación y soporte para el mantenimiento de sesión sobre la API. La restricción efectiva de vistas y acciones continúa dependiendo del modelo de roles y permisos implementado en el sistema.
 
 \section{Otras herramientas y técnicas}
+
+Además de los lenguajes, \textit{frameworks} y bibliotecas principales, el desarrollo del proyecto ha requerido el uso de otras herramientas y técnicas auxiliares. En este apartado se describen aquellas que han resultado más relevantes para la implementación, la planificación del trabajo y la elaboración de la documentación.
+
 \subsection{Analizador léxico y expresiones regulares: \textit{re}}
 
 Para implementar parte del analizador léxico encargado en procesar los horarios académicos se utilizó el módulo \textit{re} de Python. Este módulo proporciona operaciones de coincidencia mediante expresiones regulares, permitiendo describir patrones textuales y reconocer cadenas que siguen una estructura concreta \cite{python_re_docs, python_regex_howto}.
@@ -136,7 +147,7 @@ Su utilización resultó útil para visualizar el progreso del proyecto mediante
 
 \subsection{TeXstudio}
 
-Como apoyo a la gestión de la memoria se utilizó \textit{TeXstudio}, un entorno integrado para la creación de documentos \LaTeX. La propia herramienta se presenta como un entorno de escritura integrado cuyo objetivo es facilitar la elaboración de documentos \LaTeX mediante funciones como resaltado de sintaxis, visor integrado, comprobación de referencias y asistentes \cite{wiki:texstudio}.
+Como apoyo a la gestión de la memoria se utilizó \textit{TeXstudio}, un entorno integrado para la creación de documentos \LaTeX{}. La propia herramienta se presenta como un entorno de escritura integrado cuyo objetivo es facilitar la elaboración de documentos \LaTeX{} mediante funciones como resaltado de sintaxis, visor integrado, comprobación de referencias y asistentes \cite{wiki:texstudio}.
 
 La elección fue tomada por la decisión de trabajar de forma local con una documentación  extensa, manteniendo control directo sobre la compilación y la estructura de archivos. Esto resultó especialmente útil para la realización de la memoria y de los anexos, donde la integración con el proceso de compilación y el visor de pdf al lado, mejoran notablemente la productividad.
 

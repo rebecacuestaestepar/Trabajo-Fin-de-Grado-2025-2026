@@ -4,7 +4,7 @@ Este capítulo recoge los aspectos más relevantes del desarrollo práctico del 
 
 \section{Modelo híbrido de persistencia}
 
-Uno de los aspectos más relevantes del desarrollo ha sido el integrar dos enfoques distintos de persistencia dentro de un mismo sistema. Por un lado, la parte de la base de datos asociada a la gestión académica y organización de la escuela que se ha realizado a través de un \textit{script} SQL cuya base o prototipo fue realizado al principio del proyecto, previo a elegir \textit{frameworks} o lenguajes de programación. Y por otro lado, tenemos la gestión de usuarios, roles y permisos se implementó con los mecanismos que proporciona Django.
+Uno de los aspectos más relevantes del desarrollo ha sido el integrar dos enfoques distintos de persistencia dentro de un mismo sistema. Por un lado, la parte de la base de datos asociada a la gestión académica y organización de la Escuela que se ha realizado a través de un \textit{script} SQL cuya base o prototipo fue realizado al principio del proyecto, previo a elegir \textit{frameworks} o lenguajes de programación. Y por otro lado, tenemos la gestión de usuarios, roles y permisos se implementó con los mecanismos que proporciona Django.
 
 Esta decisión permitió reutilizar la estructura de datos preexistente, evitando redefinir las entidades ya consolidadas en el \textit{script}, y a su vez aprovechar las facilidades que ofrece el \textit{framework} para la autenticación, autorización y administración de accesos. No obstante, hubo que integrar las entidades, relaciones y reglas de acceso para aprovechas las ventajas del ORM que ofrece Django. Para ello se volcaron los modelos a Django mediante el comando \textit{inspectdb}.
 
@@ -12,7 +12,7 @@ Desde el punto de vista práctico, este modelo híbrido permitió combinar una b
 
 \section{Integración con la autenticación institucional}
 
-Otro aspecto destacado del desarrollo fue la decisión de delegar la autenticación de usuarios en la API institucional de la universidad. De este modo el sistema no valida directamente las credenciales contra la base de datos propia, sino que utiliza las credenciales oficiales proporcionadas por la institución, apoyándose así en un mecanismo externo ya consolidado y en funcionamiento.
+Otro aspecto destacado del desarrollo fue la decisión de delegar la autenticación de usuarios en la API institucional de la universidad. De este modo el sistema no valida directamente las credenciales contra la base de datos propia, sino que utiliza las credenciales oficiales proporcionadas por la institución, apoyándose así en un mecanismo externo ya consolidado y en funcionamiento, como lo es el Moodle.
 
 Esta decisión fue tomada debido a que la aplicación va a ser utilizada y gestionada por personas relacionadas a la Universidad de Burgos, de forma que así se controla los usuarios que pueden acceder a la página y evitando así tener que hacer un registro de usuario, provocando que el usuario tenga que crear otra contraseña nueva para tareas relacionadas con la institución. Por lo que se llegó a la conclusión de que este paso no era necesario.
 
@@ -35,7 +35,7 @@ La gestión relacionada a los tipos de días aporta varias ventajas. En primer l
 Desde el punto de vista del diseño, esta decisión supone que el sistema no solo gestiona reservas y horarios, sino también se encarga del marco temporal académico que condiciona la validez de los puntos anteriores. En consecuencia, la aplicación pasa a tratar no únicamente qué actividad tiene lugar en el aula, sino también en qué contexto académico se produce, lo que refuerza su adecuación al entorno universitario y mejora la calidad de la información que ofrece.
 
 \section{Parser de horarios}
-Durante el desarrollo del proyecto, se decidió realizar un analizador léxico para la carga de los horarios de los grados en el sistema, los cuales se encuentran ahora mismo en una hoja de cálculo. Esta decisión fue tomada debido a que para poder modificar la franja horario en la que se imparte una clase tiene que estar cargada en base de datos, y habría que cargar de manera manual las reservas en el sistema. Lo que no es viable ya que con la extracción de los datos de la hoja de cálculo, el número de clases o reservas extraídas supera las 1000 reservas periódicas.
+Durante el desarrollo del proyecto, se decidió realizar un analizador léxico para la carga de los horarios de los grados en el sistema, los cuales se encuentran ahora mismo en una hoja de cálculo. Esta decisión fue tomada debido a que para poder modificar la franja horario en la que se imparte una clase tiene que estar cargada en base de datos, y habría que cargar de manera manual las reservas en el sistema. Lo que no es viable ya que con la extracción de los datos de la hoja de cálculo, el número de clases o reservas extraídas supera las mil reservas periódicas.
 
 Para comenzar se analizó en profundidad la estructura que presentaban las clases teóricas y prácticas de la hoja de cálculo que se utiliza actualmente para la gestión de los horarios. Tras el análisis se supuso que las clases teóricas podían ser encontradas con tres estructuras diferentes, y las clases prácticas con otras tres estructuras, con una estructura de ellas común entre los dos tipos de clases. También se observó que las clases teóricas tenían un color y las prácticas otro a nivel general incluyendo las clases en inglés del grado de Organización Industrial. También se analizaron los datos que era importante extraer para poder realizar las cargas en base de datos de las reservas periódicas, entre los que se encuentran, la asignatura, su código (identificador de la asignatura en base de datos), el grupo, el aula, el día de la semana y la franja horaria en la que se imparte la clase. 
 
@@ -47,11 +47,11 @@ Entre los problemas de unificación encontrados están los siguientes:
 \begin{enumerate}
 	\item Inconsistencia en el formato de colores. Aunque visualmente había colores que podían parecer similares, la tonalidad o código era distinto para representar una misma categoría. El grupo teórico de inglés tenía el mismo color designado que el grupo teórico para el segundo grupo de teoría.
 	\begin{itemize}
-		\item Solución aplicada: Se decidió qué color y tonalidad iba a tener cada categoría encontrada, y 
+		\item Solución aplicada: Se decidió qué color y tonalidad iba a tener cada categoría encontrada, y se aplicó el color definido para cada caso de forma uniforme.
 	\end{itemize}
-	\item Introducción manual de datos. Se encontraron datos que en vez de haber sido añadidos mediante el validador se habían introducido a mano en la celda, en vez de ser añadidos en la lista de celdas de la que el validador extraía los datos.
+	\item Introducción manual de datos. Se encontraron valores escritos directamente en las celdas, en lugar de seleccionarse mediante el validador de datos.
 	\begin{itemize}
-		\item Solución aplicada: Se analizó y detectó que datos habían sido introducidos de manera manual, se añadió su valor a la lista del validador, y se eligió mediante este.
+		\item Solución aplicada: Se analizó y detectó qué datos habían sido introducidos de manera manual, se añadió su valor a la lista del validador, y se eligió mediante este.
 	\end{itemize}
 	\item Inconsistencia en la nomenclatura de los laboratorios. Para referirse a los laboratorios, se utilizaban diferentes abreviaturas (Lab., Lab, Lb., L.). La última de estas abreviaturas provocaba que alguna asignatura la identificase como aula por acabar con <<l>>. Por ejemplo, APL. BASES DE DATOS (Aplicación de base de datos).
 	\begin{itemize}
@@ -79,26 +79,26 @@ Entre los problemas de unificación encontrados están los siguientes:
 	\end{itemize}
 \end{enumerate}
 
-Se ha adjuntado a continuación una imagen~\ref{fig:problemas-unificaciones}, en la que vamos a poder observar y analizar varios de los problemas que acaban de ser expuestos.
+Se ha adjuntado la imagen~\ref{fig:problemas-unificaciones}, en la que se observanr varios de los problemas que acaban de ser expuestos.
 
-\imagen{img/InconsistenciasExcel.png}{Imagen apreciativa de los problemas de uniformidad de la hoja de cálculo}{fig:problemas-unificaciones}
+\imagen{img/InconsistenciasExcel.png}{Imagen descriptiva de los problemas de uniformidad de la hoja de cálculo de horarios}{fig:problemas-unificaciones}
 
-En color azul, se puede observar como en la clase teórica aparece la asignatura sin tilde y separada por un guión del I, en cambio, en la clase práctica se puede observar como aparece la asignatura sin tilde y sin el guión de separación.
+En color azul, se puede observar como en la clase teórica aparece la asignatura sin tilde y separada por un guión del <<I>>, en cambio, en la clase práctica se puede observar como aparece la asignatura sin tilde y sin el guión de separación.
 De color verde se ve un caso similar, entre dos clases teóricas una de ellas sin tilde y abreviada, y la otra por el contrario con el nombre completo y la tilde asignada, algo similar al caso de color rojo o marrón.
-De color amarillo, se observa como en uno de los casos el separador es un guión y en el otro una barra. Además, fijándose en pequeños detalles que pueden pasar desapercibidos a simple vista se puede llegar a apreciar como en la primera clase Inf 1B referido al aula se encuentra separado, y en la impartida el jueves se encuentra todo seguido Inf1B.
+De color amarillo, se observa como en uno de los casos el separador es un guión y en el otro una barra. Además, fijándose en pequeños detalles que pueden pasar desapercibidos a simple vista se puede llegar a apreciar como en la primera clase <<Inf 1B>> referido al aula se encuentra separado, y en la impartida el jueves se encuentra todo seguido <<Inf1B>>.
 
-En la siguiente imagen~\ref{fig:problemas-colores}, se van a apreciar como había diferentes tonos de azul asignados para las clases prácticas del mismo grupo, en este caso, el grupo 1.
+En la imagen~\ref{fig:problemas-colores}, se aprecian cómo había diferentes tonos de azul asignados para las clases prácticas del mismo grupo, en este caso, el grupo 1.
 
-\imagen{img/ColoresClasesExcel.png}{Imagen apreciativa de los diferentes tonos de color asignados a un mismo tipo de clase y grupo}{fig:problemas-colores}
+\imagen{img/ColoresClasesExcel.png}{Imagen descriptiva de los diferentes tonos de color asignados a un mismo tipo de clase y grupo}{fig:problemas-colores}
 
 
-Y por último, se van a adjuntar unas imágenes~\ref{fig:problemas-estructuras-1,fig:problemas-estructuras-2,fig:problemas-estructuras-3}, en las que se van a poder ver las diferentes estructuras que se han tenido que tener en cuenta para poder extraer de manera correcta la información de las clases.
+Y por último, se adjuntan las imágenes~\ref{fig:problemas-estructuras-1}, ~\ref{fig:problemas-estructuras-2} y ~\ref{fig:problemas-estructuras-3}, en las que se van a poder ver las diferentes estructuras que se han tenido que tener en cuenta para poder extraer de manera correcta la información de las clases.
 
-\imagen{img/EstructurasClases.png}{Imagen con dos tipos de estructuras para los grupos teóricos y los prácticos}{fig:problemas-colores}
+\imagen{img/EstructurasClases.png}{Imagen con dos tipos de estructuras para los grupos teóricos y los prácticos}{fig:problemas-estructuras-1}
 
 En esta primera imagen se observan dos tipos de clases prácticas, ambas con el texto rotado 90º. Una con el grupo arriba de la asignatura, y la otra con el grupo a la derecha. Además se aprecian las clases teóricas con el texto sin rotación y con texto rotado 90º al igual que las prácticas. Para poder encontrarlo mejor, el color morado y carne se refieren a clases teóricas, y los colores verde y azul a clases prácticas.
 
-\imagen{img/EstructurasClases2.png}{Imagen para ver estructuras de grupos teóricos cuando hay 2}{fig:problemas-estructuras-2}
+\imagen{img/EstructurasClases2.png}{Imagen para ver estructuras de grupos teóricos cuando hay dos grupos}{fig:problemas-estructuras-2}
 
 En esta segunda imagen se puede apreciar que cuando hay dos grupos teóricos, en vez de aparecer el aula debajo de la asignatura aparece a la derecha, además de que también se debe guardar el número del grupo que aparece al final del bloque.
 

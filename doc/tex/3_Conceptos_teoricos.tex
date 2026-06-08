@@ -1,6 +1,6 @@
 \capitulo{3}{Conceptos teóricos}
 
-En esta sección de la memoria, se pretenden recoger los conceptos teóricos más relevantes para la comprensión del proyecto.
+En esta sección de la memoria, se recogen los conceptos teóricos más relevantes para la comprensión del proyecto.
 
 \subsection{Aplicaciones web y arquitecturas cliente-servidor}
 
@@ -124,7 +124,7 @@ En el contexto de este proyecto, estos conceptos resultan útiles para entender 
 
 Las expresiones regulares constituyen un mecanismo formal para describir patrones dentro de cadenas de texto. Mediante una notación compacta, permiten definir qué secuencia de caracteres son válidas y cuáles no, facilitando tareas como la búsqueda, validación, extracción o sustituición de fragmentos de información dentro de una entrada de texto.
 
-Desde el punto de vista del análisis léxico, las expresiones regulares resultan especialmente útiles porque permiten especificar de manera precisa la forma que deben tener los lexemas asociados a cada tipo de \textit{token}. Así, en lugar de comprobar manualmente carácter a carácter si una cadena cumple un determinado formato, es posible describir dicho patrón mediante una expresión formal y utilizarla para reconocer automáticamente las coincidencias dentro del texto de entrada.
+Desde el punto de vista del análisis léxico, las expresiones regulares resultan especialmente útiles porque permiten especificar de manera precisa la forma que deben tener los lexemas asociados a cada tipo de \textit{token}. Así, en lugar de comprobar manualmente carácter a carácter si una cadena cumple un determinado formato, es posible describir dicho patrón mediante una expresión regular y utilizarla para reconocer automáticamente las coincidencias dentro del texto de entrada.
 
 Su utilidad no se limita únicamente al ámbito de compiladores o lenguajes de programación, sino que se extiende también al procesamiento general de información textual estructurada. Gracias a ello, pueden emplearse reconocer días, códigos, abreviaturas, grupos, franjas horarias u otras secuencias que sigan una forma recurrente y definida.
 
@@ -133,48 +133,3 @@ En el contexto de este proyecto, las expresiones regulares constituyen una herra
 \cite{regex:david}
 \cite{regex:manuel}
 
-\subsection{Autómatas finitos}
-
-Los autómatas finitos son modelos matemáticos utilizados para describir y reconocer lenguajes formales definidos mediante un conjunto finito de estados y transiciones. Su funcionamiento se basa en procesar una cadena de entrada símbolo a símbolo, cambiando de estado según las reglas previamente definidas, hasta determinar si la secuencia analizada es aceptada o rechazada.
-
-Desde el punto de vista del análisis léxico, los autómatas finitos constituyen una de las bases teóricas más relevantes para el reconocimiento de patrones. A partir de expresiones regulares, es posible construir mecanismos que permitan decidir de forma sistemática si una determinada secuencia de caracteres se ajusta o no al formato esperado. De este modo, los autómatas proporcionan un fundamento formal para identificar \textit{tokens} dentro de una entrada de texto.
-
-Existen dos tipos principales de autómatas finitos:
-\begin{itemize}
-	\item Autómatas finitos deterministas: para cada estado y símbolo de entrada existe una única transición posible. Resultan especialmente adecuados para la implementación eficiente de analizadores léxicos, debido a que permiten recorrer la entrada de manera directa y sin ambigüedad.
-	\item Autómatas finitos no deterministas: para cada estado y símbolo de entrada pueden existir varias alternativas.
-\end{itemize}
-
-La relación entre expresiones regulares y autómatas finitos resulta especialmente importante, ya que ambos describen la misma familia de lenguajes, conocidos como lenguajes regulates. Gracias a esta equivalencia, los patrones definidos formalmente mediante expresiones regulares pueden transformarse en estructuras de reconocimiento basadas en estados y transiciones, lo que facilita su aplicación práctica en procesos automáticos de análisis.
-
-En el contexto del proyecto, la utilidad de estos conceptos no reside tanto en la construcción de autómatas finitos como en comprender la base formal sobre la que se apoya el reconocimiento de patrones dentro del procesamiento de horarios académicos. Esta perspectiva resulta útil para entender cómo determinadas cadenas pueden ser reconocidas, segmentadas y validadas antes de transformarse en reservas periódicas dentro del sistema.
-
-\cite{wiki:automatas}
-
-
-
-
-%\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-%{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-%	HTML5 & X & & &\\
-%	CSS3 & X & & &\\
-%	BOOTSTRAP & X & & &\\
-%	JavaScript & X & & &\\
-%	AngularJS & X & & &\\
-%	Bower & X & & &\\
-%	PHP & & X & &\\
-%	Karma + Jasmine & X & & &\\
-%	Slim framework & & X & &\\
-%	Idiorm & & X & &\\
-%	Composer & & X & &\\
-%	JSON & X & X & &\\
-%	PhpStorm & X & X & &\\
-%	MySQL & & & X &\\
-%	PhpMyAdmin & & & X &\\
-%	Git + BitBucket & X & X & X & X\\
-%	Mik\TeX{} & & & & X\\
-%	\TeX{}Maker & & & & X\\
-%	Astah & & & & X\\
-%	Balsamiq Mockups & X & & &\\
-%	VersionOne & X & X & X & X\\
-%} 
