@@ -14,17 +14,17 @@ Para representar este diseño se han utilizado dos modelos complementarios: el d
 
 \subsection{Diagrama entidad-relación}
 
-El diagrama entidad-relación representa el modelo conceptual de la base de datos. Este tipo de diagrama permite identificar las entidades principales del sistema, sus atributos más relevantes y las relaciones existentes entre ellas, sin entrar todavía en detalles concretos de implementación \cite{diagrama_er}.
+El diagrama entidad-relación representa el modelo conceptual de la base de datos. Este tipo de diagrama permite identificar las entidades principales del sistema, sus atributos más relevantes y las relaciones existentes entre ellas, sin entrar todavía en detalles concretos de implementación~\cite{diagrama_er}. Podemos ver su representación en la Figura~\ref{fig:diagrama-er}
 
 En el caso de esta aplicación, el diagrama entidad-relación permite representar elementos como las aulas, los grados, las asignaturas, los grupos, los docentes, las reservas y los días del calendario académico. Además, recoge relaciones importantes como la asociación entre reservas y aulas, la relación entre asignaturas y grupos, la vinculación entre docentes y asignaturas, y la clasificación de las reservas en puntuales o periódicas.
 
 También se representa la especialización de algunos conceptos. Por ejemplo, una reserva puede ser puntual o periódica, y un día del calendario académico puede clasificarse como lectivo, festivo, día de examen, día de cambio de docencia o periodo asociado a TFG/TFM. De esta forma, el diagrama permite obtener una visión general de la estructura lógica del sistema antes de su transformación al modelo relacional.
 
-Podemos ver su representación en la Figura~\ref{fig:diagrama-er}
+
 
 \subsection{Modelo relacional}
 
-El modelo relacional representa la transformación del diagrama entidad-relación en una estructura preparada para su implementación en una base de datos relacional. En este modelo, cada entidad o relación relevante se convierte en una tabla, cuyos atributos se representan mediante columnas \cite{modeloRelacional}.
+El modelo relacional representa la transformación del diagrama entidad-relación en una estructura preparada para su implementación en una base de datos relacional. En este modelo, cada entidad o relación relevante se convierte en una tabla, cuyos atributos se representan mediante columnas~\cite{modeloRelacional}.
 
 Además, el modelo relacional permite definir las claves primarias, encargadas de identificar de forma única cada registro, y las claves ajenas, que permiten establecer relaciones entre las distintas tablas. Gracias a estas claves se garantiza la integridad referencial de la información, evitando inconsistencias entre elementos relacionados, como reservas asociadas a aulas inexistentes o grupos vinculados a asignaturas no registradas.
 
@@ -674,7 +674,7 @@ En la Figura~\ref{fig:diagrama-inicio-sesion} se muestra el diagrama correspondi
 
 La carga de horario desde hoja de cálculo es uno de los procedimientos principales de la aplicación, ya que permite transformar la información contenida en la hoja de cálculo de horarios en reservas periódicas dentro del sistema. Este proceso evita introducir manualmente cada clase, reduciendo el tiempo de gestión y disminuyendo la posibilidad de errores en la planificación académica.
 
-En este proceso el usuario selecciona el curso para el que quiere cargar el horario, se abre un desplegable con un área donde cargar el archivo, el usuario lo carga y pulsa el botón "Enviar". El archivo se manda al \textit{backend}, el analizador léxico extraer las clases que se encuentran en la hoja de cálculo y el \textit{backend} crea una reserva periódica para cada día de docencia de cada clase extraída.
+En este proceso el usuario selecciona el curso para el que quiere cargar el horario, se abre un desplegable con un área donde cargar el archivo, el usuario lo carga y pulsa el botón ``Enviar''. El archivo se manda al \textit{backend}, el analizador léxico extraer las clases que se encuentran en la hoja de cálculo y el \textit{backend} crea una reserva periódica para cada día de docencia de cada clase extraída.
 
 Este procedimiento permite automatizar una parte fundamental de la gestión académica, ya que convierte los horarios definidos en hojas de cálculo en información estructurada dentro de la base de datos. Además, al realizarse las validaciones desde el \textit{backend}, se garantiza que las reservas generadas respeten las restricciones del calendario académico.
 
@@ -686,7 +686,7 @@ En la Figura~\ref{fig:diagrama-carga-excel} se muestra el diagrama correspondien
 
 La creación de una reserva puntual permite registrar una solicitud de uso de un aula para una fecha y franja horaria concreta. Este procedimiento está orientado principalmente a reservas no periódicas, como charlas, reuniones, actividades docentes concretas, exámenes u otros eventos que no forman parte del horario semanal habitual.
 
-Para este procedimiento, el usuario deberá pulsar "Crear Nueva Reserva", se abrirá el formulario, y rellenará los campos obligatorios y los campos opcionales que crea necesarios. Luego pulsará "Buscar Aulas Candidatas", el sistema le mostrará la lista de aulas con los recursos que ha solicitado y que se encuentran disponibles para la fecha y hora seleccionada. El usuario pulsará en "Guardar", y se generará la reserva o mostrará un mensaje de error.
+Para este procedimiento, el usuario deberá pulsar ``Crear Nueva Reserva'', se abrirá el formulario, y rellenará los campos obligatorios y los campos opcionales que crea necesarios. Luego pulsará ``Buscar Aulas Candidatas'', el sistema le mostrará la lista de aulas con los recursos que ha solicitado y que se encuentran disponibles para la fecha y hora seleccionada. El usuario pulsará en ``Guardar'', y se generará la reserva o mostrará un mensaje de error.
 
 Este procedimiento garantiza que las reservas puntuales se creen de forma controlada, comprobando previamente la validez de los datos introducidos y la disponibilidad de aulas.
 
@@ -710,7 +710,7 @@ En la Figura~\ref{fig:diagrama-modificar-periodica} se muestra el diagrama corre
 
 La consulta de ocupación de aula permite visualizar las reservas asociadas a una o varias aulas concretas dentro de un intervalo de tiempo determinado. Esta funcionalidad resulta útil para conocer la disponibilidad real de los espacios docentes, comprobar si un aula se encuentra libre en una fecha y franja horaria concreta, y facilitar la toma de decisiones antes de crear o modificar una reserva.
 
-El usuario selecciona el aula o aulas para el que quiere consultar la ocupación. Pulsa "Ver Ocupación", el sistema carga todas las reservas asociadas a esas aulas y las representa en el calendario, permitiendo ver las reservas para rangos determinados de tiempo.
+El usuario selecciona el aula o aulas para el que quiere consultar la ocupación. Pulsa ``Ver Ocupación'', el sistema carga todas las reservas asociadas a esas aulas y las representa en el calendario, permitiendo ver las reservas para rangos determinados de tiempo.
 
 En la Figura~\ref{fig:digrama-ocupacion-aula} se muestra el diagrama correspondiente al proceso de consulta de ocupación de aula.
 
@@ -720,7 +720,7 @@ En la Figura~\ref{fig:digrama-ocupacion-aula} se muestra el diagrama correspondi
 
 La modificación de un día permite actualizar la información asociada a una fecha concreta del calendario académico. Esta funcionalidad es necesaria para reflejar situaciones especiales dentro del curso, como días lectivos, festivos, periodos de exámenes, cambios de docencia o fechas destinadas a TFG/TFM.
 
-El usuario cuando está en la vista del calendario de un curso académicos, pulsa sobre uno o varios de los días del calendario. El sistema abre una modal con las opciones a las que cambiar el día, el usuario selecciona la opción, rellena los datos asociados y pulsa "Guardar". El sistema valida que no sea sábado y domingo y n día distinto de festivo, modifica el tipo de día asociado a esa fecha y se actualiza la vista del calendario con los nuevos datos.
+El usuario cuando está en la vista del calendario de un curso académicos, pulsa sobre uno o varios de los días del calendario. El sistema abre una modal con las opciones a las que cambiar el día, el usuario selecciona la opción, rellena los datos asociados y pulsa ``Guardar''. El sistema valida que no sea sábado y domingo y n día distinto de festivo, modifica el tipo de día asociado a esa fecha y se actualiza la vista del calendario con los nuevos datos.
 
 Este procedimiento permite mantener actualizado el calendario académico y garantiza que las modificaciones realizadas sobre una fecha concreta sean coherentes con la planificación docente. Además, resulta relevante para la generación y gestión de reservas periódicas, ya que estas dependen de la existencia de días lectivos, festivos y posibles cambios de docencia.
 

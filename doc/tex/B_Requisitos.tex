@@ -114,6 +114,8 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 
 \subsection{Definición de los casos de uso}
 
+A continuación, se describen los casos de uso identificados para el sistema. Cada caso de uso se presenta mediante una tabla en la que se recoge su identificador, una breve descripción, las precondiciones necesarias, el flujo principal de ejecución, las postcondiciones las posibles excepciones y la importancia.
+
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
@@ -668,10 +670,9 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
 				\tightlist
 				\item El sistema muestra un formulario con el grado, el curso y el semestre preseleccionados del horario en el que se encontraba.
-				\item El usuario modifica los datos precargados si lo cree necesario, añade la asignatura y el grupo para el que va a realizarse la reserva, y la hora de inicio y de fin y el día de la semana que va a ejecutarse, además de seleccionar un aula libre.
-				\item El usuario confirma la reserva
+				\item El usuario modifica los datos precargados si lo cree necesario, añade la asignatura y el grupo para el que va a realizarse la reserva, y la hora de inicio y de fin y el día de la semana que va a ejecutarse, además de seleccionar un aula libre. Y confirma la reserva.
 			\end{enumerate}
-			\item El usuario selecciona una reserva periódica y pulsa \emph{Editar}
+			\item El usuario selecciona una reserva periódica
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
 				\tightlist
 				\item El sistema permite cambiar los campos relativos al día y hora, y el aula
@@ -681,7 +682,6 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 			\item El usuario selecciona una reserva periódica y pulsa \emph{Eliminar}
 			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
 				\tightlist
-				\item El sistema solicita la confirmación y muestra las consecuencias
 				\item El usuario confirma
 				\item El sistema elimina todos los datos correspondientes a esa reserva
 			\end{enumerate}			
