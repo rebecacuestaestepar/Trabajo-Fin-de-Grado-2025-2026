@@ -2,7 +2,74 @@
 
 \section{Introducción}
 
+En este apéndice se recoge la documentación técnica de programación del proyecto. Su objetivo es facilitar la comprensión de la estructura interna de la aplicación, así como proporcionar la información necesaria para que otro desarrollador pueda instalar, ejecutar, mantener o ampliar el sistema.
+
+La aplicación desarrollada está formada por un \textit{backend} implementado con Django, un \textit{frontend} desarrollado con React y Vite, y una base de datos MySQL. El \textit{backend} se encarga de la lógica de negocio, la autenticación, la gestión de reservas, la carga de horarios y el acceso a la base de datos. El \textit{frontend}, por su parte, proporciona la interfaz de usuario desde la que se accede a las distintas funcionalidades del sistema.
+
+Esta documentación describe la estructura de directorios del proyecto, las principales partes del código, los pasos necesarios para instalar y ejecutar la aplicación, y las pruebas realizadas para comprobar el correcto funcionamiento del sistema.
+
+El proyecto se organiza separando el código del \textit{backend} y del \textit{frontend}, lo que permite mantener diferenciadas la lógica de negocio y la interfaz de usuario. Esta separación facilita el mantenimiento del sistema y permite que ambas partes puedan evolucionar de forma independiente.
+
 \section{Estructura de directorios}
+
+La estructura del proyecto se organiza separando la parte correspondiente al \textit{backend} y la parte correspondiente al \textit{frontend}. Esta división permite diferenciar claramente la lógica de negocio y acceso a datos, desarrollada con Django, de la interfaz de usuario, desarrollada con React. Por otro lado, tenemos el \textit{script SQL} de la base de datos llamado "BaseDeDatosHorario.sql", que se encuentra a la misma altura que el directorio del \textit{frontend} y del \textit{backend}.
+
+En los siguientes apartados se describe la organización de ambos bloques, indicando la finalidad de los principales directorios y ficheros que forman parte del proyecto. Esta explicación facilita la comprensión del código fuente y permite que otros desarrolladores puedan localizar de forma más sencilla los módulos principales de la aplicación.
+
+
+\subsection{Backend}
+
+El \textit{backend} de la aplicación se encuentra desarrollado con Django y contiene la lógica principal del sistema. En esta parte del proyecto se gestionan los modelos de datos, las rutas, las vistas, la autenticación, la comunicación con la base de datos y las operaciones relacionadas con horarios, reservas, calendario académico, aulas, docencia y usuarios.
+
+En la Figura~\ref{fig:estructura-directorios-backend} se muestra la estructura principal de directorios correspondiente al \textit{backend} del proyecto.
+
+\imagen{img/EstructuraDirectoriosBack.png}{Estructura de directorios del backend}{fig:estructura-directorios-backend}
+
+Como se observa en la Figura~\ref{fig:estructura-directorios-backend}, el directorio del \textit{backend} está formado por diferentes aplicaciones de Django, cada una de ellas orientada a una parte funcional concreta del sistema. Esta organización modular permite separar responsabilidades y facilita el mantenimiento del código.
+
+El directorio \textit{nucleo} contiene la configuración principal del proyecto Django. En él se encuentran los archivos generales de configuración, como la configuración del proyecto, las rutas principales y otros elementos necesarios para el arranque de la aplicación.
+
+El módulo \textit{aulas} agrupa la lógica relacionada con la gestión de aulas y su ocupación. Este módulo permite trabajar con la información relativa a capacidad, ubicación y equipamiento disponible en cada aula, y hacer las llamadas para obtener las reservas asociadas a cada aula.
+
+El módulo \textit{calendario} contiene las funcionalidades relacionadas con el calendario académico. En él se gestiona la información de días lectivos, festivos, exámenes, cambios de docencia y fechas asociadas a TFG/TFM. Se encarga de cargar el calendario académico obteniendo los tipos de día y de manejar el cambio de tipo de día, además de la generación de un nuevo calendario académico.
+
+El módulo \textit{docencia} agrupa la información académica relacionada con grados, asignaturas, grupos y docentes. Esta parte resulta fundamental para la generación y consulta de horarios, ya que permite asociar las reservas periódicas con la estructura docente correspondiente. En este módulo, se obtienen los cursos con horario cargado, los grados con docencia y sus semestres, las reservas periódicas asociadas a todo lo anterior, en cuanto a mostrar el horario. En cuanto a las reservas periódicas, maneja la creación de una nueva reserva periódica, la edición, su eliminación, las restricciones, la búsqueda de aulas disponibles frente a otras reservas periódicas.
+
+El módulo \textit{app\_horarios} contiene las funcionalidades de importación y exportación de la base de datos conjunta o por entidades.
+
+El módulo \textit{reservas} contiene la lógica relacionada con la gestión de reservas puntuales. En él se implementan las operaciones de creación, modificación, consulta, eliminación, y la carga de un horario creando con el analizador léxico y creando todas las reservas periódicas asociadas a la hoja de cálculo cargada.
+
+El módulo \textit{usuarios} se encarga de las funcionalidades relacionadas con la autenticación, los usuarios y los roles. Esta parte permite controlar el acceso a las distintas funcionalidades de la aplicación en función del perfil asociado a cada usuario. Por lo que en esta parte se encuentra la conexión con la API del moodle de la universidad.
+
+Además de estos directorios, aparecen varios ficheros relevantes en la raíz del proyecto. El archivo \textit{manage.py} es el punto de entrada para ejecutar comandos propios de Django, como iniciar el servidor de desarrollo, aplicar migraciones o crear usuarios administradores. El fichero \textit{requirements.txt} contiene las dependencias de Python necesarias para ejecutar el \textit{backend}. Por otro lado, los archivos \textit{package.json} y \textit{package-lock.json} recogen las dependencias asociadas a Node.js, utilizadas por la parte de \textit{frontend}. Finalmente, el directorio \textit{node\_modules} se genera automáticamente al instalar dichas dependencias.
+
+A continuación, se adjunta la Tabla~\ref{tab:estructura-backend} a modo resumen de las funcionalidades que abarca cada módulo.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l p{9cm}}
+		\toprule
+		\textbf{Directorio/Fichero} & \textbf{Descripción} \\
+		\midrule
+		\textit{nucleo} & Configuración principal del proyecto Django. \\
+		\textit{aulas} & Gestión de aulas, capacidad, ubicación y recursos disponibles. \\
+		\textit{calendario} & Gestión del calendario académico, días lectivos, festivos, exámenes y cambios de docencia. \\
+		\textit{docencia} & Gestión de grados, asignaturas, grupos y docentes y horarios. \\
+		\textit{app\_horarios} & Importación y exportación base de datos. \\
+		\textit{reservas} & Gestión de reservas puntuales y analizador léxico. \\
+		\textit{usuarios} & Gestión de autenticación, usuarios, roles y permisos. \\
+		\textit{manage.py} & Archivo principal para ejecutar comandos de administración de Django. \\
+		\textit{requirements.txt} & Fichero con las dependencias Python necesarias para el backend. \\
+		\textit{package.json} & Fichero de configuración de dependencias de Node.js. \\
+		\textit{node\_modules} & Directorio generado automáticamente al instalar dependencias de Node.js. \\
+		\bottomrule
+	\end{tabular}
+	\caption{Descripción de la estructura principal del backend}
+	\label{tab:estructura-backend}
+\end{table}
+
+
+
 
 \section{Manual del programador}
 
