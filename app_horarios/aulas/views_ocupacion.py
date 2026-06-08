@@ -4,7 +4,7 @@ from rest_framework import status
 
 from aulas.models import Aula
 from aulas.serializers import OcupacionAulaEventosQuerySerializer
-from reservas.services_ocupacion import obtener_eventos_ocupacion_aula
+from aulas.services_ocupacion import obtener_eventos_ocupacion_aula
 
 from rest_framework.permissions import IsAuthenticated
 

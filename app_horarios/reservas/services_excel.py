@@ -55,77 +55,53 @@ def generar_reservas_periodicas(clases, curso):
             dia_actual = fecha_inicio_sem
             while dia_actual <= fecha_fin_sem:
                 dia_bd = Dia.objects.filter(dia=dia_actual).first()
+
+                if not dia_bd:
+                    dia_actual += timedelta(days=1)
+                    continue
+
                 num_dia_db = dia_actual.weekday() + 1
-                if num_dia_db == dia_num:
-                    festivo = Festivo.objects.filter(id_dia=dia_bd).first()
-                    if not dia_bd or festivo:
-                        dia_actual += timedelta(days=1)
-                        continue
-                    if CambioDocencia.objects.filter(id_dia=dia_bd).exists():
-                        dia_actual += timedelta(days=1)
-                        continue
-                    dia_cambio = CambioDocencia.objects.filter(sustituye_dia=dia_num).first()
-                    lectivo = Lectivo.objects.filter(id_dia=dia_bd).first()
-                    if dia_cambio and dia_cambio.sustituye_dia == dia_num:
-                        reserva_cambio = Reserva.objects.create(
-                            id_aula=aula_objeto,
-                            id_dia=dia_bd,
-                            estado='A',
-                            tipo='R',
-                            hora_inicio=clase.hora_inicio,
-                            hora_fin=clase.hora_fin
-                        )
 
-                        ReservaPeriodica.objects.create(
-                            id_reserva=reserva_cambio,
-                            id_grupo=grupo_objeto,
-                            dia_semana=dia_num,
-                            fecha_inicio=fecha_inicio_sem,
-                            fecha_fin=fecha_fin_sem,
-                            intervalo_semanas=1
-                        )
-                        dia_actual += timedelta(days=1)
-                        continue
-                        
-                    if lectivo:
-                        reserva = Reserva.objects.create(
-                            id_aula=aula_objeto,
-                            id_dia=dia_bd,
-                            estado='A',
-                            tipo='R',
-                            hora_inicio=clase.hora_inicio,
-                            hora_fin=clase.hora_fin
-                        )
+                hay_clase = False
 
-                        ReservaPeriodica.objects.create(
-                            id_reserva=reserva,
-                            id_grupo=grupo_objeto,
-                            dia_semana=dia_num,
-                            fecha_inicio=fecha_inicio_sem,
-                            fecha_fin=fecha_fin_sem,
-                            intervalo_semanas=1
-                        )
-                    
+                cambio = CambioDocencia.objects.filter(id_dia=dia_bd).first()
 
-                    dia_actual += timedelta(days=1)
+                if cambio:
+                    # Si hoy actúa como el día que buscamos
+                    if cambio.sustituye_dia == dia_num:
+                        hay_clase = True
                 else:
-                    dia_actual += timedelta(days=1)
+                    # 2. Si no hay cambio, es un día normal. Comprueba si es lectivo y no festivo
+                    if num_dia_db == dia_num:
+                        es_festivo = Festivo.objects.filter(id_dia=dia_bd).exists()
+                        es_lectivo = Lectivo.objects.filter(id_dia=dia_bd).exists()
+                        if not es_festivo and es_lectivo:
+                            hay_clase = True
+                
+                if hay_clase:
+                    reserva_cambio = Reserva.objects.create(
+                        id_aula=aula_objeto,
+                        id_dia=dia_bd,
+                        estado='A',
+                        tipo='R',
+                        hora_inicio=clase.hora_inicio,
+                        hora_fin=clase.hora_fin
+                    )
+
+                    ReservaPeriodica.objects.create(
+                        id_reserva=reserva_cambio,
+                        id_grupo=grupo_objeto,
+                        dia_semana=dia_num,
+                        fecha_inicio=fecha_inicio_sem,
+                        fecha_fin=fecha_fin_sem,
+                        intervalo_semanas=1
+                    )
+
+                dia_actual += timedelta(days=1)
 
                 num_reservas_creadas += 1
         curso_objeto.horario_cargado = True
         curso_objeto.save()
-
-        
-
-            # reserva = Reserva.objects.create(
-            #     idreserva=Reserva.next_id(),
-            #     id_aula=aula_objeto,
-            #     id_dia=dia_num,
-            #     estado='A',
-            #     tipo='R',
-            #     hora_inicio=clase.hora_inicio,
-            #     hora_fin=clase.hora_fin
-            # )
 
             
             
