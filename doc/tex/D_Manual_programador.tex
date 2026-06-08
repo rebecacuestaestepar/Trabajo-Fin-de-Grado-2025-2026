@@ -234,4 +234,177 @@ Por este motivo, las validaciones importantes deben realizarse también en el \t
 
 \section{Compilación, instalación y ejecución del proyecto}
 
+En esta sección se describen los pasos necesarios para instalar y ejecutar el proyecto en un entorno local de desarrollo. La aplicación está formada por dos partes principales: el \textit{backend}, desarrollado con Django, y el \textit{frontend}, desarrollado con React y Vite. Además, es necesario disponer de una base de datos MySQL correctamente configurada.
+
+El proceso de instalación consiste en preparar el entorno del \textit{backend}, instalar las dependencias necesarias, configurar la conexión con la base de datos, preparar el entorno del \textit{frontend} y ejecutar ambos servidores de desarrollo.
+
+\subsection{Requisitos previos}
+
+Antes de ejecutar el proyecto, es necesario tener instaladas las siguientes herramientas:
+
+\begin{itemize}
+	\item \textbf{Python}: necesario para ejecutar el proyecto Django.
+	\item \textbf{pip}: gestor de paquetes de Python.
+	\item \textbf{Node.js}: necesario para ejecutar el proyecto React.
+	\item \textbf{npm}: gestor de paquetes de Node.js.
+	\item \textbf{MySQL}: sistema gestor de base de datos utilizado por la aplicación.
+	\item \textbf{Git}: recomendado para clonar el repositorio y gestionar el código fuente.
+\end{itemize}
+
+Además, se recomienda utilizar un entorno virtual de Python para aislar las dependencias del proyecto y evitar conflictos con otras aplicaciones instaladas en el equipo.
+
+\subsection{Obtención del código fuente}
+
+En primer lugar, se debe obtener el código fuente del proyecto desde el repositorio correspondiente. Para ello, se puede clonar el repositorio mediante Git:
+
+\begin{verbatim}
+	git clone <URL_DEL_REPOSITORIO>
+\end{verbatim}
+
+Una vez clonado el repositorio, se accede al directorio principal del proyecto:
+
+\begin{verbatim}
+	cd Trabajo-Fin-de-Grado-2025-2026
+\end{verbatim}
+
+En caso de disponer del proyecto comprimido en un fichero, bastará con descomprimirlo y acceder a la carpeta raíz del proyecto.
+
+\subsection{Configuración de la base de datos}
+
+La aplicación utiliza MySQL como sistema gestor de base de datos. Antes de ejecutar el \textit{backend}, es necesario crear una base de datos vacía y configurar las credenciales de acceso en el proyecto Django.
+
+Desde MySQL, se puede crear la base de datos con un comando similar al siguiente:
+
+\begin{verbatim}
+	CREATE DATABASE nombre_base_datos;
+\end{verbatim}
+
+A continuación, se debe comprobar que el usuario configurado dispone de permisos suficientes sobre dicha base de datos. Estos datos de conexión deberán coincidir con los valores definidos en la configuración del proyecto.
+
+En caso de partir de un script SQL inicial, este deberá ejecutarse sobre la base de datos creada para generar las tablas necesarias o cargar datos iniciales.
+
+\begin{verbatim}
+	mysql -u usuario -p nombre_base_datos < BaseDeDatosHorario.sql
+\end{verbatim}
+
+\subsection{Instalación y ejecución del backend}
+
+Para instalar el \textit{backend}, se accede al directorio en el que se encuentra el proyecto Django:
+
+\begin{verbatim}
+	cd app_horarios
+\end{verbatim}
+
+A continuación, se crea un entorno virtual de Python:
+
+\begin{verbatim}
+	python -m venv .venv
+\end{verbatim}
+
+En Windows, el entorno virtual se activa con el siguiente comando:
+
+\begin{verbatim}
+	.venv\Scripts\activate
+\end{verbatim}
+
+Una vez activado el entorno virtual, se instalan las dependencias necesarias a partir del fichero \textit{requirements.txt}:
+
+\begin{verbatim}
+	pip install -r requirements.txt
+\end{verbatim}
+
+Antes de iniciar el servidor, se debe revisar la configuración del proyecto, especialmente los datos de conexión a la base de datos, la clave secreta de Django, el modo de depuración y los parámetros relacionados con la autenticación institucional.
+
+Como el proyecto utiliza migraciones de Django para la gestión de usuarios, roles y permisos, se aplican mediante los siguientes comandos:
+
+\begin{verbatim}
+	python manage.py mmakemigrations
+\end{verbatim}
+
+\begin{verbatim}
+	python manage.py migrate
+\end{verbatim}
+
+Finalmente, se inicia el servidor de desarrollo del \textit{backend}:
+
+\begin{verbatim}
+	python manage.py runserver
+\end{verbatim}
+
+Si la ejecución se realiza correctamente, el servidor quedará disponible por defecto en la siguiente dirección:
+
+\begin{verbatim}
+	http://127.0.0.1:8000/
+\end{verbatim}
+
+Una se ha inicializado el proyecto la primera vez correctamente, si el sistema operativo es Windows, puede ejecutar el archivo \textit{runserver.ps1} que inicia el servidor desde la carpeta principal del repositorio, al ejecutar los comandos necesarios.
+
+Para instalar el \textit{frontend}, se accede al directorio correspondiente a la aplicación React:
+
+\begin{verbatim}
+	cd frontend_app_horarios
+\end{verbatim}
+
+A continuación, se instalan las dependencias definidas en el fichero \textit{package.json}:
+
+\begin{verbatim}
+	npm install
+\end{verbatim}
+
+Una vez instaladas las dependencias, se puede iniciar el servidor de desarrollo de Vite:
+
+\begin{verbatim}
+	npm run dev
+\end{verbatim}
+
+Si la ejecución se realiza correctamente, la aplicación indicará en la consola la dirección local en la que se encuentra disponible. Habitualmente, será una dirección similar a la siguiente:
+
+\begin{verbatim}
+	http://localhost:5173/
+\end{verbatim}
+
+Desde esta dirección se podrá acceder a la interfaz web de la aplicación mediante un navegador.
+
+\subsection{Ejecución completa del sistema}
+
+Para que la aplicación funcione correctamente en local, deben estar activos al mismo tiempo la base de datos, el servidor del \textit{backend} y el servidor del \textit{frontend}.
+
+El orden recomendado de ejecución es el siguiente:
+
+\begin{enumerate}
+	\item Iniciar el servicio de MySQL.
+	\item Comprobar que la base de datos existe y que las credenciales de conexión son correctas.
+	\item Activar el entorno virtual del \textit{backend}.
+	\item Ejecutar el servidor de Django mediante \textit{python manage.py runserver}.
+	\item Instalar, si no se ha hecho previamente, las dependencias del \textit{frontend} mediante \textit{npm install}.
+	\item Ejecutar el servidor de desarrollo del \textit{frontend} mediante \textit{npm run dev}.
+	\item Acceder a la aplicación desde el navegador mediante la URL indicada por Vite.
+\end{enumerate}
+
+Durante la ejecución, el \textit{frontend} enviará peticiones HTTP al \textit{backend}, y este se encargará de procesarlas, aplicar la lógica de negocio y consultar o modificar la base de datos cuando sea necesario.
+
+\subsection{Compilación del frontend para producción}
+
+En caso de querer generar una versión optimizada del \textit{frontend} para despliegue, se puede ejecutar el siguiente comando dentro del directorio del \textit{frontend}:
+
+\begin{verbatim}
+	npm run build
+\end{verbatim}
+
+Este comando genera una versión compilada de la aplicación en el directorio de salida configurado por Vite, normalmente denominado \textit{dist}. Esta versión contiene los ficheros estáticos optimizados para su despliegue en un servidor.
+
+\subsection{Consideraciones sobre variables de entorno}
+
+Para evitar incluir información sensible directamente en el código fuente, se recomienda utilizar variables de entorno para almacenar datos de configuración. Entre los valores que pueden configurarse mediante variables de entorno se encuentran:
+
+\begin{itemize}
+	\item Clave secreta de Django.
+	\item Nombre de la base de datos.
+	\item Usuario y contraseña de la base de datos.
+	\item Host y puerto de MySQL.
+\end{itemize}
+
+El uso de variables de entorno facilita el despliegue en distintos entornos, como desarrollo local, pruebas o producción, sin necesidad de modificar directamente el código fuente.
+
 \section{Pruebas del sistema}
+
