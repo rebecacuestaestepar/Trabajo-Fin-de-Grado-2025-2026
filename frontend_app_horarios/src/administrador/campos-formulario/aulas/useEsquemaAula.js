@@ -14,7 +14,6 @@ export function useEsquemaAula() {
     }, []); 
 
     return [
-        { llave: 'id', etiqueta: 'ID del Aula', tipo: 'numero', requerido: true },
         { llave: 'nombre', etiqueta: 'Nombre', tipo: 'texto', requerido: true },
         { llave: 'capacidad', etiqueta: 'Capacidad', tipo: 'numero', requerido: true },
         { 
