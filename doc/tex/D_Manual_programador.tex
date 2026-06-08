@@ -408,3 +408,307 @@ El uso de variables de entorno facilita el despliegue en distintos entornos, com
 
 \section{Pruebas del sistema}
 
+En esta sección se recogen las pruebas realizadas para comprobar el correcto funcionamiento de algunas de las funcionalidades principales de la aplicación. El objetivo de estas pruebas es verificar que el sistema responde de forma adecuada ante distintos escenarios, tanto correctos como erróneos, y que la lógica interna implementada en el \textit{backend} mantiene la coherencia de los datos.
+
+Durante el desarrollo del proyecto se han implementado pruebas unitarias. Las pruebas unitarias son aquellas que permiten comprobar el funcionamiento de una parte concreta del sistema de forma aislada, normalmente una función, método o servicio específico. Este tipo de pruebas resultan útiles para validar que una unidad de código produce el resultado esperado ante unos datos de entrada determinados.
+
+Las pruebas se han desarrollado utilizando la clase \textit{TestCase} de Django. Esta clase permite crear una base de datos de prueba independiente, de forma que los datos utilizados durante la ejecución de los tests no afectan a la base de datos real de la aplicación. Además, en algunos casos se han utilizado \textit{mocks} mediante \textit{unittest.mock.patch}, lo que permite simular el comportamiento de determinadas funciones auxiliares y comprobar cómo responde el servicio principal ante distintos resultados.
+
+\subsection{Casos de prueba unitarios}
+
+En este apartado se van a presentar algunos de los casos de prueba implementados. Para cada caso de prueba se ha definido un identificador, título, prioridad, descripción, precondiciones, pasos de ejecución, resultado esperado, resultado obtenido y estado final. Estos campos han sido seleccionado parecidos a los que se utilizaron en la asignatura de Validación y Pruebas de cuarto.
+
+Estos casos se han seleccionado porque cubren las funcionalidades más críticas del sistema, especialmente aquellas relacionadas con la generación de reservas periódicas, la validación de restricciones, la carga de horarios desde hoja de cálculo y el análisis de la información extraída del fichero.
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-01 \\
+		\textbf{Título} & Validación de restricciones con conflicto de aula y grupo \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el sistema detecta correctamente los conflictos cuando se intenta mover una reserva periódica a una franja horaria en la que el aula está ocupada y el grupo ya tiene otra docencia asignada. \\
+		\textbf{Precondición} & Debe existir una reserva periódica previa asociada a un aula, grupo, día y franja horaria concreta. \\
+		\textbf{Postcondición} & La reserva periódica no se modifica, ya que la validación detecta conflictos. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Crear los datos de prueba necesarios: curso, semestre, día, grado, asignatura, grupo, aula y reserva periódica.
+			\item Preparar una firma de serie válida para identificar la reserva.
+			\item Simular mediante \textit{mocks} que la validación de ocupación de aula falla.
+			\item Simular mediante \textit{mocks} que la validación de solapamiento de grupo falla.
+			\item Ejecutar la función \textit{validar\_restricciones\_movimiento}.
+			\item Comprobar que el resultado indica que la modificación no es válida.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Reserva periódica del grupo A1 en el aula A-01, lunes de 09:00 a 11:00. Movimiento simulado al martes de 10:00 a 12:00. \\
+		\textbf{Resultado esperado} & El sistema debe devolver la validación como incorrecta e indicar los motivos del conflicto. \\
+		\textbf{Resultado actual} & El sistema devuelve la validación como incorrecta e incluye los mensajes de aula ocupada y grupo solapado. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-01: validación de restricciones con conflicto}
+	\label{tab}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-02 \\
+		\textbf{Título} & Validación correcta de restricciones \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el sistema permite la modificación de una reserva periódica cuando no existen conflictos de aula ni solapamientos de grupo. \\
+		\textbf{Precondición} & Debe existir una reserva periódica previa y una firma válida que permita identificarla. \\
+		\textbf{Postcondición} & La operación se considera válida y puede ejecutarse la modificación de la serie de reservas. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Crear una reserva periódica asociada a un grupo y aula.
+			\item Preparar una firma válida de la serie de reservas.
+			\item Simular mediante \textit{mocks} que el aula está disponible.
+			\item Simular mediante \textit{mocks} que el grupo no tiene solapamientos.
+			\item Ejecutar la función \textit{validar\_restricciones\_movimiento}.
+			\item Comprobar que el resultado de la validación es correcto.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Movimiento de la reserva del grupo 101 al martes de 10:00 a 12:00 sin conflictos simulados. \\
+		\textbf{Resultado esperado} & El sistema debe indicar que la modificación es válida y no devolver motivos de error. \\
+		\textbf{Resultado actual} & El sistema devuelve la validación como correcta y la lista de motivos aparece vacía. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-02: validación correcta de restricciones}
+	\label{tab}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-03 \\
+		\textbf{Título} & Movimiento correcto de una serie de reservas periódicas \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el sistema actualiza correctamente una serie de reservas periódicas cuando se modifica su día de la semana y su franja horaria. \\
+		\textbf{Precondición} & Debe existir una reserva periódica registrada en la base de datos de prueba y una firma válida que permita identificar la serie. \\
+		\textbf{Postcondición} & La reserva periódica queda actualizada con el nuevo día de la semana y la reserva asociada queda actualizada con la nueva franja horaria. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Crear una reserva periódica asociada a una reserva base.
+			\item Preparar una firma válida para identificar la serie.
+			\item Simular el cálculo de nuevas fechas mediante un \textit{mock}.
+			\item Ejecutar la función \textit{mover\_serie\_reservas}.
+			\item Refrescar los objetos desde la base de datos.
+			\item Comprobar que el día de la semana se ha actualizado.
+			\item Comprobar que la hora de inicio y la hora de fin se han actualizado correctamente.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Reserva original el lunes de 09:00 a 11:00. Nueva reserva el martes de 10:00 a 12:00. \\
+		\textbf{Resultado esperado} & La reserva periódica debe cambiar al día 2 y la reserva asociada debe actualizar sus horas a 10:00 y 12:00. \\
+		\textbf{Resultado actual} & La reserva periódica cambia correctamente al día 2 y la reserva asociada actualiza su hora de inicio y fin. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-03: movimiento correcto de una serie de reservas}
+	\label{tab}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-04 \\
+		\textbf{Título} & Generación correcta de reservas desde hoja de cálculo \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el sistema genera correctamente reservas periódicas a partir de una clase extraída de una hoja de cálculo. \\
+		\textbf{Precondición} & Deben existir en la base de datos de prueba el curso académico, semestre, día lectivo, aula, grado y asignatura correspondientes. \\
+		\textbf{Postcondición} & Se crean las reservas periódicas necesarias, se crea el grupo si no existía previamente y el curso queda marcado como horario cargado. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Crear el calendario académico de prueba con un día lectivo, un festivo y un cambio de docencia.
+			\item Crear el aula, grado y asignatura necesarios.
+			\item Simular una clase leída del Excel mediante un objeto \textit{Clase}.
+			\item Ejecutar la función \textit{generar\_reservas\_periodicas}.
+			\item Comprobar que el curso queda marcado como cargado.
+			\item Comprobar que se crea el grupo correspondiente.
+			\item Comprobar que se crea una reserva en el día lectivo.
+			\item Comprobar que se tiene en cuenta el cambio de docencia.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Clase de Álgebra, código 8797, grupo 1, aula Aula 51-A1, lunes de 09:00 a 11:00. \\
+		\textbf{Resultado esperado} & El sistema debe crear el grupo, generar las reservas periódicas correspondientes y marcar el curso como horario cargado. \\
+		\textbf{Resultado actual} & El sistema crea el grupo, genera la reserva del lunes, genera la reserva correspondiente al cambio de docencia y marca el curso como cargado. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-04: generación de reservas desde hoja de cálculo}
+	\label{tab}
+\end{table}
+
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-05 \\
+		\textbf{Título} & Carga de Excel con aula inexistente \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el sistema no genera reservas cuando la clase extraída del Excel hace referencia a un aula que no existe en la base de datos. \\
+		\textbf{Precondición} & Debe existir la asignatura correspondiente, pero no debe existir el aula indicada en la clase extraída del Excel. \\
+		\textbf{Postcondición} & No se crea ninguna reserva en la base de datos de prueba. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Crear el curso, semestre, día lectivo, grado y asignatura necesarios.
+			\item Crear una clase procedente del Excel con un aula inexistente.
+			\item Ejecutar la función \textit{generar\_reservas\_periodicas}.
+			\item Comprobar el número de reservas creadas.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Clase de Álgebra con aula ``Aula Inexistente''. \\
+		\textbf{Resultado esperado} & El sistema no debe crear ninguna reserva. \\
+		\textbf{Resultado actual} & El número de reservas creadas es 0. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-05: carga de Excel con aula inexistente}
+	\label{tab}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-06 \\
+		\textbf{Título} & Detección de aula ocupada \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el sistema detecta correctamente que un aula ya está ocupada cuando se intenta crear o mover una reserva a una franja horaria solapada. \\
+		\textbf{Precondición} & Debe existir una reserva periódica previa en el aula y franja horaria que se desea validar. \\
+		\textbf{Postcondición} & La validación devuelve resultado negativo y no se permite utilizar el aula en esa franja. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Crear un aula y una reserva periódica asociada a ella.
+			\item Ejecutar la función \textit{validar\_ocupacion\_aula} con una franja horaria solapada.
+			\item Comprobar que la función devuelve \textit{False}.
+			\item Comprobar que el mensaje de error indica que el aula está ocupada.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Aula 51-A1 ocupada de 09:00 a 11:00. Nueva validación de 10:00 a 12:00. \\
+		\textbf{Resultado esperado} & El sistema debe indicar que el aula seleccionada ya está ocupada en ese horario. \\
+		\textbf{Resultado actual} & El sistema devuelve la validación como incorrecta y muestra el mensaje de aula ocupada. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-06: detección de aula ocupada}
+	\label{tab}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-07 \\
+		\textbf{Título} & Validación de aula disponible por cambio de horario \\
+		\textbf{Prioridad} & Media \\
+		\textbf{Descripción} & Comprobar que el sistema considera disponible un aula cuando la nueva franja horaria no se solapa con reservas existentes. \\
+		\textbf{Precondición} & Debe existir una reserva previa en el aula seleccionada, pero en una franja horaria diferente. \\
+		\textbf{Postcondición} & La validación devuelve resultado positivo y el aula se considera disponible. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Crear una reserva periódica previa en un aula.
+			\item Ejecutar la función \textit{validar\_ocupacion\_aula} con una franja horaria no solapada.
+			\item Comprobar que la función devuelve \textit{True}.
+			\item Comprobar que no se devuelve mensaje de error.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Aula 51-A1 ocupada de 09:00 a 11:00. Nueva validación de 11:00 a 13:00. \\
+		\textbf{Resultado esperado} & El sistema debe considerar el aula disponible. \\
+		\textbf{Resultado actual} & El sistema devuelve la validación como correcta y sin mensaje de error. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-07: validación de aula disponible}
+	\label{tab}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-08 \\
+		\textbf{Título} & Clasificación de celdas mediante expresiones regulares \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el analizador léxico clasifica correctamente las celdas procedentes de la hoja de cálculo según su contenido. \\
+		\textbf{Precondición} & Debe estar disponible la función \textit{clasificar\_celda} utilizada por el analizador del Excel. \\
+		\textbf{Postcondición} & Cada valor analizado se clasifica con el tipo correspondiente. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Ejecutar la función \textit{clasificar\_celda} con una celda vacía.
+			\item Ejecutar la función con palabras clave como ``Hora'' o ``Nombre Abreviado''.
+			\item Ejecutar la función con días de la semana.
+			\item Ejecutar la función con tramos horarios.
+			\item Ejecutar la función con grupos teóricos y prácticos.
+			\item Ejecutar la función con aulas, códigos y abreviaturas de asignaturas.
+			\item Comprobar que cada celda recibe la clasificación esperada.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Valores como ``Hora'', ``lunes'', ``09:00 - 11:00'', ``1'', ``801'', ``Aula 51-A1'', ``8797'' y ``ALG''. \\
+		\textbf{Resultado esperado} & El sistema debe clasificar cada celda como comienzo de tabla, día de semana, tramo horario, grupo, aula, código o abreviatura según corresponda. \\
+		\textbf{Resultado actual} & Las celdas se clasifican correctamente según las reglas definidas en el analizador léxico. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-08: clasificación de celdas mediante expresiones regulares}
+	\label{tab}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabularx}{\textwidth}{@{}p{3.5cm}X@{}}
+		\toprule
+		\textbf{Campo} & \textbf{Descripción} \\
+		\midrule
+		\textbf{ID} & CP-09 \\
+		\textbf{Título} & Normalización de nombres de aulas \\
+		\textbf{Prioridad} & Alta \\
+		\textbf{Descripción} & Comprobar que el sistema normaliza correctamente los nombres de aulas procedentes de la hoja de cálculo para poder compararlos con los nombres almacenados en la base de datos. \\
+		\textbf{Precondición} & Debe estar disponible la función \textit{limpiar\_nombre\_aula}. \\
+		\textbf{Postcondición} & Los nombres de aulas quedan transformados al formato esperado por la aplicación. \\
+		\textbf{Pasos} &
+		\begin{enumerate}
+			\item Ejecutar la función con un valor vacío.
+			\item Ejecutar la función con un aula con prefijo ``Aula''. \item Ejecutar la función con un nombre que no debe modificarse, como Aula Empresa''.
+			\item Ejecutar la función con abreviaturas como ``Inf.''. \item Ejecutar la función con laboratorios abreviados como ``Lab.''.
+			\item Comprobar que el resultado coincide con el formato normalizado esperado.
+		\end{enumerate} \\
+		\textbf{Datos de prueba} & Valores como \textit{None}, ``Aula 51-A1'',`` Aula Empresa'', ``Inf. 1'', ``Lab. Química'' y ``Lab 12-A1''. \\ \textbf{Resultado esperado} & El sistema debe devolver nombres normalizados como ``51-A1'', ``Aula Empresa'', ``Informática 1'' y ``Laboratorio Química''. \\\
+		\textbf{Resultado actual} & Los nombres de aulas se normalizan correctamente según las reglas definidas. \\
+		\textbf{Estado} & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Caso de prueba CP-09: normalización de nombres de aulas}
+	\label{tab}
+\end{table}
