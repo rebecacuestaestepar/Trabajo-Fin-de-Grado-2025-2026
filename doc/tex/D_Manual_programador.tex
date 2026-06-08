@@ -68,10 +68,80 @@ A continuación, se adjunta la Tabla~\ref{tab:estructura-backend} a modo resumen
 	\label{tab:estructura-backend}
 \end{table}
 
+\subsection{Frontend}
 
+El \textit{frontend} de la aplicación se encuentra desarrollado con React + Vite y contiene la parte visual del sistema. Esta parte del proyecto se encarga de mostrar las pantallas de la aplicación, gestionar la interacción con el usuario y comunicarse con el \textit{backend} mediante peticiones HTTP.
+
+En la Figura~\ref{fig:estructura-directorios-frontend} se muestra la estructura principal de directorios correspondiente al \textit{frontend} del proyecto.
+
+\imagen{img/EstructuraDirectoriosFront.png}{Estructura de directorios del frontend}{fig:estructura-directorios-frontend}
+
+Como se observa en la Figura~\ref{fig:estructura-directorios-frontend}, el directorio del \textit{frontend} está formado por una carpeta principal \textit{src}, donde se encuentra el código fuente de la interfaz, y por varios ficheros de configuración necesarios para ejecutar y construir la aplicación.
+
+El directorio \textit{public} contiene recursos estáticos públicos que pueden ser utilizados directamente por la aplicación. Estos archivos se sirven sin necesidad de ser procesados por el sistema de construcción.
+
+Dentro de \textit{src} se organiza la mayor parte del código del \textit{frontend}.
+
+El directorio \textit{administrador} agrupa las pantallas y componentes relacionados con el panel de administración. En este módulo se encuentran las funcionalidades destinadas a la gestión de entidades, usuarios, roles y el mantenimiento global del sistema.
+
+El directorio \textit{api} contiene las funciones encargadas de centralizar la comunicación con el \textit{backend}. Esta organización permite separar las llamadas HTTP de los componentes visuales, facilitando el mantenimiento del código y evitando duplicidades.
+
+El directorio \textit{assets} almacena recursos estáticos utilizados por la interfaz, como imágenes, logotipos u otros elementos gráficos.
+
+El directorio \textit{aulas} agrupa los componentes y páginas relacionados con la consulta de ocupación de aulas.
+
+El directorio \textit{auth} contiene la lógica para proteger rutas de acceso sin autenticación, y para validar permisos.
+
+El directorio \textit{calendario} agrupa las pantallas y componentes relacionados con la consulta y modificación del calendario académico.
+
+El directorio \textit{horarios} contiene las pantallas y componentes necesarios para cargar nuevos horarios, consultar horarios existentes.
+
+El directorio \textit{login} contiene la pantalla de inicio de sesión y los elementos visuales relacionados con el acceso a la aplicación.
+
+El directorio \textit{reservas} agrupa las pantallas y componentes relacionados con la gestión de reservas puntuales y periódicas, incluyendo listados, formularios de creación y edición, y acciones asociadas a las solicitudes.
+
+Finalmente, el directorio \textit{shared} contiene elementos compartidos por diferentes módulos del \textit{frontend}, permitiendo reutilizar código común y mantener una estructura más organizada.
+
+Además de estos directorios, aparecen varios ficheros relevantes en la raíz del proyecto. El archivo \textit{App.jsx} define la estructura principal de la aplicación React y la organización general de sus rutas o componentes principales. El archivo \textit{main.jsx} actúa como punto de entrada de la aplicación. Los ficheros \textit{App.css} e \textit{index.css} contienen estilos globales utilizados por la interfaz.
+
+El fichero \textit{package.json} recoge la configuración del proyecto, los scripts de ejecución y las dependencias necesarias. El archivo \textit{package-lock.json} almacena la versión exacta de las dependencias instaladas. El archivo \textit{vite.config.js} contiene la configuración de Vite, herramienta utilizada para ejecutar y construir el \textit{frontend}. Por último, el directorio \textit{node\_modules} se genera automáticamente al instalar las dependencias de Node.js y no forma parte del código fuente desarrollado.
+
+Se ha realizado una Tabla~\ref{tab:estructura-frontend} a modo resumen visual de lo que realiza cada directorio.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l p{9cm}}
+		\toprule
+		\textbf{Directorio/Fichero} & \textbf{Descripción} \\
+		\midrule
+		\textit{public} & Recursos estáticos públicos de la aplicación. \\
+		\textit{src} & Directorio principal del código fuente del frontend. \\
+		\textit{administrador} & Pantallas y componentes relacionados con el panel de administración. \\
+		\textit{api} & Funciones encargadas de realizar peticiones al backend. \\
+		\textit{assets} & Imágenes, logotipos y otros recursos gráficos. \\
+		\textit{aulas} & Componentes relacionados con aulas y ocupación de espacios. \\
+		\textit{auth} & Lógica de autenticación y gestión de sesión. \\
+		\textit{calendario} & Componentes relacionados con el calendario académico. \\
+		\textit{general} & Componentes comunes de la interfaz. \\
+		\textit{horarios} & Pantallas de carga, consulta y gestión de horarios. \\
+		\textit{login} & Pantalla y componentes de inicio de sesión. \\
+		\textit{reservas} & Gestión de reservas puntuales. \\
+		\textit{shared} & Componentes o utilidades compartidas por varios módulos. \\
+		\textit{App.jsx} & Componente principal de la aplicación React. \\
+		\textit{main.jsx} & Punto de entrada del frontend. \\
+		\textit{vite.config.js} & Configuración de Vite. \\
+		\textit{package.json} & Dependencias y scripts del proyecto frontend. \\
+		\textit{node\_modules} & Dependencias instaladas automáticamente mediante Node.js. \\
+		\bottomrule
+	\end{tabular}
+	\caption{Descripción de la estructura principal del frontend}
+	\label{tab:estructura-frontend}
+\end{table}
 
 
 \section{Manual del programador}
+
+
 
 \section{Compilación, instalación y ejecución del proyecto}
 
