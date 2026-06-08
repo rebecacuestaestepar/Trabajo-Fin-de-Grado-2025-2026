@@ -7,10 +7,10 @@ En este apartado se van a explicar las decisiones tomadas a lo largo del desarro
 En esta sección se presentan los lenguajes y entornos de programación utilizados durante el desarrollo del proyecto, así como los motivos que justifican su elección en función de las necesidades técnicas de la aplicación.
 
 \subsection{Python}
-Para la realización de este proyecto, se ha decidido utilizar \textit{python} como lenguaje de programación, por su gran popularidad en la actualidad, la importancia que está tomando en el mundo de la programación y su gran demanda en el mundo laboral. Con lo que puede ser interesante para profundizar más en su funcionamiento y mejorar y conocer más a fondo este lenguaje de programación, ampliando los conocimientos del mismo que se adquirieron en las asignaturas de Sistemas Inteligentes y Algoritmia.
+Para la realización de este proyecto, se ha decidido utilizar \textit{python} como lenguaje de programación, por su gran popularidad en la actualidad, la importancia que está tomando en el mundo de la programación y su gran demanda en el mundo laboral \cite{python:porque}. Con lo que puede ser interesante para profundizar más en su funcionamiento y mejorar y conocer más a fondo este lenguaje de programación, ampliando los conocimientos del mismo que se adquirieron en las asignaturas de Sistemas Inteligentes y Algoritmia.
 
 \subsection{Visual Studio Code}
-Además, el entorno de desarrollo en el que se va a realizar todo el proyecto, tanto la parte del \textit{backend} como la del \textit{frontend}, va a ser \textit{Visual Studio Code}, por ser principalmente un editor de código gratuito, por su alto rendimiento y por tener soporte para múltiples lenguajes de programación. Permitiendo así tanto el desarrollo web como el \textit{backend}, además de que permite una amplia personalización del entorno mediante diferentes extensiones.
+Además, el entorno de desarrollo en el que se va a realizar todo el proyecto, tanto la parte del \textit{backend} como la del \textit{frontend}, va a ser \textit{Visual Studio Code}, por ser principalmente un editor de código gratuito, por su alto rendimiento y por tener soporte para múltiples lenguajes de programación. Permitiendo así tanto el desarrollo web como el \textit{backend}, además de que permite una amplia personalización del entorno mediante diferentes extensiones \cite{visualcode:ventajas}.
 
 \subsection{Jupyter Notebook}
 Durante el desarrollo se utilizó \textit{Jupyter Notebook} como herramienta de apoyo de forma progresiva determinadas partes de la implementación, concretamente las relacionadas con la extracción y transformación de los datos procedentes del excel de horarios. Los cuadernos de Jupyter combinan código ejecutable, texto y salidas dentro de un mismo documento, lo que los convierte en una opción especialmente adecuada para validar de forma incremental y el prototipado \cite{jupyter_what_is, jupyter_docs}.
@@ -31,7 +31,7 @@ En esta sección se exponen las herramientas elegidas para soportar el funcionam
 
 \subsection{Sistema gestor de base de datos: MySQL}
 
-La aplicación requiere de una base de datos para almacenar y consultar toda la información relacionada horarios, reservas, y aulas. Para llevarlo a cabo se ha elegido MySQL como Sistema Gestor de Base de Datos (SGBD), por su amplio uso y por tener compatibilidad directa con Django mediante su \textit{backend}. Además, Django documenta soporte oficial para MySQL a partir de versiones modernas.
+La aplicación requiere de una base de datos para almacenar y consultar toda la información relacionada horarios, reservas, y aulas. Para llevarlo a cabo se ha elegido MySQL como Sistema Gestor de Base de Datos (SGBD), por su amplio uso y por tener compatibilidad directa con Django mediante su \textit{backend}, además de haber trabajado previamente con él. Además, Django documenta soporte oficial para MySQL a partir de versiones modernas.
 
 Con lo que he elegido MySQL ya que a nivel de mantenimiento permite un control independiente de la versión del sistema gestor de bases de datos, evitando que me limite la compatibilidad con versiones del \textit{framework} del \textit{backend} elegido.
 
@@ -51,19 +51,19 @@ Por tanto, \textit{Railway} se consideró la opción más adecuada para el proye
 En este apartado se recogen las decisiones tecnológicas relacionadas con los \textit{frameworks} empleados en el proyecto, tanto para el \textit{backend} como para el \textit{frontend}. Su selección no solo responde a criterios técnicos, sino también a la necesidad de contar con una solución mantenible, flexible y alineada con el tipo de aplicación web que se pretende desarrollar.
 
 \subsection{Backend: Django}
-Una vez seleccionado Python como lenguaje principal del proyecto, se decidió utilizar Django como \textit{framework} de desarrollo para el \textit{backend}. La elección fue tomada principalmente por la necesidad de una arquitectura modular, mantenible y escalable, se tuvo en cuenta que el sistema debía organizarse en componentes independientes (por ejemplo, gestión de horarios, gestión de aulas, reservas, calendario, etc.) con responsabilidades bien delimitadas, y por ser un proyecto basado en el desarrollo de una aplicación web.
+Una vez seleccionado Python como lenguaje principal del proyecto, se decidió utilizar Django como \textit{framework} de desarrollo para el \textit{backend}. La elección fue tomada principalmente por la necesidad de una arquitectura modular, mantenible y escalable, se tuvo en cuenta que el sistema debía organizarse en componentes independientes (por ejemplo, gestión de horarios, gestión de aulas, reservas, calendario, etc.) con responsabilidades bien delimitadas, y por ser un proyecto basado en el desarrollo de una aplicación web \cite{django}.
 
-Django favorece este enfoque mediante su organización basada en aplicaciones, permitiendo dividir el proyecto en módulos reutilizables e independientes, con el fin de dividir la lógica del proyecto, facilitando el crecimiento del mismo y reduciendo el acoplamiento entre distintas funcionalidades.
+Django favorece este enfoque mediante su organización basada en aplicaciones, permitiendo dividir el proyecto en módulos reutilizables e independientes, con el fin de dividir la lógica del proyecto, facilitando el crecimiento del mismo y reduciendo el acoplamiento entre distintas funcionalidades \cite{django}.
 
 Además, Django se apoya en el patrón arquitectónico MVT (Modelo-Vista-Plantilla), separando así las responsabilidades del sistema de forma que favorece la mantenibilidad y escalabilidad del proyecto
 
 \subsection{Backend: Django REST Framework}
 
-Dado que se necesita que el \textit{frontend} consuma datos del \textit{backend}, concluimos que iba a ser necesaria la utilización de una API, mediante \textit{endpoints}. Por ello decidió instalarse Django REST Framework (DRF).
+Dado que se necesita que el \textit{frontend} consuma datos del \textit{backend}, concluimos que iba a ser necesaria la utilización de una API, mediante \textit{endpoints}. Por ello decidió instalarse Django REST Framework (DRF) \cite{drf:general}.
 
 Esta elección se debe a que  DRF proporciona componentes esenciales para este tipo de arquitectura. Entre los más relevantes destacan:
 \begin{itemize}
-	\item \textbf{Serializadores:} permiten transformar instancias de modelos y consultas en formatos intercambiables (por ejemplo JSON) y, además, validar los datos de entrada antes de persistirlos.
+	\item \textbf{Serializadores:} permiten transformar instancias de modelos y consultas en formatos intercambiables (por ejemplo JSON) y, además, validar los datos de entrada antes de persistirlos \cite{drf:serializers}.
 	\item \textbf{Vistas y ViewSets:} facilitan la implementación de endpoints reutilizables y coherentes, reduciendo código repetido y estandarizando operaciones habituales (listar, crear, modificar y eliminar recursos).
 	\item \textbf{Autenticación y permisos:} permiten controlar el acceso a la API, aplicando políticas de seguridad según el tipo de usuario o rol.
 \end{itemize}
@@ -72,21 +72,21 @@ Esta elección se debe a que  DRF proporciona componentes esenciales para este t
 
 Para llevar a cabo el desarrollo del \textit{frontend}, se tuvieron en cuenta dos opciones: \textit{React} y \textit{Angular}.
 
-Aunque verdaderamente \textit{React} se define como una librería para construir interfaces de usuarios, basada en componentes, permitiendo reutilizar piezas y separar de manera clara las funcionalidades de la interfaz. Además, nos permite una mayor flexibilidad de cara a la estructura del proyecto, permitiendo seleccionar únicamente las dependencias necesarias. Por otro lado, tenemos \textit{Angular} un \textit{framework} que es más cerrado, con decisiones y herramientas integradas, teniendo una mayor carga inicial y la adaptación a la forma de trabajo es menos flexible.
+Aunque verdaderamente \textit{React} se define como una librería para construir interfaces de usuarios, basada en componentes, permitiendo reutilizar piezas y separar de manera clara las funcionalidades de la interfaz. Además, nos permite una mayor flexibilidad de cara a la estructura del proyecto, permitiendo seleccionar únicamente las dependencias necesarias \cite{react}. Por otro lado, tenemos \textit{Angular} un \textit{framework} que es más cerrado, con decisiones y herramientas integradas, teniendo una mayor carga inicial y la adaptación a la forma de trabajo es menos flexible.
 
 Con lo que finalmente elegí utilizar \textit{React}, porque me pareció importante la característica de la flexibilidad. 
 Una vez seleccionado \textit{React}, investigué en profundidad y encontré dos formas de iniciarlo en el proyecto: \textit{Create React App} y \textit{Vite + React}. Tras buscar información relativa a ambas opciones, finalmente elegía la opción que contiene Vite.
 
 Y es que Vite es una alternativa más moderna, de hecho el propio equipo de \textit{React} no recomienda actualmente su utilización debido a limitaciones, y recomienda utilizar herramientas integradas, como es el caso de la escogida.
 
-Esta herramienta destaca por el hecho de que proporciona un entorno de desarrollo ligero y rápido al contar con un servidor de desarrollo optimizado y capacidades como la recarga en caliente (\textit{HMR - Hot Module Replacement}) que es instantáneo sin importar lo grande que sea la app, lo que mejora el flujo de trabajo durante la implementación. Además, \textit{Vite} utiliza \textit{Rollup} que es muy rápido en eliminar el código muerto que no usas, resultando en una aplicación final más ligera mejorando las métricas de rendimiento web.
+Esta herramienta destaca por el hecho de que proporciona un entorno de desarrollo ligero y rápido al contar con un servidor de desarrollo optimizado y capacidades como la recarga en caliente (\textit{HMR - Hot Module Replacement}) que es instantáneo sin importar lo grande que sea la app, lo que mejora el flujo de trabajo durante la implementación. Además, \textit{Vite} utiliza \textit{Rollup} que es muy rápido en eliminar el código muerto que no usas, resultando en una aplicación final más ligera mejorando las métricas de rendimiento web \cite{vite}.
 
 \subsection{CSS: Tailwind}
 
 Para la estética del frontend valoré dos alternativas: \textit{Tailwind CSS} y \textit{Bootstrap}.
 
 Tras analizar la documentación sobre ambos \textit{frameworks}: \textit{Bootstrap} permite crear interfaces de forma más rápida debido a que cuenta con un catálogo de componentes predefinidos (botones, formularios,...), pero debido a esta característica en muchas ocasiones las aplicaciones que hacen uso de este \textit{framework} utilizando su configuración por defecto tienen una estética muy parecida. Se puede personalizar pero requiere estar sobrescribiendo.
-Por otro lado, tenemos que Tailwind CSS es \textit{utility-first}, es decir, se basa en clases atómicas que se combinan para construir diseños a medida. Este enfoque permite una mayor flexibilidad y no depende de estilos prestablecidos, además encaja con el desarrollo por componentes del \textit{frontend}. Por todos estos motivos, fue por los que elegí este \textit{framework} para los estilos del proyecto.
+Por otro lado, tenemos que Tailwind CSS es \textit{utility-first}, es decir, se basa en clases atómicas que se combinan para construir diseños a medida. Este enfoque permite una mayor flexibilidad y no depende de estilos prestablecidos, además encaja con el desarrollo por componentes del \textit{frontend}. Por todos estos motivos, fue por los que elegí este \textit{framework} para los estilos del proyecto \cite{tailwind:bootstrap}.
 
 \section{Bibliotecas}
 
@@ -95,7 +95,7 @@ En esta sección se presentan las principales bibliotecas empleadas en el desarr
 \subsection{Biblioteca de Calendarios: Fullcalendar}
 En cuanto a la biblioteca de calendarios que va a ser utilizada para el \textit{frontend}, se han valorado dos opciones: \textit{Fullcalendar} y \textit{React Big Calendar}.
 
-Tras estudiar los recursos que ofrece cada una de estas bibliotecas se ha determinado que la elegida iba a ser \textit{Fullcalendar}. Aunque \textit{React Big Calendar} es una biblioteca \textit{opensource}, y por lo tanto, totalmente gratuita se ha optado por elegir la otra, ya que con las funcionalidades que ofrece de manera gratuita es suficiente para la realización de este proyecto y además, ofrece mucha mayor documentación y viene implementada ya la funcionalidad del \textit{drag and drop}. 
+Tras estudiar los recursos que ofrece cada una de estas bibliotecas se ha determinado que la elegida iba a ser \textit{Fullcalendar}. Aunque \textit{React Big Calendar} es una biblioteca \textit{opensource}, y por lo tanto, totalmente gratuita se ha optado por elegir la otra, ya que con las funcionalidades que ofrece de manera gratuita es suficiente para la realización de este proyecto y además, ofrece mucha mayor documentación y viene implementada ya la funcionalidad del \textit{drag and drop} \cite{fullcalendar:reactcalendar}. 
 
 \subsection{Procesamiento de hojas de cálculo: Openpyxl}
 

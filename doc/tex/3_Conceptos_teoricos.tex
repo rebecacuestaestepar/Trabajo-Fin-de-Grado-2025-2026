@@ -4,7 +4,7 @@ En esta sección de la memoria, se recogen los conceptos teóricos más relevant
 
 \subsection{Aplicaciones web y arquitecturas cliente-servidor}
 
-Una aplicación web es un sistema software al que se puede acceder a través de un navegador, más concretamente a través de una URL, con lo que requiere tener conexión a Internet. Además está sustentada sobre una arquitectura cliente-servidor.
+Una aplicación web es un sistema software al que se puede acceder a través de un navegador, más concretamente a través de una URL, con lo que requiere tener conexión a Internet. Además está sustentada sobre una arquitectura cliente-servidor \cite{clienteservidor:Fernan}.
 
 Esta arquitectura o modelo tiene funciona de la siguiente manera.
 \begin{itemize}
@@ -12,8 +12,7 @@ Esta arquitectura o modelo tiene funciona de la siguiente manera.
 	\item El servidor es le que centraliza la lógica de negocio, el acceso a los datos, y recibe y procesa las peticiones del cliente entregándoles una respuesta.
 \end{itemize}
 
-La comunicación entre el cliente y el servidor se realiza por medio de protocolos de red. En las aplicaciones web, el más común es \textit{HTTP} (\textit{Hyper Text Transfer Protocol}), un protocolo de comunicación que define cómo se intercambian las peticiones y respuestas entre cliente y servidor. Gracias a este mecanismo, el cliente puede solicitar o enviar recursos o información al servidor, mientras que este puede responder con datos o el resultado de una operación concreta.
-\cite{clienteservidor:Fernan}
+La comunicación entre el cliente y el servidor se realiza por medio de protocolos de red. En las aplicaciones web, el más común es \textit{HTTP} (\textit{Hyper Text Transfer Protocol}), un protocolo de comunicación que define cómo se intercambian las peticiones y respuestas entre cliente y servidor. Gracias a este mecanismo, el cliente puede solicitar o enviar recursos o información al servidor, mientras que este puede responder con datos o el resultado de una operación concreta \cite{clienteservidor:Fernan}.
 
 Esta separación de responsabilidades facilita el mantenimiento, la escalabilidad y la evolución de forma independiente de las distintas partes que conforman el sistema. En este proyecto se utiliza un framework distinto para el \textit{front} (cliente) que para el \textit{back} (servidor).
 
@@ -21,7 +20,7 @@ Esta separación de responsabilidades facilita el mantenimiento, la escalabilida
 
 Una API (\textit{Application Programming Interface}) es un conjunto de reglas, protocolos y definiciones que permite la comunicación entre diferentes sistemas software. En el contexto de las aplicaciones web, una API permite que el \textit{frontend} y el \textit{backend} intercambien información de una forma estructurada, sin la necesidad de que ambos softwares estén implementados con la misma tecnologías.
 
-En particular, una API REST (\textit{Representational State Transfer}) es un estilo de arquitectura ampliamente utilizado en el desarrollo de servicios web. Su objetivo principal es organizar la comunicación entre cliente y servidor mediante recursos identificados por URLs y operaciones estándar del protocolo HTTP. De esta forma permite que los recursos del sistema como, en el caso de este proyecto, un aula o una reserva, pueda ser modificado o consultado a través de una dirección concreta y utilizando unos métodos bien definidos.
+En particular, una API REST (\textit{Representational State Transfer}) es un estilo de arquitectura ampliamente utilizado en el desarrollo de servicios web. Su objetivo principal es organizar la comunicación entre cliente y servidor mediante recursos identificados por URLs y operaciones estándar del protocolo HTTP. De esta forma permite que los recursos del sistema como, en el caso de este proyecto, un aula o una reserva, pueda ser modificado o consultado a través de una dirección concreta y utilizando unos métodos bien definidos \cite{metodosHttp:Oscar}.
 
 Entre los métodos más comunes de HTTP en una API REST se encuentran:
 \begin{itemize}
@@ -30,8 +29,8 @@ Entre los métodos más comunes de HTTP en una API REST se encuentran:
 	\item \textit{PUT} o \textit{PATCH}: para modificaciones de recursos ya existentes.
 	\item \textit{DELETE}: utilizado para la eliminación de recursos existentes.
 \end{itemize}
-Con esta organización las operaciones del sistema quedan estructuradas.
-\cite{metodosHttp:Oscar}
+Con esta organización las operaciones del sistema quedan estructuradas \cite{metodosHttp:Oscar}.
+
 
 \subsection{Patrón arquitectónico MVT}
 
@@ -43,20 +42,18 @@ Django se apoya en el patrón arquitectónico MVT (\textit{Model-View-Template})
 	\item La Plantilla (\textit{Template}) se encarga de la presentación y visualización de la información. Su función es definir cómo presentar los datos al usuario, separando así la lógica de presentación del resto de responsabilidades del sistema. Aunque en el caso de este proyecto la interfaz de usuario se implementa con React y, por tanto, la representación gráfica del lado del cliente no recae sobre las plantillas de Django. Este patrón sigue siendo útil a un nivel conceptual, debido a que el \textit{backend} mantiene la separación entre accesos a datos, lógica de negocio y exposición de servicios.
 \end{itemize}
 
-El uso de este patrón arquitectónico ayuda a reducir el acoplamiento entre componentes, facilitando el mantenimiento del sistema y mejorando su escalabilidad. Asimismo, permite que las distintas partes de la aplicación puedan evolucionar de una forma más independiente, algo que es bastante relevante en proyectos en los que el \textit{backend} se desarrolla de manera desacoplada al \textit{frontend}.
+El uso de este patrón arquitectónico ayuda a reducir el acoplamiento entre componentes, facilitando el mantenimiento del sistema y mejorando su escalabilidad. Asimismo, permite que las distintas partes de la aplicación puedan evolucionar de una forma más independiente, algo que es bastante relevante en proyectos en los que el \textit{backend} se desarrolla de manera desacoplada al \textit{frontend} \cite{modeloArquitectonicoDjango}.
 
-A continuación, se adjunta la figura~\ref{fig:patron-mvt}, en la que en un esquema muy simple explica de manera gráfica el funcionamiento de este patrón arquitectónico.
+A continuación, se adjunta la figura~\ref{fig:patron-mvt}, en la que en un esquema muy simple explica de manera gráfica el funcionamiento de este patrón arquitectónico, obtenida de \cite{mvt:geek}.
 \imagen{img/django_mvt_image_geeks_for_geeks.jpg}{Imagen patrón arquitectónico MVT}{fig:patron-mvt}
 
-\cite{modeloArquitectonicoDjango}
-\cite{mvt:geek}
 
 \subsection{ORM y persistencia de datos}
 La persistencia de datos es el mecanismo que permite que la información gestionada por una aplicación no se pierda al finalizar su ejecución, sino que quede almacenada de forma estable en una base de datos para poder ser consultada, modificada o reutilizada posteriormente. En aplicaciones web como la desarrollada en este proyecto, la persistencia resulta esencial, ya que permite conservar de manera estructurada la información relativa a usuarios, roles, reservas, aulas, docencia u horarios.
 
-Para facilitar la interacción entre la aplicación y la base de datos, Django incorpora un ORM (\textit{Object-Relational Mapping}). Un ORM es una técnica que permite representar las tablas de una base de datos relacional mediante clases del lenguaje de programación (Python), y sus registros mediante objetos. De este modo, el desarrollador puede trabajar con entidades del dominio del problema utilizando abstracciones propias del lenguaje, reduciendo la necesidad de escribir manualmente consultas SQL en las operaciones más habituales.
+Para facilitar la interacción entre la aplicación y la base de datos, Django incorpora un ORM (\textit{Object-Relational Mapping}). Un ORM es una técnica que permite representar las tablas de una base de datos relacional mediante clases del lenguaje de programación (Python), y sus registros mediante objetos. De este modo, el desarrollador puede trabajar con entidades del dominio del problema utilizando abstracciones propias del lenguaje, reduciendo la necesidad de escribir manualmente consultas SQL en las operaciones más habituales \cite{orm-jorge,orm-urian}.
 
-En Django, un modelo es la fuente principal de información sobre los datos almacenados. Cada modelo se define como una clase de Python y, de forma general, se corresponde con un tabla de la base de datos. A su vez, cada atributo del modelo representa a un campo de esa tabla. Gracias a esto, el \textit{framework} genera de manera automática una API de acceso de datos que permite realizar consultas, inserciones, modificaciones y eliminaciones de una forma más mantenible y sencilla. 
+En Django, un modelo es la fuente principal de información sobre los datos almacenados. Cada modelo se define como una clase de Python y, de forma general, se corresponde con un tabla de la base de datos. A su vez, cada atributo del modelo representa a un campo de esa tabla. Gracias a esto, el \textit{framework} genera de manera automática una API de acceso de datos que permite realizar consultas, inserciones, modificaciones y eliminaciones de una forma más mantenible y sencilla \cite{orm-jorge,orm-urian}. 
 
 El uso de un ORM aporta ciertas ventajas en el desarrollo del sistema. En primer lugar, mejora la legibilidad del código al permitir trabajr con objetos y relaciones de alto nivel en lugar de hacerlo directamente con sentencias SQL. En segundo lugar, facilita el mantenimiento, ya que los cambios en la estructura de datos pueden gestionarse a través de los propios modelos y sus migraciones.
 
@@ -64,16 +61,14 @@ No obstante, el uso de un ORM no elimina completamente la importancia del modelo
 
 Cabe destacar que en este proyecto, la gestión de la persistencia se ha realizado de manera mixta. Por un lado, la parte del esquema relacional asociada a la gestión académica y organizativa de la escuela, ya se encontraba definida previamente mediante un \textit{script SQL}. Y por otro lado, la gestión de usuarios, roles y permisos se apoya en los mecanismos que proporciona Django, combinando así elementos definidos de manera externa con otros elementos administrados a través del propio \textit{framework}.
 
-\cite{orm-jorge}
-\cite{orm-urian}
 
 \subsection{Autenticación, autorización y control de acceso basado en roles}
 
-En aplicaciones con diferentes tipos de usuario, es muy importante distinguir entre el concepto de autenticación y autorización. La autenticación es el proceso por el cual se verifica y se valida la identidad de un usuario, es decir, se comprueba que las credenciales introducidas corresponden a una cuenta válida. Por otro lado, la autorización determina qué recursos puede consultar ese usuario y qué acciones puede realizar, todo ello habiendo se autenticado previamente de manera correcta.
+En aplicaciones con diferentes tipos de usuario, es muy importante distinguir entre el concepto de autenticación y autorización. La autenticación es el proceso por el cual se verifica y se valida la identidad de un usuario, es decir, se comprueba que las credenciales introducidas corresponden a una cuenta válida. Por otro lado, la autorización determina qué recursos puede consultar ese usuario y qué acciones puede realizar, todo ello habiendo se autenticado previamente de manera correcta \cite{authn-authz}.
 
 En proyecto actual, la autenticación no se gestiona directamente contra la base de datos propia de la aplicación, sino que se delega en la API institucional de la universidad. De este modo, para poder iniciar sesión es necesario utilizar las credenciales proporcionadas por la propia institución.
 
-Una vez se ha verificado la identidad del usuario a través del servicio externo, la aplicación consulta su propia base de datos pare recoger la información asociada a ese usaurio dentro del sistema, más concretamente su rol y los permisos asociados. Esta segunda función no tiene como objetivo autenticar de nuevo al usuario, sino determinar que nivel de acceso a las distintas funcionalidades de la aplicación.
+Una vez se ha verificado la identidad del usuario a través del servicio externo, la aplicación consulta su propia base de datos pare recoger la información asociada a ese usuario dentro del sistema, más concretamente su rol y los permisos asociados. Esta segunda función no tiene como objetivo autenticar de nuevo al usuario, sino determinar que nivel de acceso a las distintas funcionalidades de la aplicación \cite{authn-authz}.
 
 Por tanto, el control de accesos se basa en un modelo de roles y permisos. Un rol agrupa un conjunto de capacidades o acciones asociadas a un determinado tipo de usuario, mientras que los permisos permiten restringir de forma más concreta el acceso a determinadas vistas, operaciones o recursos. Gracias a este mecanismo, el sistema permite diferenciar entre administrador, gestores o solicitantes (PDI).
 
@@ -83,32 +78,29 @@ En una aplicación como la desarrollada en este proyecto ambos conceptos son muy
 
 \subsection{Arquitectura basada en componentes}
 
-En el desarrollo de interfaces modernas y de proyectos de buenas prácticas se suele buscar una arquitectura basada en componentes. Esta idea trata de que la interfaz del usuario se construye a partir de componentes independientes y reutilizables, que encapsulan su propia estructura y comportamiento. Este enfoque permite descomponer interfaces complejas y largas en piezas más pequeñas que faciliten tanto su desarrollo como su mantenimiento.
+En el desarrollo de interfaces modernas y de proyectos de buenas prácticas se suele buscar una arquitectura basada en componentes. Esta idea trata de que la interfaz del usuario se construye a partir de componentes independientes y reutilizables, que encapsulan su propia estructura y comportamiento. Este enfoque permite descomponer interfaces complejas y largas en piezas más pequeñas que faciliten tanto su desarrollo como su mantenimiento \cite{arq-comp}.
 
-React adopta este método como uno de sus principios fundamentales. En esta biblioteca, una interfaz se define como una composición jerárquica de componentes, que pueden combinarse entre sí para formar elementos más complejos, como pueden ser páginas completas o vistas con múltiples secciones. Gracias a ello, es posible reutilizar la misma lógica o estructura visual en diferentes partes de la aplicación, evitando así duplicidad de código y favoreciendo una mayor modularidad.
+React adopta este método como uno de sus principios fundamentales. En esta biblioteca, una interfaz se define como una composición jerárquica de componentes, que pueden combinarse entre sí para formar elementos más complejos, como pueden ser páginas completas o vistas con múltiples secciones. Gracias a ello, es posible reutilizar la misma lógica o estructura visual en diferentes partes de la aplicación, evitando así duplicidad de código y favoreciendo una mayor modularidad \cite{arq-comp}.
 
 La arquitectura basada en componentes también favorece una mejor separación de responsabilidades dentro del \textit{frontend}. Debido a que cada componente puede asumir una función concreta dentro de la interfaz, como mostrar información, recoger datos del usuario o coordinar otras partes de la vista. Esta organización no solamente mejora la claridad del código, sino que también facilita la escalabilidad del sistema, ya que nuevas funcionalidades pueden incorporarse mediante nuevos componentes o ampliaciones de los ya existentes.
 
 En este proyecto, el \textit{frontend} se apoya en este modelo de desarrollo, permitiendo estructurar la interfaz en elementos reutilizables y desacoplados. Esto puede resultar bastante útil para una aplicación con múltiples vistas, formularios, tablas y paneles de gestión, donde la reutilización y ña organización clara de la interfaz contribuyen de forma directa a la mantenibilidad del sistema.
 
-\cite{arq-comp}
 
 \subsection{Análisis léxico}
 
-El análisis léxico es una de las fases fundamentales en el procesamiento automático de cadenas de texto. Su función principal consiste en recorrer una secuencia de caracteres de entrada y agruparla en unidades con significado propio, denominadas \textit{tokens}. De este modo, una entrada textual que inicialmente se presenta como una cadena continua puede transformarse en una secuencia estructurada de elementos más simples y manejables.
+El análisis léxico es una de las fases fundamentales en el procesamiento automático de cadenas de texto. Su función principal consiste en recorrer una secuencia de caracteres de entrada y agruparla en unidades con significado propio, denominadas \textit{tokens}. De este modo, una entrada textual que inicialmente se presenta como una cadena continua puede transformarse en una secuencia estructurada de elementos más simples y manejables \cite{uco:analizador}.
 
-Este proceso resulta especialmente útil cuando se trabaja con lenguajes formales, expresiones definidas por una sintaxis concreta o entradas que deben ser interpretadas automáticamente por un sistema. En lugar de analizar cada carácter de manera aislada, el análisis léxico permite recnocer componentes con valor propio, como palabras clave, identificadores, números, separadores o símbolos especiales. Gracias a ello, se simplifica el tratamiento posterior de la información.
+Este proceso resulta especialmente útil cuando se trabaja con lenguajes formales, expresiones definidas por una sintaxis concreta o entradas que deben ser interpretadas automáticamente por un sistema. En lugar de analizar cada carácter de manera aislada, el análisis léxico permite recnocer componentes con valor propio, como palabras clave, identificadores, números, separadores o símbolos especiales. Gracias a ello, se simplifica el tratamiento posterior de la información \cite{wiki:analizador}.
 
 Desde un punto de vista funcional, el anlizador léxico actúa como un primer filtro sobre la entrada. Su objetivo no es interpretar completamente su significado, sino segmentarla y clasificarla de acuerdo con unas reglas previamente definidas. Esta fase permite detectar patrones válidos, aislar elementos relevantes e identificar errores tempranos cuando la entrada no se ajusta al formato esperado.
 
 En este proyecto, el análisis léxico se utiliza para procesar la información procedente de los horarios académicos de los distintos grados. A partir de dicha información, el sistema identifica y extrae los elementos necesarios para interpretar cada bloque docente, con el objetivo de transformar las clases impartidas en reservas periódicas que posteriormente se cargan en la base de datos de la aplicación. Por ello, el análisis léxico constituye una base importante dentro del proceso de automatización de la incorporación de horarios al sistema.
 
-\cite{wiki:latex}
-\cite{uco:analizador}
 
 \subsection{Token, lexema y patrón}
 
-Dentro del análisis léxico, tres de los conceptos fundamentales son \textit{token}, \textit{lexema} y \textit{patrón}. Estos términos permite describir cómo una secuencia de caracteres puede descomponerse en unidades reconocibles por el sistema.
+Dentro del análisis léxico, tres de los conceptos fundamentales son \textit{token}, \textit{lexema} y \textit{patrón}. Estos términos permite describir cómo una secuencia de caracteres puede descomponerse en unidades reconocibles por el sistema \cite{tok-lex-patr}.
 
 \begin{itemize}
 	\item Un \textit{token} representa una categoría léxica, es decir, un tipo abstracto de elemento que el analizador es capaz de identificar. Por ejemplo, en un lenguaje formal pueden existir \textit{tokens} para identificadores, números, operadores o palabras reservadas. El \textit{token} no hace referencia a una cadena concreta, sino a la clase a la que pertenece un fragmento de la entrada.
@@ -118,18 +110,15 @@ Dentro del análisis léxico, tres de los conceptos fundamentales son \textit{to
 
 En el contexto de este proyecto, estos conceptos resultan útiles para entender cómo se procesa la información procedente de los horarios académicos. Determinadas cadenas de texto pueden interpretarse como lexemas que representan elementos concretos del horario, mientras que el sistema los clasifica en categorías de interés para su posterior transformación en reservas periódicas. De este forma el análisis léxico permite identificar de forma estructurada los componentes relevantes de la entrada antes de que sean integrados en la lógica de la aplicación.
 
-\cite{tok-lex-patr}
 
 \subsection{Expresiones regulares}
 
-Las expresiones regulares constituyen un mecanismo formal para describir patrones dentro de cadenas de texto. Mediante una notación compacta, permiten definir qué secuencia de caracteres son válidas y cuáles no, facilitando tareas como la búsqueda, validación, extracción o sustituición de fragmentos de información dentro de una entrada de texto.
+Las expresiones regulares constituyen un mecanismo formal para describir patrones dentro de cadenas de texto. Mediante una notación compacta, permiten definir qué secuencia de caracteres son válidas y cuáles no, facilitando tareas como la búsqueda, validación, extracción o sustituición de fragmentos de información dentro de una entrada de texto \cite{regex:david}.
 
-Desde el punto de vista del análisis léxico, las expresiones regulares resultan especialmente útiles porque permiten especificar de manera precisa la forma que deben tener los lexemas asociados a cada tipo de \textit{token}. Así, en lugar de comprobar manualmente carácter a carácter si una cadena cumple un determinado formato, es posible describir dicho patrón mediante una expresión regular y utilizarla para reconocer automáticamente las coincidencias dentro del texto de entrada.
+Desde el punto de vista del análisis léxico, las expresiones regulares resultan especialmente útiles porque permiten especificar de manera precisa la forma que deben tener los lexemas asociados a cada tipo de \textit{token}. Así, en lugar de comprobar manualmente carácter a carácter si una cadena cumple un determinado formato, es posible describir dicho patrón mediante una expresión regular y utilizarla para reconocer automáticamente las coincidencias dentro del texto de entrada \cite{regex:manuel}.
 
 Su utilidad no se limita únicamente al ámbito de compiladores o lenguajes de programación, sino que se extiende también al procesamiento general de información textual estructurada. Gracias a ello, pueden emplearse reconocer días, códigos, abreviaturas, grupos, franjas horarias u otras secuencias que sigan una forma recurrente y definida.
 
-En el contexto de este proyecto, las expresiones regulares constituyen una herramienta útil para apoyar el procesamiento de la información contenida en en los horarios académicos. A través de patrones definidos previamente, es posible identificar fragmentos de texto con una estructura reconocible y extraer de ellos los elementos relevantes para su posterior transformación en reservas periódicas del sistema. De este modo, ls expresiones regualres sirven para el reconocimiento y validación de partes concretas de la entrada.
+En el contexto de este proyecto, las expresiones regulares constituyen una herramienta útil para apoyar el procesamiento de la información contenida en en los horarios académicos. A través de patrones definidos previamente, es posible identificar fragmentos de texto con una estructura reconocible y extraer de ellos los elementos relevantes para su posterior transformación en reservas periódicas del sistema. De este modo, ls expresiones regulares sirven para el reconocimiento y validación de partes concretas de la entrada.
 
-\cite{regex:david}
-\cite{regex:manuel}
 
