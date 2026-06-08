@@ -26,7 +26,7 @@ export default function CabeceraTabla({
                 <h1 className="text-2xl font-bold text-slate-900">{titulo}</h1>
                 
                 <div className="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-3 justify-between">
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-3">
                     <button
                         onClick={alAlternarFiltros}
                         className="rounded-md bg-white px-4 py-2 text-sm font-medium text-slate-700 ring-1 ring-slate-300 hover:bg-slate-50 transition-colors"
@@ -40,7 +40,7 @@ export default function CabeceraTabla({
                         Crear Nuevo
                     </button>
                 </div>
-                <div className="flex gap-3  justify-end">
+                <div className="flex flex-wrap gap-3 justify-end">
                     <button
                         onClick={alDescargarPlantilla}
                         className="flex items-center gap-2 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-slate-600 ring-1 ring-slate-300 hover:bg-slate-50 hover:text-slate-900 transition-colors"

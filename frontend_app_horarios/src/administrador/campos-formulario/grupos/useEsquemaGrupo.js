@@ -10,7 +10,7 @@ export function useEsquemaGrupo() {
         listaMiniAsignaturas().then(asignaturas => {
             const opcionesFormateadas = asignaturas.map(asig => ({
                 valor: asig.idasignatura,
-                texto: `${asig.idasignatura} - ${asig.nombre}`
+                texto: `${asig.grado_abreviatura} - ${asig.nombre}`
             }));
             setOpcionesAsig(opcionesFormateadas);
         });
