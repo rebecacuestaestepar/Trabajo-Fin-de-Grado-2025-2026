@@ -141,6 +141,95 @@ Se ha realizado una Tabla~\ref{tab:estructura-frontend} a modo resumen visual de
 
 \section{Manual del programador}
 
+Esta sección está dirigida a futuros desarrolladores que necesiten mantener, ampliar o modificar la aplicación. En ella se describen los aspectos más relevantes del desarrollo, la organización interna del código y las partes principales que deben conocerse antes de realizar cambios en el sistema.
+
+La aplicación está formada por dos bloques principales: el \textit{backend}, desarrollado con Django, y el \textit{frontend}, desarrollado con React. El \textit{backend} se encarga de la lógica de negocio, la autenticación, la comunicación con la base de datos y la validación de las operaciones. El \textit{frontend}, por su parte, proporciona la interfaz visual y se comunica con el servidor mediante peticiones HTTP.
+
+\subsection{Organización interna del backend}
+
+Como se ha indicado en la sección anterior, el \textit{backend} se encuentra dividido en varios módulos funcionales, como \textit{aulas}, \textit{calendario}, \textit{docencia}, \textit{reservas} y \textit{usuarios}. Cada uno de estos módulos agrupa la lógica correspondiente a una parte concreta del sistema, lo que permite separar responsabilidades y facilita el mantenimiento del código.
+
+Dentro de estos módulos se ha seguido una organización basada en distintos tipos de ficheros, entre los que destacan los modelos, vistas, serializadores y servicios.
+
+\subsubsection{Modelos}
+
+Los modelos representan las entidades de la base de datos dentro de Django. Cada modelo define los campos de una tabla, sus tipos de datos, relaciones y restricciones principales. Gracias a estos modelos, el \textit{backend} puede trabajar con la información persistente de la aplicación sin necesidad de escribir directamente todas las consultas SQL.
+
+En este proyecto, los modelos representan elementos como aulas, docentes, asignaturas, grupos, reservas, cursos, semestres y días del calendario académico. Cualquier modificación en la estructura de datos debe revisarse cuidadosamente, ya que puede afectar a las vistas, serializadores, servicios y pantallas del \textit{frontend} que dependan de dicha información.
+
+\subsubsection{Vistas}
+
+Las vistas son las encargadas de recibir las peticiones procedentes del \textit{frontend}, procesarlas y devolver una respuesta. En ellas se definen los puntos de entrada de la API y se controla qué operación debe ejecutarse en función de la petición recibida.
+
+El \textit{frontend} envía una petición HTTP al \textit{backend}. La vista correspondiente recibe esa petición, comprueba los datos recibidos y coordina el resto de operaciones necesarias.
+
+Aunque las vistas pueden contener validaciones sencillas, se ha procurado que la lógica más compleja se separe en servicios auxiliares. De esta forma, las vistas se mantienen más claras y se evita concentrar demasiada lógica en un único fichero.
+
+\subsubsection{Serializadores}
+
+Los serializadores se utilizan para transformar los datos entre el formato interno de Django y el formato intercambiado con el \textit{frontend}, normalmente JSON. Su función es especialmente importante en una aplicación con \textit{frontend} y \textit{backend} desacoplados, ya que permiten controlar qué información se envía al cliente y cómo se reciben los datos introducidos por el usuario.
+
+Además de convertir objetos en respuestas JSON, los serializadores permiten realizar validaciones sobre los datos recibidos antes de crear o actualizar registros en la base de datos. Por ejemplo, pueden comprobar que los campos obligatorios estén presentes, que los tipos de datos sean correctos o que una estructura enviada desde el \textit{frontend} cumpla el formato esperado.
+
+\subsubsection{Servicios}
+
+Los servicios agrupan funciones auxiliares o procesos de negocio que no deben estar directamente dentro de las vistas. Esta separación permite reutilizar código y mantener una estructura más organizada.
+
+En este proyecto, los servicios son especialmente importantes en procesos como la carga de horarios desde hojas de cálculo, la validación de disponibilidad de aulas, la comprobación de solapes entre reservas y el tratamiento del calendario académico.
+
+Por ejemplo, en lugar de implementar toda la lógica de lectura de Excel dentro de una vista, esta se puede delegar en funciones o clases de servicio encargadas de procesar el fichero, extraer la información relevante y devolver los datos estructurados para que posteriormente sean validados y almacenados.
+
+\subsubsection{Rutas}
+
+Las rutas definen las direcciones de la API disponibles para el \textit{frontend}. Cada ruta se asocia con una vista o conjunto de vistas que implementan una funcionalidad concreta. Mantener las rutas organizadas por módulos facilita localizar los puntos de entrada de cada parte del sistema.
+
+Si en el futuro se añade una nueva funcionalidad, será necesario definir su ruta correspondiente, implementar la vista asociada, crear o reutilizar los serializadores necesarios y, en caso de que exista lógica compleja, trasladarla a un servicio específico.
+
+\subsection{Organización interna del frontend}
+
+El \textit{frontend} está desarrollado con React y se organiza en módulos funcionales relacionados con las principales partes de la aplicación, como reservas, horarios, calendario, aulas, autenticación y administración.
+
+Cada módulo contiene componentes y pantallas relacionados con una funcionalidad concreta. Esta organización permite que el código sea más mantenible y que los cambios realizados en una parte de la interfaz no afecten directamente al resto del sistema.
+
+\subsubsection{Componentes}
+
+Los componentes son la base de la interfaz en React. Cada componente representa una parte visual o funcional de la aplicación, como formularios, tablas, botones, modales, menús o pantallas completas.
+
+En este proyecto se han utilizado componentes para construir pantallas como la gestión de reservas puntuales, la ocupación de aulas, el calendario académico, la carga de horarios o el panel de administración. La reutilización de componentes permite evitar duplicidades y mantener una apariencia coherente en toda la aplicación.
+
+\subsubsection{Estado de los componentes}
+
+Para gestionar la información interna de los componentes se ha utilizado el \textit{hook} \textit{useState}. Este mecanismo permite almacenar valores que pueden cambiar durante la ejecución de la aplicación, como filtros seleccionados, datos de formularios, mensajes de error, resultados de una consulta o el estado de apertura de un modal.
+
+\subsubsection{Efectos y carga de datos}
+
+Para ejecutar acciones asociadas al ciclo de vida de los componentes se ha utilizado el \textit{hook} \textit{useEffect}. Este mecanismo permite realizar operaciones cuando se carga una pantalla o cuando cambia algún dato del que depende el componente.
+
+En este proyecto, \textit{useEffect} se utiliza principalmente para cargar información inicial desde el \textit{backend}. También puede emplearse para actualizar la información mostrada cuando el usuario modifica filtros o selecciona una nueva opción.
+
+De esta forma, las pantallas pueden solicitar datos al \textit{backend} en el momento adecuado y actualizar la interfaz cuando la respuesta ha sido recibida.
+
+\subsubsection{Comunicación con el backend}
+
+La comunicación entre el \textit{frontend} y el \textit{backend} se realiza mediante peticiones HTTP. Para evitar duplicar código, las llamadas a la API se centralizan en ficheros específicos dentro del directorio \textit{api}.
+
+Estos ficheros contienen funciones encargadas de realizar operaciones concretas, como consultar reservas, crear una reserva puntual, modificar una reserva periódica, cargar un horario o actualizar un día del calendario académico. Los componentes de React llaman a estas funciones cuando necesitan comunicarse con el servidor.
+
+Esta organización permite separar la lógica visual de la lógica de comunicación. Si en el futuro cambia una ruta del \textit{backend}, solo será necesario actualizar el fichero correspondiente de la API, sin modificar todas las pantallas que utilizan esa operación.
+
+\subsubsection{Gestión de formularios y eventos}
+
+Las pantallas que permiten crear o editar información utilizan formularios controlados mediante estado. Cada campo del formulario se asocia a una variable de estado y se actualiza mediante eventos, como \textit{onChange} o \textit{onSubmit}.
+
+Cuando el usuario confirma una operación, el componente recoge los valores almacenados en el estado, realiza las comprobaciones necesarias en la interfaz y envía los datos al \textit{backend}. Posteriormente, en función de la respuesta recibida, se muestra un mensaje de confirmación o de error.
+
+\subsection{Control de autenticación y permisos}
+
+El sistema diferencia las funcionalidades disponibles en función del rol asociado al usuario autenticado. Por este motivo, el programador debe tener en cuenta que algunas pantallas, botones o acciones solo deben mostrarse a determinados perfiles.
+
+En el \textit{frontend}, esta restricción se utiliza para adaptar la interfaz al rol del usuario, ocultando opciones que no le corresponden. Sin embargo, estas comprobaciones no son suficientes por sí solas, ya que un usuario podría intentar acceder manualmente a una ruta o enviar una petición no permitida.
+
+Por este motivo, las validaciones importantes deben realizarse también en el \textit{backend}, que es el encargado de garantizar que cada operación solo pueda ser ejecutada por usuarios autorizados.
 
 
 \section{Compilación, instalación y ejecución del proyecto}
