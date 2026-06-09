@@ -32,9 +32,6 @@ export default function OcupacionAulaCalendario() {
 
   const { events, setRange } = useEventosAula({ aulasNombres: aulasSeleccionadasNombres, tipo });
 
-  console.log("Eventos obtenidos:", events);
-
-
   const mapaColores = useMemo(() => {
     return generarMapaColores(objetosAulas);
   }, [objetosAulas]);

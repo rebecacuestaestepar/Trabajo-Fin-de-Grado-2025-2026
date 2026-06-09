@@ -129,6 +129,20 @@ export function reservaDesdeHorarioGrado(id_grado, semestre) {
     });
 }
 
+export function validarEdicionReservaPeriodica(id_reserva, payload) {
+    return apiRequest(`/docencia/validar-edicion-reserva-periodica/${id_reserva}/`, {
+        method: "POST",
+        body: payload,
+    });
+}
+
+export function editarReservaPeriodica(id_reserva, payload) {
+    return apiRequest(`/docencia/ejecutar-edicion-reserva-periodica/${id_reserva}/`, {
+        method: "PUT",
+        body: payload,
+    });
+}
+
 export function crearGrado(datos) {
     return apiRequest("/docencia/grados/", {
         method: "POST",

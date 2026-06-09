@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { obtenerDatosReservaPeriodica, eliminarReservaPeriodica } from '../../../api/docencia';
+import PropTypes from 'prop-types';
+import { obtenerDatosReservaPeriodica, eliminarReservaPeriodica, validarEdicionReservaPeriodica, editarReservaPeriodica } from '../../../api/docencia';
 
 import TarjetaPagina from '../../formulario-componentes/ui/TarjetaPagina';
 import BotonVolver from '../../formulario-componentes/ui/BotonVolver';
@@ -13,6 +14,7 @@ import AccionesReserva from '../../formulario-componentes/secciones/AccionesRese
 
 import { useReservaPeriodica } from '../hooks/useReservaPeriodica';
 import ModalConfirmacion from '../../../shared/modales/ModalConfirmacion';
+import ModalRestricciones from '../../../horarios/componentes/ModalRestricciones'
 
 export default function EditarReservaPeriodica() {
     const { id } = useParams();
@@ -45,13 +47,31 @@ export default function EditarReservaPeriodica() {
     return <FormularioEditar id={id} datos={datosCargados} />;
 }
 
+FormularioEditar.propTypes = {
+    id: PropTypes.string.isRequired,
+    datos: PropTypes.shape({
+        asignatura: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+        grupo: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+        diaSemana: PropTypes.string.isRequired,
+        horaInicio: PropTypes.string.isRequired,
+        horaFin: PropTypes.string.isRequired,
+        aulaSeleccionada: PropTypes.string,
+        curso_academico: PropTypes.string.isRequired,
+        semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+        grado: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        curso: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    }).isRequired
+};
+
 function FormularioEditar({ id, datos }) {
 
     const navigate = useNavigate();
 
-    const [estadoEliminar, setEstadoEliminar] = useState({ exito: null, error: null });
+    const [estadoAccion, setEstadoAccion] = useState({ cargando: false, exito: null, error: null });
 
     const [mostrarModalEliminar, setMostrarModalEliminar] = useState(false);
+    const [mostrarModalRestricciones, setMostrarModalRestricciones] = useState(false);
+    const [motivosRestriccion, setMotivosRestriccion] = useState([]);
     
     const reserva = useReservaPeriodica({
         modo: 'editar',
@@ -68,8 +88,50 @@ function FormularioEditar({ id, datos }) {
     // La firma original se mantiene constante para identificar la reserva, incluso si el usuario modifica los campos
     const firmaOriginal = `${datos.asignatura}|${datos.grupo}|${datos.diaSemana}|${datos.horaInicio}|${datos.horaFin}|${datos.aulaSeleccionada}`;
 
-    const manejarGuardarEdicion = (e) => {
+    const payloadEdicion = {
+        diaSemana: reserva.formulario.diaSemana,
+        horaInicio: reserva.formulario.horaInicio,
+        horaFin: reserva.formulario.horaFin,
+        aulaSeleccionada: reserva.aulaSeleccionada || datos.aulaSeleccionada,
+    };
+
+    const manejarGuardarEdicion = async (e) => {
         e.preventDefault();
+        setEstadoAccion({ cargando: true, exito: null, error: null });
+
+        try {
+            // Validamos en el backend
+            const respuesta = await validarEdicionReservaPeriodica(id, payloadEdicion);
+
+            console.log("Datos enviados para validación:", payloadEdicion);
+            
+            if (respuesta.valido) {
+                // Si no se violan restricciones, guardamos directamente
+                ejecutarGuardado();
+            } else {
+                // Si se violan restricciones, abrimos la modal y esperamos a que el usuario decida
+                setMotivosRestriccion(respuesta.motivos);
+                setMostrarModalRestricciones(true);
+                setEstadoAccion({ cargando: false, exito: null, error: null });
+            }
+        } catch (error) {
+            setEstadoAccion({ cargando: false, exito: null, error: error.message || "Error al validar la edición" });
+        }
+    };
+
+    const ejecutarGuardado = async () => {
+        setMostrarModalRestricciones(false);
+        setEstadoAccion({ cargando: true, exito: null, error: null });
+
+        try {
+            // Ejecutamos el cambio real en la base de datos
+            await editarReservaPeriodica(id, payloadEdicion);
+            
+            setEstadoAccion({ cargando: false, error: null, exito: "Reserva modificada correctamente." });
+            setTimeout(() => navigate(-1), 1500);
+        } catch (error) {
+            setEstadoAccion({ cargando: false, error: error.message || "Error al guardar los cambios", exito: null });
+        }
     };
 
     const manejarClickEliminar = (e) => {
@@ -79,7 +141,7 @@ function FormularioEditar({ id, datos }) {
 
     const confirmarEliminacion = async () => {
         setMostrarModalEliminar(false); // Cerramos la modal
-        setEstadoEliminar({ cargando: true, error: null, exito: null });
+        setEstadoAccion({ cargando: true, error: null, exito: null });
 
         const payloadEliminar = {
             curso_academico: datos.curso_academico, 
@@ -90,14 +152,14 @@ function FormularioEditar({ id, datos }) {
         try {
             await eliminarReservaPeriodica(payloadEliminar);
             
-            setEstadoEliminar({ cargando: false, error: null, exito: "Serie de reservas eliminada correctamente." });
+            setEstadoAccion({ cargando: false, error: null, exito: "Serie de reservas eliminada correctamente." });
             
             setTimeout(() => {
                 navigate(-1);
             }, 1500);
 
         } catch (error) {
-            setEstadoEliminar({ cargando: false, error: error.message || "Hubo un error al eliminar", exito: null });
+            setEstadoAccion({ cargando: false, error: error.message || "Hubo un error al eliminar", exito: null });
         }
     };
 
@@ -114,6 +176,12 @@ function FormularioEditar({ id, datos }) {
                     mensaje={`¿Estás seguro de que deseas eliminar TODA la serie de reservas? Esta acción no se puede deshacer y liberará el aula para todo el semestre.`}
                     onConfirm={confirmarEliminacion}
                     onCancel={() => setMostrarModalEliminar(false)}
+                />
+                <ModalRestricciones 
+                    abierto={mostrarModalRestricciones}
+                    motivos={motivosRestriccion}
+                    onContinuar={ejecutarGuardado}
+                    onCancelar={() => setMostrarModalRestricciones(false)}
                 />
                 <form onSubmit={manejarGuardarEdicion} className="space-y-6">
                     
@@ -147,14 +215,14 @@ function FormularioEditar({ id, datos }) {
 
                     <AccionesReserva 
                         variante="editar" 
-                        deshabilitado={!reserva.puedeEnviar} 
+                        deshabilitarGuardar={!formularioModificado} 
                         alGuardar={manejarGuardarEdicion}
                         alEliminar={manejarClickEliminar}
-                        deshabilitarEliminar={formularioModificado || estadoEliminar.cargando}
+                        deshabilitarEliminar={formularioModificado || estadoAccion.cargando}
                     />
 
-                    <CajaExito>{reserva.exito}</CajaExito>
-                    <CajaError errores={reserva.errores} />
+                    <CajaExito>{estadoAccion.exito}</CajaExito>
+                    <CajaError errores={{ mensaje: estadoAccion.error }} />
                 </form>
             </TarjetaPagina>
         </div>

@@ -25,7 +25,7 @@ export default function AccionesReserva({ variante, ...props }) {
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-      <RequierePermiso permisos={["reservas.delete_reservapuntual", "reservas.delete_reserva"]}>
+      <RequierePermiso permisos={["delete_reserva"]}>
         {variante === "editar" && (
           <button
             type="button"
