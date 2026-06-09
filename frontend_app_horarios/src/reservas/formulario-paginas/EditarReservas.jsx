@@ -15,12 +15,9 @@ import { useEditarReserva } from "../formulario-hooks/useEditarReserva";
 export default function EditarReservas() {
   const { id } = useParams();
   const navigate = useNavigate();
-  //const location = useLocation();
-
-  //const from = location.state?.from || "/reservas/pendientes";
 
   const editar = useEditarReserva(id, {
-    onFinish: () => navigate("reservas/gestion"),
+    onFinish: () => navigate(-1),
   });
 
   if (editar.cargando) return <div className="p-6">Cargando reserva...</div>;
@@ -85,6 +82,7 @@ export default function EditarReservas() {
           <AccionesReserva
             variante="editar"
             alGuardar={editar.guardar}
+            alEliminar={editar.pedirEliminar}
             deshabilitarGuardar={!editar.puedeGuardar || !editar.hayCambios}
           />
 

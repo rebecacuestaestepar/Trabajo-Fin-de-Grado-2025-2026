@@ -5,6 +5,7 @@ import {
   postAulasCandidatas,
   aprobarReserva,
   rechazarReserva,
+  eliminarReserva,
 } from "../../api/reservas";
 
 import igualdadSuperficial from "../formulario-utiles/igualdadSuperficial";
@@ -282,6 +283,11 @@ export function useEditarReserva(id, { onFinish } = {}) {
     setConfirmacionAbierta(true);
   };
 
+  const pedirEliminar = () => {
+    setTipoConfirmacion("eliminar");
+    setConfirmacionAbierta(true);
+  };
+
   const confirmarCambioEstado = async () => {
     setConfirmacionAbierta(false);
     setErrores(null);
@@ -294,9 +300,16 @@ export function useEditarReserva(id, { onFinish } = {}) {
       } else if (tipoConfirmacion === "rechazar") {
         const res = await rechazarReserva(formulario.idreserva);
         setMensaje(res?.message || "Reserva rechazada");
+      } else if (tipoConfirmacion === "eliminar") {
+        const res = await eliminarReserva(formulario.idreserva);
+        setMensaje(res?.message || "Reserva eliminada correctamente");
       }
 
-      if (onFinish) onFinish(); 
+      if (onFinish) {
+        setTimeout(() => {
+          onFinish();
+        }, 1000);
+      }
     } catch (e) {
       console.error(e);
       setErrores(e?.data || { general: "Error al cambiar el estado" });
@@ -306,12 +319,16 @@ export function useEditarReserva(id, { onFinish } = {}) {
   };
 
   const tituloConfirmacion =
-    tipoConfirmacion === "aprobar" ? "¿Aceptar solicitud?" : "¿Rechazar solicitud?";
+    tipoConfirmacion === "aprobar" ? "¿Aceptar solicitud?" : 
+    tipoConfirmacion === "rechazar" ? "¿Rechazar solicitud?" : 
+    "¿Eliminar reserva?";
 
   const descripcionConfirmacion =
     tipoConfirmacion === "aprobar"
       ? "Vas a aprobar esta solicitud. El estado cambiará a Aprobada."
-      : "Vas a rechazar esta solicitud. El estado cambiará a Rechazada.";
+      : tipoConfirmacion === "rechazar"
+      ? "Vas a rechazar esta solicitud. El estado cambiará a Rechazada."
+      : "Vas a eliminar esta reserva permanentemente. Esta acción no se puede deshacer.";
 
   return {
     cargando,
@@ -335,6 +352,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
 
     pedirAprobar,
     pedirRechazar,
+    pedirEliminar,
 
     modal: {
       abierto: confirmacionAbierta,
@@ -342,7 +360,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
       titulo: tituloConfirmacion,
       descripcion: descripcionConfirmacion,
       textoConfirmar: tipoConfirmacion === "aprobar" ? "Aceptar" : "Rechazar",
-      peligro: tipoConfirmacion === "rechazar",
+      peligro: tipoConfirmacion === "rechazar"|| tipoConfirmacion === "eliminar",
       alConfirmar: confirmarCambioEstado,
     },
   };
