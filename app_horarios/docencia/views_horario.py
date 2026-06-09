@@ -22,13 +22,31 @@ class ValidarHorarioCargadoView(APIView):
         except Exception as e:
             traceback.print_exc()
             return Response({'error': str(e)}, status=404)
+        
+class ObtenerNumeroClasesView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_perm("reservas.view_reservaperiodica"):
+            return Response({'error': 'No tienes permiso para consultar las clases extraídas.'}, status=403)
+        fichero = request.FILES.get('fichero')
+
+        if not fichero:
+            return Response({'error': 'No se ha proporcionado ningún fichero'}, status=400)
+
+        try:
+            clases = parsear_horario_excel(fichero)
+            num_clases = len(clases)
+            return Response({'num_clases': num_clases}, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=500)
 
 class CargarHorarioExcelView(APIView):
     permission_classes = [IsAuthenticated]
     parser_clases = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm(["reservas.add_reservaperiodica", "reservas.add_reserva"]):
+        if not request.user.has_perms(["reservas.add_reservaperiodica", "reservas.add_reserva"]):
             return Response({'error': 'No tienes permiso para cargar horarios.'}, status=403)
         fichero = request.FILES.get('fichero')
         curso = request.data.get('id_curso')

@@ -1,5 +1,5 @@
 from django.urls import include, path
-from .views_horario import CargarHorarioExcelView, MoverSerieReservasView, ObtenerAsignaturasPorGradoYSemestreView, ObtenerCursosView, ValidarRestriccionesView, SemestresPorGradoView, GradosPorCursoView, ListaHorariosView, ValidarHorarioCargadoView
+from .views_horario import CargarHorarioExcelView, MoverSerieReservasView, ObtenerAsignaturasPorGradoYSemestreView, ObtenerCursosView, ObtenerNumeroClasesView, ValidarRestriccionesView, SemestresPorGradoView, GradosPorCursoView, ListaHorariosView, ValidarHorarioCargadoView
 from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet, ImparteViewSet, ListaMiniDocentesView, ListaMiniGruposView, ListaMiniGradosView, ListaMiniAsignaturasView
 from .views_periodicas import EliminarReservaPeriodicaView, ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView
 from rest_framework.routers import DefaultRouter
@@ -19,6 +19,7 @@ routerImparte.register(r'imparte', ImparteViewSet, basename='imparte')
 urlpatterns = [
     path('', ListaHorariosView.as_view(), name='lista_horarios'),
     path('<str:id_curso>/grados/', GradosPorCursoView.as_view(), name='grados_por_curso'),
+    path('obtener-numero-clases/', ObtenerNumeroClasesView.as_view(), name='obtener_numero_clases'),
     path('<str:id_curso>/validar-horario/', ValidarHorarioCargadoView.as_view(), name='validar-horario-curso'),
     path('cargar-horario/', CargarHorarioExcelView.as_view(), name='cargar_horario_excel'),
     path('cursos/', ObtenerCursosView.as_view(), name='obtener_cursos'),

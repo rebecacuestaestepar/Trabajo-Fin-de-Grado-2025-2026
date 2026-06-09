@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from reservas.limpiar_nombres_aulas import limpiar_nombre_aula
-from reservas.excel_parser import DIAS_SEMANA
+from reservas.excel_parser import DIAS_SEMANA, parsear_horario_excel
 from aulas.models import Aula
 from reservas.models import Reserva, ReservaPeriodica
 from docencia.models import Grupo, Asignaturas
@@ -16,13 +16,15 @@ def validar_horario_cargado(curso):
     if not curso_objeto:
         raise ValueError(f"Curso '{curso}' no encontrado en la base de datos.")
     
-    num_reservas = Reserva.objects.filter(
-            tipo='R',
-            id_dia__dia__gte=curso_objeto.fecha_inicio,
-            id_dia__dia__lte=curso_objeto.fecha_fin
-        ).count()
-    
+    if curso_objeto.horario_cargado:
+        num_reservas = Reserva.objects.filter(
+                tipo='R',
+                id_dia__dia__gte=curso_objeto.fecha_inicio,
+                id_dia__dia__lte=curso_objeto.fecha_fin
+            ).count()
+        
     return curso_objeto.horario_cargado, num_reservas
+
 
 def generar_reservas_periodicas(clases, curso):
     with transaction.atomic():
