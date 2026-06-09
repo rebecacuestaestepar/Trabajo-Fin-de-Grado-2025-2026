@@ -94,6 +94,31 @@ export default function MantenimientoGlobal() {
                     </label>
                 </div>
             </div>
+            <div className="mt-8 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm">
+                <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                        <svg className="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div className="ml-3">
+                        <h3 className="text-sm font-bold text-amber-800">
+                            Recomendación de Seguridad
+                        </h3>
+                        <p className="mt-1 text-sm text-amber-700">
+                            Antes de realizar cualquier importación, se recomienda utilizar la opción de{' '}
+                            <button 
+                                onClick={() => handleAction(dbService.exportarDatos, 'all')} 
+                                className="font-semibold underline hover:text-amber-900 focus:outline-none"
+                                disabled={cargando}
+                            >
+                                Exportar Todo
+                            </button>
+                            {' '}para guardar una copia de seguridad de la base de datos actual. Las importaciones son irreversibles.
+                        </p>
+                    </div>
+                </div>
+            </div>
             <ModalConfirmacion 
                 isOpen={modalAbierto}
                 mensaje="¡Atención! Importar este archivo borrará y reemplazará TODOS los datos actuales en la Base de Datos al completo. ¿Deseas continuar?"
