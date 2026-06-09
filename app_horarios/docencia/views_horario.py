@@ -6,10 +6,22 @@ from docencia.serializers import HorarioSerializer, CursoSerializer, GradoSerial
 from docencia.services_horario import mover_serie_reservas, obtener_semestres_por_grado, obtener_asignaturas_por_grado_y_semestre, validar_restricciones_movimiento, obtener_cursos_con_horario, obtener_grados_con_horario
 from calendario.models import Curso
 from reservas.excel_parser import parsear_horario_excel
-from reservas.services_excel import generar_reservas_periodicas
+from reservas.services_excel import generar_reservas_periodicas, validar_horario_cargado
 import traceback
 
 from rest_framework.permissions import IsAuthenticated
+
+class ValidarHorarioCargadoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_curso):
+        if not request.user.has_perm("reservas.view_reservaperiodica"):
+            return Response({'error': 'No tienes permiso para consultar los horarios.'}, status=403)
+        try:
+            horario_cargado, num_reservas = validar_horario_cargado(id_curso)
+            return Response({'horario_cargado': horario_cargado, 'num_reservas': num_reservas}, status=200)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=404)
 
 class CargarHorarioExcelView(APIView):
     permission_classes = [IsAuthenticated]

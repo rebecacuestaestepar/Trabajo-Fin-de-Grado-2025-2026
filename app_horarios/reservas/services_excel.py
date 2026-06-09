@@ -10,6 +10,20 @@ from django.db import transaction
 
 import uuid
 
+def validar_horario_cargado(curso):
+    curso_objeto = Curso.objects.filter(idcurso=curso, horario_cargado=True).first()
+
+    if not curso_objeto:
+        raise ValueError(f"Curso '{curso}' no encontrado en la base de datos.")
+    
+    num_reservas = Reserva.objects.filter(
+            tipo='R',
+            id_dia__dia__gte=curso_objeto.fecha_inicio,
+            id_dia__dia__lte=curso_objeto.fecha_fin
+        ).count()
+    
+    return curso_objeto.horario_cargado, num_reservas
+
 def generar_reservas_periodicas(clases, curso):
     with transaction.atomic():
         curso_objeto = Curso.objects.filter(idcurso=curso).first()
