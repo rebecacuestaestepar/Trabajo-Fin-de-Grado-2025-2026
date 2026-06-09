@@ -71,6 +71,7 @@ class SolicitarReservaPuntualAPIView(APIView):
                 {"message": "Reserva puntual creada correctamente"},
                 status=status.HTTP_201_CREATED
             )
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class CrearReservaPuntualAPIView(APIView):
@@ -297,7 +298,7 @@ class ReservaPendienteDetailAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
-        if not request.user.has_perms(["reservas.view_reservapuntual", "reservas.view_reserva"]):
+        if not (request.user.has_perms(["reservas.view_reservapuntual", "reservas.view_reserva"]) or request.user.has_perm("reservas.view_own_reserva_puntual")):
             raise PermissionDenied("No tienes permiso para consultar reservas puntuales.")
         reserva = Reserva.objects.filter(pk=id).first()
         if not reserva:
@@ -306,7 +307,7 @@ class ReservaPendienteDetailAPIView(APIView):
 
     @transaction.atomic
     def patch(self, request, id):
-        if not request.user.has_perms(["reservas.change_reservapuntual", "reservas.change_reserva"]):
+        if not (request.user.has_perms(["reservas.change_reservapuntual", "reservas.change_reserva"]) or request.user.has_perm("reservas.request_reserv_puntual")):
             raise PermissionDenied("No tienes permiso para modificar reservas puntuales.")
         reserva = Reserva.objects.select_for_update().filter(pk=id).first()
         if not reserva:
