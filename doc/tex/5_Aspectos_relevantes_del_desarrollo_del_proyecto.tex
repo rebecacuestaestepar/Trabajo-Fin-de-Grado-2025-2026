@@ -106,7 +106,13 @@ En esta segunda imagen se puede apreciar que cuando hay dos grupos teóricos, en
 
 En la última imagen, se observa el último tipo de estructura para los grupos prácticos, similar a una de la de los grupos teóricos, con el nombre de la asignatura y el aula debajo, sin apreciar el número del grupo que por defecto se asignará el 101.
 
+Con el objetivo de que este proceso de carga funcione, se han de seguir las reglas añadidas en la penúltima hoja del Excel sobre la unificación que debe tener este archivo.
+
 Tras terminar la fase preparación y unificación de la hoja de cálculo, y finalizar de forma correcta la implementación del \textit{parser}, para poder cargar las reservas en base de datos, hubo que cargar previamente todas las asignaturas y aulas con sus respectivos campos en base de datos.
+
+En la figura~\ref{fig:proceso-analizador} se explica en un esquema los pasos que sigue el analizador léxico una vez se manda el archivo para poder cargar las reservas periódicas en la base de datos.
+
+\imagen{img/ProcesoAnalizador.png}{Imagen con los pasos para cargar los horarios en la base de datos}{fig:proceso-analizador}
 
 Para poner en contexto la complejidad y el esfuerzo requeridos por el desarrollo del analizador léxico y por la fase previa de unificación de la hoja de cálculo, conviene señalar que este trabajo se prolongó desde el 25 de febrero hasta el 13 de mayo, abarcando un total de 11 semanas. En términos de planificación, este proceso ocupó desde el sprint 13 hasta el sprint 21, es decir, 9 sprints en total, debido a los distintos problemas e inconsistencias que fueron surgiendo durante su desarrollo.
 
@@ -147,7 +153,7 @@ Se van a distinguir los permisos de los que dispone cada uno de los roles.
 	\end{itemize}
 \end{itemize}
 
-Dvidiéndose así, de forma clara las operaciones que puede realizar cada uno de los roles y las funcionalidades a las que puede acceder, adaptándose así a los diferentes tipos de perfiles que van a hacer uso de esta herramienta.
+Dividiéndose así, de forma clara las operaciones que puede realizar cada uno de los roles y las funcionalidades a las que puede acceder, adaptándose así a los diferentes tipos de perfiles que van a hacer uso de esta herramienta.
 
 
 

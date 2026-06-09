@@ -10,21 +10,21 @@ A diferencia de otros trabajos más orientados a la investigación teórica o el
 
 \section{Herramientas de reserva y gestión de citas}
 \subsection{Bookitit}
-Bookitit es una plataforma comercial de reservas \textit{online} orientada principalmente a la gestión de citas, agendas y servicios. Entre sus funcionalidades más destacadas se encuentran la reserva \textit{online} por parte de clientes, la gestión manual de citas introducidas presencialmente o por teléfono, la administración de calendarios, notificaciones y recordatorios, así como la sincronización con servicios externos como \textit{Google Calendar}.
+Bookitit es una plataforma comercial de reservas \textit{online} orientada principalmente a la gestión de citas, agendas y servicios~\cite{bookitit:web}. Entre sus funcionalidades más destacadas se encuentran la reserva \textit{online} por parte de clientes, la gestión manual de citas introducidas presencialmente o por teléfono, la administración de calendarios, notificaciones y recordatorios, así como la sincronización con servicios externos como \textit{Google Calendar}~\cite{bookitit:web,bookitit:kitdigital}.
 
-Además, la plataforma contempla características adicionales como la gestión de clases o reservas grupales, personalización del \textit{widget} de reserva e integración con páginas web y redes sociales. Estas capacidades la convierten en una solución versátil para sectores como salud, estética, formación o actividades dirigidas.
+Además, la plataforma contempla características adicionales como la gestión de clases o reservas grupales, personalización del \textit{widget} de reserva e integración con páginas web y redes sociales~\cite{bookitit:web,bookitit:grupales}. Estas capacidades la convierten en una solución versátil para sectores como salud, estética, formación o actividades dirigidas.
 
 No obstante, su orientación principal se sitúa en la gestión comercial de citas y servicios, más que en la organización académica de docencia reglada. Aunque alguna de sus funciones pueden resultar comparables a la gestión de reservas puntuales planteada en este proyecto, no está específicamente creada para trabajar con horarios docentes, calendarios académicos, reservas periódicas asociadas a asignaturas o restricciones académicas.
 
 \section{Sistemas de reservas de recursos}
 \subsection{LibreBooking}
-LibreBooking es una solución de código abierto orientada a la reserva y planificación de recursos compartidos dentro de organizaciones. Su propósito principal es permitir la gestión de reservas de recursos mediante una interfaz flexible, extendible y adaptada a múltiples tipos de activos, como salas, equipamiento o recursos comunes.
+LibreBooking es una solución de código abierto orientada a la reserva y planificación de recursos compartidos dentro de organizaciones. Su propósito principal es permitir la gestión de reservas de recursos mediante una interfaz flexible, extendible y adaptada a múltiples tipos de activos, como salas, equipamiento o recursos comunes ~\cite{librebooking:web,librebooking:github}.
 
-Frente a herramientas más centradas en la cita previa comercial, LibreBooking se aproxima más al problema tratado en este proyecto, al trabajar directamente con la reserva de recursos y gestión de disponibilidad. Además, su carácter abierto y extensible hace que resulte especialmente interesante como referencia desde el punto de vista de la arquitectura y del enfoque de gestión.
+Frente a herramientas más centradas en la cita previa comercial, LibreBooking se aproxima más al problema tratado en este proyecto, al trabajar directamente con la reserva de recursos y gestión de disponibilidad. Además, su carácter abierto y extensible hace que resulte especialmente interesante como referencia desde el punto de vista de la arquitectura y del enfoque de gestión~\cite{librebooking:web,librebooking:github}.
 
 Sin embargo, se trata de una herramienta generalista de reserva de recursos. Aunque puede resultar útil para reservar aulas o espacios, no incorpora de forma nativa aspectos específicos del dominio universitario como la conversión automática de horarios académicos en reservas periódicas, la diferenciación entre tipo de usuarios institucionales, la integración con autenticación universitaria, la gestión detallada de roles académicos o la gestión del calendario académico.
 
-\section{Comparativa herramientas y proyecto}
+\section{Comparativa trabajos relacionados y proyecto}
 
 A partir de las herramientas analizadas, puede observarse que existen soluciones estables para la gestión de reservas y recursos, pero generalmente orientadas a contextos distintos al universitario. Bookitit cubre de forma sólida la gestión de agendas, citas y reservas de servicios, mientras que LibreBooking proporciona un enfoque más próximo a la reserva de recursos compartidos dentro de organizaciones.
 
@@ -49,8 +49,8 @@ A continuación, se ha generado la tabla~\ref{tabla:comparativa_relacionados} qu
 		Reservas periódicas ligadas a docencia & No & Parcial & Sí \\
 		Transformación de horarios en reservas periódicas & No & No & Sí \\
 		Autenticación institucional universitaria & No consta & No consta & Sí \\
-		Gestión de roles académicos & No específica & Genérica & Sí \\
+		Gestión de roles académicos & No consta & Genérica & Sí \\
 		Consulta de ocupación docente de aulas & Limitada & Parcial & Sí \\
-		Adecuación a restricciones académicas & No & No específica & Sí \\
+		Adecuación a restricciones académicas & No & No consta & Sí \\
 	}
 }

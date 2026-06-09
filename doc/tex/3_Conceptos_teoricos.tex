@@ -6,10 +6,10 @@ En esta sección de la memoria, se recogen los conceptos teóricos más relevant
 
 Una aplicación web es un sistema software al que se puede acceder a través de un navegador, más concretamente a través de una URL, con lo que requiere tener conexión a Internet. Además está sustentada sobre una arquitectura cliente-servidor \cite{clienteservidor:Fernan}.
 
-Esta arquitectura o modelo tiene funciona de la siguiente manera.
+Esta arquitectura o modelo funciona de la siguiente manera.
 \begin{itemize}
 	\item El cliente se encarga de la interacción con el usuario y la representación de la interfaz, es decir, es el que hace las peticiones de servicios al servidor y recibe las respuestas de estas.
-	\item El servidor es le que centraliza la lógica de negocio, el acceso a los datos, y recibe y procesa las peticiones del cliente entregándoles una respuesta.
+	\item El servidor es el encargado de centralizar la lógica de negocio, el acceso a los datos, y recibe y procesa las peticiones del cliente entregándoles una respuesta.
 \end{itemize}
 
 La comunicación entre el cliente y el servidor se realiza por medio de protocolos de red. En las aplicaciones web, el más común es \textit{HTTP} (\textit{Hyper Text Transfer Protocol}), un protocolo de comunicación que define cómo se intercambian las peticiones y respuestas entre cliente y servidor. Gracias a este mecanismo, el cliente puede solicitar o enviar recursos o información al servidor, mientras que este puede responder con datos o el resultado de una operación concreta \cite{clienteservidor:Fernan}.
@@ -55,7 +55,7 @@ Para facilitar la interacción entre la aplicación y la base de datos, Django i
 
 En Django, un modelo es la fuente principal de información sobre los datos almacenados. Cada modelo se define como una clase de Python y, de forma general, se corresponde con un tabla de la base de datos. A su vez, cada atributo del modelo representa a un campo de esa tabla. Gracias a esto, el \textit{framework} genera de manera automática una API de acceso de datos que permite realizar consultas, inserciones, modificaciones y eliminaciones de una forma más mantenible y sencilla \cite{orm-jorge,orm-urian}. 
 
-El uso de un ORM aporta ciertas ventajas en el desarrollo del sistema. En primer lugar, mejora la legibilidad del código al permitir trabajr con objetos y relaciones de alto nivel en lugar de hacerlo directamente con sentencias SQL. En segundo lugar, facilita el mantenimiento, ya que los cambios en la estructura de datos pueden gestionarse a través de los propios modelos y sus migraciones.
+El uso de un ORM aporta ciertas ventajas en el desarrollo del sistema. En primer lugar, mejora la legibilidad del código al permitir trabajar con objetos y relaciones de alto nivel en lugar de hacerlo directamente con sentencias SQL. En segundo lugar, facilita el mantenimiento, ya que los cambios en la estructura de datos pueden gestionarse a través de los propios modelos y sus migraciones.
 
 No obstante, el uso de un ORM no elimina completamente la importancia del modelo relacional. Sigue siendo necesario diseñar adecuadamente las entidades, sus relaciones y restricciones para poder garantizar la consistencia de los datos y el correcto funcionamiento de la aplicación. 
 
@@ -91,9 +91,9 @@ En este proyecto, el \textit{frontend} se apoya en este modelo de desarrollo, pe
 
 El análisis léxico es una de las fases fundamentales en el procesamiento automático de cadenas de texto. Su función principal consiste en recorrer una secuencia de caracteres de entrada y agruparla en unidades con significado propio, denominadas \textit{tokens}. De este modo, una entrada textual que inicialmente se presenta como una cadena continua puede transformarse en una secuencia estructurada de elementos más simples y manejables \cite{uco:analizador}.
 
-Este proceso resulta especialmente útil cuando se trabaja con lenguajes formales, expresiones definidas por una sintaxis concreta o entradas que deben ser interpretadas automáticamente por un sistema. En lugar de analizar cada carácter de manera aislada, el análisis léxico permite recnocer componentes con valor propio, como palabras clave, identificadores, números, separadores o símbolos especiales. Gracias a ello, se simplifica el tratamiento posterior de la información \cite{wiki:analizador}.
+Este proceso resulta especialmente útil cuando se trabaja con lenguajes formales, expresiones definidas por una sintaxis concreta o entradas que deben ser interpretadas automáticamente por un sistema. En lugar de analizar cada carácter de manera aislada, el análisis léxico permite reconocer componentes con valor propio, como palabras clave, identificadores, números, separadores o símbolos especiales. Gracias a ello, se simplifica el tratamiento posterior de la información \cite{wiki:analizador}.
 
-Desde un punto de vista funcional, el anlizador léxico actúa como un primer filtro sobre la entrada. Su objetivo no es interpretar completamente su significado, sino segmentarla y clasificarla de acuerdo con unas reglas previamente definidas. Esta fase permite detectar patrones válidos, aislar elementos relevantes e identificar errores tempranos cuando la entrada no se ajusta al formato esperado.
+Desde un punto de vista funcional, el analizador léxico actúa como un primer filtro sobre la entrada. Su objetivo no es interpretar completamente su significado, sino segmentarla y clasificarla de acuerdo con unas reglas previamente definidas. Esta fase permite detectar patrones válidos, aislar elementos relevantes e identificar errores tempranos cuando la entrada no se ajusta al formato esperado.
 
 En este proyecto, el análisis léxico se utiliza para procesar la información procedente de los horarios académicos de los distintos grados. A partir de dicha información, el sistema identifica y extrae los elementos necesarios para interpretar cada bloque docente, con el objetivo de transformar las clases impartidas en reservas periódicas que posteriormente se cargan en la base de datos de la aplicación. Por ello, el análisis léxico constituye una base importante dentro del proceso de automatización de la incorporación de horarios al sistema.
 
@@ -104,7 +104,7 @@ Dentro del análisis léxico, tres de los conceptos fundamentales son \textit{to
 
 \begin{itemize}
 	\item Un \textit{token} representa una categoría léxica, es decir, un tipo abstracto de elemento que el analizador es capaz de identificar. Por ejemplo, en un lenguaje formal pueden existir \textit{tokens} para identificadores, números, operadores o palabras reservadas. El \textit{token} no hace referencia a una cadena concreta, sino a la clase a la que pertenece un fragmento de la entrada.
-	\item Un lexema, en cambio, es la secuencia concreta de caracteres reconocida en la entrada como una instancia de un determinado \textit{token}. Dicho de otra forma, el lexema es la aparición real en el texto, mientras que el \textit{token} es la categoría abstracta a la que esa aparición pertence. Así, distintos lexemas pueden corresponder al mismo tipo de token si cumplen la misma función léxica.
+	\item Un lexema, en cambio, es la secuencia concreta de caracteres reconocida en la entrada como una instancia de un determinado \textit{token}. Dicho de otra forma, el lexema es la aparición real en el texto, mientras que el \textit{token} es la categoría abstracta a la que esa aparición pertenece. Así, distintos lexemas pueden corresponder al mismo tipo de token si cumplen la misma función léxica.
 	\item Un patrón define la forma que deben tener los lexemas para ser reconocidos como pertenecientes a un determinado \textit{token}. Normalmente, estos patrones se expresan mediante reglas formales, como expresiones regulares, que permiten describir de manera precisa qué combinaciones de caracteres son válidas.
 \end{itemize}
 
@@ -119,6 +119,6 @@ Desde el punto de vista del análisis léxico, las expresiones regulares resulta
 
 Su utilidad no se limita únicamente al ámbito de compiladores o lenguajes de programación, sino que se extiende también al procesamiento general de información textual estructurada. Gracias a ello, pueden emplearse reconocer días, códigos, abreviaturas, grupos, franjas horarias u otras secuencias que sigan una forma recurrente y definida.
 
-En el contexto de este proyecto, las expresiones regulares constituyen una herramienta útil para apoyar el procesamiento de la información contenida en en los horarios académicos. A través de patrones definidos previamente, es posible identificar fragmentos de texto con una estructura reconocible y extraer de ellos los elementos relevantes para su posterior transformación en reservas periódicas del sistema. De este modo, ls expresiones regulares sirven para el reconocimiento y validación de partes concretas de la entrada.
+En el contexto de este proyecto, las expresiones regulares constituyen una herramienta útil para apoyar el procesamiento de la información contenida en los horarios académicos. A través de patrones definidos previamente, es posible identificar fragmentos de texto con una estructura reconocible y extraer de ellos los elementos relevantes para su posterior transformación en reservas periódicas del sistema. De este modo, ls expresiones regulares sirven para el reconocimiento y validación de partes concretas de la entrada.
 
 
