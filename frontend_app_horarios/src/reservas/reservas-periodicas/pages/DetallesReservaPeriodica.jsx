@@ -21,7 +21,6 @@ export default function DetallesReservaPeriodica() {
     useEffect(() => {
         obtenerDatosReservaPeriodica(id)
             .then(data => {
-                console.log("Datos recibidos para la reserva periódica:", data);
                 const res = data.reserva; 
                 setDatosCargados({
                     grado: Number(res.grado), 

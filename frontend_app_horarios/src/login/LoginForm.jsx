@@ -46,15 +46,12 @@ export default function LoginForm() {
 
                 sessionStorage.setItem('roles', JSON.stringify(data.usuario.roles || []));
                 sessionStorage.setItem('permisos', JSON.stringify(data.usuario.permisos || []));
-                console.log("Sesión inciada correctamente:", data);
 
                 navigate("/reservas/gestion");
             } else {
                 setError(data.detail || "Error al iniciar sesión.");
             }
             
-            console.log("Enviando credenciales:", credenciales);
-
         } catch (err) {
             console.error("Error al iniciar sesión:", err);
             setError("El usuario o la contraseña son incorrectos.");

@@ -22,12 +22,6 @@ export default function CrearReservaPeriodica() {
 
     const cursoAcademicoState = location.state?.cursoAcademico ? String(location.state.cursoAcademico) : '';
 
-    console.log("Datos recibidos para crear reserva periódica:", {
-        grado: gradoState,
-        semestre: semestreState,
-        curso_academico: cursoAcademicoState
-     });
-
     const requiereCalcularCurso = Boolean(gradoState && semestreState);
     const [cargando, setCargando] = useState(requiereCalcularCurso);
     
@@ -44,7 +38,6 @@ export default function CrearReservaPeriodica() {
         if (requiereCalcularCurso) {
             reservaDesdeHorarioGrado(gradoState, semestreState)
                 .then(data => {
-                    console.log("Datos académicos pre-calculados:", data);
                     setDatosIniciales({
                         grado: gradoState,
                         curso: data.curso ? Number(data.curso) : '',

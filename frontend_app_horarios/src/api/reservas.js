@@ -45,7 +45,6 @@ export function getReservaDetalle(id) {
 
 // Actualizar
 export function patchReserva(id, parcial) {
-  console.log("Parcial enviado:", parcial);
   return apiRequest(`/reservas/${id}/`, {
     method: "PATCH",
     body: parcial
@@ -92,14 +91,12 @@ export function rechazarReservasMasivo(ids) {
 // ------------------------------------------------
 
 export function getTodasReservas() {
-  console.log("Obteniendo todas las reservas...");
   return apiRequest("/reservas/todas/", {
     method: "GET"
   });
 }
 
 export function getReservasUsuario(usuario) {
-  console.log(`Obteniendo reservas para el usuario: ${usuario}...`);
   return apiRequest(`/reservas/todas/${usuario}/`, {
     method: "GET"
   });

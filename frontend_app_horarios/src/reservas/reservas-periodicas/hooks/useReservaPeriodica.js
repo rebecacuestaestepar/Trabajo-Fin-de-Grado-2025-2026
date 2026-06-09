@@ -108,12 +108,6 @@ export function useReservaPeriodica({ modo = 'crear', datosIniciales = {} }) {
     };
 
     const buscarAulas = () => {
-        console.log("1. ¡Botón de buscar pulsado!");
-        console.log("2. Enviando datos al endpoint:", {
-            diaSemana: formulario.diaSemana,
-            horaInicio: formulario.horaInicio,
-            horaFin: formulario.horaFin
-        });
         setBuscandoAulas(true);
         setExito(null);
         setErrores(null);
@@ -121,7 +115,6 @@ export function useReservaPeriodica({ modo = 'crear', datosIniciales = {} }) {
         obtenerAulasLibres({
             diaSemana: formulario.diaSemana, horaInicio: formulario.horaInicio, horaFin: formulario.horaFin
         }).then(data => {
-            console.log("Aulas libres recibidas:", data);
             const aulas = data.aulas_libres || [];
             setAulasDisponibles(aulas);
             setAulaSeleccionada(aulas.length > 0 ? aulas[0].nombre : '');
@@ -146,8 +139,6 @@ export function useReservaPeriodica({ modo = 'crear', datosIniciales = {} }) {
                 hora_fin: formulario.horaFin
             }
         };
-
-        console.log("Enviando formulario con payload:", payload);
 
         crearReservaPeriodica(payload)
             .then(() => {

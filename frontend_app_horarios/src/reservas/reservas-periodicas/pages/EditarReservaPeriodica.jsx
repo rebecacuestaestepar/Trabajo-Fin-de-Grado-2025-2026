@@ -70,7 +70,6 @@ function FormularioEditar({ id, datos }) {
 
     const manejarGuardarEdicion = (e) => {
         e.preventDefault();
-        console.log("Enviando cambios (PUT) de la reserva ", id, reserva.formulario);
     };
 
     const manejarClickEliminar = (e) => {
@@ -87,8 +86,6 @@ function FormularioEditar({ id, datos }) {
             semestre_num: datos.semestre,
             firma_serie: firmaOriginal
         };
-
-        console.log("Datos que se envían para eliminar:", payloadEliminar);
 
         try {
             await eliminarReservaPeriodica(payloadEliminar);

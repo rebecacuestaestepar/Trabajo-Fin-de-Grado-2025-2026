@@ -19,7 +19,6 @@ import {
   rechazarReservasMasivo,
   getReservasUsuario,
 } from "../../api/reservas";
-import RequierePermiso from "../../auth/RequierePermiso";
 
 export default function GestionReservas() {
   const navegar = useNavigate();
@@ -32,12 +31,6 @@ export default function GestionReservas() {
 
   const correoUsuario = sessionStorage.getItem("username");
   const esUsuarioValido = correoUsuario && correoUsuario !== "undefined";
-
-  console.log("Permisos del usuario:", permisos);
-    console.log("Puede crear reservas:", puedoCrear);
-    console.log("Puede solicitar reservas:", puedoSolicitar);
-
-    console.log("Usuario actual:", sessionStorage.getItem("username"));
   
   const cargadorConfigurado = useMemo(() => {
     if (puedoCrear) {

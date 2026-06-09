@@ -51,11 +51,10 @@ export default function CrearCalendario() {
         };
 
         try {
-            const respuesta = await cargarCalendarioFormulario(payload);
+            await cargarCalendarioFormulario(payload);
 
 
             setMensajeCorrecto("Calendario guardado correctamente.");
-            console.log(respuesta.mensaje);
 
                         
         } catch (error) {

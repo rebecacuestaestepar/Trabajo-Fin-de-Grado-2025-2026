@@ -21,25 +21,10 @@ export default function TodasReservas() {
   const puedoCrear = permisos.includes("add_reservapuntual");
   const puedoSolicitar = permisos.includes("request_reserv_puntual") || permisos.includes("view_own_reserva_puntual");
 
-  console.log("Permisos del usuario:", permisos);
-  console.log("Puede crear reservas:", puedoCrear);
-  console.log("Puede solicitar reservas:", puedoSolicitar);
-
   const listado = useListadoReservas({
     cargador: puedoCrear ? getTodasReservas : getReservasUsuario,
     cargadorParams: puedoCrear ? [] : [sessionStorage.getItem("username") || ""],
   });
-
-  // if (puedoCrear) {
-  //   const listado = useListadoReservas({
-  //     cargador: getTodasReservas,
-  //   });
-  // } else {
-  //    listado = useListadoReservas({
-  //     cargador: getReservasUsuario,
-  //     cargadorParams: [sessionStorage.getItem("username") || ""],
-  //   });
-  // }
   
 
   const alCrear = () => {

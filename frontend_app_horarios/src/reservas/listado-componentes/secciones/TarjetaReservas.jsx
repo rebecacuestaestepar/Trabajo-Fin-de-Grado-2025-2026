@@ -61,8 +61,6 @@ export default function TarjetaReserva({
 
   const puedeVerBotonEditar = tienePoderAbsoluto || (esPDI && esPendiente);
 
-  console.log(reserva);
-
   return (
     <li
       className={`group rounded-2xl bg-white p-5 shadow-sm ring-1 transition hover:shadow-md
