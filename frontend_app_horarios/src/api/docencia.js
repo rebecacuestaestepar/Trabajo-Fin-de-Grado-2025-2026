@@ -13,6 +13,15 @@ export function validarHorarioCargado(idCurso) {
     });
 }
 
+export function obtenerNumeroClases(archivo) {
+    const formData = new FormData();
+    formData.append('fichero', archivo);
+    return apiRequest(`/docencia/obtener-numero-clases/`, {
+        method: "POST",
+        body: formData,
+    });
+}
+
 export function obtenerCursos() {
     return apiRequest("/docencia/cursos/", {
         method: "GET",
