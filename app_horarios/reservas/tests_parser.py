@@ -44,7 +44,7 @@ class AnalizadorLexicoTests(TestCase):
         self.assertEqual(valor, "101") # Comprueba que le quita los paréntesis
 
     def test_clasificar_celda_aula(self):
-        self.assertEqual(clasificar_celda("Aula 101")[0], "AULA")
+        self.assertEqual(clasificar_celda("Aula 51-A1")[0], "AULA")
         self.assertEqual(clasificar_celda("Lab de redes")[0], "AULA")
         self.assertEqual(clasificar_celda("Sala de reuniones")[0], "AULA")
 
@@ -61,7 +61,7 @@ class AnalizadorLexicoTests(TestCase):
         self.assertEqual(limpiar_nombre_aula(None), "")
         
         # Quitar prefijo "Aula " pero no "Aula Empresa"
-        self.assertEqual(limpiar_nombre_aula("Aula 101"), "101")
+        self.assertEqual(limpiar_nombre_aula("Aula 51-A1"), "51-A1")
         self.assertEqual(limpiar_nombre_aula("Aula Empresa"), "Aula Empresa")
         
         # Transformar Inf en Informática

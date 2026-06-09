@@ -181,7 +181,6 @@ class HorarioServicesTests(TestCase):
             "nueva_hora_inicio": "10:00:00", 
             "nueva_hora_fin": "12:00:00"
         }
-        # Nota: La función no devuelve nada al terminar con éxito (cae al final del código).
         # Por lo tanto, comprobaremos el impacto en la Base de Datos.
         mover_serie_reservas("2025-2026", 1, datos)
         

@@ -46,45 +46,6 @@ class AulasDisponiblesInputSerializer(serializers.Serializer):
 # -----------------------------
 # LISTADO PENDIENTES/SOLICITADAS
 # -----------------------------
-"""
-class ReservaPendienteListItemSerializer(serializers.Serializer):
-    idreserva = serializers.CharField()
-    motivo = serializers.CharField(allow_blank=True, required=False)
-    correo_responsable = serializers.EmailField(allow_blank=True, required=False)
-
-    fecha = serializers.DateField()
-    hora_inicio = serializers.TimeField()
-    hora_fin = serializers.TimeField()
-
-    capacidad_solicitada = serializers.IntegerField(allow_null=True, required=False)
-    num_ordenadores = serializers.IntegerField(allow_null=True, required=False)
-    altavoces = serializers.BooleanField(required=False)
-    proyector = serializers.BooleanField(required=False)
-    camara = serializers.BooleanField(required=False)
-    enchufes = serializers.BooleanField(required=False)
-
-    nombre_aula = serializers.CharField(allow_blank=True, required=False)
-    estado = serializers.CharField()
-
-    class Meta:
-        model = ReservaPuntual
-        fields = [
-            "idreserva",
-            "motivo",
-            "correo_responsable",
-            "fecha",
-            "hora_inicio",
-            "hora_fin",
-            "capacidad_solicitada",
-            "num_ordenadores",
-            "altavoces",
-            "proyector",
-            "camaras",
-            "enchufes",
-            "nombre_aula",
-            "estado",
-        ]
-"""
 class ReservaPendienteListItemSerializer(serializers.ModelSerializer):
     # campos de Reserva
     idreserva = serializers.CharField(source="id_reserva.pk", read_only=True)
@@ -153,9 +114,6 @@ class ReservaDetalleSerializer(serializers.Serializer):
         return attrs
 
     def to_representation(self, instance: Reserva):
-        """
-        instance = Reserva
-        """
         puntual = ReservaPuntual.objects.select_related("id_responsable").filter(id_reserva=instance).first()
 
         correo = ""
@@ -189,7 +147,6 @@ class ReservaDetalleSerializer(serializers.Serializer):
         }
 
     def update(self, instance: Reserva, validated_data):
-        # Fecha => Dia
         if "fecha" in validated_data:
             fecha = validated_data["fecha"]
             try:
@@ -221,33 +178,34 @@ class ReservaDetalleSerializer(serializers.Serializer):
             puntual.capacidad_solicitada = validated_data["capacidad_solicitada"]
         
         if "num_ordenadores" in validated_data:
-            puntual.num_ordenadores = validated_data["num_ordenadores"] or 0
+            puntual.num_ordenadores_solicitados = validated_data["num_ordenadores"] or 0
         
         if "altavoces" in validated_data:
-            puntual.altavoces = validated_data["altavoces"]
+            puntual.altavoces_solicitados = validated_data["altavoces"]
         
         if "proyector" in validated_data:
-            puntual.proyector = validated_data["proyector"]
+            puntual.proyector_solicitado = validated_data["proyector"]
 
         if "camara" in validated_data:
-            puntual.camara = validated_data["camara"]
+            puntual.camara_solicitada = validated_data["camara"]
         
         if "enchufes" in validated_data:
-            puntual.enchufes = validated_data["enchufes"]
-        
-        puntual.save()
+            puntual.enchufes_solicitados = validated_data["enchufes"]
 
         if "correo_responsable" in validated_data:
-            correo = (validated_data["correo_responsable"] or "").strip()
-            if correo:
-                responsable = Responsable.objects.filter(correo=correo).first()
-                if responsable:
-                    puntual.id_responsable = responsable
-                    puntual.save()
-                else:
-                    raise serializers.ValidationError({"correo_responsable": "No existe un responsable con ese correo."})
-
-        # Falta permitir editar el correo de responsable
+            nuevo_correo = (validated_data["correo_responsable"] or "").strip()
+            
+            correo_actual = getattr(puntual.id_responsable, "correo", "") if puntual.id_responsable else ""
+            
+            if nuevo_correo and nuevo_correo != correo_actual:
+                try:
+                    nuevo_responsable = Responsable.objects.get(correo=nuevo_correo)
+                    puntual.id_responsable = nuevo_responsable
+                except Responsable.DoesNotExist:
+                    raise serializers.ValidationError({
+                        "correo_responsable": f"No existe un responsable registrado con el correo '{nuevo_correo}'."
+                    })
+        puntual.save()
         return instance
     
 class ReservaBulkIdsSerializer(serializers.Serializer):

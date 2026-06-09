@@ -9,7 +9,6 @@ from django.utils import timezone
 # Create your models here.
 
 class Reserva(models.Model):
-    #idreserva = models.CharField(db_column='IDRESERVA', primary_key=True, max_length=12)  # Field name made lowercase.
     idreserva = models.AutoField(db_column='IDRESERVA', primary_key=True)  # Field name made lowercase.
     id_aula = models.ForeignKey(Aula, models.CASCADE, db_column='ID_AULA')  # Field name made lowercase.
     id_dia = models.ForeignKey(Dia, models.CASCADE, db_column='ID_DIA')  # Field name made lowercase.
@@ -22,16 +21,6 @@ class Reserva(models.Model):
     class Meta:
         managed = False
         db_table = 'reserva'
-
-    # @classmethod
-    
-    # def next_id(cls):
-    #     ultimo = cls.objects.aggregate(max_id=models.Max('idreserva'))['max_id']
-    #     if not ultimo:
-    #         return 'R0001'
-    #     numero = int(ultimo[1:]) + 1
-    #     return f'R{numero:11d}'
-
 
 
 class ReservaPeriodica(models.Model):

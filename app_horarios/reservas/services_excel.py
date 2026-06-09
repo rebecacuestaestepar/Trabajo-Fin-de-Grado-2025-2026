@@ -11,10 +11,17 @@ from django.db import transaction
 import uuid
 
 def generar_reservas_periodicas(clases, curso):
-    num_reservas_creadas = 0
-
     with transaction.atomic():
         curso_objeto = Curso.objects.filter(idcurso=curso).first()
+
+        if not curso_objeto:
+            raise ValueError(f"Curso '{curso}' no encontrado en la base de datos.")
+        
+        Reserva.objects.filter(
+            tipo='R',
+            id_dia__dia__gte=curso_objeto.fecha_inicio,
+            id_dia__dia__lte=curso_objeto.fecha_fin
+        ).delete()
 
         fecha_inicio_sem_1 = Semestre.objects.filter(curso_id=curso_objeto, numero=1).first().fecha_inicio
         fecha_inicio_sem_2 = Semestre.objects.filter(curso_id=curso_objeto, numero=2).first().fecha_inicio
@@ -99,7 +106,6 @@ def generar_reservas_periodicas(clases, curso):
 
                 dia_actual += timedelta(days=1)
 
-                num_reservas_creadas += 1
         curso_objeto.horario_cargado = True
         curso_objeto.save()
 

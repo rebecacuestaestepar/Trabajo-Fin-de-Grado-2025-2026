@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 
 from django.db import transaction
+from django.utils import timezone
 from docencia.models import Docente
 from reservas.services import aula_disponible_en_varias_fechas, aulas_disponibles_en_fecha_hora
 from rest_framework import serializers
@@ -43,6 +44,23 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
     @transaction.atomic
     def create(self, validated_data):
+
+        hoy = timezone.now().date()
+
+        generar_periodica = validated_data.get('generar_periodica', False)
+
+        if not generar_periodica:
+            fecha = validated_data.get('fecha')
+            if fecha and fecha < hoy:
+                raise serializers.ValidationError({
+                    "fecha": "La fecha de la reserva no puede ser anterior al día actual."
+                })
+        else:
+            fi = validated_data.get("fecha_inicio_periodo")
+            if fi and fi < hoy:
+                raise serializers.ValidationError({
+                    "periodo": "La fecha de inicio de la reserva periódica no puede ser anterior al día actual."
+                })
 
         estado_elegido = validated_data.get("estado", "P")
 
@@ -189,21 +207,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
         # ==========================
         fi = validated_data.get("fecha_inicio_periodo", None)
         ff = validated_data.get("fecha_fin_periodo", None)
-
-
-        '''try:
-            fi = date.fromisoformat(fi_raw) if fi_raw else None
-        except ValueError:
-            raise serializers.ValidationError({
-                "fecha_inicio_periodo": "Formato de fecha de inicio inválido (use YYYY-MM-DD)."
-            })
-
-        try:
-            ff = date.fromisoformat(ff_raw) if ff_raw else None
-        except ValueError:
-            raise serializers.ValidationError({
-                "fecha_fin_periodo": "Formato de fecha de fin inválido (use YYYY-MM-DD)."
-            })'''
 
         if not fi or not ff:
             raise serializers.ValidationError({

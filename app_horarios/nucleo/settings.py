@@ -26,7 +26,6 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-9op17d70_c7qawk_r=&l@_xfk4r4^xnkjx)qky+z%g=c+jgmqt'
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -130,49 +129,20 @@ WSGI_APPLICATION = 'nucleo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASE_URL = os.environ.get('DATABASE_URL')
-
-# if DATABASE_URL:
-#     DATABASES = {
-#         'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'horario_db',
-#             'USER': 'root',
-#             'PASSWORD': 'quier0AprobarTFG!',
-#             'HOST': 'localhost',
-#             'PORT': '3306',
-#         }
-#     }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQLDATABASE', 'horario_db'),
-        'USER': os.environ.get('MYSQLUSER', 'root'),
+        'NAME': os.environ.get('MYSQLDATABASE'),
+        'USER': os.environ.get('MYSQLUSER'),
         'PASSWORD': os.environ.get('MYSQLPASSWORD'),
-        'HOST': os.environ.get('MYSQLHOST', '127.0.0.1'),
-        'PORT': os.environ.get('MYSQLPORT', '3306'),
+        'HOST': os.environ.get('MYSQLHOST'),
+        'PORT': os.environ.get('MYSQLPORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.environ.get('MYSQLDATABASE', 'horario_db'),
-#         'USER': os.environ.get('MYSQLUSER', 'root'),
-#         'PASSWORD': os.environ.get('MYSQLPASSWORD', 'quier0AprobarTFG!'),
-#         'HOST': os.environ.get('MYSQLHOST', 'localhost'),
-#         'PORT': os.environ.get('MYSQLPORT', '3306'),
-#     }
-# }
-
 
 
 # Password validation
