@@ -13,7 +13,7 @@ export default function SelectorSemestre({idCurso, grados, gradoActivo, onSelecc
                     <label className="text-sm font-semibold text-slate-700">Grado:</label>
                     <select 
                         className="border border-slate-300 rounded-lg px-3 py-1.5 bg-slate-50 focus:ring-2 focus:ring-[#7a1e1e] outline-none disabled:opacity-50 min-w-[200px]"
-                        value={gradoActivo || ""}
+                        value={String(gradoActivo) || ""}
                         onChange={(e) => onSeleccionarGrado(e.target.value)}
                         disabled={cargando || grados.length === 0}
                     >
@@ -31,7 +31,7 @@ export default function SelectorSemestre({idCurso, grados, gradoActivo, onSelecc
                     <label className="text-sm font-semibold text-slate-700">Semestre:</label>
                     <select 
                         className="border border-slate-300 rounded-lg px-3 py-1.5 bg-slate-50 focus:ring-2 focus:ring-[#7a1e1e] outline-none disabled:opacity-50"
-                        value={semestreActivo || ""}
+                        value={String(semestreActivo) || ""}
                         onChange={(e) => onSeleccionarSemestre(Number(e.target.value))}
                         disabled={cargando || semestres.length === 0 || !gradoActivo}
                     >

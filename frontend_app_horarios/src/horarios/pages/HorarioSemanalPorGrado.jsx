@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { obtenerSemestresPorGrado, obtenerAsignaturasPorGradoYSemestre, obtenerGradosPorCurso, validarRestricciones, moverReservaPeriodica } from '../../api/docencia';
 import { obtenerColorGrupo } from '../utiles/coloresGrupo';
 import SelectorSemestre from '../componentes/SelectorSemestre';
@@ -13,11 +13,15 @@ export default function VistaHorarioSemanalGrado() {
     const { id_curso } = useParams();
     const navigate = useNavigate();
 
+    const [searchParams, setSearchParams] = useSearchParams();
     const [grados, setGrados] = useState([]);
-    const [gradoActivo, setGradoActivo] = useState("");
+    //const [gradoActivo, setGradoActivo] = useState("");
+
+    const gradoActivo = searchParams.get("grado") || "";
+    const semestreActivo = searchParams.get("semestre") || "";
 
     const [semestres, setSemestres] = useState([]);
-    const [semestreActivo, setSemestreActivo] = useState("");
+    //const [semestreActivo, setSemestreActivo] = useState("");
     const [eventos, setEventos] = useState([]);
     const [cargando, setCargando] = useState(true);
 
@@ -33,61 +37,90 @@ export default function VistaHorarioSemanalGrado() {
     const puedoVer = permisos.includes("view_reservaperiodica");
 
     useEffect(() => {
+        let montado = true;
         const cargarGrados = async () => {
             setCargando(true);
             try {
                 const data = await obtenerGradosPorCurso(id_curso);
+                if (!montado) return;
                 setGrados(data);
-                if (data.length > 0) {
-                    setGradoActivo(data[0].idgrado);
-                }
+                setSearchParams(prev => {
+                    if (data.length > 0 && !prev.get("grado")) {
+                        prev.set("grado", data[0].idgrado);
+                        return prev;
+                    }
+                    return prev;
+                }, { replace: true });
             } catch (error) {
                 console.error("Error al cargar grados:", error);
             } finally {
-                setCargando(false);
+                if (montado) {
+                    setCargando(false);
+                }
             }
         };
         cargarGrados();
-    }, [id_curso]);
+        return () => { montado = false; };
+    }, [id_curso, searchParams, setSearchParams]);
 
     useEffect(() => {
         if (!gradoActivo) {
             setSemestres([]);
-            setSemestreActivo("");
             setEventos([]);
             return;
         }
+        let montado = true;
 
         const cargarSemestres = async () => {
             setCargando(true);
             try {
                 const data = await obtenerSemestresPorGrado(gradoActivo);
+                if (!montado) return;
                 const listaSemestres = data.semestres ? data.semestres : data;
                 setSemestres(listaSemestres);
                 
-                if (listaSemestres.length > 0) {
-                    setSemestreActivo(listaSemestres[0]);
-                } else {
-                    setSemestreActivo("");
-                    setEventos([]);
-                }
+                setSearchParams(prev => {
+                    const currentSem = prev.get("semestre");
+                    const semestresString = listaSemestres.map(String);
+                    
+                    if (semestresString.length > 0) {
+                        // Si el semestre actual no es válido para este grado, forzamos el primero
+                        if (!semestresString.includes(String(currentSem))) {
+                            prev.set("semestre", semestresString[0]);
+                            return prev;
+                        }
+                    } else {
+                        // Si no hay semestres, lo limpiamos de la URL
+                        prev.delete("semestre");
+                        return prev;
+                    }
+                    return prev;
+                }, { replace: true });
             } catch (error) {
                 console.error("Error al cargar semestres:", error);
             } finally {
-                setCargando(false);
+                if (montado) {
+                    setCargando(false);
+                }
             }
         };
         cargarSemestres();
+        return () => { montado = false; };
     }, [gradoActivo]);
 
     useEffect(() => {
-        if (!gradoActivo || !semestreActivo) return;
+        if (!gradoActivo || !semestreActivo) {
+            setEventos([]);
+            return;
+        }
 
+        let montado = true;
         const cargarHorario = async () => {
             setCargando(true);
             try {
                 const reservas = await obtenerAsignaturasPorGradoYSemestre(gradoActivo, semestreActivo, id_curso);
-                
+                if (!montado) return;
+
                 const eventosFormateados = reservas.map(res => {
                     const estilo = obtenerColorGrupo(String(res.grupo_nombre));
                     return {
@@ -111,14 +144,33 @@ export default function VistaHorarioSemanalGrado() {
                 setEventos(eventosFormateados);
             } catch (error) {
                 console.error("Error al cargar las asignaturas:", error);
-                setEventos([]);
+                if (montado) {
+                    setEventos([]);
+                }
             } finally {
-                setCargando(false);
+                if (montado) {
+                    setCargando(false);
+                }
             }
         };
 
         cargarHorario();
     }, [gradoActivo, semestreActivo, id_curso, recarga]);
+
+    const manejarCambioGrado = (nuevoGrado) => {
+        setSearchParams(prev => {
+            prev.set("grado", nuevoGrado);
+            prev.delete("semestre"); // Al cambiar grado, borramos semestre para que el efecto asigne el correcto
+            return prev;
+        });
+    };
+
+    const manejarCambioSemestre = (nuevoSemestre) => {
+        setSearchParams(prev => {
+            prev.set("semestre", nuevoSemestre);
+            return prev;
+        });
+    };
 
     const manejarMovimientoEvento = async (info) => {
         const { event, revert } = info;
@@ -217,10 +269,10 @@ export default function VistaHorarioSemanalGrado() {
                 idCurso={id_curso}
                 grados={grados}
                 gradoActivo={gradoActivo}
-                onSeleccionarGrado={setGradoActivo}
+                onSeleccionarGrado={manejarCambioGrado}
                 semestres={semestres}
                 semestreActivo={semestreActivo}
-                onSeleccionarSemestre={setSemestreActivo}
+                onSeleccionarSemestre={manejarCambioSemestre}
                 cargando={cargando}
             />
 
