@@ -40,37 +40,12 @@ export default function MenuLateral({ abierto }) {
               abierta={!!estados["reservas"]}
               alAlternar={() => toggle("reservas")}
             >
-              {/* <RequierePermiso permisos={["view_reserva", "view_reservapuntual"]} condicion="alguno">
-                <SeccionMenu
-                  titulo="Reservas puntuales"
-                  level={1}
-                  abierta={!!estados["puntuales"]}
-                  alAlternar={() => toggle("puntuales", "reservas")}
-                >
-                  
-                  <ItemMenu a="/reservas/gestion" level={2}>Gestionar Reservas</ItemMenu>
-                  <ItemMenu a="/reservas/solicitud" level={2}>Solicitar reserva</ItemMenu>
-                  
-                </SeccionMenu>
-              </RequierePermiso> */}
-
               <RequierePermiso permisos={["view_reserva", "view_reservapuntual"]} condicion="alguno">
                   
                 <ItemMenu a="/reservas/gestion" level={1}>Gestionar Reservas</ItemMenu>
                 <ItemMenu a="/reservas/solicitud" level={1}>Solicitar reserva</ItemMenu>
                   
               </RequierePermiso>
-              
-              {/* <RequierePermiso permisos={["add_reservaperiodica"]}>
-                <SeccionMenu 
-                titulo="Reservas periódicas" 
-                level={1}
-                abierta={!!estados["periodicas"]}
-                alAlternar={() => toggle("periodicas", "reservas")}
-                >
-                  <ItemMenu a="/reservas/periodicas/crear" level={2}>Crear Reserva Periódica</ItemMenu>
-                </SeccionMenu>
-              </RequierePermiso> */}
                 
             </SeccionMenu>
           </RequierePermiso>

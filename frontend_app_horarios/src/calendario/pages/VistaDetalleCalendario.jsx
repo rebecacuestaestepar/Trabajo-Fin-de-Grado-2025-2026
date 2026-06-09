@@ -197,13 +197,6 @@ export default function VistaDetalleCalendario() {
                     <div className="flex justify-between items-center mb-4">
                         <h1 className="text-2xl font-bold text-slate-800">Calendario Académico {id_curso}</h1>
                         <div className="flex gap-2">
-                            {/* <button 
-                                onClick={exportarPDF} 
-                                disabled={exportando}
-                                className="no-exportar text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-md shadow-sm transition-colors disabled:bg-blue-400"
-                            >
-                                {exportando ? 'Generando PDF...' : 'Exportar PDF'}
-                            </button> */}
                             <button onClick={() => navigate(-1)} className="no-exportar text-sm font-medium text-slate-600 hover:text-slate-900 border px-3 py-1.5 rounded-md hover:bg-slate-50">
                                 ← Volver a Cursos
                             </button>

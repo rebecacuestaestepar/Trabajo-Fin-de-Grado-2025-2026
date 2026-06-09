@@ -1,15 +1,16 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 //import './App.css'
 
 import PlantillaApp from './general/layout/PlantillaApp.jsx';
 
 import RutaProtegida from "./auth/RutaProtegida.jsx";
+import RequierePermiso from "./auth/RequierePermiso.jsx";
 
 //import SolicitudReserva from './reservas/SolicitudReserva.jsx'
 import SolicitudReservas from './reservas/formulario-paginas/SolicitudReservas.jsx';
 import FormularioCargar from './calendario/FormularioCargar.jsx';
 //import SolicitudesPendientes from './reservas/SolicitudesPendientes.jsx';
-import SolicitudesPendientes from './reservas/listado-paginas/SolicitudesPendientes.jsx';
+// import SolicitudesPendientes from './reservas/listado-paginas/SolicitudesPendientes.jsx';
 //import TodasReservas from './reservas/listado-paginas/TodasReservas.jsx';
 import EditarReservas from './reservas/formulario-paginas/EditarReservas.jsx';
 import CrearReserva from './reservas/formulario-paginas/CrearReserva.jsx';
@@ -77,36 +78,129 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route element={<RutaProtegida />}>
           <Route element={<PlantillaApp />}>
-            <Route path="/reservas/gestion" element={<GestionReservas />} />
+            <Route 
+              path="/reservas/gestion" 
+              element={
+                <RequierePermiso permisos={["view_reserva", "view_reservapuntual", "view_own_reserva", "view_own_reservapuntual"]} condicion="alguno">
+                  <GestionReservas />
+                </RequierePermiso>
+              } 
+            />
+          
             <Route path="/reservas/solicitud" element={<SolicitudReservas />} />
-            <Route path="/reservas/crear" element={<CrearReserva />} />
-            <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} />
-            <Route path="/reservas/puntuales/:id" element={<EditarReservas />} />
-            <Route path="/cargar-calendario" element={<FormularioCargar />} />
+
+            <Route 
+              path="/reservas/crear"
+              element={
+                <RequierePermiso permisos={["add_reserva", "add_reservapuntual"]} condicion="alguno">
+                  <CrearReserva />
+                </RequierePermiso>
+              } />
+            {/* <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} /> */}
+            <Route
+              path="/reservas/puntuales/:id" 
+              element={
+                <RequierePermiso permisos={["change_reserva", "change_reservapuntual", "request_reserv_puntual"]} condicion="alguno">
+                  <EditarReservas />
+                </RequierePermiso>
+              } 
+            />
+            {/* <Route 
+              path="/cargar-calendario" 
+              element={
+                <RequierePermiso permisos={["add_calendario"]} condicion="alguno">
+                  <FormularioCargar />
+                </RequierePermiso>
+              } /> */}
             <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
 
-            <Route path="/horarios" element={<Horarios />} />
-            <Route path="/horarios/cargar/cursos" element={<ListaCursos />} />
-            {/* <Route path="/horarios/:id_curso/grados" element={<ListaGrados />} /> */}
-            <Route path="/ocupacion-aulas" element={<OcupacionAulas />} />
-            <Route path="/aulas/ocupacion/ver" element={<OcupacionAulaCalendario />} />
+            <Route 
+              path="/horarios" 
+              element={
+                <RequierePermiso permisos={["view_reservaperiodica"]}>
+                  <Horarios />
+                </RequierePermiso>
+              } 
+            />
+            <Route 
+              path="/horarios/cargar/cursos" 
+              element={
+                <RequierePermiso permisos={["view_admin_panel"]} condicion="alguno">
+                  <ListaCursos />
+                </RequierePermiso>
+              } />
+            <Route 
+              path="/ocupacion-aulas" 
+              element={
+                <RequierePermiso permisos={["view_ocupacion_aula"]}>
+                  <OcupacionAulas />
+                </RequierePermiso>
+              } />
+            <Route 
+              path="/aulas/ocupacion/ver" 
+              element={
+                <RequierePermiso permisos={["view_ocupacion_aula"]}>
+                  <OcupacionAulaCalendario />
+                </RequierePermiso>
+              } />
 
-            <Route path="/calendario/crear" element={<CrearCalendario />} />
-            <Route path="/calendario/cursos" element={<ConsultaCalendarios />} />
-            <Route path="/calendario/cursos/:id_curso" element={<VistaDetalleCalendario />} />
+            <Route 
+              path="/calendario/crear" 
+              element={
+                <RequierePermiso permisos={["add_curso"]}>
+                  <CrearCalendario />
+                </RequierePermiso>
+              } />
+            <Route 
+              path="/calendario/cursos" 
+              element={
+                <RequierePermiso permisos={["view_curso"]}>
+                  <ConsultaCalendarios />
+                </RequierePermiso>
+              } />
+            <Route 
+              path="/calendario/cursos/:id_curso" 
+              element={
+                <RequierePermiso permisos={["view_curso"]}>
+                  <VistaDetalleCalendario />
+                </RequierePermiso>
+              } />
 
-            <Route path="/calendario/leyenda" element={<LeyendaCalendario />} />
+            <Route 
+              path="/horarios/:id_curso" 
+              element={
+                <RequierePermiso permisos={["view_reservaperiodica", "view_reserva"]} condicion="todos">
+                  <VistaHorarioSemanalGrado />
+                </RequierePermiso>
+              } />
 
+            <Route 
+              path="/reservas/periodicas/crear" 
+              element={
+                <RequierePermiso permisos={["add_reservaperiodica"]}>
+                  <CrearReservaPeriodica />
+                </RequierePermiso>
+              } />
+            <Route 
+              path="/reservas/periodicas/ver/:id" 
+              element={
+                <RequierePermiso permisos={["view_reservaperiodica"]}>
+                  <DetallesReservaPeriodica />
+                </RequierePermiso>
+              } />
+            <Route 
+              path="/reservas/periodicas/editar/:id" 
+              element={
+                <RequierePermiso permisos={["change_reservaperiodica"]}>
+                  <EditarReservaPeriodica />
+                </RequierePermiso>
+              } />
 
-            <Route path="/horarios/:id_curso" element={<VistaHorarioSemanalGrado />} />
-
-            <Route path="/reservas/periodicas/crear" element={<CrearReservaPeriodica />} />
-            <Route path="/reservas/periodicas/ver/:id" element={<DetallesReservaPeriodica />} />
-            <Route path="/reservas/periodicas/editar/:id" element={<EditarReservaPeriodica />} />
-
-            <Route path="/horarios/modal" element={<ModalRestricciones />} />
-
-            <Route path="/admin">
+            <Route path="/admin" element={
+              <RequierePermiso permisos={["view_admin_panel"]}>
+                <Outlet />
+              </RequierePermiso>
+            }>
               <Route path="aulas" element={<GestionAulas/>} />
               <Route path="aulas/crear" element={<CrearAula/>} />
               <Route path="aulas/editar/:id" element={<EditarAula/>} />
