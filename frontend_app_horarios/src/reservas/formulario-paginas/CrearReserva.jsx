@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
@@ -16,13 +17,14 @@ import SeccionPeriodicidad from "../formulario-componentes/secciones/SeccionPeri
 import { useReservaPuntual } from "../formulario-hooks/useReservaPuntual";
 
 export default function CrearReserva() {
-  const reserva = useReservaPuntual({ esCreacion: true });
+  const navigate = useNavigate();
+  const reserva = useReservaPuntual({ esCreacion: true, onFinish: () => navigate("/reservas/gestion") });
   
   useEffect(() => {
     if (reserva.formulario.estado === undefined) {
       reserva.aplicarCambios({ estado: "" });
     }
-  }, []);
+  }, [reserva]);
 
   return (
     <div>

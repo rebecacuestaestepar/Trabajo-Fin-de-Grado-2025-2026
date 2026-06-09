@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
@@ -15,12 +15,12 @@ import { useEditarReserva } from "../formulario-hooks/useEditarReserva";
 export default function EditarReservas() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
+  //const location = useLocation();
 
-  const from = location.state?.from || "/reservas/pendientes";
+  //const from = location.state?.from || "/reservas/pendientes";
 
   const editar = useEditarReserva(id, {
-    onFinish: () => navigate(from),
+    onFinish: () => navigate("reservas/gestion"),
   });
 
   if (editar.cargando) return <div className="p-6">Cargando reserva...</div>;
@@ -63,7 +63,6 @@ export default function EditarReservas() {
             modo="simple"
             aulasDisponibles={editar.aulasDisponibles}
             aulaSeleccionada={editar.formulario.nombre_aula}
-            //alSeleccionarAula={(nombre) => editar.aplicarCambios({ nombre_aula: nombre })}
             alSeleccionarAula={(aulaElegida) => 
               editar.aplicarCambios({ 
                 id_aula: editar.aulasDisponibles.find(a => a.nombre === aulaElegida)?.id || null,

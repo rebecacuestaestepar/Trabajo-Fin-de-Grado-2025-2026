@@ -179,7 +179,7 @@ export default function ListaCursos() {
                 )}
                 {generandoDatos && (
                     <div className="p-4 mb-4 text-black bg-grey-100 rounded">
-                        Generando datos para el curso...
+                        Generando datos para el curso.... Este proceso puede tardar un par de minutos, por favor, no cierres esta ventana ni navegues a otra página.
                     </div>
                 )}
                 {cursos.length > 0 ? (

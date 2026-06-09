@@ -77,7 +77,7 @@ function FormularioCrear({ datos }) {
         <div>
             <TarjetaPagina 
                 titulo="CREAR RESERVA PERIÓDICA"
-                izquierda={<BotonVolver fallback="/reservas" />}
+                izquierda={<BotonVolver/>}
                 derecha={<span />}
             >
                 <form onSubmit={reserva.enviarFormulario} className="space-y-6">

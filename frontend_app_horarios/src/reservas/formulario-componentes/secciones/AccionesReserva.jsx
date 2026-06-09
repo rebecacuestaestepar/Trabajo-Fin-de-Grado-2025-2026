@@ -1,3 +1,5 @@
+import RequierePermiso from "../../../auth/RequierePermiso";
+
 export default function AccionesReserva({ variante, ...props }) {
   if (variante === "solicitud") {
     const { alEnviar, deshabilitado } = props;
@@ -23,19 +25,20 @@ export default function AccionesReserva({ variante, ...props }) {
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-
-      {variante === "editar" && (
-        <button
-          type="button"
-          onClick={alEliminar}
-          className={[
-            "inline-flex items-center justify-center rounded-md border border-red-600 px-5 py-2.5 text-sm font-semibold text-red-600 transition",
-            "hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600/30",
-          ].join(" ")}
-        >
-          Eliminar reserva
-        </button>
-      )}
+      <RequierePermiso permisos={["reservas.delete_reservapuntual", "reservas.delete_reserva"]}>
+        {variante === "editar" && (
+          <button
+            type="button"
+            onClick={alEliminar}
+            className={[
+              "inline-flex items-center justify-center rounded-md border border-red-600 px-5 py-2.5 text-sm font-semibold text-red-600 transition",
+              "hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-600/30",
+            ].join(" ")}
+          >
+            Eliminar reserva
+          </button>
+        )}
+      </RequierePermiso>
 
       <button
         type="button"

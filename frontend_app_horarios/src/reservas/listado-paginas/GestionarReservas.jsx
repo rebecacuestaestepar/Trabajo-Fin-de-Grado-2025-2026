@@ -19,6 +19,7 @@ import {
   rechazarReservasMasivo,
   getReservasUsuario,
 } from "../../api/reservas";
+import RequierePermiso from "../../auth/RequierePermiso";
 
 export default function GestionReservas() {
   const navegar = useNavigate();
@@ -182,7 +183,6 @@ export default function GestionReservas() {
               Listado general de reservas. Usa los filtros para localizar solicitudes específicas.
             </p>
           </div>
-
           <BarraListado
             tituloAccionCrear="Crear Reserva"
             alCrear={alCrear}
@@ -200,6 +200,7 @@ export default function GestionReservas() {
             accionesMasivas={[
               {
                 label: "Aceptar",
+                permisos: ["reservas.change_reservapuntual", "reservas.change_reserva"],
                 onClick: alAceptarSeleccionadas,
                 disabled: listado.accionando || !todasSeleccionadasSonPendientes,
                 className: `rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm
@@ -211,6 +212,7 @@ export default function GestionReservas() {
               },
               {
                 label: "Rechazar",
+                permisos: ["reservas.change_reservapuntual", "reservas.change_reserva"],
                 onClick: alRechazarSeleccionadas,
                 disabled: listado.accionando || !todasSeleccionadasSonPendientes,
                 className: `rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm
@@ -222,6 +224,7 @@ export default function GestionReservas() {
               },
               {
                 label: "Eliminar",
+                permisos: ["reservas.delete_reservapuntual", "reservas.delete_reserva"],
                 onClick: alEliminarSeleccionadas,
                 disabled: listado.accionando,
                 className: `rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm

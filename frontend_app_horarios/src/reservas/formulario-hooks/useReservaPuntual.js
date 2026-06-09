@@ -246,6 +246,14 @@ export function useReservaPuntual(opciones = {}) {
       }
       setMensaje(data.message || "Reserva(s) creada(s) correctamente");
 
+      if (opciones.onFinish) {
+        // Esperamos 1 segundo para que el usuario lea el mensaje verde
+        setTimeout(() => {
+          opciones.onFinish();
+        }, 1000);
+        return; // Salimos de la función para no vaciar el formulario inútilmente
+      }
+
       setFormulario((prev) => ({
         ...prev,
         fecha: "",

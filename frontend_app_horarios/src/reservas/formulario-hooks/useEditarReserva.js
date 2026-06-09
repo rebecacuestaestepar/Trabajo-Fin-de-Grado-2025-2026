@@ -257,6 +257,14 @@ export function useEditarReserva(id, { onFinish } = {}) {
       const res = await patchReserva(formulario.idreserva, parcial);
       setMensaje(res?.message || "Cambios guardados correctamente");
 
+      if (onFinish) {
+        // Esperamos 1 segundo para que el usuario lea el mensaje verde
+        setTimeout(() => {
+          onFinish();
+        }, 1000);
+        return; // Salimos de la función para no vaciar el formulario inútilmente
+      }
+
       setFormularioInicial((prev) => ({ ...prev, ...formulario }));
     } catch (e) {
       console.error(e);

@@ -45,6 +45,7 @@ export function getReservaDetalle(id) {
 
 // Actualizar
 export function patchReserva(id, parcial) {
+  console.log("Parcial enviado:", parcial);
   return apiRequest(`/reservas/${id}/`, {
     method: "PATCH",
     body: parcial

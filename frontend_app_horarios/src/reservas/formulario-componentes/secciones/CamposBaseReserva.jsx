@@ -58,6 +58,7 @@ export default function CamposBaseReserva({
           onChange={(e) => alCambiar({ motivo: e.target.value })}
           rows={3}
           placeholder="Describe brevemente el motivo…"
+          required
           disabled={!!soloLectura.motivo}
         />
       </Campo>

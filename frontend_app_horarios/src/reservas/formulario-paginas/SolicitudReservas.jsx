@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import TarjetaPagina from "../formulario-componentes/ui/TarjetaPagina";
 import { ModalConfirmacion } from "../formulario-componentes/ui/ModalConfirmacion";
 import { CajaExito, CajaError } from "../formulario-componentes/ui/CajaExito";
@@ -14,7 +16,8 @@ import { useReservaPuntual } from "../formulario-hooks/useReservaPuntual";
 import BotonVolver from "../formulario-componentes/ui/BotonVolver";
 
 export default function SolicitudReservas() {
-  const reserva = useReservaPuntual();
+  const navigate = useNavigate();
+  const reserva = useReservaPuntual({onFinish: () => navigate("/reservas/gestion")});
 
   return (
     <div>

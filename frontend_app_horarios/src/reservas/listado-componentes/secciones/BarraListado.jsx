@@ -1,3 +1,5 @@
+import RequierePermiso from "../../../auth/RequierePermiso";
+
 export default function BarraListado({
   tituloAccionCrear,
   alCrear,
@@ -36,27 +38,28 @@ export default function BarraListado({
           >
             {soloPendientes ? "Visualizar Todas" : "Reservas Pendientes"}
           </button>
+          <RequierePermiso permisos={["reservas.change_reservapuntual", "reservas.change_reserva", "reservas.delete_reservapuntual", "reservas.delete_reserva"]}>
+            <label className="inline-flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={todoVisibleSeleccionado}
+                ref={(el) => {
+                  if (el) el.indeterminate = !todoVisibleSeleccionado && algunoVisibleSeleccionado;
+                }}
+                onChange={alAlternarSeleccionarTodoVisible}
+                className="h-4 w-4 rounded border-slate-300"
+              />
+              <span>Seleccionar todas (vista actual)</span>
+            </label>
 
-          <label className="inline-flex items-center gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              checked={todoVisibleSeleccionado}
-              ref={(el) => {
-                if (el) el.indeterminate = !todoVisibleSeleccionado && algunoVisibleSeleccionado;
-              }}
-              onChange={alAlternarSeleccionarTodoVisible}
-              className="h-4 w-4 rounded border-slate-300"
-            />
-            <span>Seleccionar todas (vista actual)</span>
-          </label>
-
-          <span className="text-sm text-slate-600">
-            Mostrando <span className="font-semibold">{totalFiltradas}</span> /{" "}
-            <span className="font-semibold">{total}</span>
-            {" · "}
-            Seleccionadas:{" "}
-            <span className="font-semibold">{cantidadSeleccionadas}</span>
-          </span>
+            <span className="text-sm text-slate-600">
+              Mostrando <span className="font-semibold">{totalFiltradas}</span> /{" "}
+              <span className="font-semibold">{total}</span>
+              {" · "}
+              Seleccionadas:{" "}
+              <span className="font-semibold">{cantidadSeleccionadas}</span>
+            </span>
+          </RequierePermiso>
 
           {cantidadSeleccionadas > 0 && (
             <button
@@ -85,17 +88,27 @@ export default function BarraListado({
               ${cantidadSeleccionadas > 0 ? "" : "invisible pointer-events-none"}`}
             aria-hidden={cantidadSeleccionadas === 0}
           >
-            {accionesMasivas.map((b) => (
-              <button
-                key={b.label}
-                type="button"
-                onClick={b.onClick}
-                disabled={b.disabled}
-                className={b.className}
-              >
-                {b.label}
-              </button>
-            ))}
+            {accionesMasivas.map((b) => {
+              const boton = (
+                <button
+                  type="button"
+                  onClick={b.onClick}
+                  disabled={b.disabled}
+                  className={b.className}
+                >
+                  {b.label}
+                </button>
+              );
+              return b.permisos ? (
+                <RequierePermiso key={b.label} permisos={b.permisos}>
+                  {boton}
+                </RequierePermiso>
+              ) : (
+                <React.Fragment key={b.label}>
+                  {boton}
+                </React.Fragment>
+              );
+    })}
           </div>
         </div>
       </div>
