@@ -100,7 +100,7 @@ class CrearReservaPuntualAPIView(APIView):
 class AulasDisponiblesAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
-        if not request.user.has_perms(["reservas.add_reserva", "reservas.add_reservapuntual", "reservas.change_reservapuntual"]):
+        if not (request.user.has_perms(["reservas.add_reserva", "reservas.add_reservapuntual", "reservas.change_reservapuntual"]) or request.user.has_perm("reservas.request_reserv_puntual")):
             raise PermissionDenied("No tienes permiso para consultar aulas disponibles.")
         data = request.data
 
