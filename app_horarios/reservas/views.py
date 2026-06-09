@@ -48,7 +48,7 @@ class ResponsableViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        responsable = ResponsableService.retrieve(pk)
+        _ = ResponsableService.retrieve(pk)
         ResponsableService.delete(pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -98,10 +98,10 @@ class CrearReservaPuntualAPIView(APIView):
 # 1) ENDPOINT: POST /api/aulas/disponibles/
 # -------------------------------------------------------
 class AulasDisponiblesAPIView(APIView):
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
-        #if not request.user.has_perms(["reservas.add_reserva", "reservas.add_reservapuntual", "reservas.change_reservapuntual"]):
-            #raise PermissionDenied("No tienes permiso para consultar aulas disponibles.")
+        if not request.user.has_perms(["reservas.add_reserva", "reservas.add_reservapuntual", "reservas.change_reservapuntual"]):
+            raise PermissionDenied("No tienes permiso para consultar aulas disponibles.")
         data = request.data
 
         generar_periodica = bool(data.get("generar_periodica", False))
@@ -251,7 +251,7 @@ class ReservasPendientesListAPIView(APIView):
     PENDIENTES_ESTADOS = ("P")
 
     def get(self, request):
-        if not request.user.has_perms(["reservas.view_reserva_puntual", "reservas.view_reserva"]):
+        if not request.user.has_perms(["reservas.view_reservapuntual", "reservas.view_reserva"]):
             raise PermissionDenied("No tienes permiso para consultar reservas puntuales.")
         estados = request.query_params.getlist("estado")
         estados = tuple(estados) if estados else self.PENDIENTES_ESTADOS
@@ -390,12 +390,23 @@ class ReservaAprobarAPIView(APIView):
             return Response({"detail": "La reserva no está en Pendiente."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        #if not (reserva.id_aula and reserva.id_aula.strip()):
         if not reserva.id_aula:
             return Response({"detail": "Debe existir un aula asignada antes de aprobar."},
                             status=status.HTTP_400_BAD_REQUEST)
+        
+        solapamientos = Reserva.objects.filter(
+            id_aula=reserva.id_aula,
+            estado="A",
+            id_dia = reserva.id_dia,
+            hora_inicio__lt=reserva.hora_fin,
+            hora_fin__gt=reserva.hora_inicio
+        ).exists()
 
-        reserva.estado = "A"  # Aceptada
+        if solapamientos:
+            return Response({"detail": "No se puede aprobar porque el aula asignada ha sido ocupada por otra reserva aprobada en ese horario."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        reserva.estado = "A"
         reserva.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -450,6 +461,33 @@ class ReservaAprobarMasivoAPIView(APIView):
                     {"detail": f"La reserva {r.pk} no tiene aula asignada."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            
+            solapamiento_db = Reserva.objects.filter(
+                id_aula=r.id_aula,
+                estado="A",
+                id_dia=r.id_dia,
+                hora_inicio__lt=r.hora_fin,
+                hora_fin__gt=r.hora_inicio
+            ).exists()
+
+            if solapamiento_db:
+                return Response(
+                    {"detail": f"No se puede aprobar. El aula de la reserva {r.reservapuntual.motivo} ya está ocupada en ese horario por otra reserva."},
+                    status=status.HTTP_409_CONFLICT,
+                )
+        # Validación de conflicos internos (Entre las seleccionadas)
+        for i in range(len(reservas)):
+            for j in range(i + 1, len(reservas)):
+                r1 = reservas[i]
+                r2 = reservas[j]
+                
+                # Si es la misma aula y el mismo día, comprobamos si se cruzan las horas
+                if r1.id_aula == r2.id_aula and r1.id_dia == r2.id_dia:
+                    if r1.hora_inicio < r2.hora_fin and r1.hora_fin > r2.hora_inicio:
+                        return Response(
+                            {"detail": f"Conflicto: Has seleccionado las reservas {r1.reservapuntual.motivo} y {r2.reservapuntual.motivo} que se solapan entre sí para la misma aula."},
+                            status=status.HTTP_409_CONFLICT,
+                        )
 
         reservas.update(estado="A")
         return Response(status=status.HTTP_204_NO_CONTENT)
