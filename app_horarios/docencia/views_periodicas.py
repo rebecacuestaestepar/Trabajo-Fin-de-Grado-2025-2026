@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+from docencia.models import Grado, Grupo
+from reservas.models import ReservaPeriodica
 
-from docencia.services_periodicas import crear_reserva_periodica, eliminar_reserva_periodica, obtener_asignaturas_por_grado_curso_semestre, obtener_aulas_libres, obtener_cursos_grado, obtener_datos_reserva_periodica, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre, reserva_desde_horario_grado, eliminar_reserva_periodica
+from docencia.services_periodicas import crear_reserva_periodica, eliminar_reserva_periodica, obtener_asignaturas_por_grado_curso_semestre, obtener_aulas_libres, obtener_cursos_grado, obtener_datos_reserva_periodica, obtener_grados, obtener_grupos_asignatura, obtener_semestres_por_grado_semestre, reserva_desde_horario_grado, eliminar_reserva_periodica, validar_edicion_serie, ejecutar_edicion_serie
 import traceback
 
 from rest_framework.permissions import IsAuthenticated
@@ -174,4 +177,33 @@ class EliminarReservaPeriodicaView(APIView):
         else:
             traceback.print_exc()
             return Response(resultado, status=400)
+
+
+class ValidarEdicionReservaPeriodicaView(APIView):
+    """
+    Vista llamada desde el formulario para verificar si saltan restricciones.
+    """
+    def post(self, request, id_reserva, *args, **kwargs):
+        try:
+            resultado = validar_edicion_serie(id_reserva, request.data)
+            return Response(resultado, status=status.HTTP_200_OK)
+        except ReservaPeriodica.DoesNotExist:
+            return Response({"error": "La reserva no existe."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class EditarReservaPeriodicaView(APIView):
+    """
+    Edita las reservas periódicas(se invoca tras pasar la validación).
+    """
+    def put(self, request, id_reserva, *args, **kwargs):
+        try:
+            resultado = ejecutar_edicion_serie(id_reserva, request.data)
+            if resultado["exito"]:
+                return Response(resultado, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": resultado["mensaje"]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

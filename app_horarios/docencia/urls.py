@@ -1,7 +1,7 @@
 from django.urls import include, path
 from .views_horario import CargarHorarioExcelView, MoverSerieReservasView, ObtenerAsignaturasPorGradoYSemestreView, ObtenerCursosView, ObtenerNumeroClasesView, ValidarRestriccionesView, SemestresPorGradoView, GradosPorCursoView, ListaHorariosView, ValidarHorarioCargadoView
 from .views import GradoViewSet, AsignaturaViewSet, GrupoViewSet, DocenteViewSet, ImparteViewSet, ListaMiniDocentesView, ListaMiniGruposView, ListaMiniGradosView, ListaMiniAsignaturasView
-from .views_periodicas import EliminarReservaPeriodicaView, ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView
+from .views_periodicas import EliminarReservaPeriodicaView, ObtenerGradosView, ObtenerCursosGradoView, ObtenerSemestresPorGradoView, ObtenerAsignaturasPorGradoCursoSemestreView, ObtenerGruposAsignaturaView, ObtenerAulasLibresView, CrearReservaPeriodicaView, ObtenerDatosReservaPeriodicaView, ReservaDesdeHorarioAsignaturasView, ValidarEdicionReservaPeriodicaView, EditarReservaPeriodicaView
 from rest_framework.routers import DefaultRouter
 
 routerGrado = DefaultRouter()
@@ -37,6 +37,8 @@ urlpatterns = [
     path('validar-restricciones/', ValidarRestriccionesView.as_view(), name='validar_restricciones'),
     path('mover-reserva-periodica/', MoverSerieReservasView.as_view(), name='validar_movimiento_reserva_periodica'),
     path('eliminar-reserva-periodica/', EliminarReservaPeriodicaView.as_view(), name='eliminar_reserva_periodica'),
+    path('validar-edicion-reserva-periodica/<int:id_reserva>/', ValidarEdicionReservaPeriodicaView.as_view(), name='validar_edicion_reserva_periodica'),
+    path('ejecutar-edicion-reserva-periodica/<int:id_reserva>/', EditarReservaPeriodicaView.as_view(), name='ejecutar_edicion_reserva_periodica'),
 
     path('', include(routerGrado.urls)),
     path('', include(routerAsignatura.urls)),

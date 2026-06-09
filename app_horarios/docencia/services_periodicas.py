@@ -5,6 +5,8 @@ from aulas.models import Aula
 from calendario.models import Semestre, Dia, Lectivo, CambioDocencia
 from datetime import timedelta
 from django.db import transaction
+from .restricciones import validar_ocupacion_aula, validar_solapamiento_grupos
+from .utils import calcular_nuevas_fechas
 
 def obtener_grados():
     grados = Grado.objects.all().values('idgrado', 'nombre').order_by('nombre')
@@ -190,4 +192,124 @@ def eliminar_reserva_periodica(id_curso, semestre_num, firma_serie):
 
         return {"exito": True, "estado": "exito", "mensaje": "La serie de reservas ha sido eliminada correctamente."}
 
+
+def validar_edicion_serie(id_reserva, datos_edicion):
+    """
+    Comprueba restricciones globales periódicas excluyendo a la propia serie.
+    Devuelve un diccionario para el frontend: {"valido": bool, "motivos": list}
+    """
+    nuevo_dia = int(datos_edicion.get('diaSemana'))
+    n_inicio = datos_edicion.get('horaInicio')
+    n_fin = datos_edicion.get('horaFin')
+    nombre_aula = datos_edicion.get('aulaSeleccionada')
+
+    # Extraemos la firma de la serie actual a partir del ID de una de sus reservas
+    reserva_base = ReservaPeriodica.objects.select_related(
+        'id_reserva', 'id_grupo', 'id_grupo__id_asignatura'
+    ).get(id_reserva=id_reserva)
+
+    grupo_id = reserva_base.id_grupo.grupoid
+    asignatura_id = reserva_base.id_grupo.id_asignatura.idasignatura
+    old_dia = reserva_base.dia_semana
+    old_hi = reserva_base.id_reserva.hora_inicio
+    old_hf = reserva_base.id_reserva.hora_fin
+    fecha_inicio_semestre = reserva_base.fecha_inicio
+    fecha_fin_semestre = reserva_base.fecha_fin
     
+    id_grado = reserva_base.id_grupo.id_asignatura.grado_id
+    semestre_num = reserva_base.id_grupo.id_asignatura.semestre_academico
+    nombre_grupo = reserva_base.id_grupo.nombre
+
+    # Buscamos todas las reservas de la serie actual para sacar sus IDs y excluirlas de la validación
+    reservas_actuales = ReservaPeriodica.objects.filter(
+        id_grupo__id_asignatura__idasignatura=asignatura_id,
+        id_grupo__grupoid=grupo_id,
+        dia_semana=old_dia,
+        id_reserva__hora_inicio=old_hi,
+        id_reserva__hora_fin=old_hf,
+        fecha_inicio__gte=fecha_inicio_semestre,
+        fecha_fin__lte=fecha_fin_semestre,
+    )
+    ids_excluir = list(reservas_actuales.values_list('id_reserva_id', flat=True))
+
+    aula_nueva = Aula.objects.filter(nombre=nombre_aula).first()
+    aula_id = aula_nueva.id if aula_nueva else None
+
+    motivos_bloqueo = []
+
+    # Validamos la ocupación del aula (si se ha cambiado) y el solapamiento de grupos (si se ha cambiado hora/día)S
+    if aula_id:
+        aula_ok, msg_aula = validar_ocupacion_aula(
+            aula_id, n_inicio, n_fin, ids_excluir, nuevo_dia, fecha_inicio_semestre, fecha_fin_semestre
+        )
+        if not aula_ok: motivos_bloqueo.append(msg_aula)
+    else:
+        motivos_bloqueo.append(f"El aula '{nombre_aula}' no existe.")
+
+    grupos_ok, msg_grupos = validar_solapamiento_grupos(
+        id_grado, semestre_num, nombre_grupo, n_inicio, n_fin, nuevo_dia, ids_excluir, fecha_inicio_semestre, fecha_fin_semestre
+    )
+    if not grupos_ok: motivos_bloqueo.append(msg_grupos)
+
+    return {"valido": len(motivos_bloqueo) == 0, "motivos": motivos_bloqueo}
+
+def ejecutar_edicion_serie(id_reserva, datos_edicion):
+    """
+    Actualiza la base de datos a lo bestia. 
+    Se asume que el frontend ya validó o el usuario forzó la acción.
+    """
+    nuevo_dia = int(datos_edicion.get('diaSemana'))
+    n_inicio = datos_edicion.get('horaInicio')
+    n_fin = datos_edicion.get('horaFin')
+    nombre_aula = datos_edicion.get('aulaSeleccionada')
+
+    with transaction.atomic():
+        try:
+            reserva_base = ReservaPeriodica.objects.select_related(
+                'id_reserva', 'id_grupo', 'id_grupo__id_asignatura'
+            ).get(id_reserva=id_reserva)
+            
+            grupo_id = reserva_base.id_grupo.grupoid
+            asignatura_id = reserva_base.id_grupo.id_asignatura.idasignatura
+            old_dia = reserva_base.dia_semana
+            old_hi = reserva_base.id_reserva.hora_inicio
+            old_hf = reserva_base.id_reserva.hora_fin
+            
+            aula_nueva = Aula.objects.filter(nombre=nombre_aula).first()
+
+            semestre_obj = Semestre.objects.filter(
+                fecha_inicio=reserva_base.fecha_inicio, 
+                fecha_fin=reserva_base.fecha_fin
+            ).first()
+
+            reservas_actuales = ReservaPeriodica.objects.filter(
+                id_grupo__id_asignatura__idasignatura=asignatura_id,
+                id_grupo__grupoid=grupo_id,
+                dia_semana=old_dia,
+                id_reserva__hora_inicio=old_hi,
+                id_reserva__hora_fin=old_hf,
+                fecha_inicio__gte=reserva_base.fecha_inicio,
+                fecha_fin__lte=reserva_base.fecha_fin,
+            )
+
+            ids_reservas_originales = list(reservas_actuales.values_list('id_reserva_id', flat=True))
+
+            # Calculamos las fechas físicas para cada registro Reserva (saltando festivos)
+            nuevas_fechas = calcular_nuevas_fechas(semestre_obj, nuevo_dia, old_dia, reservas_actuales)
+
+            # Actualizamos la tabla hija Periódica
+            reservas_actuales.update(dia_semana=nuevo_dia)
+
+            # Actualizamos la tabla Reserva
+            for id_r, nueva_fecha in zip(ids_reservas_originales, nuevas_fechas):
+                reserva = Reserva.objects.get(idreserva=id_r)
+                reserva.fecha = nueva_fecha
+                reserva.hora_inicio = n_inicio
+                reserva.hora_fin = n_fin
+                reserva.id_aula = aula_nueva
+                reserva.save()
+
+            return {"exito": True, "mensaje": "Reserva periódica actualizada correctamente."}
+
+        except Exception as e:
+            return {"exito": False, "mensaje": str(e)}

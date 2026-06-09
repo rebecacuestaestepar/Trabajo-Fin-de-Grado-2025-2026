@@ -43,18 +43,12 @@ def generar_calendario_academico(datos):
 
         dia_actual = fecha_inicio_curso
         delta = timedelta(days=1)
-        dias_a_crar = []
+        dias_a_crear = []
         lectivos_a_crear = []
         festivos_a_crear = []
 
         while dia_actual <= fecha_fin_curso:
-            #semestre_asignado = None
             dia_semana_num = dia_actual.isoweekday()
-
-            #if datos["fecha_inicio_1_semestre"] <= dia_actual <= datos["fecha_fin_1_semestre"]:
-                #semestre_asignado = sem_1_objeto
-            #elif datos["fecha_inicio_2_semestre"] <= dia_actual <= datos["fecha_fin_2_semestre"]:
-                #semestre_asignado = sem_2_objeto
 
             semestre_asignado = sem_1_objeto
 
@@ -67,7 +61,7 @@ def generar_calendario_academico(datos):
                 dia_semana=dia_semana_num
             )
 
-            dias_a_crar.append(nuevo_dia)
+            dias_a_crear.append(nuevo_dia)
             
             if dia_actual in festivos or dia_semana_num == 7:
                 festivos_a_crear.append(
@@ -86,7 +80,7 @@ def generar_calendario_academico(datos):
                     )
             dia_actual += delta
 
-        Dia.objects.bulk_create(dias_a_crar)
+        Dia.objects.bulk_create(dias_a_crear)
         Festivo.objects.bulk_create(festivos_a_crear)
         Lectivo.objects.bulk_create(lectivos_a_crear)
 
