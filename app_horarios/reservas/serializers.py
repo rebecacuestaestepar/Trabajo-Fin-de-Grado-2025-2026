@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from django.utils.timezone import make_aware
 
 from django.db import transaction
 from django.utils import timezone
@@ -182,8 +183,9 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
             reserva.refresh_from_db()
 
-            inicio = datetime.combine(fecha, hora_inicio)
-            fin = datetime.combine(fecha, hora_fin)
+            #inicio = datetime.combine(fecha, hora_inicio)
+            inicio = make_aware(datetime.combine(fecha, hora_inicio))
+            fin = make_aware(datetime.combine(fecha, hora_fin))
 
             reserva_puntual = ReservaPuntual.objects.create(
                 id_reserva=reserva,
