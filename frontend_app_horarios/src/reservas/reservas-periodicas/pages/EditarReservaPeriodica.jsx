@@ -222,7 +222,9 @@ function FormularioEditar({ id, datos }) {
                     />
 
                     <CajaExito>{estadoAccion.exito}</CajaExito>
-                    <CajaError errores={{ mensaje: estadoAccion.error }} />
+                    {estadoAccion.error !== null && (
+                        <CajaError errores={{ mensaje: estadoAccion.error }} />
+                    )}
                 </form>
             </TarjetaPagina>
         </div>
