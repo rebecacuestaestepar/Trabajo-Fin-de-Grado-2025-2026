@@ -54,6 +54,7 @@ export default function PanelFiltros({
                 type="date"
                 value={filtroDesde}
                 onChange={(e) => setFiltroDesde(e.target.value)}
+                max={filtroHasta || undefined}
                 className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
               />
             </div>
@@ -66,6 +67,7 @@ export default function PanelFiltros({
                 type="date"
                 value={filtroHasta}
                 onChange={(e) => setFiltroHasta(e.target.value)}
+                min={filtroDesde || undefined}
                 className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-200"
               />
             </div>

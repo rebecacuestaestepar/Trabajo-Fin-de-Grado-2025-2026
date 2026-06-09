@@ -30,6 +30,8 @@ export default function CamposBaseReserva({
 
   const estadoSelect = normalizarEstado(formulario.estado);
 
+  const hoy = new Date().toISOString().split("T")[0];
+
 
   return (
     
@@ -68,6 +70,7 @@ export default function CamposBaseReserva({
             onChange={(e) => alCambiar({ fecha: e.target.value })}
             required
             disabled={!!soloLectura.fecha}
+            min={hoy}
           />
         </Campo>
 
