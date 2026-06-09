@@ -1,10 +1,11 @@
-import { cargarHorarioExcel } from "../../api/docencia";
+import { cargarHorarioExcel, validarHorarioCargado } from "../../api/docencia";
 import ItemCurso from "../componentes/ItemCurso";
 import { useNavigate } from "react-router-dom";
 import { useCursos } from "../hooks/useCursos";
 import React, { useState } from "react";
 
 import RequierePermiso from "../../auth/RequierePermiso";
+import ModalConfirmacion from "../../shared/modales/ModalConfirmacion";
 
 export default function ListaCursos() {
   const navigate = useNavigate();
@@ -12,11 +13,49 @@ export default function ListaCursos() {
   const [generandoDatos, setGenerandoDatos] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState(null);
-  
+
+  const [modalCarga, setModalCarga] = useState({
+    abierto: false,
+    archivo: null,
+    idCurso: null,
+    numReservas: 0,
+    validando: false,
+  });
 
   const { cursos, cargando } = useCursos();
 
-  console.log("Cursos obtenidos:", cursos);
+  const manejarIntentoCarga = async (archivo, idCurso) => {
+    setError(null);
+    
+    // 1. Abrimos el modal instantáneamente en estado "Cargando/Validando"
+    setModalCarga({
+      abierto: true,
+      archivo: archivo,
+      idCurso: idCurso,
+      numReservas: 0,
+      validando: true,
+    });
+
+    try {
+      const data = await validarHorarioCargado(idCurso);
+
+      if (data.horario_cargado) {
+        // 3a. SÍ HAY HORARIO: Actualizamos el modal para mostrar la advertencia
+        setModalCarga((prev) => ({
+          ...prev,
+          numReservas: data.num_reservas,
+          validando: false,
+        }));
+      } else {
+        setModalCarga({ abierto: false, archivo: null, idCurso: null, numReservas: 0, validando: false });
+        await enviarBack(archivo, idCurso);
+      }
+    } catch (e) {
+      console.error("Error al validar el curso:", e);
+      setError("No se pudo verificar el estado actual del curso. Inténtalo de nuevo.");
+      setModalCarga({ abierto: false, archivo: null, idCurso: null, numReservas: 0, validando: false });
+    }
+  };
 
   const enviarBack = async (archivo, idCurso) => {
     const formData = new FormData();
@@ -38,6 +77,18 @@ export default function ListaCursos() {
         setGenerandoDatos(false);
     }
   };
+
+  const cancelarCarga = () => {
+    setModalCarga({ abierto: false, archivo: null, idCurso: null, numReservas: 0, validando: false });
+  };
+
+  const tituloModal = modalCarga.validando 
+    ? "Verificando el curso..." 
+    : "¡Atención! Curso con horario cargado";
+
+    const mensajeModal = modalCarga.validando
+    ? "Consultando la base de datos para verificar el estado de este curso..."
+    : `El curso ${modalCarga.idCurso} ya tiene un horario registrado. Si continúas, se borrarán las ${modalCarga.numReservas} reservas periódicas que existen actualmente para este curso. ¿Deseas continuar?`;
 
   if (cargando) {
         return (
@@ -91,7 +142,7 @@ export default function ListaCursos() {
                         <ItemCurso 
                             key={curso.idcurso} 
                             idCurso={curso.idcurso} 
-                            enviarBack={enviarBack}
+                            enviarBack={manejarIntentoCarga}
                             rutaDestino={`/calendario/cursos/${curso.idcurso}`}
                             titulo={`Curso ${curso.idcurso}`}
                         />
@@ -103,6 +154,14 @@ export default function ListaCursos() {
                 )}
             </div>
         </div>
+        <ModalConfirmacion
+        isOpen={modalCarga.abierto}
+        titulo={tituloModal}
+        mensaje={mensajeModal}
+        onConfirm={() => enviarBack(modalCarga.archivo, modalCarga.idCurso)}
+        onCancel={cancelarCarga}
+        disabled={modalCarga.validando} 
+      />
     </div>
   );
 }

@@ -7,6 +7,12 @@ export function cargarHorarioExcel(payload) {
     });
 }
 
+export function validarHorarioCargado(idCurso) {
+    return apiRequest(`/docencia/${idCurso}/validar-horario/`, {
+        method : "GET",
+    });
+}
+
 export function obtenerCursos() {
     return apiRequest("/docencia/cursos/", {
         method: "GET",
