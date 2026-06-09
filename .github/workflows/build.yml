@@ -42,6 +42,7 @@ jobs:
       - name: Ejecutar tests y cobertura
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          MYSQLDATABASE: test_horario_db
           MYSQLUSER: root
           MYSQLPASSWORD: root 
           MYSQLHOST: 127.0.0.1
