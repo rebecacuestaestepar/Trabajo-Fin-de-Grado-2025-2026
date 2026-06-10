@@ -17,19 +17,26 @@ const localesCalendario = [esLocale];
 
 const obtenerFechasEnRango = (startStr, endStr) => {
     let fechas = [];
-    let actual = new Date(startStr);
-    let fin = new Date(endStr);
+    const [startY, startM, startD] = startStr.split('-');
+    let actual = new Date(startY, startM - 1, startD);
+
+    const [endY, endM, endD] = endStr.split('-');
+    let fin = new Date(endY, endM - 1, endD);
     
     while (actual < fin) {
         const diaSemana = actual.getDay();
         
-        if (fechas.length > 0 && (diaSemana === 0 || diaSemana === 6) && actual.getTime() !== fin.getTime()) {
-            actual = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate() + 1);
+        if (fechas.length > 0 && (diaSemana === 0 || diaSemana === 6)) {
+            actual.setDate(actual.getDate() + 1);
             continue;
         }
-        fechas.push(actual.toISOString().split('T')[0]);
 
-        actual = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate() + 1);
+        const yyyy = actual.getFullYear();
+        const mm = String(actual.getMonth() + 1).padStart(2, '0');
+        const dd = String(actual.getDate()).padStart(2, '0');
+        fechas.push(`${yyyy}-${mm}-${dd}`);
+
+        actual.setDate(actual.getDate() + 1);
     }
     return fechas;
 };
