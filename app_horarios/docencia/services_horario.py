@@ -7,15 +7,18 @@ from django.db import transaction
 from .utils import calcular_nuevas_fechas
 
 def obtener_cursos_con_horario():
+    """Obtiene los cursos académicos que tienen el horario cargado, ordenados de forma descendente por su identificador."""
     return Curso.objects.filter(horario_cargado=True).order_by('-idcurso')
 
 def obtener_grados_con_horario(curso):
+    """Obtiene los grados académicos que tienen asignaturas con grupos que a su vez tienen reservas periódicas dentro del rango de fechas del curso académico dado."""
     return Grado.objects.filter(
         asignaturas__grupo__reservaperiodica__fecha_inicio__gte=curso.fecha_inicio,
         asignaturas__grupo__reservaperiodica__fecha_inicio__lte=curso.fecha_fin
     ).distinct().order_by('nombre')
 
 def obtener_semestres_por_grado(id_grado):
+    """Obtiene los semestres académicos disponibles para un grado específico, basándose en las asignaturas que pertenecen a ese grado."""
     semestres = (
         Asignaturas.objects.filter(grado_id=id_grado)
         .values_list('semestre_academico', flat=True)
@@ -27,6 +30,7 @@ def obtener_semestres_por_grado(id_grado):
 
 
 def obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, semestre_academico):
+    """Obtiene las reservas periódicas de docencia para un grado y semestre académico específicos, dentro del rango de fechas del curso académico dado. Devuelve una lista de diccionarios con información relevante de cada reserva."""
 
     semestre = 2
     if semestre_academico % 2 == 1:
@@ -87,6 +91,7 @@ def obtener_asignaturas_por_grado_y_semestre(id_curso, id_grado, semestre_academ
     return reservas_unicas
 
 def validar_restricciones_movimiento(id_curso, semestre_num, id_grado, datos_movimiento):
+    """Valida las restricciones para mover una serie de reservas periódicas de docencia, verificando la ocupación del aula y el solapamiento de grupos en el nuevo horario propuesto."""
     distint = datos_movimiento['firma_serie']
     nuevo_dia = datos_movimiento['nuevo_dia']
     n_inicio = datos_movimiento['nueva_hora_inicio']
@@ -131,6 +136,7 @@ def validar_restricciones_movimiento(id_curso, semestre_num, id_grado, datos_mov
 
 
 def mover_serie_reservas(id_curso, semestre_num, datos_movimiento):
+    """Realiza el movimiento de una serie de reservas periódicas de docencia a un nuevo horario, actualizando las fechas y horas de las reservas afectadas. Se asume que las restricciones ya han sido validadas antes de llamar a esta función."""
     distint = datos_movimiento['firma_serie']
     nuevo_dia = datos_movimiento['nuevo_dia']
     n_inicio = datos_movimiento['nueva_hora_inicio']

@@ -12,6 +12,7 @@ import traceback
 from rest_framework.permissions import IsAuthenticated
 
 class ValidarHorarioCargadoView(APIView):
+    """Valida si el curso ya tiene un horario cargado, y en caso afirmativo, devuelve el número de reservas periódicas de docencia que existen para ese curso académico. Como aviso para mostrar al usuario antes de cargar un nuevo horario, para evitar cargar un horario nuevo sin querer sobre uno ya existente."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_curso):
         if not request.user.has_perm("reservas.view_reservaperiodica"):
@@ -24,6 +25,7 @@ class ValidarHorarioCargadoView(APIView):
             return Response({'error': str(e)}, status=404)
         
 class ObtenerNumeroClasesView(APIView):
+    """Obtiene el número de clases que se extraerían de un fichero Excel de horario, sin necesidad de cargarlo realmente. Para mostrar una previsualización al usuario antes de cargar el horario, y así evitar cargar un horario nuevo con menos clases de las que espera."""
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm("reservas.view_reservaperiodica"):
@@ -42,6 +44,7 @@ class ObtenerNumeroClasesView(APIView):
             return Response({'error': str(e)}, status=500)
 
 class CargarHorarioExcelView(APIView):
+    """Carga un horario académico a partir de un fichero Excel, generando las reservas periódicas de docencia correspondientes. Valida que el usuario tenga permisos para cargar horarios, y que se haya proporcionado un fichero y un curso académico válidos."""
     permission_classes = [IsAuthenticated]
     parser_clases = (MultiPartParser, FormParser)
 
@@ -68,6 +71,7 @@ class CargarHorarioExcelView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ListaHorariosView(APIView):
+    """Obtiene la lista de reservas periódicas de docencia para un curso académico específico, con información relevante como la asignatura, el grupo y el aula. Valida que el usuario tenga permisos para consultar los horarios."""
     permission_classes = [IsAuthenticated]
     def get(self, request):
         if not request.user.has_perm("reservas.view_reservaperiodica"):
@@ -79,6 +83,7 @@ class ListaHorariosView(APIView):
         return Response(serializer.data, status=200)
     
 class GradosPorCursoView(APIView):
+    """Obtiene la lista de grados académicos que tienen asignaturas con grupos que a su vez tienen reservas periódicas de docencia dentro del rango de fechas de un curso académico específico. Valida que el usuario tenga permisos para consultar los horarios, y que el curso académico proporcionado exista."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_curso):
         if not request.user.has_perm("reservas.view_reservaperiodica"):
@@ -94,6 +99,7 @@ class GradosPorCursoView(APIView):
         return Response(serializer.data, status=200)
 
 class ObtenerCursosView(APIView):
+    """Obtiene la lista de cursos académicos que tienen el horario cargado, ordenados de forma descendente por su identificador. Valida que el usuario tenga permisos para consultar los horarios."""
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         if not (request.user.has_perm("reservas.add_reservaperiodica") or request.user.has_perm("calendario.view_curso")):
@@ -102,6 +108,8 @@ class ObtenerCursosView(APIView):
         return Response(cursos, status=200)
     
 class SemestresPorGradoView(APIView):
+    """Obtiene la lista de semestres que tienen asignaturas con grupos que a su vez tienen reservas periódicas de docencia dentro del rango de fechas de un curso académico específico. Valida que el usuario tenga permisos para consultar los semestres, y que el grado proporcionado exista."""
+    permission_classes = [IsAuthenticated]
     def get(self, request, id_grado, *args, **kwargs):
         if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
             return Response({'error': 'No tienes permiso para consultar los semestres.'}, status=403)
@@ -114,6 +122,7 @@ class SemestresPorGradoView(APIView):
 
 
 class ObtenerAsignaturasPorGradoYSemestreView(APIView):
+    """Obtiene la lista de asignaturas con grupos que a su vez tienen reservas periódicas de docencia dentro del rango de fechas de un curso académico específico, para un grado y semestre académico determinados. Valida que el usuario tenga permisos para consultar las asignaturas, y que el grado y semestre proporcionados existan."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_grado, id_semestre, *args, **kwargs):
         if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
@@ -131,6 +140,7 @@ class ObtenerAsignaturasPorGradoYSemestreView(APIView):
             return Response({'error': str(e)}, status=404)
 
 class ValidarRestriccionesView(APIView):
+    """Valida las restricciones al mover una serie de reservas periódicas de docencia a un nuevo día de la semana, para un grado y semestre académico específicos. Valida que el usuario tenga permisos para validar las restricciones, y que el curso, grado y semestre proporcionados existan."""
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm("reservas.change_reservaperiodica"):
@@ -145,6 +155,7 @@ class ValidarRestriccionesView(APIView):
         
 
 class MoverSerieReservasView(APIView):
+    """Mueve una serie de reservas periódicas de docencia a un nuevo día de la semana, para un grado y semestre académico específicos. Valida que el usuario tenga permisos para mover las reservas, y que el curso, grado y semestre proporcionados existan. Devuelve un mensaje de éxito si el movimiento se realiza correctamente, o un mensaje de error si ocurre algún problema durante el proceso."""
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm("reservas.change_reservaperiodica"):

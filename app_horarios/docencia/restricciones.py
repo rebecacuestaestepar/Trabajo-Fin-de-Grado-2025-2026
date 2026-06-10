@@ -1,6 +1,7 @@
 from reservas.models import Reserva, ReservaPeriodica
 
 def validar_ocupacion_aula(id_aula, n_inicio, n_fin, ids_reservas_excluir, dia_num, fecha_inicio_sem, fecha_fin_sem):
+    """Valida si un aula está ocupada para un día de la semana y un horario específico, excluyendo ciertas reservas. Prioridad a las reservas periódicas."""
     if id_aula == "Sin aula" or id_aula is None:
         return True, ""
 
@@ -20,7 +21,9 @@ def validar_ocupacion_aula(id_aula, n_inicio, n_fin, ids_reservas_excluir, dia_n
     return True, ""
 
 def validar_solapamiento_grupos(id_grado, semestre_num, nombre_grupo, n_inicio, n_fin, dia_num, ids_reservas_excluir, fecha_inicio_sem, fecha_fin_sem):
-    
+    """
+    Valida si un grupo tiene otra docencia en el mismo horario, para el mismo grado y seemestre académico, excluyendo las reservas propias del grupo que se está editando.
+    """
     reservas_conflictivas = Reserva.objects.filter(
         id_dia__dia_semana=dia_num,
         hora_inicio__lt=n_fin,

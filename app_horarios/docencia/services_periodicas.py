@@ -9,27 +9,33 @@ from .restricciones import validar_ocupacion_aula, validar_solapamiento_grupos
 from .utils import calcular_nuevas_fechas
 
 def obtener_grados():
+    """Obtiene todos los grados académicos disponibles, ordenados por nombre."""
     grados = Grado.objects.all().values('idgrado', 'nombre').order_by('nombre')
     return list(grados)
 
 def obtener_cursos_grado(id_grado):
+    """Obtiene los cursos académicos disponibles para un grado específico, basándose en las asignaturas que pertenecen a ese grado."""
     cursos = Asignaturas.objects.filter(grado_id=id_grado).values_list('curso_grado', flat=True).distinct().order_by('curso_grado')
     return [int(curso) for curso in cursos if curso is not None]
 
 def obtener_semestres_por_grado_semestre(id_grado, curso_grado):
+    """Obtiene los semestres académicos disponibles para un grado específico y curso académico, basándose en las asignaturas que pertenecen a ese grado y curso."""
     semestres = Asignaturas.objects.filter(grado_id=id_grado, curso_grado=curso_grado).values_list('semestre_academico', flat=True).distinct().order_by('semestre_academico')
     return [int(semestre) for semestre in semestres if semestre is not None]
 
 def obtener_asignaturas_por_grado_curso_semestre(id_curso, id_grado, semestre_academico):
+    """Obtiene las asignaturas disponibles para un grado específico, curso académico y semestre académico. Devuelve una lista de diccionarios con el identificador, nombre y abreviatura de cada asignatura."""
     asignaturas = Asignaturas.objects.filter(grado_id=int(id_grado), curso_grado=Decimal(id_curso), semestre_academico=Decimal(semestre_academico)).values('idasignatura', 'nombre', 'abreviatura')
     return list(asignaturas)
 
 def obtener_grupos_asignatura(id_asignatura):
+    """Obtiene los grupos disponibles para una asignatura específica. Devuelve una lista de diccionarios con el identificador y nombre de cada grupo."""
     grupos = Grupo.objects.filter(id_asignatura=id_asignatura).values('grupoid', 'nombre')
     return list(grupos)
 
 
 def obtener_aulas_libres(dia_semana, hora_inicio, hora_fin):
+    """Obtiene las aulas que están libres para un día de la semana y un horario específico. Devuelve una lista de diccionarios con el identificador, nombre, capacidad y número de ordenadores de cada aula libre."""
     reservas_solapadas = ReservaPeriodica.objects.filter(
         dia_semana=int(dia_semana),
         id_reserva__hora_inicio__lt=hora_fin,
@@ -53,6 +59,7 @@ def obtener_aulas_libres(dia_semana, hora_inicio, hora_fin):
 
 
 def crear_reserva_periodica(id_curso, semestre_num, datos_reserva):
+    """Crea una serie de reservas periódicas de docencia para un grupo específico, basándose en los datos proporcionados. Calcula las nuevas fechas de las reservas según el nuevo día de la semana y el rango de fechas del semestre académico, y luego crea las reservas correspondientes en la base de datos. Teniendo en cuenta los tipos de día del calendario académico."""
     num_dia = datos_reserva.get('dia_semana')
     grupo = datos_reserva.get('id_grupo')
     aula = datos_reserva.get('id_aula')
@@ -104,6 +111,9 @@ def crear_reserva_periodica(id_curso, semestre_num, datos_reserva):
 
 
 def obtener_datos_reserva_periodica(id_reserva):
+    """
+    Obtiene los detalles de una reserva periódica específica, incluyendo información sobre el aula, día, hora, grupo, asignatura, grado, semestre y curso académico asociados a esa reserva. Excluyendo la fecha de la reserva, ya que a nivel conceptual no se valora. Devuelve un diccionario con esta información, o None si no se encuentra la reserva periódica.
+    """
     try:
         reserva_periodica = ReservaPeriodica.objects.select_related('id_reserva', 'id_grupo').get(id_reserva=id_reserva)
         asignatura = Grupo.objects.select_related('id_asignatura').get(grupoid=reserva_periodica.id_grupo.grupoid).id_asignatura
@@ -139,6 +149,9 @@ def obtener_datos_reserva_periodica(id_reserva):
         return None
     
 def reserva_desde_horario_grado(id_grado, semestre_academico):
+    """
+    Carga el grado, curso académico, semestre académico y asignaturas para el grado y semestre académico desde el que se accede al forumulario de creación de reservas periódicas. Devuelve un diccionario con esta información, o None si no se encuentra el grado o las asignaturas correspondientes.
+    """
     grado = Grado.objects.filter(idgrado=id_grado).values('idgrado', 'nombre').first()
     curso = Asignaturas.objects.filter(grado_id=id_grado, semestre_academico=semestre_academico).values_list('curso_grado', flat=True).distinct().first()
     asignaturas = Asignaturas.objects.filter(grado_id=id_grado, semestre_academico=semestre_academico)
@@ -153,7 +166,7 @@ def reserva_desde_horario_grado(id_grado, semestre_academico):
 
 def eliminar_reserva_periodica(id_curso, semestre_num, firma_serie):
     """
-    Elimina una serie de reservas periódicas
+    Elimina una serie de reservas periódicas.
     """
 
     with transaction.atomic():

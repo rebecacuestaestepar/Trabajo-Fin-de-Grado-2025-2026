@@ -11,6 +11,7 @@ import traceback
 from rest_framework.permissions import IsAuthenticated
 
 class ObtenerGradosView(APIView):
+    """Obtiene la lista de grados académicos disponibles, ordenados por su nombre. Valida que el usuario tenga permisos para consultar los grados."""
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         if not (request.user.has_perm("reservas.view_reservaperiodica") or request.user.has_perm("reservas.change_reservaperiodica")):
@@ -23,6 +24,7 @@ class ObtenerGradosView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ObtenerCursosGradoView(APIView):
+    """Obtiene la lista de cursos académicos que tiene el grado seleccionado, ordenados de forma descendente por su identificador. Valida que el usuario tenga permisos para consultar los cursos, y que el grado proporcionado exista."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_grado, *args, **kwargs):
         if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
@@ -35,6 +37,7 @@ class ObtenerCursosGradoView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ObtenerSemestresPorGradoView(APIView):
+    """Obtiene la lista de semestres para el grado y curso seleccionados. Valida que el usuario tenga permisos para consultar los semestres, y que el grado y curso proporcionados existan."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_grado, curso_grado, *args, **kwargs):
         if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
@@ -47,6 +50,7 @@ class ObtenerSemestresPorGradoView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ObtenerAsignaturasPorGradoCursoSemestreView(APIView):
+    """Obtiene la lista de asignaturas para el grado, curso y semestre seleccionados. Valida que el usuario tenga permisos para consultar las asignaturas, y que el grado, curso y semestre proporcionados existan."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_grado, curso_grado, semestre, *args, **kwargs):
         if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
@@ -60,6 +64,7 @@ class ObtenerAsignaturasPorGradoCursoSemestreView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ObtenerGruposAsignaturaView(APIView):
+    """Obtiene la lista de grupos para la asignatura seleccionada. Valida que el usuario tenga permisos para consultar los grupos, y que la asignatura proporcionada exista."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_asignatura, *args, **kwargs):
         if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
@@ -72,6 +77,7 @@ class ObtenerGruposAsignaturaView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ObtenerAulasLibresView(APIView):
+    """Obtiene la lista de aulas libres para un día de la semana y un horario específico, excluyendo ciertas reservas. Valida que el usuario tenga permisos para consultar las aulas libres, y que se hayan proporcionado los parámetros necesarios (día de la semana, hora de inicio y hora de fin)."""
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         if not (request.user.has_perm("reservas.change_reservaperiodica") or request.user.has_perm("reservas.view_reservaperiodica")):
@@ -91,6 +97,7 @@ class ObtenerAulasLibresView(APIView):
             return Response({'error': str(e)}, status=500)
 
 class CrearReservaPeriodicaView(APIView):
+    """Crea una reserva periódica para un curso, grado, semestre, asignatura y grupo específicos, con un día de la semana, hora de inicio y hora de fin determinados, y un aula previamente seleccionada. Valida que el usuario tenga permisos para crear reservas periódicas, y que se hayan proporcionado los parámetros necesarios (curso académico, semestre académico y datos de la reserva). Devuelve un mensaje de éxito si la reserva se crea correctamente, o un mensaje de error si ocurre algún problema durante el proceso."""
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm("reservas.add_reservaperiodica"):
@@ -110,6 +117,7 @@ class CrearReservaPeriodicaView(APIView):
             return Response({'error': str(e)}, status=500)
         
 class ObtenerDatosReservaPeriodicaView(APIView):
+    """Obtiene los datos de una reserva periódica específica por su identificador. Valida que el usuario tenga permisos para consultar las reservas periódicas, y que la reserva proporcionada exista. Devuelve un diccionario con la información relevante de la reserva periódica, o un mensaje de error si ocurre algún problema durante el proceso."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_reserva, *args, **kwargs):
         if not request.user.has_perm("reservas.view_reservaperiodica"):
@@ -122,6 +130,7 @@ class ObtenerDatosReservaPeriodicaView(APIView):
             return Response({'error': str(e)}, status=500)
 
 class ReservaDesdeHorarioAsignaturasView(APIView):
+    """Obtiene las asignaturas para el grado, curso y semestre seleccionado para que se precarguen en el formulario de creación de reserva periódica al crear una reserva desde el horario. Valida que el usuario tenga permisos para consultar las asignaturas, y que el grado, curso y semestre proporcionados existan."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_grado, semestre, *args, **kwargs):
         if not request.user.has_perm("reservas.add_reservaperiodica"):

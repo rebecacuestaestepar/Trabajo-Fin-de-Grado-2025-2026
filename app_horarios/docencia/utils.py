@@ -2,6 +2,7 @@ from calendario.models import CambioDocencia, Dia, Lectivo, Semestre
 from datetime import timedelta
 
 def calcular_nuevas_fechas(semestre_obj, nuevo_dia, old_dia, reservas_actuales):
+    """Calcula las nuevas fechas para las reservas periódicas de docencia al moverlas a un nuevo día de la semana, teniendo en cuenta el calendario académico y los posibles cambios de docencia."""
     nuevas_fechas = []
     fecha_inicio_semestre = semestre_obj.fecha_inicio
     fecha_fin_semestre = semestre_obj.fecha_fin
