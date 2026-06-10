@@ -12,6 +12,9 @@ import traceback
 from rest_framework.permissions import IsAuthenticated
 
 class CargarCalendarioAPIView(APIView):
+    """
+    Vista para cargar el calendario académico de un curso. Recibe las fechas de inicio y fin del curso, así como las fechas de los semestres y los días festivos. Valida que el usuario tenga permisos para cargar el calendario académico antes de generar el calendario utilizando la función generar_calendario_academico.
+    """
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm("calendario.add_calendario"):
@@ -28,6 +31,8 @@ class CargarCalendarioAPIView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ObtenerCalendarioCursoAPIView(APIView):
+    """
+    Vista para obtener el calendario académico de un curso específico. Valida que el usuario tenga permisos para consultar el calendario del curso antes de obtener los días del curso utilizando la función obtener_dias_curso."""
     permission_classes = [IsAuthenticated]
     def get(self, request, id_curso, *args, **kwargs):
         if not request.user.has_perm("calendario.view_curso"):
@@ -49,6 +54,9 @@ class ObtenerCalendarioCursoAPIView(APIView):
         
 
 class ModificarDiaCalendarioAPIView(APIView):
+    """
+    Vista para modificar el tipo de un día específico en el calendario académico. Recibe las fechas y el nuevo tipo de día (lectivo, festivo, examen o cambio de docencia). Valida que el usuario tenga permisos para modificar el calendario antes de realizar la modificación utilizando la función modificar_tipo_dia.
+    """
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         if not request.user.has_perms(["calendario.change_curso", "calendario.change_dia", "calendario.change_cambiodocencia", "calendario.change_tfg", "calendario.change_lectivo", "calendario.change_festivo", "calendario.change_examen"]):

@@ -3,6 +3,7 @@ from rest_framework import serializers
 from calendario.models import Dia
 
 class CargarCalendarioSerializer(serializers.Serializer):
+    """Serializador para cargar el calendario académico de un curso, incluyendo sus semestres y días festivos."""
 
     curso = serializers.CharField(max_length=9)
     fecha_inicio_curso = serializers.DateField()

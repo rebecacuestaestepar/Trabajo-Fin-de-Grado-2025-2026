@@ -3,6 +3,9 @@ from calendario.models import CambioDocencia, Dia, Curso, Examen, Festivo, Lecti
 from datetime import timedelta
 
 def generar_calendario_academico(datos):
+    """
+    Genera el calendario académico de un curso a partir de las fechas de inicio y fin del curso, así como de los semestres y días festivos proporcionados. Crea registros en la tabla Dia para cada fecha del curso. Y valida si es lectivo o festivo, para añdir el registro en la tabla correspondiente.
+    """
 
     with transaction.atomic():
         curso = datos['curso']
@@ -85,6 +88,9 @@ def generar_calendario_academico(datos):
         Lectivo.objects.bulk_create(lectivos_a_crear)
 
 def obtener_dias_curso(curso):
+    """
+    Obtiene un diccionario con las fechas del curso y su tipo de día (lectivo, festivo, examen, cambio de docencia o TFG) a partir del curso proporcionado.
+    """
     semestres = Semestre.objects.filter(curso_id=curso)
 
     dias = Dia.objects.filter(id_semestre__in=semestres).select_related('cambiodocencia', 'examen', 'festivo', 'lectivo', 'tfg', 'id_semestre')
@@ -123,6 +129,9 @@ def obtener_dias_curso(curso):
     return diccionario_dias
 
 def modificar_tipo_dia(datos):
+    """
+    Modifica el tipo de día (lectivo, festivo, examen, cambio de docencia o TFG) de una lista de fechas proporcionada. Elimina cualquier registro existente para esas fechas en las tablas correspondientes antes de crear el nuevo registro con el tipo de día actualizado.
+    """
     fechas = datos['fechas']
     tipo = datos['tipo']
 
