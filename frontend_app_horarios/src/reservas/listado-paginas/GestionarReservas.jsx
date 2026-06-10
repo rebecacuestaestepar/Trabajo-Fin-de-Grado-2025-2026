@@ -42,7 +42,7 @@ export default function GestionReservas() {
     return null;
   }, [puedoCrear, esUsuarioValido, correoUsuario]);
 
-  // 2. Se lo pasamos limpio al hook
+  // Se lo pasamos limpio al hook
   const listado = useListadoReservas({
     cargador: cargadorConfigurado,
   });

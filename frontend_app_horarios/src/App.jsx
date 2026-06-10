@@ -1,17 +1,11 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-//import './App.css'
 
 import PlantillaApp from './general/layout/PlantillaApp.jsx';
 
 import RutaProtegida from "./auth/RutaProtegida.jsx";
 import RequierePermiso from "./auth/RequierePermiso.jsx";
 
-//import SolicitudReserva from './reservas/SolicitudReserva.jsx'
 import SolicitudReservas from './reservas/formulario-paginas/SolicitudReservas.jsx';
-import FormularioCargar from './calendario/FormularioCargar.jsx';
-//import SolicitudesPendientes from './reservas/SolicitudesPendientes.jsx';
-// import SolicitudesPendientes from './reservas/listado-paginas/SolicitudesPendientes.jsx';
-//import TodasReservas from './reservas/listado-paginas/TodasReservas.jsx';
 import EditarReservas from './reservas/formulario-paginas/EditarReservas.jsx';
 import CrearReserva from './reservas/formulario-paginas/CrearReserva.jsx';
 
@@ -25,12 +19,10 @@ import CrearCalendario from "./calendario/pages/CrearCalendario.jsx";
 
 import ConsultaCalendarios from "./horarios/pages/ConsultarCalendarios.jsx";
 import VistaDetalleCalendario from "./calendario/pages/VistaDetalleCalendario.jsx";
-import LeyendaCalendario from "./calendario/componentes/LeyendaCalendario.jsx";
 import VistaHorarioSemanalGrado from "./horarios/pages/HorarioSemanalPorGrado.jsx";
 import CrearReservaPeriodica from "./reservas/reservas-periodicas/pages/CrearReservaPeriodica.jsx";
 import DetallesReservaPeriodica from "./reservas/reservas-periodicas/pages/DetallesReservaPeriodica.jsx";
 import EditarReservaPeriodica from "./reservas/reservas-periodicas/pages/EditarReservaPeriodica.jsx";
-import ModalRestricciones from "./horarios/componentes/ModalRestricciones.jsx";
 
 import GestionAulas from "./administrador/gestores/GestionAulas.jsx";
 import CrearAula from "./administrador/campos-formulario/aulas/CrearAula.jsx";
@@ -244,33 +236,6 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  
-  
-
-
-    /*
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>*/
   )
 }
 

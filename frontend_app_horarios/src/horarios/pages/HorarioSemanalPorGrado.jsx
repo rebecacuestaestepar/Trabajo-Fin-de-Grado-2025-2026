@@ -15,13 +15,11 @@ export default function VistaHorarioSemanalGrado() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [grados, setGrados] = useState([]);
-    //const [gradoActivo, setGradoActivo] = useState("");
-
+    
     const gradoActivo = searchParams.get("grado") || "";
     const semestreActivo = searchParams.get("semestre") || "";
 
     const [semestres, setSemestres] = useState([]);
-    //const [semestreActivo, setSemestreActivo] = useState("");
     const [eventos, setEventos] = useState([]);
     const [cargando, setCargando] = useState(true);
 

@@ -263,7 +263,7 @@ export function useEditarReserva(id, { onFinish } = {}) {
         setTimeout(() => {
           onFinish();
         }, 1000);
-        return; // Salimos de la función para no vaciar el formulario inútilmente
+        return; // Salimos de la función para no vaciar el formulario para nada
       }
 
       setFormularioInicial((prev) => ({ ...prev, ...formulario }));

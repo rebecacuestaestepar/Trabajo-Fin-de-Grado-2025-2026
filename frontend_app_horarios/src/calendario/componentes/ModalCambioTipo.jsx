@@ -51,22 +51,6 @@ export default function ModalCambioTipo({ diasSeleccionados, datosActuales, alCe
 
                 <div className="p-4 overflow-y-auto">
                     <h4 className="text-sm font-semibold text-slate-500 mb-3 uppercase tracking-wider">Tipo de Día</h4>
-                    {/* <div className="grid grid-cols-1 gap-2 mb-6">
-                        {Object.values(TIPOS_DIA).map(t => (
-                            <button
-                                key={t.id}
-                                onClick={() => setTipo(t.id)}
-                                className={`flex items-center p-3 rounded-lg transition-all text-left border ${
-                                    tipo === t.id 
-                                        ? 'border-indigo-500 bg-indigo-50 ring-1 ring-indigo-500 shadow-sm' 
-                                        : 'border-slate-200 hover:bg-slate-50'
-                                }`}
-                            >
-                                <div className={`w-5 h-5 rounded mr-3 shadow-sm ${t.id === 'NO_LECTIVO' ? 'border border-slate-300' : ''}`} style={{ backgroundColor: t.color }}></div>
-                                <span className={`font-medium ${tipo === t.id ? 'text-indigo-900' : 'text-slate-700'}`}>{t.label}</span>
-                            </button>
-                        ))}
-                    </div> */}
                     <div className="grid grid-cols-1 gap-2 mb-6">
                         {Object.values(TIPOS_DIA).map(t => {
                             const estaProhibido = diasSeleccionados.length > 1 && t.id === 'CAMBIO_DOC';

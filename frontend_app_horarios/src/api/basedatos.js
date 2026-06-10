@@ -17,7 +17,6 @@ export const dbService = {
      * GET - Exporta datos (Toda la BD o entidades sueltas)
      */
     exportarDatos: async (entidad = 'all') => {
-        // Pasamos la propiedad responseType para indicarle al fetch modificado que devuelva un Blob
         const blob = await apiRequest(`/db/exportar/?entidad=${entidad}`, { 
             method: "GET",
             responseType: 'blob' 

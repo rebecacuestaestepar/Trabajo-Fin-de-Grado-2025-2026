@@ -7,8 +7,6 @@ export default function BotonVolver({
   children = "← Volver",
 }) {
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const from = location.state?.from || fallback;
 
   const manejarClic = () => {
         if (window.history.state && window.history.state.idx > 0) {
@@ -19,7 +17,6 @@ export default function BotonVolver({
     };
 
   return (
-    // <button type="button" onClick={() => navigate(from)} className={className}>
     <button 
             onClick={manejarClic}
             className={`flex items-center text-sm font-medium text-slate-600 hover:text-slate-900 border border-slate-200 bg-white px-3 py-1.5 rounded-md hover:bg-slate-50 transition-colors shadow-sm ${className}`}

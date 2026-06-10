@@ -56,7 +56,6 @@ export default function SeccionSelectorAula({
                   if (aulaObjeto) {
                     alSeleccionarAula(aulaObjeto.nombre);
                   }
-                  //alSeleccionarAula(e.target.value)
                 }}
               >
                 {aulasDisponibles.map((a) => (
