@@ -1,6 +1,6 @@
 \capitulo{3}{Conceptos teóricos}
 
-En esta sección de la memoria, se recogen los conceptos teóricos más relevantes para la comprensión del proyecto.
+En esta sección de la memoria, se recogen los conceptos teóricos más relevantes para la comprensión del proyecto desarrollado.
 
 \subsection{Aplicaciones web y arquitecturas cliente-servidor}
 
@@ -44,14 +44,14 @@ Django se apoya en el patrón arquitectónico MVT (\textit{Model-View-Template})
 
 El uso de este patrón arquitectónico ayuda a reducir el acoplamiento entre componentes, facilitando el mantenimiento del sistema y mejorando su escalabilidad. Asimismo, permite que las distintas partes de la aplicación puedan evolucionar de una forma más independiente, algo que es bastante relevante en proyectos en los que el \textit{backend} se desarrolla de manera desacoplada al \textit{frontend} \cite{modeloArquitectonicoDjango}.
 
-A continuación, se adjunta la figura~\ref{fig:patron-mvt}, en la que en un esquema muy simple explica de manera gráfica el funcionamiento de este patrón arquitectónico, obtenida de \cite{mvt:geek}.
-\imagen{img/django_mvt_image_geeks_for_geeks.jpg}{Imagen patrón arquitectónico MVT}{fig:patron-mvt}
+A continuación, se adjunta la figura~\ref{fig:patron-mvt}, en la que en un esquema muy simple explica de manera gráfica el funcionamiento de este patrón arquitectónico (obtenida de \cite{mvt:geek}).
+\imagen{img/django_mvt_image_geeks_for_geeks.jpg}{Imagen patrón arquitectónico MVT~\cite{mvt:geek}}{fig:patron-mvt}
 
 
 \subsection{ORM y persistencia de datos}
 La persistencia de datos es el mecanismo que permite que la información gestionada por una aplicación no se pierda al finalizar su ejecución, sino que quede almacenada de forma estable en una base de datos para poder ser consultada, modificada o reutilizada posteriormente. En aplicaciones web como la desarrollada en este proyecto, la persistencia resulta esencial, ya que permite conservar de manera estructurada la información relativa a usuarios, roles, reservas, aulas, docencia u horarios.
 
-Para facilitar la interacción entre la aplicación y la base de datos, Django incorpora un ORM (\textit{Object-Relational Mapping}). Un ORM es una técnica que permite representar las tablas de una base de datos relacional mediante clases del lenguaje de programación (Python), y sus registros mediante objetos. De este modo, el desarrollador puede trabajar con entidades del dominio del problema utilizando abstracciones propias del lenguaje, reduciendo la necesidad de escribir manualmente consultas SQL en las operaciones más habituales \cite{orm-jorge,orm-urian}.
+Para facilitar la interacción entre la aplicación y la base de datos, Django incorpora un ORM. Un ORM es una técnica que permite representar las tablas de una base de datos relacional mediante clases del lenguaje de programación (Python), y sus registros mediante objetos. De este modo, el desarrollador puede trabajar con entidades del dominio del problema utilizando abstracciones propias del lenguaje, reduciendo la necesidad de escribir manualmente consultas SQL en las operaciones más habituales \cite{orm-jorge,orm-urian}.
 
 En Django, un modelo es la fuente principal de información sobre los datos almacenados. Cada modelo se define como una clase de Python y, de forma general, se corresponde con un tabla de la base de datos. A su vez, cada atributo del modelo representa a un campo de esa tabla. Gracias a esto, el \textit{framework} genera de manera automática una API de acceso de datos que permite realizar consultas, inserciones, modificaciones y eliminaciones de una forma más mantenible y sencilla \cite{orm-jorge,orm-urian}. 
 
@@ -74,7 +74,6 @@ Por tanto, el control de accesos se basa en un modelo de roles y permisos. Un ro
 
 En una aplicación como la desarrollada en este proyecto ambos conceptos son muy importantes, por dar acceso solamente a las personas relacionadas a la institución para la gestión de una parte de ella (Escuela Politécnica Superior). Y también por restringir las acciones que puede realizar los diferentes tipos de usuarios para no permitir realizar gestiones a nivel académico al Personal Docente Investigador.
 
-\cite{authn-authz}
 
 \subsection{Arquitectura basada en componentes}
 
@@ -100,7 +99,7 @@ En este proyecto, el análisis léxico se utiliza para procesar la información 
 
 \subsection{Token, lexema y patrón}
 
-Dentro del análisis léxico, tres de los conceptos fundamentales son \textit{token}, \textit{lexema} y \textit{patrón}. Estos términos permite describir cómo una secuencia de caracteres puede descomponerse en unidades reconocibles por el sistema \cite{tok-lex-patr}.
+Dentro del análisis léxico, tres de los conceptos fundamentales son \textit{token}, \textit{lexema} y \textit{patrón}. Estos términos permite describir cómo una secuencia de caracteres puede descomponerse en unidades reconocibles por el sistema~\cite{tok-lex-patr}.
 
 \begin{itemize}
 	\item Un \textit{token} representa una categoría léxica, es decir, un tipo abstracto de elemento que el analizador es capaz de identificar. Por ejemplo, en un lenguaje formal pueden existir \textit{tokens} para identificadores, números, operadores o palabras reservadas. El \textit{token} no hace referencia a una cadena concreta, sino a la clase a la que pertenece un fragmento de la entrada.

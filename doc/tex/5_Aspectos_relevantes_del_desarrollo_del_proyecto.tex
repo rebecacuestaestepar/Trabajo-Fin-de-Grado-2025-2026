@@ -53,15 +53,15 @@ Entre los problemas de unificación encontrados están los siguientes:
 	\begin{itemize}
 		\item Solución aplicada: Se analizó y detectó qué datos habían sido introducidos de manera manual, se añadió su valor a la lista del validador, y se eligió mediante este.
 	\end{itemize}
-	\item Inconsistencia en la nomenclatura de los laboratorios. Para referirse a los laboratorios, se utilizaban diferentes abreviaturas (Lab., Lab, Lb., L.). La última de estas abreviaturas provocaba que alguna asignatura la identificase como aula por acabar con <<l>>. Por ejemplo, APL. BASES DE DATOS (Aplicación de base de datos).
+	\item Inconsistencia en la nomenclatura de los laboratorios. Para referirse a los laboratorios, se utilizaban diferentes abreviaturas (<<Lab.>>, <<Lab>>, <<Lb.>>, <<L.>>). La última de estas abreviaturas provocaba que alguna asignatura la identificase como aula por acabar con <<l>>. Por ejemplo, <<APL. BASES DE DATOS>> (Aplicación de base de datos).
 	\begin{itemize}
-		\item Solución aplicada: Se unificó la abreviatura a Lab. o Lab para todos los laboratorios. Y posteriormente, se tuvo que actualizar en cada celda en la que se encontraba uno de los laboratorios modificados. 
+		\item Solución aplicada: Se unificó la abreviatura a <<Lab.>> o <<Lab>> para todos los laboratorios. Y posteriormente, se tuvo que actualizar en cada celda en la que se encontraba uno de los laboratorios modificados. 
 	\end{itemize}
 	\item Inconsistencia en la separación de aulas combinadas. Las combinaciones de aulas eran separadas por diferentes caracteres especiales (<<,>>, <</>>, <<->>)
 	\begin{itemize}
 		\item Solución aplicada: Se unificó el separador de las aulas a <<\textit{/}>> en el validador, y se actualizó en cada celda que aparecía la combinación de todos los horarios para que se aplicaran los cambios.
 	\end{itemize}
-	\item Inconsistencia en las abreviaturas de las asignaturas. Se encontró que las abreviaturas de las asignaturas no eran homogéneas. La misma asignatura podía encontrarse en el mismo horario con tilde y sin ella, o directamente la abreviatura fuese totalmente diferente. Por ejemplo, se podía encontrar: AMP. CALC., AMP. CÁLCULO o AMP. CALCULO
+	\item Inconsistencia en las abreviaturas de las asignaturas. Se encontró que las abreviaturas de las asignaturas no eran homogéneas. La misma asignatura podía encontrarse en el mismo horario con tilde y sin ella, o directamente la abreviatura fuese totalmente diferente. Por ejemplo, se podía encontrar: <<AMP. CALC.>>, <<AMP. CÁLCULO>> o <<AMP. CALCULO>>
 	\begin{itemize}
 		\item Solución aplicada: Unificar la abreviatura de las asignaturas en la hoja de Asignaturas, e ir actualizando en el horario del grado y semestre correspondiente.
 	\end{itemize}
@@ -75,11 +75,11 @@ Entre los problemas de unificación encontrados están los siguientes:
 	\end{itemize}
 	\item Clases sin aula asignada. Algunas clases no tienen definida el aula por no conocerse si finalmente van a ser impartidas o no, corresponden a asignaturas optativas. Pero para poder realizar la reserva, es obligatorio introducir un aula.
 	\begin{itemize}
-		\item Solución aplicada: Se implementó en las distintas estructuras del analizador léxico que si no se encontraba un valor de tipo Aula en la celda correspondiente se le iba a asignar el valor Aula 0. Y en base de datos se añadió un Aula 0 que no existe, solamente es provisional para poder realizar la reserva.
+		\item Solución aplicada: Se implementó en las distintas estructuras del analizador léxico que si no se encontraba un valor de tipo Aula en la celda correspondiente se le iba a asignar el valor <<Aula 0>>. Y en base de datos se añadió un <<Aula 0>> que no existe, solamente es provisional para poder realizar la reserva.
 	\end{itemize}
 \end{enumerate}
 
-Se ha adjuntado la imagen~\ref{fig:problemas-unificaciones}, en la que se observanr varios de los problemas que acaban de ser expuestos.
+Se ha adjuntado la imagen~\ref{fig:problemas-unificaciones}, en la que se observan varios de los problemas que acaban de ser expuestos.
 
 \imagen{img/InconsistenciasExcel.png}{Imagen descriptiva de los problemas de uniformidad de la hoja de cálculo de horarios}{fig:problemas-unificaciones}
 
@@ -87,12 +87,12 @@ En color azul, se puede observar como en la clase teórica aparece la asignatura
 De color verde se ve un caso similar, entre dos clases teóricas una de ellas sin tilde y abreviada, y la otra por el contrario con el nombre completo y la tilde asignada, algo similar al caso de color rojo o marrón.
 De color amarillo, se observa como en uno de los casos el separador es un guión y en el otro una barra. Además, fijándose en pequeños detalles que pueden pasar desapercibidos a simple vista se puede llegar a apreciar como en la primera clase <<Inf 1B>> referido al aula se encuentra separado, y en la impartida el jueves se encuentra todo seguido <<Inf1B>>.
 
-En la imagen~\ref{fig:problemas-colores}, se aprecian cómo había diferentes tonos de azul asignados para las clases prácticas del mismo grupo, en este caso, el grupo 1.
+En la imagen~\ref{fig:problemas-colores}, se aprecian cómo había diferentes tonos de azul asignados para las clases prácticas del mismo grupo, en este caso, el grupo~1.
 
 \imagen{img/ColoresClasesExcel.png}{Imagen descriptiva de los diferentes tonos de color asignados a un mismo tipo de clase y grupo}{fig:problemas-colores}
 
 
-Y por último, se adjuntan las imágenes~\ref{fig:problemas-estructuras-1}, ~\ref{fig:problemas-estructuras-2} y ~\ref{fig:problemas-estructuras-3}, en las que se van a poder ver las diferentes estructuras que se han tenido que tener en cuenta para poder extraer de manera correcta la información de las clases.
+Y por último, se adjuntan las imágenes~\ref{fig:problemas-estructuras-1}, ~\ref{fig:problemas-estructuras-2} y~\ref{fig:problemas-estructuras-3}, en las que se van a poder ver las diferentes estructuras que se han tenido que tener en cuenta para poder extraer de manera correcta la información de las clases.
 
 \imagen{img/EstructurasClases.png}{Imagen con dos tipos de estructuras para los grupos teóricos y los prácticos}{fig:problemas-estructuras-1}
 
@@ -102,7 +102,12 @@ En esta primera imagen se observan dos tipos de clases prácticas, ambas con el 
 
 En esta segunda imagen se puede apreciar que cuando hay dos grupos teóricos, en vez de aparecer el aula debajo de la asignatura aparece a la derecha, además de que también se debe guardar el número del grupo que aparece al final del bloque.
 
-\imagen{img/EstructurasClases3.png}{Imagen donde se aprecia otra estructura para los grupos prácticos}{fig:problemas-estructuras-3}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.55\textwidth]{img/EstructurasClases3.png}
+	\caption{Imagen donde se aprecia otra estructura para los grupos prácticos}
+	\label{fig:problemas-estructuras-3}
+\end{figure}
 
 En la última imagen, se observa el último tipo de estructura para los grupos prácticos, similar a una de la de los grupos teóricos, con el nombre de la asignatura y el aula debajo, sin apreciar el número del grupo que por defecto se asignará el 101.
 
