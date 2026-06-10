@@ -4,12 +4,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 class ClienteMoodle:
+    """Cliente para interactuar con la API de Moodle. Proporciona métodos para obtener un token de autenticación y para recuperar información del usuario utilizando ese token."""
     def __init__(self, host):
         self.host = host.rstrip('/')
 
         self.servicio = "moodle_mobile_app"
     
     def obtener_token(self, usuario, contrasena):
+        """Obtiene un token de autenticación de Moodle utilizando las credenciales del usuario. Si la autenticación es exitosa, devuelve el token; de lo contrario, devuelve None."""
         url = f"{self.host}/login/token.php"
         datos = {
             'username': usuario,
@@ -32,6 +34,7 @@ class ClienteMoodle:
             return None
     
     def obtener_info_usuarios(self, token):
+        """Obtiene información del usuario de Moodle utilizando un token de autenticación."""
         url = f"{self.host}/webservice/rest/server.php"
         parametros = {
             'wstoken': token,

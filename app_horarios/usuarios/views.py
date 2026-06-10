@@ -17,16 +17,19 @@ class UsuarioViewSet(viewsets.ViewSet):
     queryset = Usuario.objects.none()
 
     def list(self, request):
+        """Devuelve una lista de todos los usuarios disponibles en la aplicación, ordenados por su ID."""
         usuarios = UsuarioService.list()
         serializer = UsuarioSerializer(usuarios, many=True)
         return Response(serializer.data, status=200)
 
     def retrieve(self, request, pk=None):
+        """Devuelve un usuario específico basado en su ID. Si el usuario no existe, devuelve un error 404."""
         usuario = UsuarioService.retrieve(pk)
         serializer = UsuarioSerializer(usuario)
         return Response(serializer.data, status=200)
     
     def create(self, request):
+        """Crea un nuevo usuario utilizando los datos proporcionados. Los grupos asociados al usuario se establecen después de crear el usuario. No se establece una contraseña para el usuario, ya que se asume que la autenticación se realizará a través de Moodle."""
         serializer = UsuarioSerializer(data=request.data)
         if serializer.is_valid():
             nuevo_usuario = UsuarioService.create(serializer.validated_data)
@@ -35,6 +38,7 @@ class UsuarioViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=400)
 
     def update(self, request, pk=None):
+        """Actualiza un usuario específico basado en su ID. Si el usuario no existe, devuelve un error 404."""
         usuario = UsuarioService.retrieve(pk)
         serializer = UsuarioSerializer(usuario, data=request.data)
         if serializer.is_valid():
@@ -44,10 +48,12 @@ class UsuarioViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=400)
 
     def destroy(self, request, pk=None):
+        """Elimina un usuario específico basado en su ID. Si el usuario no existe, devuelve un error 404."""
         UsuarioService.delete(pk)
         return Response(status=204)
     
 class RolViewSet(viewsets.ViewSet):
+    """ViewSet para gestionar los roles (grupos) de la aplicación, incluyendo la creación, actualización, eliminación y listado de roles. Requiere autenticación y permisos específicos para acceder a las diferentes acciones."""
     permission_classes = [IsAuthenticated, DjangoModelPermissions]
     queryset = Group.objects.none()
     def list(self, request):
@@ -56,11 +62,13 @@ class RolViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=200)
 
     def retrieve(self, request, pk=None):
+        """Devuelve un rol específico basado en su ID. Si el rol no existe, devuelve un error 404."""
         rol = RolService.retrieve(pk)
         serializer = RolSerializer(rol)
         return Response(serializer.data, status=200)
     
     def create(self, request):
+        """Crea un nuevo rol (grupo) utilizando los datos proporcionados. Los permisos asociados al rol se establecen después de crear el grupo."""
         serializer = RolSerializer(data=request.data)
         if serializer.is_valid():
             nuevo_rol = RolService.create(serializer.validated_data)
@@ -69,6 +77,7 @@ class RolViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=400)
 
     def update(self, request, pk=None):
+        """Actualiza un rol específico basado en su ID. Si el rol no existe, devuelve un error 404."""
         rol = RolService.retrieve(pk)
         serializer = RolSerializer(rol, data=request.data)
         if serializer.is_valid():
@@ -78,21 +87,27 @@ class RolViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=400)
 
     def destroy(self, request, pk=None):
+        """Elimina un rol específico basado en su ID. Si el rol no existe, devuelve un error 404."""
         RolService.delete(pk)
         return Response(status=204)
     
 class ListaMiniRolesAPIView(APIView):
+    """APIView para obtener una lista de todos los roles (grupos) disponibles en la aplicación, ordenados por su nombre."""
     def get(self, request, *args, **kwargs):
         roles = lista_mini_roles()
         return Response(roles, status=200)
     
 class ListaMiniPermisosAPIView(APIView):
+    """APIView para obtener una lista de todos los permisos disponibles en la aplicación, ordenados por su etiqueta de aplicación y nombre."""
     def get(self, request, *args, **kwargs):
         permisos = lista_mini_permisos()
         return Response(permisos, status=200)
 
 
 class LoginUniversidadAPIView(APIView):
+    """
+    APIView para manejar el proceso de inicio de sesión de los usuarios utilizando las credenciales de Moodle. Si la autenticación es exitosa, devuelve un token JWT junto con la información del usuario, incluyendo sus roles y permisos.
+    """
     permission_classes = [AllowAny]
     def post(self, request):
         usuario = request.data.get('username')
@@ -121,5 +136,3 @@ class LoginUniversidadAPIView(APIView):
             }, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
-
-# Create your views here.

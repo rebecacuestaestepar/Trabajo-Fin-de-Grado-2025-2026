@@ -7,6 +7,8 @@ from django.conf import settings
 User = get_user_model()
 
 class BackendUniversidadMoodle(BaseBackend):
+    """Backend de autenticación que se conecta a Moodle para validar las credenciales del usuario.
+    Si la autenticación es exitosa, busca o crea un usuario en la base de datos local y lo asigna al grupo 'PDI' si no lo encuentra."""
     def authenticate(self, request, username=None, password=None):
         host = getattr(settings, 'MOODLE_HOST', 'https://ubuvirtual.ubu.es')
         moodle = ClienteMoodle(host)

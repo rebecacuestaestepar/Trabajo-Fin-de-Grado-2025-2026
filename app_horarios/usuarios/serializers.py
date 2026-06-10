@@ -5,11 +5,13 @@ from django.contrib.auth import get_user_model
 Usuario = get_user_model()
 
 class RolSerializer(serializers.ModelSerializer):
+    """Serializer para el modelo Group, utilizado para representar los roles de los usuarios en la aplicación."""
     class Meta:
         model = Group
         fields = ['id', 'name', 'permissions']
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    """Serializer para el modelo Usuario, utilizado para representar a los usuarios de la aplicación, incluyendo sus roles y permisos."""
     roles_nombres = serializers.SerializerMethodField()
     
     class Meta:
