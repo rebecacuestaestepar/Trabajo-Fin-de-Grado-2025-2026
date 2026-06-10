@@ -21,16 +21,19 @@ class ResponsableViewSet(viewsets.ViewSet):
     queryset = Responsable.objects.none()
 
     def list(self, request):
+        """Listamos todos los responsables de reservas puntuales."""
         responsables = ResponsableService.list()
         serializer = ResponsableSerializer(responsables, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        """Obtenemos un responsable por su correo electrónico (pk)."""
         responsable = ResponsableService.retrieve(pk)
         serializer = ResponsableSerializer(responsable)
         return Response(serializer.data)
 
     def create(self, request):
+        """Creamos un nuevo responsable a partir de los datos proporcionados en la solicitud."""
         serializer = ResponsableSerializer(data=request.data)
         if serializer.is_valid():
             nuevo_responsable = serializer.save()
@@ -39,6 +42,7 @@ class ResponsableViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
+        """Actualizamos un responsable existente."""
         responsable = ResponsableService.retrieve(pk)
         serializer = ResponsableSerializer(instance=responsable, data=request.data)
         if serializer.is_valid():
@@ -48,17 +52,14 @@ class ResponsableViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
+        """Eliminamos un responsable existente."""
         _ = ResponsableService.retrieve(pk)
         ResponsableService.delete(pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-"""
-============================================
-== PÁGINA DE SOLICITUD DE RESERVA PUNTUAL ==
-=============================================
-"""
 class SolicitarReservaPuntualAPIView(APIView):
+    """Vista para que los usuarios puedan solicitar una reserva puntual. La reserva se crea con estado "P" (Pendiente)."""
     permission_classes = [IsAuthenticated]
     def post(self, request):
 
@@ -73,8 +74,10 @@ class SolicitarReservaPuntualAPIView(APIView):
             )
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
 class CrearReservaPuntualAPIView(APIView):
+    """Vista para que los usuarios con permisos puedan crear una reserva puntual directamente eligiendo el estado que tenga."""
     permission_classes = [IsAuthenticated]
     def post(self, request):
         if not request.user.has_perms(["reservas.add_reservapuntual", "reservas.add_reserva"]):
@@ -95,10 +98,8 @@ class CrearReservaPuntualAPIView(APIView):
 ============================================
 """
 
-# -------------------------------------------------------
-# 1) ENDPOINT: POST /api/aulas/disponibles/
-# -------------------------------------------------------
 class AulasDisponiblesAPIView(APIView):
+    """Vista para consultar aulas disponibles para una reserva puntual, tanto en modo común (aulas disponibles en todas las fechas) como en modo por fecha (aulas disponibles por cada fecha)."""
     permission_classes = [IsAuthenticated]
     def post(self, request):
         if not (request.user.has_perms(["reservas.add_reserva", "reservas.add_reservapuntual", "reservas.change_reservapuntual"]) or request.user.has_perm("reservas.request_reserv_puntual")):
@@ -116,7 +117,7 @@ class AulasDisponiblesAPIView(APIView):
         camara = bool(data.get("camara", False))
         enchufes = bool(data.get("enchufes", False))
 
-        # ---------- NO periódica ----------
+        # NO periódica
         if not generar_periodica:
             fecha_raw = data.get("fecha")
             if not fecha_raw:
@@ -147,7 +148,7 @@ class AulasDisponiblesAPIView(APIView):
 
             return Response({"aulas": aulas}, status=200)
 
-        # ---------- PERIÓDICA ----------
+        # PERIÓDICA 
         fi_raw = data.get("fecha_inicio_periodo")
         ff_raw = data.get("fecha_fin_periodo")
         dia_semana_raw = data.get("dia_semana_periodica")
@@ -181,7 +182,7 @@ class AulasDisponiblesAPIView(APIView):
                         {"fecha": f"La fecha {current.isoformat()} no existe en el calendario académico."},
                         status=400
                     )
-                fechas_periodo.append(current)  # date objects
+                fechas_periodo.append(current)
             current += timedelta(days=1)
 
         if not fechas_periodo:
@@ -192,7 +193,7 @@ class AulasDisponiblesAPIView(APIView):
 
         # 1) Aulas comunes
         qs_comun = aula_disponible_en_varias_fechas(
-            fechas=fechas_periodo,  # date objects
+            fechas=fechas_periodo,
             hora_inicio=hora_inicio,
             hora_fin=hora_fin,
             capacidad=capacidad,
@@ -243,11 +244,9 @@ class AulasDisponiblesAPIView(APIView):
         }, status=200)
 
 
-# -------------------------------------------------------
-# 2) LISTADO: GET /api/reservas/pendientes/
-# Estado: Pendiente o Solicitado => por defecto "P" y "S"
-# -------------------------------------------------------
+
 class ReservasPendientesListAPIView(APIView):
+    """Vista para listar las reservas puntuales pendientes, con filtros por motivo, responsable y fechas."""
     permission_classes = [IsAuthenticated]
     PENDIENTES_ESTADOS = ("P")
 
@@ -257,11 +256,10 @@ class ReservasPendientesListAPIView(APIView):
         estados = request.query_params.getlist("estado")
         estados = tuple(estados) if estados else self.PENDIENTES_ESTADOS
 
-        # Parámetros para el filtrado
         motivo = request.query_params.get("motivo")
         responsable = request.query_params.get("responsable")
-        desde = request.query_params.get("desde")  # YYYY-MM-DD
-        hasta = request.query_params.get("hasta")  # YYYY-MM-DD
+        desde = request.query_params.get("desde")
+        hasta = request.query_params.get("hasta")
 
         hoy = date.today()
 
@@ -276,11 +274,11 @@ class ReservasPendientesListAPIView(APIView):
         if motivo:
             puntuales = puntuales.filter(motivo__icontains=motivo)
 
-        # Filtro responsable (correo o parte)
+        # Filtro responsable
         if responsable:
             puntuales = puntuales.filter(id_responsable__correo__icontains=responsable)
 
-        # Filtro fechas (sobre Dia.dia)
+        # Filtro fechas
         if desde:
             puntuales = puntuales.filter(id_reserva__id_dia__dia__gte=max(date.fromisoformat(desde), hoy))
         if hasta:
@@ -291,13 +289,13 @@ class ReservasPendientesListAPIView(APIView):
         ser = ReservaPendienteListItemSerializer(puntuales, many=True)
         return Response(ser.data)
 
-# -------------------------------------------------------
-# 3) DETALLE + PATCH: /api/reservas/<id>/
-# -------------------------------------------------------
+
 class ReservaPendienteDetailAPIView(APIView):
+    """Vista para consultar, modificar o eliminar una reserva puntual pendiente."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
+        """Obtenemos el detalle de una reserva puntual pendiente por su id."""
         if not (request.user.has_perms(["reservas.view_reservapuntual", "reservas.view_reserva"]) or request.user.has_perm("reservas.view_own_reserva_puntual")):
             raise PermissionDenied("No tienes permiso para consultar reservas puntuales.")
         reserva = Reserva.objects.filter(pk=id).first()
@@ -307,6 +305,7 @@ class ReservaPendienteDetailAPIView(APIView):
 
     @transaction.atomic
     def patch(self, request, id):
+        """Modificamos una reserva puntual pendiente por su id. Se pueden modificar tanto los campos de la reserva como los campos específicos de la reserva puntual."""
         if not (request.user.has_perms(["reservas.change_reservapuntual", "reservas.change_reserva"]) or request.user.has_perm("reservas.request_reserv_puntual")):
             raise PermissionDenied("No tienes permiso para modificar reservas puntuales.")
         reserva = Reserva.objects.select_for_update().filter(pk=id).first()
@@ -345,16 +344,16 @@ class ReservaPendienteDetailAPIView(APIView):
         return Response({"message": "Reserva actualizada correctamente"}, status=status.HTTP_200_OK)
     
     def delete(self, request, id):
+        """Eliminamos una reserva puntual pendiente por su id."""
         if not request.user.has_perms(["reservas.delete_reservapuntual", "reservas.delete_reserva"]):
             raise PermissionDenied("No tienes permiso para eliminar reservas puntuales.")
         reserva = get_object_or_404(Reserva, idreserva=id) 
         reserva.delete()
         return Response({"message": "Reserva eliminada"}, status=status.HTTP_200_OK)
 
-# -------------------------------------------------------
-# 4) AULAS CANDIDATAS: POST /api/reservas/<id>/aulas-candidatas/
-# -------------------------------------------------------
+
 class ReservaAulasCandidatasAPIView(APIView):
+    """Vista para consultar aulas candidatas para una reserva puntual pendiente, es decir, aulas que cumplen los requisitos de la reserva puntual y que están disponibles en el horario solicitado."""
     permission_classes = [IsAuthenticated]
     def post(self, request, id):
         if not request.user.has_perms(["reservas.change_reservapuntual", "reservas.change_reserva"]):
@@ -376,10 +375,8 @@ class ReservaAulasCandidatasAPIView(APIView):
         return Response({"aulas": candidatas})
 
 
-# -------------------------------------------------------
-# 5) APROBAR / RECHAZAR (y de forma masiva)
-# -------------------------------------------------------
 class ReservaAprobarAPIView(APIView):
+    """Vista para aprobar una reserva puntual pendiente. Se cambia el estado de la reserva a "A" (Aprobada) siempre que no haya solapamientos con otras reservas aprobadas para el mismo aula en el mismo horario."""
     permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request, id):
@@ -414,6 +411,7 @@ class ReservaAprobarAPIView(APIView):
 
 
 class ReservaRechazarAPIView(APIView):
+    """Vista para rechazar una reserva puntual pendiente. Se cambia el estado de la reserva a "R" (Rechazada). No se permiten rechazar reservas que no estén en estado "P" (Pendiente)."""
     permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request, id):
@@ -432,6 +430,7 @@ class ReservaRechazarAPIView(APIView):
     
 
 class ReservaAprobarMasivoAPIView(APIView):
+    """Vista para aprobar varias reservas puntuales pendientes a la vez. Se cambia el estado de las reservas a "A" (Aprobada) siempre que no haya solapamientos con otras reservas aprobadas para el mismo aula en el mismo horario, ni solapamientos internos entre las reservas seleccionadas."""
     permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request):
@@ -495,6 +494,7 @@ class ReservaAprobarMasivoAPIView(APIView):
 
 
 class ReservaRechazarMasivoAPIView(APIView):
+    """Vista para rechazar varias reservas puntuales pendientes a la vez. Se cambia el estado de las reservas a "R" (Rechazada). No se permiten rechazar reservas que no estén en estado "P" (Pendiente)."""
     permission_classes = [IsAuthenticated]
     @transaction.atomic
     def post(self, request):
@@ -521,9 +521,9 @@ class ReservaRechazarMasivoAPIView(APIView):
 
         reservas.update(estado="R")
         return Response(status=status.HTTP_204_NO_CONTENT)
-# Create your views here.
 
 class ReservasTodasAPIView(APIView):
+    """Vista para listar todas las reservas puntuales, sin importar su estado, con filtros por motivo, responsable y fechas."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -539,6 +539,7 @@ class ReservasTodasAPIView(APIView):
         return Response(ReservaTodasSerializer(qs, many=True).data)
 
 class ReservasUsuarioAPIView(APIView):
+    """Vista para listar todas las reservas puntuales de un usuario específico, sin importar su estado, con filtros por motivo y fechas."""
     permission_classes = [IsAuthenticated]
 
     def get(self, request, usuario):
@@ -556,6 +557,7 @@ class ReservasUsuarioAPIView(APIView):
     
 
 class ReservasEliminarMasivoAPIView(APIView):
+    """Vista para eliminar varias reservas puntuales a la vez. Se eliminan tanto las reservas como las reservas puntuales asociadas."""
     permission_classes = [IsAuthenticated]
 
     def post(self, request):

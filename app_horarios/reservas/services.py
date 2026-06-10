@@ -47,7 +47,7 @@ def aulas_candidatas_por_requisitos(
     # Capacidad mínima
     qs = qs.filter(capacidad__gte=capacidad)
 
-    # Ordenadores mínimos (si viene None no filtramos)
+    # Ordenadores mínimos
     if num_ordenadores is not None:
         qs = qs.filter(num_ordenadores__gte=num_ordenadores)
 

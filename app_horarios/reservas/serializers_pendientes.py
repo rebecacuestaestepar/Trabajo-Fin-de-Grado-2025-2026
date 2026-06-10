@@ -10,12 +10,12 @@ from reservas.services import aulas_disponibles_en_fecha_hora
 # AULAS DISPONIBLES (GENÉRICO)
 # -----------------------------
 class AulasDisponiblesInputSerializer(serializers.Serializer):
+    """Serializer para la consulta de aulas disponibles en una fecha y hora determinada, con capacidad y equipamiento opcionalmente."""
     fecha = serializers.DateField()
     hora_inicio = serializers.TimeField()
     hora_fin = serializers.TimeField()
     capacidad_solicitada = serializers.IntegerField(min_value=0)
 
-    # Recursos (pueden o no existir en tu modelo Reserva; aquí solo para buscar aulas)
     num_ordenadores = serializers.IntegerField(required=False, allow_null=True, min_value=0)
     altavoces = serializers.BooleanField(required=False, default=False)
     proyector = serializers.BooleanField(required=False, default=False)
@@ -47,7 +47,7 @@ class AulasDisponiblesInputSerializer(serializers.Serializer):
 # LISTADO PENDIENTES/SOLICITADAS
 # -----------------------------
 class ReservaPendienteListItemSerializer(serializers.ModelSerializer):
-    # campos de Reserva
+    """Serializer para el listado de reservas pendientes o solicitadas, con información básica de la reserva y el responsable."""
     idreserva = serializers.CharField(source="id_reserva.pk", read_only=True)
     fecha = serializers.DateField(source="id_reserva.id_dia.dia", read_only=True)
     hora_inicio = serializers.TimeField(source="id_reserva.hora_inicio", read_only=True)
@@ -86,6 +86,7 @@ class ReservaPendienteListItemSerializer(serializers.ModelSerializer):
 # DETALLE + PATCH EDICIÓN
 # -----------------------------
 class ReservaDetalleSerializer(serializers.Serializer):
+    """Serializer para el detalle de una reserva puntual, con información completa de la reserva y el responsable. También se utiliza para la edición de la reserva mediante PATCH."""
     idreserva = serializers.CharField(read_only=True)
 
     fecha = serializers.DateField()
@@ -107,6 +108,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
     estado = serializers.CharField(required=False)
 
     def validate(self, attrs):
+        """Validación cruzada para asegurar que hora_inicio es menor que hora_fin."""
         hi = attrs.get("hora_inicio")
         hf = attrs.get("hora_fin")
         if hi and hf and hi >= hf:
@@ -114,6 +116,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
         return attrs
 
     def to_representation(self, instance: Reserva):
+        """Sobrescribimos el método to_representation para incluir información del responsable y los recursos solicitados en la representación de la reserva puntual."""
         puntual = ReservaPuntual.objects.select_related("id_responsable").filter(id_reserva=instance).first()
 
         correo = ""
@@ -147,6 +150,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
         }
 
     def update(self, instance: Reserva, validated_data):
+        """Actualizamos la reserva puntual con los datos validados. Primero actualizamos los campos de Reserva, luego los campos de ReservaPuntual."""
         if "fecha" in validated_data:
             fecha = validated_data["fecha"]
             try:
@@ -155,7 +159,6 @@ class ReservaDetalleSerializer(serializers.Serializer):
                 raise serializers.ValidationError({"fecha": "La fecha no existe en el calendario académico."})
             instance.id_dia = dia
 
-        # Campos de Reserva
         for field in ["hora_inicio", "hora_fin", "id_aula"]:
             if field in validated_data:
                 setattr(instance, field, validated_data[field])
@@ -165,7 +168,6 @@ class ReservaDetalleSerializer(serializers.Serializer):
 
         instance.save()
 
-        # Campos Reserva Puntual
         puntual = ReservaPuntual.objects.filter(id_reserva=instance).first()
 
         if not puntual:
@@ -209,6 +211,7 @@ class ReservaDetalleSerializer(serializers.Serializer):
         return instance
     
 class ReservaBulkIdsSerializer(serializers.Serializer):
+    """Serializer para la eliminación masiva de reservas puntuales, con una lista de IDs de reservas a eliminar."""
     ids = serializers.ListField(
         child=serializers.CharField(),
         allow_empty=False

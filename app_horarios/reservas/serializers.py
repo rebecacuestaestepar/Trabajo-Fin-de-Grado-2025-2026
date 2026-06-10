@@ -11,6 +11,7 @@ from reservas.models import Reserva, ReservaPuntual, Responsable
 from aulas.models import Aula
 
 class ResponsableSerializer(serializers.ModelSerializer):
+    """Serializer para el modelo Responsable, utilizado para crear o actualizar responsables de reservas."""
     telefono = serializers.IntegerField(required=False, allow_null=True)
 
     class Meta:
@@ -19,6 +20,7 @@ class ResponsableSerializer(serializers.ModelSerializer):
 
 
 class ReservaPuntualCreateSerializer(serializers.Serializer):
+    """Serializer para la creación de reservas puntuales, con validaciones personalizadas para asegurar la coherencia de los datos y la disponibilidad de aulas."""
     fecha = serializers.DateField()
     hora_inicio = serializers.TimeField()
     hora_fin = serializers.TimeField()
@@ -32,15 +34,18 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
     proyector = serializers.BooleanField(required=False, default=False)
     camara = serializers.BooleanField(required=False, default=False)   
     enchufes = serializers.BooleanField(required=False, default=False)
+    observaciones = serializers.CharField(required=False, allow_blank=True, max_length=300)
+    estado = serializers.ChoiceField(choices=[('P', 'Pendiente'), ('A', 'Aceptada'), ('R', 'Rechazada')], default='P', required=False)
+    
+
     generar_periodica = serializers.BooleanField(required=False, default=False)
     fecha_inicio_periodo = serializers.DateField(required=False, allow_null=True)
     fecha_fin_periodo = serializers.DateField(required=False, allow_null=True)
     dia_semana_periodica = serializers.IntegerField(required=False, min_value=1, max_value=5)
+    
+
     id_aula = serializers.IntegerField(required=False, allow_null=True)
     aulas_por_fecha = serializers.DictField(child=serializers.CharField(allow_blank=True), required=False)
-    observaciones = serializers.CharField(required=False, allow_blank=True, max_length=300)
-
-    estado = serializers.ChoiceField(choices=[('P', 'Pendiente'), ('A', 'Aceptada'), ('R', 'Rechazada')], default='P', required=False)
     
 
     @transaction.atomic
@@ -67,11 +72,13 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
         es_solicitud = self.context.get('es_solicitud', False)
         
+        # Si es una solicitud, forzamos el estado a 'P' independientemente de lo que haya enviado el cliente, para que siempre empiece como pendiente.
         if es_solicitud:
             estado_final = 'P'
         else:
             estado_final = estado_elegido
 
+        # Validamos que el responsable exista o lo creamos si no existe
         correo = validated_data['correo_responsable']
         nombre_responsable = validated_data.get('nombre_responsable', "").strip()
         apellidos_responsable = validated_data.get('apellidos_responsable', "").strip()
@@ -183,7 +190,6 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
 
             reserva.refresh_from_db()
 
-            #inicio = datetime.combine(fecha, hora_inicio)
             inicio = make_aware(datetime.combine(fecha, hora_inicio))
             fin = make_aware(datetime.combine(fecha, hora_fin))
 
@@ -250,7 +256,7 @@ class ReservaPuntualCreateSerializer(serializers.Serializer):
                 "periodo": "No hay ningún día en el rango que coincida con el día de la semana seleccionado."
             })
 
-        # 2) Intentar MISMA AULA para todas las fechas
+        # 2) Intentar obtener el mismo aula para todas las fechas
         qs_comun = aula_disponible_en_varias_fechas(
             fechas=fechas_periodo,
             hora_inicio=hora_inicio,

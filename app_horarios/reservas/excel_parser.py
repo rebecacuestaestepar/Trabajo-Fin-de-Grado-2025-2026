@@ -1,6 +1,7 @@
 import openpyxl
 import re
 
+"""Definimos los días de la semana igual que en base de datos para facilitar la comparación posterior"""
 DIAS_SEMANA = {
     "LUNES": 1,
     "MARTES": 2,
@@ -11,7 +12,7 @@ DIAS_SEMANA = {
     "DOMINGO": 7,
 }
 
-
+"""Representa una clase extraída del horario, con su asignatura, código de asignatura, grupo, aula, horario, día y tipo (teórica o práctica). Es decir, con los datos necesarios para crear una reserva a partir de esta clase."""
 class Clase:
     def __init__(self, asig, cod_asig, grupo, aula, hora_inicio, hora_fin, dia, tipo):
         self.asig = asig
@@ -26,7 +27,7 @@ class Clase:
     def __repr__(self):
         return f"[{self.dia} | {self.hora_inicio}-{self.hora_fin}] {self.tipo} - {self.asig} (Gr:{self.grupo}) en {self.aula}"
 
-
+"""Expresiones regulares para identificar el contenido de las celdas del horario que nos interesa para poder extraer la información de manera estructurada."""
 class ConfigurarHorario:
     HORA = re.compile(r"(?i)^\s*hora\s*$")
     TRAMO = re.compile(r"^\s*\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}\s*$")
@@ -43,7 +44,7 @@ class ConfigurarHorario:
 
     DIAS_SEMANA = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES"]
 
-
+"""Función que clasifica el contenido de una celda del horario en función de su formato y contenido, utilizando las expresiones regulares definidas en ConfigurarHorario. Devuelve una tupla con el tipo de contenido identificado y el valor limpio de la celda."""
 def clasificar_celda(valor_celda):
     if valor_celda is None:
         return ("VACIA", None)
@@ -85,7 +86,7 @@ def clasificar_celda(valor_celda):
     return ("TEXTO_GENERAL", texto)
 
 
-# Creamos una función que crea el diccionario de celdas mergeadas O(n)
+"""Creamos una función para identificar las celdas mergeadas del horario, de forma que sea más óptima acceder a un diccionario que a que calcule todo el rato las celdas mergeadas cada vez que lo quereamos saber"""
 def celdas_mergeadas(ws):
     mapa_merge = {}
     for rango in ws.merged_cells.ranges:
@@ -100,6 +101,7 @@ def celdas_mergeadas(ws):
 
     return mapa_merge
 
+"""Función para extraer el código de las asignaturas del horario, identificando la columna donde se encuentran los códigos a través de la expresión regular definida en ConfigurarHorario. Devuelve un diccionario con el código de asignatura como clave y su nombre abreviado como valor."""
 def extraer_codigo_asignaturas(ws):
     diccionario_cod_asig = {}
     fila_inicio = 0
@@ -128,6 +130,7 @@ def extraer_codigo_asignaturas(ws):
                     diccionario_cod_asig[valor_cod] = valor_asig
     return diccionario_cod_asig
 
+"""Función para extraer la leyenda de las asignaturas del horario, identificando la columna donde se encuentran los nombres abreviados a través del diccionario de códigos. Devuelve un diccionario con el nombre abreviado de la asignatura como clave y su código como valor. Se invierte el diccionario de códigos para poder extraer el código a partir de las abreviaturas encontradas en el horario."""
 def extraer_leyenda_asignaturas(ws, mapa_merge, diccionario_cod):
     diccionario_asignaturas = {}
     leyendo_tabla = False
@@ -167,7 +170,7 @@ def extraer_leyenda_asignaturas(ws, mapa_merge, diccionario_cod):
                 diccionario_asignaturas[abrev_asig] = valor_c
     return diccionario_asignaturas
 
-
+"""Función para extraer los días de la semana del horario, identificando la fila donde se encuentran a través de la expresión regular definida en ConfigurarHorario. Devuelve un diccionario con el día de la semana como clave y un diccionario con las columnas de inicio y fin donde se encuentra ese día en el horario como valor."""
 def extraer_columnas_dias(ws, fila_inicio, mapa_merge):
     dias_rangos = {}
 
@@ -176,7 +179,6 @@ def extraer_columnas_dias(ws, fila_inicio, mapa_merge):
         tipo, valor = clasificar_celda(celda.value)
 
         if tipo == "DIA_SEMANA":
-            #print(valor)
             coord = celda.coordinate
 
             if coord in mapa_merge:
@@ -193,12 +195,11 @@ def extraer_columnas_dias(ws, fila_inicio, mapa_merge):
             }
             
             if valor.upper() == "VIERNES":
-                #print("Condición de parada de los días")
                 break
                 
     return dias_rangos
 
-
+"""Función para extraer los tramos horarios del horario, identificando la fila donde se encuentran a través de la expresión regular definida en ConfigurarHorario. Devuelve una lista de diccionarios con la hora del tramo horario y las filas de inicio y fin donde se encuentra ese tramo en el horario."""
 def extraer_filas_tramos(ws, fila_inicio, mapa_merge):
     tramos_horarios = []
     fila_actual = fila_inicio + 1
@@ -228,14 +229,13 @@ def extraer_filas_tramos(ws, fila_inicio, mapa_merge):
         else:
             contador+=1
             if contador > 0:
-                #print("Condición de parada tramos horarios")
                 break
                 
         fila_actual += 1
                 
     return tramos_horarios
 
-
+"""Función para calcular el horario de una clase a partir de la lista de tramos horarios y las filas de inicio y fin de la clase. Devuelve la hora de inicio y fin de la clase."""
 def calcular_horario_clase(lista_tramos, fila_inicio, fila_fin):
     hora_inicio = "00:00"
     hora_fin = "00:00"
@@ -249,6 +249,7 @@ def calcular_horario_clase(lista_tramos, fila_inicio, fila_fin):
 
     return hora_inicio, hora_fin
 
+"""Función para calcular el día de la semana de una clase a partir del mapa de días y la columna donde se encuentra la clase. Devuelve el día de la semana correspondiente a esa columna."""
 def calcular_dia(mapa_dias, col):
     dia = ""
 
@@ -258,6 +259,7 @@ def calcular_dia(mapa_dias, col):
 
     return dia
 
+"""Función para extraer las aulas de una celda. Devuelve una tupla con un booleano indicando si se encontraron aulas, el número de aulas encontradas y un diccionario con las aulas. Para crear una reserva para cada aula encontrada."""
 def extraer_aulas(valor):
     cont=0
     aulas={}
@@ -275,7 +277,7 @@ def extraer_aulas(valor):
             
 
 
-
+"""Función para extraer de dos de las estructuras de las clases teóricas del horario. Extrayendo toda la información encontrada, y poniendo valores por defecto por si no tienen de manera explícita en el horario, como el aula o el grupo."""
 def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_visitadas, tabla, asignaturas, clases):
     dia = calcular_dia(tabla["mapa_dias"], col_actual)
     col_salto = col_actual + 1
@@ -289,7 +291,6 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
         if tipo_asig != "ABREV_ASIG" or celda_asig.coordinate in celdas_visitadas:
             continue
             
-        #print(f"\n[CLASE TEÓRICA] Asignatura: {valor_asig}, {asignaturas[valor_asig]}")
         celdas_visitadas.add(celda_asig.coordinate)
 
         fila_ini_clase = celda_asig.row
@@ -302,15 +303,12 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
             fila_fin_clase = fila_ini_clase
 
         hora_inicio, hora_fin = calcular_horario_clase(tabla["lista_tramos"], fila_ini_clase, fila_fin_clase)
-        #print(f"Día: {dia}")
-        #print(f"Horario: {hora_inicio} - {hora_fin}")
 
         celda_aula = ws.cell(row=f, column=col_aula)
         tipo_aula, valor_aula = clasificar_celda(celda_aula.value)
         
         if tipo_aula == "AULA":
             cond, num_aulas, aulas = extraer_aulas(valor_aula)
-            #print(f"AULA: {valor_aula}, color: {celda_aula.fill.start_color.theme}")
             celdas_visitadas.add(celda_aula.coordinate)
             
             if celda_aula.coordinate in mapa_merge:      
@@ -322,7 +320,6 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
             tipo_grupo, valor_grupo = clasificar_celda(celda_grupo.value)
             
             if tipo_grupo == "GRUPO_TEORICO":
-                #print(f"Grupo teórico: {valor_grupo}")
                 celdas_visitadas.add(celda_grupo.coordinate)
 
                 if cond:
@@ -354,12 +351,10 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
                 else:
                     if celda_asig.fill.start_color.theme == 9:
                         valor_grupo = "1"
-                        #print(f"Grupo teórico: {valor_grupo}")
                         nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=valor_aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
                         clases.append(nueva_clase)
                     elif celda_asig.fill.start_color.theme == 7:
                         valor_grupo = "80"
-                        #print(f"Grupo teórico: {valor_grupo}")
                         nueva_clase = Clase(asig=valor_asig, cod_asig=asignaturas[valor_asig], grupo=valor_grupo, aula=valor_aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="T")
                         clases.append(nueva_clase)
 
@@ -394,11 +389,11 @@ def extraer_teoricas(ws, fila_inicio, fila_fin, col_actual, mapa_merge, celdas_v
                 
     return col_salto
     
-
+"""Función para extraer la información de una clase práctica cuando lo priemro que se encuentra es el grupo."""
 def extraer_clase_practica_grupo(ws, fila_actual, col_actual, mapa_merge, celdas_visitadas, tabla, asignaturas, clases):
     celda = ws.cell(row=fila_actual, column=col_actual)
     coord = celda.coordinate
-    _, valor = clasificar_celda(celda.value) # 'valor' será el nombre del grupo
+    _, valor = clasificar_celda(celda.value)
     
     dia = calcular_dia(tabla["mapa_dias"], col_actual)
     fila_ini_clase = celda.row
@@ -438,24 +433,14 @@ def extraer_clase_practica_grupo(ws, fila_actual, col_actual, mapa_merge, celdas
         for aula in aulas.values():
             nueva_clase = Clase(asig=valor_a, cod_asig=asignaturas[valor_a], grupo=valor, aula=aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="P")
             clases.append(nueva_clase)
-            #print(f"[CLASE PRÁCTICA] Asignatura: {valor_a}, {asignaturas[valor_a]}")
-            #print(f"Día: {dia}")
-            #print(f"Horario: {hora_inicio} - {hora_fin}")
-            #print(f"Aula: {aula}")
-            #print(f"Grupo práctico: {valor}")
-            #print("")
 
     else:
         nueva_clase = Clase(asig=valor_a, cod_asig=asignaturas[valor_a], grupo=valor, aula=valor_d, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="P")
         clases.append(nueva_clase)
-        #print(f"[CLASE PRÁCTICA] Asignatura: {valor_a}, {asignaturas[valor_a]}")
-        #print(f"Día: {dia}")
-        #print(f"Horario: {hora_inicio} - {hora_fin}")
-        #print(f"Aula: {valor_d}")
-        #print(f"Grupo práctico: {valor}")
         
     return salto_col
 
+"""Función para extraer la información de una clase práctica cuando lo primero que se encuentra es la asignatura, y el texto se encuentra rotado 90 grados."""
 def extraer_clase_rotada90(ws, fila_actual, col_actual, mapa_merge, celdas_visitadas, tabla, asignaturas, clases):
     celda = ws.cell(row=fila_actual, column=col_actual)
     coord = celda.coordinate
@@ -539,28 +524,17 @@ def extraer_clase_rotada90(ws, fila_actual, col_actual, mapa_merge, celdas_visit
         for aula in aulas.values():
             nueva_clase = Clase(asig=valor, cod_asig=asignaturas[valor], grupo=valor_d, aula=aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo=tipo)
             clases.append(nueva_clase)
-            #print(f"[CLASE PRÁCTICA] Asignatura: {valor}, {asignaturas[valor]}")
-            #print(f"Día: {dia}")
-            #print(f"Horario: {hora_inicio }- {hora_fin}")
-            #print(f"Aula: {aula}")
-            #print(f"Grupo práctico: {valor_d}")
-            #print("")
     else:
         nueva_clase = Clase(asig=valor, cod_asig=asignaturas[valor], grupo=valor_d, aula=valor_d2, hora_inicio=hora_inicio,hora_fin=hora_fin, dia=dia, tipo=tipo)
         clases.append(nueva_clase)
-        #print(f"[CLASE PRÁCTICA] Asignatura: {valor}, {asignaturas[valor]}")
-        #print(f"Día: {dia}")
-        #print(f"Horario: {hora_inicio} - {hora_fin}")
-        #print(f"Aula: {valor_d2}")
-        #print(f"Grupo práctico: {valor_d}")
         
     return salto_col
 
-
+"""Función para extraer la información de una clase práctica cuando lo primero que se encuentra es la asignatura, y el texto no se encuentra rotado."""
 def extraer_practica_asig_rotacion0(ws, fila_actual, col_actual, mapa_merge, celdas_visitadas, tabla, asignaturas, clases):
     celda = ws.cell(row=fila_actual, column=col_actual)
     coord = celda.coordinate
-    _, valor = clasificar_celda(celda.value) # 'valor' es la abreviatura de la asignatura
+    _, valor = clasificar_celda(celda.value) 
     
     dia = calcular_dia(tabla["mapa_dias"], col_actual)
     fila_ini_clase = celda.row
@@ -613,23 +587,14 @@ def extraer_practica_asig_rotacion0(ws, fila_actual, col_actual, mapa_merge, cel
         for aula in aulas.values():
             nueva_clase = Clase(asig=valor, cod_asig=asignaturas[valor], grupo=valor_d, aula=aula, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="P")
             clases.append(nueva_clase)
-            #print(f"[CLASE PRÁCTICA] Asignatura: {valor}, {asignaturas[valor]}")
-            #print(f"Día: {dia}")
-            #print(f"Horario: {hora_inicio} - {hora_fin}")
-            #print(f"Aula: {aula}")
-            #print(f"Grupo Práctico: {valor_d}, color: {celda_derecha.fill.start_color.theme}")
     else:
         nueva_clase =  Clase(asig=valor, cod_asig=asignaturas[valor], grupo=valor_d, aula=valor_a, hora_inicio=hora_inicio, hora_fin=hora_fin, dia=dia, tipo="P")
         clases.append(nueva_clase)
-        #print(f"[CLASE PRÁCTICA] Asignatura: {valor}, {asignaturas[valor]}")
-        #print(f"Día: {dia}")
-        #print(f"Horario: {hora_inicio} - {hora_fin}")
-        #print(f"Aula: {valor_a}")
-        #print(f"Grupo Práctico: {valor_d}, color: {celda_derecha.fill.start_color.theme}")
         
     return salto_col
 
 
+"""Función que recorre la tabla de horario una vez identificada, distinguiendo cada una de las clases que se encuentran en esa tabla, y extrayendo toda la información de cada clase para crear un objeto de la clase Clase con esa información. Para ello, se apoya en las funciones anteriores para extraer la información de cada clase dependiendo de su formato y estructura en el horario."""
 def extraer_clases(ws, tabla, mapa_merge, asignaturas):
     clases = []
 
@@ -638,14 +603,12 @@ def extraer_clases(ws, tabla, mapa_merge, asignaturas):
 
     for dia, limites in tabla["mapa_dias"].items():
         for tramo in tabla["lista_tramos"]:
-            #fila_actual = tramo["fila_inicio"]
             col = limites["col_inicio"]
             while col <= limites["col_fin"]:
                 salto_maximo = col + 1
                 for fila_actual in range(tramo["fila_inicio"], tramo["fila_fin"] + 1):
                     celda = ws.cell(row=fila_actual, column=col)
                     coord = celda.coordinate
-                    #siguiente_col = col + 1
                     if coord in celdas_visitadas:
                         continue
                         
@@ -686,8 +649,6 @@ def escanear_hoja(ws, diccionario_cod):
     mapa_merge = celdas_mergeadas(ws)
 
     asignaturas = extraer_leyenda_asignaturas(ws, mapa_merge, diccionario_cod)
-
-    #print(asignaturas)
     
     fila_actual = 1
     max_row = ws.max_row
@@ -697,9 +658,6 @@ def escanear_hoja(ws, diccionario_cod):
         tipo, valor = clasificar_celda(celda.value)
         
         if tipo == "COMIENZO_TABLA":
-            #print("=========================")
-            #print("He encontrado una tabla")
-            #print("=========================")
             mapa_dias = extraer_columnas_dias(ws, fila_actual, mapa_merge)
             lista_tramos = extraer_filas_tramos(ws, fila_actual, mapa_merge)
             
@@ -716,12 +674,12 @@ def escanear_hoja(ws, diccionario_cod):
             if lista_tramos:
                 fila_actual = lista_tramos[-1]["fila_fin"]
             
-            #break
             
         fila_actual += 1
     
     return clases_hoja
 
+"""Función que recorre las hojas de horario indicadas en la última hoja del libro de Excel, que son las hojas de las que se quiere extraer la información de los horarios."""
 def extraer_hojas_analizar(ws):
     fila_inicio = 2
     hojas = []
@@ -735,7 +693,7 @@ def extraer_hojas_analizar(ws):
         fila_inicio += 1
     return hojas
 
-
+"""Función principal que recibe el fichero de Excel del horario, carga el libro, extrae el diccionario de códigos de asignaturas, las hojas a analizar y recorre cada una de las hojas para extraer las clases de cada una de ellas. Devuelve una lista con todas las clases extraídas del horario."""
 def parsear_horario_excel(fichero):
     wb = openpyxl.load_workbook(fichero, data_only=True)
     diccionario_asignaturas = extraer_codigo_asignaturas(wb["ASIGNATURAS"])

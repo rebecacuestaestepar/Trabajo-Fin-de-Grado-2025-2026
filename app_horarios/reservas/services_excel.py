@@ -11,6 +11,7 @@ from django.db import transaction
 import uuid
 
 def validar_horario_cargado(curso):
+    """Validamos si el horario del curso ya ha sido cargado. Si lo ha sido, contamos el número de reservas periódicas de docencia que hay en la base de datos para ese curso."""
     curso_objeto = Curso.objects.filter(idcurso=curso, horario_cargado=True).first()
 
     if not curso_objeto:
@@ -27,6 +28,7 @@ def validar_horario_cargado(curso):
 
 
 def generar_reservas_periodicas(clases, curso):
+    """Generamos las reservas periódicas de docencia a partir de las clases extraídas del horario Excel. Primero eliminamos las reservas periódicas de docencia existentes para ese curso, y luego generamos las nuevas reservas periódicas de docencia a partir de las clases extraídas del horario Excel."""
     with transaction.atomic():
         curso_objeto = Curso.objects.filter(idcurso=curso).first()
 
@@ -94,7 +96,7 @@ def generar_reservas_periodicas(clases, curso):
                     if cambio.sustituye_dia == dia_num:
                         hay_clase = True
                 else:
-                    # 2. Si no hay cambio, es un día normal. Comprueba si es lectivo y no festivo
+                    # Si no hay cambio, es un día normal. Comprueba si es lectivo y no festivo
                     if num_dia_db == dia_num:
                         es_festivo = Festivo.objects.filter(id_dia=dia_bd).exists()
                         es_lectivo = Lectivo.objects.filter(id_dia=dia_bd).exists()
