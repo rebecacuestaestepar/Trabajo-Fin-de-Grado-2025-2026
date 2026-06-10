@@ -7,6 +7,8 @@ import { obtenerDetalleDocente, actualizarDocente } from '../../../api/docencia'
 export default function EditarDocente() {
     const { id } = useParams(); 
     const navigate = useNavigate();
+
+    // Obtener el esquema del docente para construir el formulario
     const esquema = useEsquemaDocente(); 
     
     const [docenteOriginal, setDocenteOriginal] = useState(null);
@@ -14,6 +16,7 @@ export default function EditarDocente() {
     useEffect(() => {
         const cargarDetalle = async () => {
             try {
+                // Cargar los datos actuales del docente para prellenar el formulario
                 const data = await obtenerDetalleDocente(id);
                 setDocenteOriginal(data);
             } catch (error) {
@@ -25,6 +28,7 @@ export default function EditarDocente() {
 
     const manejarActualizar = async (datosModificados) => {
         try {
+            // Llamar a la función de la API para actualizar el docente
             await actualizarDocente(id, datosModificados);
             navigate('/admin/docentes');
         } catch (error) {

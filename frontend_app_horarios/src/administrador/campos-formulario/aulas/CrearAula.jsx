@@ -6,10 +6,13 @@ import { crearAula } from '../../../api/aulas';
 
 export default function CrearAula() {
     const navigate = useNavigate();
+
+    // Obtener el esquema del aula para construir el formulario
     const esquema = useEsquemaAula();
 
     const manejarGuardar = async (datos) => {
         try {
+            // Llamar a la función de la API para crear el aula
             await crearAula(datos);
             navigate('/admin/aulas'); 
         } catch (error) {

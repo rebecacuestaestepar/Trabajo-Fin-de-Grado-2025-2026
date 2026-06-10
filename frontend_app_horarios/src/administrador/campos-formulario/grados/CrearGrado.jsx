@@ -6,10 +6,13 @@ import { crearGrado } from '../../../api/docencia';
 
 export default function CrearGrado() {
     const navigate = useNavigate();
+
+    // Obtener el esquema del grado para construir el formulario
     const esquema = useEsquemaGrado();
 
     const manejarGuardar = async (datos) => {
         try {
+            // Llamar a la función de la API para crear el grado
             await crearGrado(datos);
             navigate('/admin/grados'); 
         } catch (error) {

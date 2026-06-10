@@ -12,11 +12,13 @@ export default function EditarAula() {
     const [aulaOriginal, setAulaOriginal] = useState(null);
 
     useEffect(() => {
+        // Cargar los datos actuales del aula para prellenar el formulario
         obtenerDetalleAula(id).then(data => setAulaOriginal(data));
     }, [id]);
 
     const manejarActualizar = async (datosModificados) => {
         try {
+            // Llamar a la función de la API para actualizar el aula
             await actualizarAula(id, datosModificados);
             navigate('/admin/aulas');
         } catch (error) {

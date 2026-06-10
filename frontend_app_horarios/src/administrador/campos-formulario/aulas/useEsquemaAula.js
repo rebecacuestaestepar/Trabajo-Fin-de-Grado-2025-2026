@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { listaMiniGrados } from '../../../api/docencia';
 
 export function useEsquemaAula() {
+    /*
+    * Este hook define el esquema de campos para los formularios de creación y edición de aulas.
+    */
     const [opcionesGrados, setOpcionesGrados] = useState([]);
 
     useEffect(() => {

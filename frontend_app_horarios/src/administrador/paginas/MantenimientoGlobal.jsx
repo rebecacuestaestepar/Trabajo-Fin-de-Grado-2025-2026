@@ -3,6 +3,11 @@ import { dbService } from '../../api/basedatos';
 
 import ModalConfirmacion from '../../shared/modales/ModalConfirmacion';
 
+/*
+ * Componente principal para el mantenimiento global del sistema en el panel de administración.
+ * Permite exportar un backup completo, descargar una plantilla vacía y restaurar/importar datos desde un archivo Excel.
+ * Incluye mensajes de éxito/error y un modal de confirmación para la importación debido a su naturaleza destructiva.
+*/
 export default function MantenimientoGlobal() {
     const [cargando, setCargando] = useState(false);
     const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });

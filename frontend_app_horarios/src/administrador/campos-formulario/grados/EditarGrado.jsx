@@ -7,6 +7,8 @@ import { obtenerDetalleGrado, actualizarGrado } from '../../../api/docencia';
 export default function EditarGrado() {
     const { id } = useParams(); 
     const navigate = useNavigate();
+
+    // Obtener el esquema del grado para construir el formulario
     const esquema = useEsquemaGrado(); 
     
     const [gradoOriginal, setGradoOriginal] = useState(null);
@@ -14,6 +16,7 @@ export default function EditarGrado() {
     useEffect(() => {
         const cargarDetalle = async () => {
             try {
+                // Cargar los datos actuales del grado para prellenar el formulario
                 const data = await obtenerDetalleGrado(id);
                 setGradoOriginal(data);
             } catch (error) {
@@ -25,6 +28,7 @@ export default function EditarGrado() {
 
     const manejarActualizar = async (datosModificados) => {
         try {
+            // Llamar a la función de la API para actualizar el grado
             await actualizarGrado(id, datosModificados);
             navigate('/admin/grados');
         } catch (error) {

@@ -1,8 +1,11 @@
 import React from 'react';
 
+/*
+ * Componente para mostrar una tabla dinámica con columnas y datos configurables.
+ * Permite acciones de edición y eliminación en cada fila.
+ */
 export default function TablaDinamica({ columnas, datos, onEditar, onEliminar }) {
     return (
-        // El overflow-x-auto permite que si la pantalla de PC es pequeña, se pueda hacer scroll en lugar de solapar
         <div className="w-full overflow-x-auto pb-4">
             <table className="w-full text-left text-sm text-slate-600 border-collapse">
                 

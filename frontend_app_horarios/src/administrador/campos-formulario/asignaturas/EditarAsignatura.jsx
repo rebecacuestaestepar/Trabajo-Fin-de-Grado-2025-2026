@@ -7,11 +7,14 @@ import { obtenerDetalleAsignatura, actualizarAsignatura } from '../../../api/doc
 export default function EditarAsignatura() {
     const { id } = useParams(); 
     const navigate = useNavigate();
+
+    // Obtener el esquema de la asignatura para construir el formulario
     const esquema = useEsquemaAsignatura(); 
     
     const [asignaturaOriginal, setAsignaturaOriginal] = useState(null);
 
     useEffect(() => {
+        // Cargar los datos actuales de la asignatura para prellenar el formulario
         const cargarDetalle = async () => {
             try {
                 const data = await obtenerDetalleAsignatura(id);
@@ -25,6 +28,7 @@ export default function EditarAsignatura() {
 
     const manejarActualizar = async (datosModificados) => {
         try {
+            // Llamar a la función de la API para actualizar la asignatura
             await actualizarAsignatura(id, datosModificados);
             navigate('/admin/asignaturas');
         } catch (error) {

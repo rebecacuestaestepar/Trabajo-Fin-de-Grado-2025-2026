@@ -6,10 +6,13 @@ import { crearDocente } from '../../../api/docencia';
 
 export default function CrearDocente() {
     const navigate = useNavigate();
+
+    // Obtener el esquema del docente para construir el formulario
     const esquema = useEsquemaDocente();
 
     const manejarGuardar = async (datos) => {
         try {
+            // Llamar a la función de la API para crear el docente
             await crearDocente(datos);
             navigate('/admin/docentes'); 
         } catch (error) {

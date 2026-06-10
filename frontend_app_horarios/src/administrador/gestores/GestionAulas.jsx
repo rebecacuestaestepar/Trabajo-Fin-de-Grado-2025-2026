@@ -7,9 +7,14 @@ import { dbService } from '../../api/basedatos';
 
 import ModalConfirmacion from '../../shared/modales/ModalConfirmacion';
 
+/*
+ * Componente principal para la gestión de aulas en el panel de administración. 
+ * Muestra una tabla con las aulas existentes y permite crear, editar, eliminar, importar y exportar aulas.
+ */
 export default function GestionAulas() {
     const navigate = useNavigate();
 
+    // Clave utilizada para identificar la entidad en las operaciones de importación/exportación
     const CLAVE_ENTIDAD = 'aulas';
 
     const columnasAulas = [
@@ -78,6 +83,8 @@ export default function GestionAulas() {
         });
     };
 
+
+    // Función que se ejecuta al confirmar una acción en el modal (eliminar o importar)
     const confirmarAccionModal = async () => {
         if (configModal.accion === 'eliminar') {
             const aula = configModal.payload;

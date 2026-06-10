@@ -6,10 +6,13 @@ import { crearAsignatura } from '../../../api/docencia';
 
 export default function CrearAsignatura() {
     const navigate = useNavigate();
+
+    // Obtener el esquema de la asignatura para construir el formulario
     const esquema = useEsquemaAsignatura(); 
 
     const manejarGuardar = async (datos) => {
         try {
+            // Llamar a la función de la API para crear la asignatura
             await crearAsignatura(datos);
             navigate('/admin/asignaturas'); 
         } catch (error) {

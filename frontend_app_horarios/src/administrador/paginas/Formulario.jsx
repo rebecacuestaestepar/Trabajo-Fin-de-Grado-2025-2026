@@ -5,6 +5,13 @@ import BotonVolver from '../../reservas/formulario-componentes/ui/BotonVolver';
 import { Campo } from '../../reservas/formulario-componentes/ui/Campo';
 import { EntradaTexto, Selector, AreaTexto } from '../../reservas/formulario-componentes/ui/Inputs';
 
+/**
+ * 
+ * Componente genérico para renderizar un formulario dinámico basado en un esquema de campos.
+ * Recibe un título, un esquema de campos, datos iniciales (para edición), una función de guardado y una ruta para volver.
+ * El esquema define el tipo de cada campo (texto, número, selector, booleano, área de texto, checkboxes) y sus opciones.
+ * El componente maneja el estado del formulario y llama a la función de guardado con los datos al enviar el formulario. 
+ */
 export default function FormularioDinamico({ 
     titulo, 
     esquema, 

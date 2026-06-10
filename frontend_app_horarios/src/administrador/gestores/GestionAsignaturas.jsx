@@ -6,9 +6,14 @@ import { listaAsignaturas, eliminarAsignatura } from '../../api/docencia';
 import { dbService } from '../../api/basedatos';
 import ModalConfirmacion from '../../shared/modales/ModalConfirmacion';
 
+/*
+ * Componente principal para la gestión de asignaturas en el panel de administración.
+ * Muestra una tabla con las asignaturas existentes y permite crear, editar, eliminar, importar y exportar asignaturas.
+ */
 export default function GestionAsignaturas() {
     const navigate = useNavigate();
 
+    // Clave utilizada para identificar la entidad en las operaciones de importación/exportación
     const CLAVE_ENTIDAD = 'asignaturas';
 
     const columnas = [
@@ -36,6 +41,7 @@ export default function GestionAsignaturas() {
 
     const cargarDatos = useCallback(async () => {
         try {
+            // Obtener la lista de asignaturas desde la API
             const data = await listaAsignaturas(); 
             let datosReales = [];
             if (Array.isArray(data)) datosReales = data;
@@ -80,6 +86,8 @@ export default function GestionAsignaturas() {
         });
     };
 
+
+    // Función que se ejecuta al confirmar una acción en el modal (eliminar o importar)
     const confirmarAccionModal = async () => {
         if (configModal.accion === 'eliminar') {
             const asignatura = configModal.payload;

@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 import { listaMiniGrados } from '../../../api/docencia';
 
 export function useEsquemaAsignatura() {
+    /*
+    * Este hook define el esquema de campos para los formularios de creación y edición de asignaturas.
+    */
     const [opcionesGrado, setOpcionesGrado] = useState([]);
 
     useEffect(() => {
+        // Cargar los grados disponibles para el selector del formulario
         const cargarGrados = async () => {
             try {
                 const grados = await listaMiniGrados();

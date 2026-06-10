@@ -5,6 +5,11 @@ import CabeceraTabla from '../componentes/CabeceraTabla';
 import PanelBuscador from '../componentes/PanelBuscador';
 import TablaDinamica from '../componentes/TablaDinamica';
 
+/*
+* Componente genérico para mostrar una tabla con funcionalidades comunes en el panel de administración.
+* Recibe un título, columnas, datos, rutas y funciones para crear, editar, eliminar, exportar, descargar plantilla e importar.
+* Incluye búsqueda, paginación y un diseño consistente con el resto del panel de administración.
+*/
 export default function VistaTablaAdministrador({ 
     titulo, 
     columnas, 

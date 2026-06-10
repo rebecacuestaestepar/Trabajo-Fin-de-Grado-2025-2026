@@ -1,5 +1,9 @@
 import React, { useRef } from 'react';
 
+/**
+ * Componente para la cabecera de una tabla en el panel de administración.
+ * Muestra el título de la tabla y los botones de acción disponibles.
+ */
 export default function CabeceraTabla({ 
     titulo, 
     mostrarFiltros, 
@@ -10,6 +14,7 @@ export default function CabeceraTabla({
     alImportar
 }) {
 
+    // Referencia al input de archivo para poder activarlo desde el botón de importación
     const inputArchivoRef = useRef(null);
 
     const manejarCambioArchivo = (e) => {

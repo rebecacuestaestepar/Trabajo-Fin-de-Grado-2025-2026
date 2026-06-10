@@ -1,6 +1,11 @@
 import React from 'react';
 import { EntradaTexto } from '../../reservas/formulario-componentes/ui/Inputs';
 
+/*
+* Este componente es un panel de búsqueda que se muestra u oculta según la prop "mostrar".
+* Permite al usuario ingresar un término de búsqueda que se propaga al componente padre a través de "alCambiarBusqueda".
+* También incluye un botón para limpiar la búsqueda, que llama a "alLimpiar" en el componente padre.
+*/
 export default function PanelBuscador({ mostrar, busqueda, alCambiarBusqueda, alLimpiar }) {
     return (
         <div className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out mb-6
