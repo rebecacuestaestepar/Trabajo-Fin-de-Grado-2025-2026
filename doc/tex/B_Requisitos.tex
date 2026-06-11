@@ -63,25 +63,25 @@ En este apartado se detallan todos los requisitos que debe  satisfacer la aplica
 		\item RF-04.4. Gestionar permisos.
 		\\La aplicación deberá de permitir asociar permisos concretos a cada rol definido en el sistema. Estos permisos lo que harán será determinar que operaciones o acciones puede realizar cada usuario sobre las reservas, informes, usuarios,... Permitiendo controlar de forma precisa el acceso a las distintas acciones, implantando un modelo de seguridad basado en los roles.
 	\end{itemize}
-	\item RF-06. Gestión de usuarios. 
+	\item RF-05. Gestión de usuarios. 
 	\\En este caso, como se ha mencionado en el requisito de la autenticación, esta funcionalidad será controlada mediante las credenciales asignadas a cada miembro de la universidad por la misma. De forma, que solo podrán existir usuarios que hayan sido designados por la misma institución. Pudiendo acceder usuarios que no se encuentren en base de datos, o editándolos que en este caso, serían los permisos y el rol asociado.
 	\begin{itemize}
-		\item RF-06.1. Crear usuario.
+		\item RF-05.1. Crear usuario.
 		\\El sistema deberá permitir que cuando un usuario no se encuentre en base de datos podrá iniciar sesión asignándole por defecto el rol de PDI. Aunque el sistema deberá permitir también que el administrador añada a usuarios asignándole el rol que crea necesario.
-		\item RF-06.2. Editar usuario.
+		\item RF-05.2. Editar usuario.
 		\\Como ya se ha mencionado, el sistema permitirá la edición de los usuarios será respecto a los roles asociado modificando su entrada en base de datos. Debido a que las credenciales no podrán ser modificadas por el sistema, sino que de eso se encargaría el sistema de la institución.
-		\item RF-06.3. Eliminar usuario.
+		\item RF-05.3. Eliminar usuario.
 		\\El sistema permitirá al usuario con permisos poder eliminar la entrada en base de datos del usuario correspondiente, eliminando así el rol asociado, de forma que cuando entre se le asignará el rol de PDI. Ya que denegar el acceso no dependerá del sistema de este proyecto.
 	\end{itemize}
-	\item RF-07. Cargar horarios desde hoja de cálculo.
+	\item RF-06. Cargar horarios desde hoja de cálculo.
 	\\ La aplicación deberá permitir la carga de horarios docentes a partir de una hoja de cálculo, con la estructura específica y unificada con las reglas expuestas. Esta funcionalidad permitirá transformar la información contenida en el fichero en reservas periódicas dentro del sistema, evitando que el gestor tenga que introducir de forma manualmente cada una de las clases. Además, permite automatizar la generación de reservas periódicas asociadas a la docencia a través del analizador léxico, y las generará teniendo en cuenta el calendario académico.
 	
-	\item RF-08. Gestión del calendario académico.
+	\item RF-07. Gestión del calendario académico.
 	\\ La aplicación deberá permitir la gestión del calendario académico utilizado para la generación y validación de reservas periódicas. Este calendario será la base para determinar los días lectivos, los periodos de docencia de cada cuatrimestre, los cambios de docencia, los días festivos, los periodos de exámenes y los periodos de solamente TFG. De esta forma, el sistema podrá crear las reservas docentes de manera coherente con la planificación oficial de la universidad, evitando generar ocupaciones en fechas en las que no exista actividad académica.
 	\begin{itemize}
-		\item RF-08.1. Crear calendario académico.
+		\item RF-07.1. Crear calendario académico.
 		\\ La aplicación deberá permitir al usuario autorizado crear un calendario académico. Para ello, se deberán introducir los datos principales, como el curso académico, la fecha de inicio y de fin del curso, los periodos de docencia, es decir, las fechas de inicio y de fin de ambos cuatrimestres, y los días lectivos.
-		\item RF-08.2. Editar calendario académico. 
+		\item RF-07.2. Editar calendario académico. 
 		\\El sistema debe permitir modificar el calendario existente, siempre que el usuario tenga los permisos necesarios. Se podrá modificar el tipo de día de uno en uno, o mediante rangos de fechas seleccionadas, permitiendo seleccionar el tipo de día al que quieren actualizarlo.
 	\end{itemize}
 \end{itemize}
@@ -162,7 +162,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\ RF-06
+		\textbf{Requisitos asociados} &  \\ RF-05
 		\textbf{Descripción}          & El administrador puede crear, modificar y eliminar entradas de usuario del sistema, se corresponderá al rol del usuario, ya que las credenciales no las comprueba la base de datos propia. Incluye búsqueda y listado de los usuarios. \\
 		\textbf{Precondición}         & El administrador tiene que estar autenticado, tiene que disponer de los permisos para la gestión de usuarios y la base de datos tiene que estar disponible. \\
 		\textbf{Acciones}             &
@@ -271,7 +271,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión} & 1.0 \\
 		\textbf{Autor} & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-05 \\
+		\textbf{Requisitos asociados} &  \\
 		\textbf{Descripción} & El administrador gestiona las entidades principales utilizadas por la aplicación, como aulas, grados, asignaturas, docentes, responsables e imparte. Esta gestión permite mantener actualizada la información base sobre la que posteriormente se crearán horarios, reservas puntuales y reservas periódicas. \\
 		\textbf{Precondición} & El administrador debe estar autenticado, disponer de permisos de administración y la base de datos debe estar disponible. \\
 		\textbf{Acciones} &
@@ -307,7 +307,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-07 \\
 		\textbf{Descripción}          & El administrador o gestor carga en el sistema un horario de otro año\\
 		\textbf{Precondición}         & Que sea un usuario con permisos y que la base de datos se encuentre disponible para recoger los datos cargados \\
 		\textbf{Acciones}             &
@@ -380,7 +380,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-04 \\
+		\textbf{Requisitos asociados} &  \\
 		\textbf{Descripción}          & El administrador o el gestor consulta la ocupación del aula para una fecha específica o semanal (solo aparecen las reservas periódicas). El sistema muestra un horario con las horas que se encuentra ocupada o disponible al aula, en función del horario y de las reservas puntuales si así se requiere.\\
 		\textbf{Precondición}         & Que sea un usuario autenticado con el rol de gestor o de administrador, que los horarios y las reservas se encuentren cargadas en el sistema y que la base de datos esté disponible. \\
 		\textbf{Acciones}             &
@@ -416,7 +416,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-03.1 \\
 		\textbf{Descripción}          & El administrador o gestor crea una reserva puntual de un aula en una fecha y un horario correcto, validando la disponibilidad. \\
 		\textbf{Precondición}         &  El usuario autenticado tiene que tener los permisos, que exista el aula y esté disponible y la base de datos y las restricciones se encuentren disponibles también.\\
 		\textbf{Acciones}             &
@@ -453,7 +453,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-03 \\
 		\textbf{Descripción}          & El gestor o administrador revisa el estado de las solicitudes de reserva \\
 		\textbf{Precondición}         & El usuario tiene que estar autenticado y ha de tener los permisos, deben de existir solicitudes de reservas y la base de datos y las restricciones han de estar disponibles \\
 		\textbf{Acciones}             &
@@ -488,7 +488,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-03.2 \\
 		\textbf{Descripción}          & El gestor o administrador decide modificar uno de los campos de la solicitud de reserva, y el sistema avisará al responsable de la reserva del cambio realizado \\
 		\textbf{Precondición}         & El usuario tiene que estar autenticado y ha de tener los permisos, deben de existir solicitudes de reservas y la base de datos y las restricciones han de estar disponibles \\
 		\textbf{Acciones}             &
@@ -527,7 +527,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-03 \\
 		\textbf{Descripción}          & El administrador o gestor revisa las reservas puntuales solicitadas por los usuarios y decide su aprobación o rechazo según la disponibilidad. \\
 		\textbf{Precondición}         &  El usuario debe de tener permisos para poder aprobar o rechazar las solicitudes, tienen que existir reservas pendientes en el sistema, y la base de datos tiene que estar disponible\\
 		\textbf{Acciones}             &
@@ -575,7 +575,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-03 \\
 		\textbf{Descripción}          & El gestor o administrador puede crear, modificar o eliminar reservas puntuales existentes, validando que no se violen las restricciones \\
 		\textbf{Precondición}         & El usuario debe tener los permisos de gestionar las reservas, que estas se encuentren registradas y la base de datos y las validaciones se encuentren disponibles \\
 		\textbf{Acciones}             &
@@ -622,7 +622,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-03 \\
 		\textbf{Descripción}          & El gestor o administrador puede consultar el horario de grado. El sistema muestra las clases planificadas con su aula y hora.  \\
 		\textbf{Precondición}         &  El usuario autenticado tiene permisos , los horarios de los grados deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
 		\textbf{Acciones}             &
@@ -657,7 +657,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-6.2 \\
+		\textbf{Requisitos asociados} & RF-03 \\
 		\textbf{Descripción}          & El gestor o administrador crea, edita y elimina las reservas durante el periodo especificado, con la frecuencia especificada.  \\
 		\textbf{Precondición}         & Que sea un usuario autenticado con los permisos de reservas, los aulas y horarios disponibles estén cargados, y la base de datos se encuentre disponible.\\
 		\textbf{Acciones}             &
@@ -706,7 +706,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión} & 1.0 \\
 		\textbf{Autor} & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-08 \\
+		\textbf{Requisitos asociados} & RF-07 \\
 		\textbf{Descripción} & El gestor editor crea un nuevo calendario académico para un curso concreto, indicando los periodos docentes, días lectivos, festivos.\\
 		\textbf{Precondición} & El usuario debe estar autenticado, tener permisos de edición sobre el calendario académico y la base de datos debe estar disponible. \\
 		\textbf{Acciones} &
@@ -742,7 +742,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-07 \\
 		\textbf{Descripción}          & El gestor o administrador puede consultar el calendario académico de la politécnica. El sistema mostrará el calendario indicando los días lectivos correspondientes a ambos semestres, los días correspondientes a exámenes de convocatoria, a TFG, los días festivos y los días que se produce un cambio de docencia.  \\
 		\textbf{Precondición}         &  El usuario autenticado tiene permisos, los tipos de día deben de estar cargados en el sistema y la base de datos tiene que estar disponible \\
 		\textbf{Acciones}             &
@@ -775,7 +775,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión}              & 1.0    \\
 		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
+		\textbf{Requisitos asociados} & RF-07 \\
 		\textbf{Descripción}          & El gestor o administrador modifica el tipo de día en el calendario académico. El sistema cambiará el tipo de día que había anteriormente por el seleccionado, y actualizará la información en la base de datos. \\
 		\textbf{Precondición}         &  El usuario autenticado tenga los permisos, que el calendario se encuentre cargado y que la base de datos esté disponible \\
 		\textbf{Acciones}             &
@@ -849,7 +849,7 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\toprule
 		\textbf{Versión} & 1.0 \\
 		\textbf{Autor} & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} & RF-02 \\
+		\textbf{Requisitos asociados} & RF-03 \\
 		\textbf{Descripción} & El PDI consulta las reservas y solicitudes que ha realizado, pudiendo comprobar su estado y visualizar la información asociada a cada una de ellas. \\
 		\textbf{Precondición} & El PDI debe estar autenticado y deben existir reservas o solicitudes asociadas a su usuario. \\
 		\textbf{Acciones} &
@@ -908,50 +908,4 @@ A continuación, se describen los casos de uso identificados para el sistema. Ca
 		\bottomrule
 	\end{tabularx}
 	\caption{CU-20 Editar reservas propias}
-\end{table}
-
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-22}    & \textbf{Gestión solicitud de reservas}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Rebeca Cuesta Estépar \\
-		\textbf{Requisitos asociados} &  \\
-		\textbf{Descripción}          & El profesorado (PDI) puede solicitar reservas puntuales de aulas, y consultar el estado de sus solicitudes para ver si han sido procesadas, y en el caso de que sí, ver si han sido aprobadas o rechazadas \\
-		\textbf{Precondición}         & El usuario debe de estar autenticado, el aula solicitada debe de estar disponible y la base de datos y las restricciones disponibles \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item El PDI accede al apartado \emph{Mis solicitudes de reserva}
-			\item El sistema le muestra las opciones disponibles que son solicitar una nueva reserva o consultar el estado de las solicitudes
-			\item El PDI pulsa en \emph{Nueva solicitud}
-			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
-				\tightlist
-				\item El sistema muestra un formulario con los campos: fecha, hora inicio y fin, motivo, capacidad
-				\item El PDI completa los campos y envía la solicitud
-				\item El sistema añade la primera aula que cumpla con las restricciones
-				\item El sistema registra la solicitud con el estado \emph{Pendiente}
-			\end{enumerate}
-			\item El PDI selecciona la opción de \emph{Consultar estado}
-			\begin{enumerate}[label*=\arabic*., itemsep=0.5pt, topsep=0.5pt, leftmargin=1em]
-				\tightlist
-				\item El sistema muestra un listado con las solicitudes del usuario
-				\item El usuario puede filtrar por fechas o estado
-				\item El sistema actualiza la lista de acuerdo a los filtros
-			\end{enumerate}
-		\end{enumerate}\\
-		\textbf{Postcondición} & La solicitud de reserva queda creada con estado Pendiente, y el usuario puede consultar el estado de las solicitudes realizadas \\
-		\textbf{Excepciones}          &  
-		\begin{itemize}
-			\tightlist
-			\item \textbf{Ex1:} Ningún aula disponible para los datos introducidos \textrightarrow{} impedir envío y solicitar cambiar datos
-			\item \textbf{Ex2:} Solicitud duplicada \textrightarrow{} informar y evitar creación
-		\end{itemize}\\
-		\textbf{Importancia}          & Media-Alta \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-22 Gestión solicitud de reservas}
 \end{table}

@@ -12,14 +12,14 @@ El proyecto se organiza separando el código del \textit{backend} y del \textit{
 
 \section{Estructura de directorios}
 
-La estructura del proyecto se organiza separando la parte correspondiente al \textit{backend} y la parte correspondiente al \textit{frontend}. Esta división permite diferenciar claramente la lógica de negocio y acceso a datos, desarrollada con Django, de la interfaz de usuario, desarrollada con React. Por otro lado, tenemos el \textit{script SQL} de la base de datos llamado "BaseDeDatosHorario.sql", que se encuentra a la misma altura que el directorio del \textit{frontend} y del \textit{backend}.
+La estructura del proyecto se organiza separando la parte correspondiente al \textit{backend} y la parte correspondiente al \textit{frontend}. Esta división permite diferenciar claramente la lógica de negocio y acceso a datos, desarrollada con Django, de la interfaz de usuario, desarrollada con React. Por otro lado, el proyecto incluye un \textit{script SQL} de la base de datos llamado "BaseDeDatosHorario.sql", que se encuentra a la misma altura que el directorio del \textit{frontend} y del \textit{backend}.
 
 En los siguientes apartados se describe la organización de ambos bloques, indicando la finalidad de los principales directorios y ficheros que forman parte del proyecto. Esta explicación facilita la comprensión del código fuente y permite que otros desarrolladores puedan localizar de forma más sencilla los módulos principales de la aplicación.
 
 
 \subsection{Backend}
 
-El \textit{backend} de la aplicación se encuentra desarrollado con Django y contiene la lógica principal del sistema. En esta parte del proyecto se gestionan los modelos de datos, las rutas, las vistas, la autenticación, la comunicación con la base de datos y las operaciones relacionadas con horarios, reservas, calendario académico, aulas, docencia y usuarios.
+El \textit{backend} de la aplicación se ha desarrollado con Django y contiene la lógica principal del sistema. En esta parte del proyecto se gestionan los modelos de datos, las rutas, las vistas, la autenticación, la comunicación con la base de datos y las operaciones relacionadas con horarios, reservas, calendario académico, aulas, docencia y usuarios.
 
 En la Figura~\ref{fig:estructura-directorios-backend} se muestra la estructura principal de directorios correspondiente al \textit{backend} del proyecto.
 
@@ -113,7 +113,7 @@ El directorio \textit{login} contiene la pantalla de inicio de sesión y los ele
 
 El directorio \textit{reservas} agrupa las pantallas y componentes relacionados con la gestión de reservas puntuales y periódicas, incluyendo listados, formularios de creación y edición, y acciones asociadas a las solicitudes.
 
-Finalmente, el directorio \textit{shared} contiene elementos compartidos por diferentes módulos del \textit{frontend}, permitiendo reutilizar código común y mantener una estructura más organizada.
+Finalmente, el directorio \textit{shared} contiene elementos compartidos por diferentes módulos del \textit{frontend} como la modal de confirmación para eliminar, permitiendo reutilizar código común y mantener una estructura más organizada.
 
 Además de estos directorios, aparecen varios ficheros relevantes en la raíz del proyecto. El archivo \textit{App.jsx} define la estructura principal de la aplicación React y la organización general de sus rutas o componentes principales. El archivo \textit{main.jsx} actúa como punto de entrada de la aplicación. Los ficheros \textit{App.css} e \textit{index.css} contienen estilos globales utilizados por la interfaz.
 
@@ -236,6 +236,22 @@ Las pantallas que permiten crear o editar información utilizan formularios cont
 
 Cuando el usuario confirma una operación, el componente recoge los valores almacenados en el estado, realiza las comprobaciones necesarias en la interfaz y envía los datos al \textit{backend}. Posteriormente, en función de la respuesta recibida, se muestra un mensaje de confirmación o de error.
 
+\subsection{Modificación y mantenimiento del analizador de horarios}
+
+Una de las partes más importantes del proyecto es el analizador encargado de procesar los horarios proporcionados en formato Excel. Este componente permite interpretar la información contenida en la hoja de cálculo, identificar asignaturas, grupos, aulas, días y franjas horarias, y transformar dichos datos en reservas periódicas dentro de la aplicación.
+
+Debido a la importancia de este proceso, cualquier modificación sobre el analizador debe realizarse con especial cuidado. Antes de aplicar cambios directamente sobre el código integrado en la aplicación, se recomienda realizar las pruebas iniciales en el \textit{notebook} utilizado durante el desarrollo. Este \textit{notebook} ha servido como entorno de prueba para validar el funcionamiento del parser, comprobar la clasificación de celdas, revisar las expresiones regulares y verificar que la información extraída del Excel se interpreta correctamente.
+
+El uso del \textit{notebook} permite probar cambios de forma más rápida y controlada, sin afectar directamente al funcionamiento del sistema completo. Por ello, si se necesita modificar alguna regla de lectura, clasificación o normalización, es conveniente comprobar primero el resultado en dicho entorno y, una vez validado, trasladar los cambios al código definitivo de la aplicación.
+
+Para realizar pruebas sobre la carga de horarios se recomienda utilizar el fichero Excel situado en la carpeta de prototipos del proyecto. Este fichero se encuentra normalizado y adaptado al formato esperado por el analizador, por lo que permite comprobar el comportamiento del parser en un escenario controlado. En caso de que sea necesario modificar este Excel o crear uno nuevo, se deben revisar previamente las reglas definidas en la penúltima hoja del libro, donde se recogen las pautas utilizadas para estructurar la información.
+
+Estas reglas son importantes porque el analizador depende de una serie de patrones y estructuras para identificar correctamente los elementos del horario. Entre ellos se encuentran los nombre abreviados de las asignaturas, los códigos de estas, los grupos tanto teóricos como prácticos y las aulas. Si el formato del Excel cambia sin respetar las reglas, es posible que el parser no clasifique correctamente alguna celdas o que de error, por ejemplo, si se cambia la abreviatura de la asignatura y no se encuentra unificada con la hoja de Asignaturas de la que se extrae el diccionario de código-asignaturas. De esta forma no se podrían generar las reservas periódicas esperadas.
+
+Además debe prestarse especial atención a la normalización de los nombres de las aulas entre el Excel y la base de datos. El sistema incluye funciones específicas para adaptar los nombre leídos desde el Excel al formato almacenado en la base de datos. Transformando abreviaturas para que coincidan con los nombres registrados en la aplicación. Esta función transforma los prefijos <<Lab.>> y <<Lab>> en <<Laboratorio>> sino encuentra la estructura que siguen el nombre de las aulas, como por ejemplo <<Lab 42-A1>>, en ese caso lo transforma en <<Lab>> que es como se encuentran almacenadas en base de datos. Además elimina la palabra <<Aula>> salvo si es el aula de empresa o el <<Aula 0>>, elimina todo lo que viene entre paréntesis con ellos incluidos, y por último, cambia la abreviatura <<Inf.>> a <<Informática>>. De esta forma el resto del nombre que no modifica esta función, deberá de ser tal cual está en base de datos. Sino no encontrará el aula y no generará la reserva periódica aunque el analizador la haya extraído. Para ello consultar la nomenclatura de los aulas que tienen ahora mismo en el Excel unificado y no modificarla.
+
+También es recomendable ejecutar las pruebas unitarias asociadas al analizador después de realizar cualquier cambio. Estas pruebas comprueban la clasificación de celdas mediante expresiones regulares, la normalización de nombres de aulas y la generación de reservas periódicas a partir de clases leídas del Excel. De esta forma, se puede detectar rápidamente si una modificación ha provocado un comportamiento incorrecto.
+
 \subsection{Control de autenticación y permisos}
 
 El sistema diferencia las funcionalidades disponibles en función del rol asociado al usuario autenticado. Por este motivo, el programador debe tener en cuenta que algunas pantallas, botones o acciones solo deben mostrarse a determinados perfiles.
@@ -243,7 +259,6 @@ El sistema diferencia las funcionalidades disponibles en función del rol asocia
 En el \textit{frontend}, esta restricción se utiliza para adaptar la interfaz al rol del usuario, ocultando opciones que no le corresponden. Sin embargo, estas comprobaciones no son suficientes por sí solas, ya que un usuario podría intentar acceder manualmente a una ruta o enviar una petición no permitida.
 
 Por este motivo, las validaciones importantes deben realizarse también en el \textit{backend}, que es el encargado de garantizar que cada operación solo pueda ser ejecutada por usuarios autorizados.
-
 
 \section{Compilación, instalación y ejecución del proyecto}
 
