@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from calendario.services import generar_calendario_academico, modificar_tipo_dia, obtener_dias_curso
+from calendario.services import generar_calendario_academico, modificar_tipo_dia, obtener_dias_curso, eliminar_curso
 from .serializers import CargarCalendarioSerializer
 from .models import Curso
 
@@ -17,7 +17,7 @@ class CargarCalendarioAPIView(APIView):
     """
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm("calendario.add_calendario"):
+        if not request.user.has_perm("calendario.add_curso"):
             return Response({'error': 'No tienes permiso para cargar el calendario académico.'}, status=403)
         serializer = CargarCalendarioSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -70,6 +70,22 @@ class ModificarDiaCalendarioAPIView(APIView):
             modificar_tipo_dia(datos)
 
             return Response({"message": "Día actualizado correctamente"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            traceback.print_exc()
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class EliminarCalendarioCursoAPIView(APIView):
+    """
+    Vista para eliminar el calendario académico de un curso específico, y eliminar el curso. Valida que el usuario tenga permisos para eliminar el calendario antes de realizar la eliminación.
+    """
+    permission_classes = [IsAuthenticated]
+    def delete(self, request, id_curso, *args, **kwargs):
+        if not request.user.has_perm("calendario.delete_curso"):
+            return Response({'error': 'No tienes permiso para eliminar el calendario académico.'}, status=403)
+        try:
+            eliminar_curso(id_curso)
+
+            return Response({"message": "Calendario académico y curso eliminados correctamente"}, status=status.HTTP_200_OK)
         except Exception as e:
             traceback.print_exc()
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

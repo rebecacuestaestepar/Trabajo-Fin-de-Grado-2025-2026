@@ -1,4 +1,5 @@
 from django.db import transaction
+from reservas.models import Reserva
 from calendario.models import CambioDocencia, Dia, Curso, Examen, Festivo, Lectivo, Semestre, Tfg
 from datetime import timedelta
 
@@ -173,3 +174,22 @@ def modificar_tipo_dia(datos):
                     sustituye_dia=datos.get('sustituye_dia')
                 )
 
+def eliminar_curso(id_curso):
+    """
+    Elimina un curso y todos los registros asociados a él, incluyendo semestres, días, festivos, lectivos, exámenes, cambios de docencia y TFGs.
+    """
+
+    with transaction.atomic():
+        curso_objeto = Curso.objects.get(idcurso=id_curso)
+        curso_objeto.delete()
+
+        Dia.objects.filter(
+            dia__gte=curso_objeto.fecha_inicio,
+            dia__lte=curso_objeto.fecha_fin
+        ).delete()
+
+        # Reserva.objects.filter(
+        #     tipo='R',
+        #     id_dia__dia__gte=curso_objeto.fecha_inicio,
+        #     id_dia__dia__lte=curso_objeto.fecha_fin
+        # ).delete()
