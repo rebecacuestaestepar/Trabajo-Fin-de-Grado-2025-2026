@@ -1,10 +1,17 @@
 import ItemCurso from "../componentes/ItemCurso";
 import { useCursos } from "../hooks/useCursos";
 import { useNavigate } from "react-router-dom";
+import { eliminarCalendarioCurso } from "../../api/calendario";
+import React, { useState } from "react";
+import ModalConfirmacion from "../../shared/modales/ModalConfirmacion";
 
 export default function ConsultaCalendarios() {
-  const { cursos, cargando } = useCursos();
+  const { cursos, cargando, recargarCursos } = useCursos();
   const navigate = useNavigate();
+
+  const [modalAbierta, setModalAbierta] = useState(false);
+  const [cursoAEliminar, setCursoAEliminar] = useState(null);
+
 
     if (cargando) {
         return (
@@ -18,8 +25,40 @@ export default function ConsultaCalendarios() {
         navigate("/calendario/crear");
     };
 
+    const pedirEliminar = (idCurso) => {
+        setCursoAEliminar(idCurso);
+        setModalAbierta(true);
+    }
+
+    const confirmarEliminar = async () => {
+        if (!cursoAEliminar) return;
+        try {
+            await eliminarCalendarioCurso(cursoAEliminar);
+            if (recargarCursos) {
+                recargarCursos();
+            }
+        } catch (error) {
+            console.error("Error al eliminar el curso:", error);
+        } finally {
+            setModalAbierta(false);
+            setCursoAEliminar(null);
+        }
+    };
+
+    const cancelarEliminar = () => {
+        setModalAbierta(false);
+        setCursoAEliminar(null);
+    };
+
     return (
-    <div className="p-4">
+    <div className="p-4 relaative">
+        <ModalConfirmacion
+            isOpen={modalAbierta}
+            mensaje={`¿Estás seguro de que deseas eliminar el Curso ${cursoAEliminar}? Esta acción eliminará en cascada todos los semestres, dias y reservas asociadas. Esta acción NO se puede deshacer.`}
+            onConfirm={confirmarEliminar}
+            onCancel={cancelarEliminar}
+        />
+
         <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-semibold">Lista de Cursos</h1>
             <button
@@ -42,6 +81,7 @@ export default function ConsultaCalendarios() {
                             key={curso.idcurso} 
                             idCurso={curso.idcurso}
                             modoNavegacion={true}
+                            onEliminar={pedirEliminar}
                         />
                     ))
                 ) : (

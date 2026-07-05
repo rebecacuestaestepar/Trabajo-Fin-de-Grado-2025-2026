@@ -26,3 +26,9 @@ export function modificarTipoDiaCalendario(payload) {
     });
 }
 
+export function eliminarCalendarioCurso(id_curso) {
+    return apiRequest(`/calendario/eliminar/curso/${id_curso}/`, {
+        method: "DELETE",
+    });
+}
+

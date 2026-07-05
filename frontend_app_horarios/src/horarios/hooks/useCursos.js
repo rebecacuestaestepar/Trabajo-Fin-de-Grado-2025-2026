@@ -6,8 +6,11 @@ export function useCursos() {
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
 
+    const [trigger, setTrigger] = useState(0);
+
     useEffect(() => {
         const cargarCursos = async () => {
+            setCargando(true);
             try {
                 const data = await obtenerCursos(); 
                 
@@ -22,7 +25,11 @@ export function useCursos() {
         };
 
         cargarCursos();
-    }, []);
+    }, [trigger]);
 
-    return { cursos, cargando, error };
+    const recargarCursos = () => {
+        setTrigger(prev => prev + 1); 
+    }
+
+    return { cursos, cargando, error, recargarCursos };
 }
