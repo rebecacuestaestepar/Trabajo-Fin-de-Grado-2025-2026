@@ -88,7 +88,6 @@ function App() {
                   <CrearReserva />
                 </RequierePermiso>
               } />
-            {/* <Route path="/reservas/pendientes" element={<SolicitudesPendientes />} /> */}
             <Route
               path="/reservas/puntuales/:id" 
               element={
@@ -97,13 +96,7 @@ function App() {
                 </RequierePermiso>
               } 
             />
-            {/* <Route 
-              path="/cargar-calendario" 
-              element={
-                <RequierePermiso permisos={["add_calendario"]} condicion="alguno">
-                  <FormularioCargar />
-                </RequierePermiso>
-              } /> */}
+
             <Route path="*" element={<h1>404 - No existe esa ruta</h1>} />
 
             <Route 

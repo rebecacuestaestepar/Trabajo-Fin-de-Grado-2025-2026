@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from django.db import transaction
 from django.shortcuts import get_object_or_404
+import traceback
 
 from reservas.serializers_todas import ReservaResumenSerializer, ReservaTodasSerializer
 from .serializers import ReservaPuntualCreateSerializer, ResponsableSerializer
@@ -74,6 +75,7 @@ class SolicitarReservaPuntualAPIView(APIView):
             )
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        traceback.print_exc()
 
     
 class CrearReservaPuntualAPIView(APIView):
@@ -141,6 +143,7 @@ class AulasDisponiblesAPIView(APIView):
             )
 
             aulas = [{
+                "id_aula": a.pk,
                 "nombre": a.nombre,
                 "capacidad": a.capacidad,
                 "num_ordenadores": getattr(a, "num_ordenadores", 0),

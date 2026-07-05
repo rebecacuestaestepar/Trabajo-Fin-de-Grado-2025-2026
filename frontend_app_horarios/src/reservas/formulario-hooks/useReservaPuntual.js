@@ -108,6 +108,8 @@ export function useReservaPuntual(opciones = {}) {
     try {
       const data = await buscarAulasDisponibles(payload);
 
+      console.log("Respuesta de aulas disponibles:", data);
+
       if (!formulario.generar_periodica) {
         setModoSeleccionAula("simple");
         setAulasDisponibles(data.aulas || []);
@@ -227,22 +229,38 @@ export function useReservaPuntual(opciones = {}) {
 
     if (!formulario.generar_periodica) {
       payload.nombre_aula = aulaSeleccionada || "";
+
+      const aulaObj = aulasDisponibles.find((a) => a.nombre === aulaSeleccionada);
+      if (aulaObj) {
+        payload.id_aula = aulaObj.id_aula;
+      }
     } else {
       payload.fecha_inicio_periodo = formulario.fecha_inicio_periodo;
       payload.fecha_fin_periodo = formulario.fecha_fin_periodo;
       payload.dia_semana_periodica = Number(formulario.dia_semana_periodica);
 
-      if (modoSeleccionAula === "comun") payload.nombre_aula = aulaSeleccionada || "";
-      if (modoSeleccionAula === "por_fecha") payload.aulas_por_fecha = seleccionPorFecha;
+      if (modoSeleccionAula === "comun") {
+        payload.nombre_aula = aulaSeleccionada || "";
+
+        const aulaObj = aulasDisponibles.find((a) => a.nombre === aulaSeleccionada);
+        if (aulaObj) {
+          payload.id_aula = aulaObj.id_aula;
+        }
+      }
+      if (modoSeleccionAula === "por_fecha") {
+        payload.aulas_por_fecha = seleccionPorFecha;
+      }
     }
 
     try {
 
       let data;
       if (opciones.esCreacion) {
+        console.log("Payload para crear reserva puntual:", payload);
         data = await crearReservaPuntual(payload);
       } else {
-         data = await solicitarReservaPuntual(payload);
+        console.log("Payload para solicitar reserva puntual:", payload);
+        data = await solicitarReservaPuntual(payload);
       }
       setMensaje(data.message || "Reserva(s) creada(s) correctamente");
 
