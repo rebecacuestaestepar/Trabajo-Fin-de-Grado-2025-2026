@@ -7,7 +7,7 @@ def validar_ocupacion_aula(id_aula, n_inicio, n_fin, ids_reservas_excluir, dia_n
 
     reservas_conflictivas = Reserva.objects.filter(
         id_aula_id=id_aula,
-        id_dia__dia_semana=dia_num, 
+        reservaperiodica__dia_semana=dia_num,
         hora_inicio__lt=n_fin,
         hora_fin__gt=n_inicio,
         estado='A',
@@ -25,7 +25,7 @@ def validar_solapamiento_grupos(id_grado, semestre_num, nombre_grupo, n_inicio, 
     Valida si un grupo tiene otra docencia en el mismo horario, para el mismo grado y seemestre académico, excluyendo las reservas propias del grupo que se está editando.
     """
     reservas_conflictivas = Reserva.objects.filter(
-        id_dia__dia_semana=dia_num,
+        reservaperiodica__dia_semana=dia_num,
         hora_inicio__lt=n_fin,
         hora_fin__gt=n_inicio,
         estado='A',

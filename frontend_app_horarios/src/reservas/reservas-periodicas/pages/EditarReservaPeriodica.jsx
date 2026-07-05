@@ -78,12 +78,16 @@ function FormularioEditar({ id, datos }) {
         datosIniciales: datos
     });
 
-    const formularioModificado = 
-        String(reserva.formulario.asignatura) !== String(datos.asignatura) ||
-        String(reserva.formulario.grupo) !== String(datos.grupo) ||
-        String(reserva.formulario.diaSemana) !== String(datos.diaSemana) ||
-        reserva.formulario.horaInicio !== datos.horaInicio ||
-        reserva.formulario.horaFin !== datos.horaFin;
+    const horarioModificado = String(reserva.formulario.diaSemana) !== String(datos.diaSemana) ||
+        String(reserva.formulario.horaInicio) !== String(datos.horaInicio) ||
+        String(reserva.formulario.horaFin) !== String(datos.horaFin);
+
+    const aulaModificada = !!reserva.aulaSeleccionada && reserva.aulaSeleccionada !== datos.aulaSeleccionada;
+
+    const hayCambios = horarioModificado || aulaModificada;
+
+    const puedeGuardar = hayCambios && (!horarioModificado || !!reserva.aulaSeleccionada);
+
 
     // La firma original se mantiene constante para identificar la reserva, incluso si el usuario modifica los campos
     const firmaOriginal = `${datos.asignatura}|${datos.grupo}|${datos.diaSemana}|${datos.horaInicio}|${datos.horaFin}|${datos.aulaSeleccionada}`;
@@ -92,7 +96,9 @@ function FormularioEditar({ id, datos }) {
         diaSemana: reserva.formulario.diaSemana,
         horaInicio: reserva.formulario.horaInicio,
         horaFin: reserva.formulario.horaFin,
-        aulaSeleccionada: reserva.aulaSeleccionada || datos.aulaSeleccionada,
+        aulaSeleccionada: horarioModificado 
+            ? reserva.aulaSeleccionada 
+            : (reserva.aulaSeleccionada || datos.aulaSeleccionada),
     };
 
     const manejarGuardarEdicion = async (e) => {
@@ -204,8 +210,14 @@ function FormularioEditar({ id, datos }) {
                         estaBuscando={reserva.buscandoAulas}
                         puedeBuscar={reserva.puedeBuscarAulas}
                         modo={reserva.modoSeleccionAula}
-                        aulasDisponibles={reserva.aulasDisponibles.length > 0 ? reserva.aulasDisponibles : [{ nombre: datos.aulaSeleccionada }]}
-                        aulaSeleccionada={reserva.aulaSeleccionada || datos.aulaSeleccionada}
+                        aulasDisponibles={
+                            reserva.aulasDisponibles.length > 0 
+                                ? reserva.aulasDisponibles 
+                                : (horarioModificado ? [] : [{ nombre: datos.aulaSeleccionada }])
+                        }
+                        aulaSeleccionada={
+                            reserva.aulaSeleccionada || (horarioModificado ? "" : datos.aulaSeleccionada)
+                        }
                         alSeleccionarAula={reserva.setAulaSeleccionada}
                         fechas={[]} 
                         aulasPorFecha={{}} 
@@ -215,10 +227,10 @@ function FormularioEditar({ id, datos }) {
 
                     <AccionesReserva 
                         variante="editar" 
-                        deshabilitarGuardar={!formularioModificado} 
+                        deshabilitarGuardar={!puedeGuardar || estadoAccion.cargando} 
                         alGuardar={manejarGuardarEdicion}
                         alEliminar={manejarClickEliminar}
-                        deshabilitarEliminar={formularioModificado || estadoAccion.cargando}
+                        deshabilitarEliminar={hayCambios || estadoAccion.cargando}
                     />
 
                     <CajaExito>{estadoAccion.exito}</CajaExito>
